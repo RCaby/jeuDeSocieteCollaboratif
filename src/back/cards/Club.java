@@ -20,4 +20,9 @@ public class Club extends Card {
     // discardOnDeath
     // board
 
+    @Override
+    public boolean canBeUsed() {
+        return !isRevealed;
+    }
+
 }

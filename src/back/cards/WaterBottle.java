@@ -9,8 +9,6 @@ public class WaterBottle extends Card {
 
     public WaterBottle(Board board) {
         super(board);
-        isSingleUse = false;
-        discardOnDeath = true;
     }
 
     public String toString() {

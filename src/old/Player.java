@@ -1,10 +1,10 @@
-package src.old;
+package old;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import src.back.cards.Card;
+import back.cards.Card;
 
 public class Player implements Serializable {
     /*

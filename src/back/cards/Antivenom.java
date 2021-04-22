@@ -19,7 +19,19 @@ public class Antivenom extends Card {
 
     @Override
     public void useCard(Player player1, Player player2, Player player3, String string) {
-        super.useCard(player1, player2, player3, string);
-        player1.setState(PlayerState.HEALTHY);
+        if (player1 != null) {
+            super.useCard(player1, player2, player3, string);
+            player1.setState(PlayerState.HEALTHY);
+        }
+
+    }
+
+    @Override
+    public boolean canBeUsed() {
+        boolean flag = false;
+        for (Player player : board.getPlayerList()) {
+            flag = flag || player.getState() == PlayerState.SICK;
+        }
+        return flag;
     }
 }

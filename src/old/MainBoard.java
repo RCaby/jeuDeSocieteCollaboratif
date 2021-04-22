@@ -1,11 +1,11 @@
-package src.old;
+package old;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import src.back.cards.Card;
+import back.cards.Card;
 //import src.front.MainScreenGame;
 
 public class MainBoard implements Serializable {

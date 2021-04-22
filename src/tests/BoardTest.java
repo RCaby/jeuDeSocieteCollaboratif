@@ -20,7 +20,7 @@ public class BoardTest {
     public void giveCardToPlayerTest() {
         Board board = new Board(7, "nom", true);
         Player player = board.getPlayerList().get(3);
-        Axe axe = new Axe();
+        Axe axe = new Axe(board);
         board.giveCardToPlayer(player, axe);
         assertEquals((Axe) player.getCard(4), axe);
     }

@@ -1,4 +1,4 @@
-package src.old;
+package old;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -7,8 +7,8 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 // import src.back.MainBoard;
-import src.back.Player;
-import src.back.cards.Card;
+import back.Player;
+import back.cards.Card;
 // import src.front.components.PlayerDisplay;
 
 import java.awt.FlowLayout;

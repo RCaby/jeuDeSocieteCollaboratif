@@ -19,4 +19,9 @@ public class CrystalBall extends Card {
     // Board
     // Permanent
     // DiscardOnDeath
+
+    @Override
+    public boolean canBeUsed() {
+        return !isRevealed;
+    }
 }

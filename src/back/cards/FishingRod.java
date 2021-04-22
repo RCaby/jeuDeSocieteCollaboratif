@@ -22,4 +22,9 @@ public class FishingRod extends Card {
 
     // discardDeath
 
+    @Override
+    public boolean canBeUsed() {
+        return !isRevealed;
+    }
+
 }

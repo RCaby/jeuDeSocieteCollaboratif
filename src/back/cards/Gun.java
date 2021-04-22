@@ -24,17 +24,23 @@ public class Gun extends Card {
 
     @Override
     public void useCard(Player player1, Player player2, Player player3, String string) {
-        Card card = player1.getCartridge();
-        if (card != null) {
-            card.useCard(player1, player2, player3, string);
-            Card metalSheet = player2.getMetalSheet();
-            if (metalSheet != null) {
-                metalSheet.useCard(player1, player2, player3, string);
-            } else {
-                board.setDeadThisRound(board.getDeadThisRound() + 1);
-                player2.setState(PlayerState.DEAD);
+        if (player1 != null && player2 != null) {
+            Card card = player1.getCartridge();
+            if (card != null) {
+                card.useCard(player1, player2, player3, string);
+                Card metalSheet = player2.getMetalSheet();
+                if (metalSheet != null) {
+                    metalSheet.useCard(player1, player2, player3, string);
+                } else {
+                    board.setDeadThisRound(board.getDeadThisRound() + 1);
+                    player2.setState(PlayerState.DEAD);
+                }
             }
         }
+    }
 
+    @Override
+    public boolean canBeUsed() {
+        return board.getNbPlayersAlive() > 1 && owner != null && owner.getCartridge() != null;
     }
 }

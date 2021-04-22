@@ -1,4 +1,4 @@
-package src.old;
+package old;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;

@@ -24,13 +24,25 @@ public abstract class Card implements Serializable {
     }
 
     public void useCard(Player player1, Player player2, Player player3, String string) {
+        if (!isRevealed) {
+            isRevealed = true;
+            if (owner != null) {
+                System.out.println(owner + " reveals his card : " + this);
+                owner.revealCard(this);
+            }
+        }
         if (isSingleUse) {
+            if (owner != null) {
+                System.out.println(owner + " discards " + this);
+                owner.discardCard(this);
+            }
             discard();
         }
     }
 
     public void discard() {
         owner = null;
+        board.getDiscardDeck().add(this);
     }
 
     public void setOwner(Player player) {

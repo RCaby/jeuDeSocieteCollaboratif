@@ -15,4 +15,9 @@ public class Cartridge extends Card {
     }
 
     // nothing
+
+    @Override
+    public boolean canBeUsed() {
+        return false;
+    }
 }

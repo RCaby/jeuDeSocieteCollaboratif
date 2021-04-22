@@ -19,9 +19,11 @@ public class VoodooDoll extends Card {
 
     @Override
     public void useCard(Player player1, Player player2, Player player3, String string) {
-        super.useCard(player1, player2, player3, string);
-        player1.setState(PlayerState.HEALTHY);
-        board.setDeadThisRound(board.getDeadThisRound() - 1);
+        if (player1 != null) {
+            super.useCard(player1, player2, player3, string);
+            player1.setState(PlayerState.HEALTHY);
+            board.setDeadThisRound(board.getDeadThisRound() - 1);
+        }
     }
 
     @Override

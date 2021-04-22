@@ -8,8 +8,6 @@ public class WinningLotteryTicket extends Card {
 
     public WinningLotteryTicket(Board board) {
         super(board);
-        isSingleUse = false;
-        discardOnDeath = true;
     }
 
     public String toString() {

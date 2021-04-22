@@ -15,4 +15,5 @@ public class Coffee extends Card {
     }
 
     // board
+
 }

@@ -25,7 +25,7 @@ public class Axe extends Card {
     // board
 
     @Override
-    public boolean discardOnDeath() {
-        return true;
+    public boolean canBeUsed() {
+        return !isRevealed;
     }
 }

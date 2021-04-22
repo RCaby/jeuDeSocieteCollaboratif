@@ -77,12 +77,14 @@ public class Board implements Serializable {
 
     }
 
-    public void askPlayersForCards() {
+    public boolean askPlayersForCards() {
+        boolean cardUsed = false;
         for (Player player : playerList) {
             if (player.getState() != PlayerState.DEAD && player.getState() != PlayerState.SICK) {
-                player.wouldLikePlayCard();
+                cardUsed = cardUsed || player.wouldLikePlayCard();
             }
         }
+        return cardUsed;
 
     }
 
@@ -98,7 +100,6 @@ public class Board implements Serializable {
     }
 
     public void play(Player player, boolean forTest) {
-
         if (gameOver) {
             endGame();
         } else if (player != null && player.getState() == PlayerState.SICK && player.getRoundSick() == round - 1) {
@@ -133,19 +134,24 @@ public class Board implements Serializable {
     }
 
     public void playAsCPU(Player player, boolean forTest) {
-        System.out.println(player.toString() + " is playing !\n");
+
         int indexAction = random.nextInt(4);
         switch (indexAction) {
         case 0:
+            System.out.println(player.toString() + " is getting food !\n");
             player.playAsCPUFood(this);
+
             break;
         case 1:
+            System.out.println(player.toString() + " is getting water !\n");
             player.playAsCPUWater(this);
             break;
         case 2:
+            System.out.println(player.toString() + " is getting wood !\n");
             player.playAsCPUWood(this);
             break;
         case 3:
+            System.out.println(player.toString() + " is getting a card !\n");
             player.playAsCPUCard(this);
             break;
         default:
@@ -163,7 +169,7 @@ public class Board implements Serializable {
         if (gameOver || getNbPlayersAlive() == 0) {
             endGame();
         } else {
-            boolean departure = weatherList[round] == -2 || isThereEnoughGoods(true);
+
             round++;
             indexOfCurrentPlayer = 0;
             if (indexOfThisPlayer == 0) {
@@ -176,36 +182,41 @@ public class Board implements Serializable {
 
             currentPhase = GamePhase.GOODS_DISTRIBUTION;
 
-            foodDistributedThisRound = 0;
-            waterDistributedThisRound = 0;
-            plankDistributedThisRound = 0;
-
             System.out.println("Water " + waterRations + ", Food " + foodRations + ", Wood " + nbWoodPlanks);
+            /*
+             * foodDistributedThisRound = 0; waterDistributedThisRound = 0;
+             * plankDistributedThisRound = 0;
+             * 
+             * 
+             * 
+             * while (!shouldGoodsBeRedistributed) {
+             * 
+             * shouldGoodsBeRedistributed = true;
+             * 
+             * retakeAllGoods(); foodRations += foodDistributedThisRound; waterRations +=
+             * waterDistributedThisRound; nbWoodPlanks += plankDistributedThisRound;
+             * 
+             * goodsAttribution(departure); // Determine who will be given food, water etc
+             * 
+             * foodDistributedThisRound = 0; waterDistributedThisRound = 0;
+             * plankDistributedThisRound = 0; goodsDistribution(departure);
+             * 
+             * askPlayersForCards(); // Modification of "shouldGoodsBeRedistributed" }
+             * 
+             * shouldGoodsBeRedistributed = false;
+             * 
+             * deathTime();
+             * 
+             * askPlayersForCards();
+             */
 
-            while (!shouldGoodsBeRedistributed) {
-
-                shouldGoodsBeRedistributed = true;
-
-                retakeAllGoods();
-                foodRations += foodDistributedThisRound;
-                waterRations += waterDistributedThisRound;
-                nbWoodPlanks += plankDistributedThisRound;
-
-                goodsAttribution(departure); // Determine who will be given food, water etc
-
-                foodDistributedThisRound = 0;
-                waterDistributedThisRound = 0;
-                plankDistributedThisRound = 0;
-                goodsDistribution(departure);
-
-                askPlayersForCards(); // Modification of "shouldGoodsBeRedistributed"
+            roundEnd(false); // Goods distribution not for departure
+            System.out.println("Distribution ended !");
+            boolean departure = weatherList[round] == -2 || isThereEnoughGoodsForAll(true);
+            if (departure) {
+                roundEnd(true);
+                voluntaryDepartureStarted = true;
             }
-
-            shouldGoodsBeRedistributed = false;
-
-            deathTime();
-
-            askPlayersForCards();
 
             if (getNbPlayersAlive() == 0) {
                 System.out.println("All dead :(");
@@ -224,7 +235,49 @@ public class Board implements Serializable {
                 deadThisRound = 0;
                 play(playerList.get(0), forTest);
             }
+
         }
+    }
+
+    public boolean isThereEnoughGoodsForAll(boolean departure) {
+        int n = getNbPlayersAlive();
+        return departure ? foodRations >= nbWoodPlanks && waterRations >= nbWoodPlanks && nbWoodPlanks >= n
+                : waterRations >= n && foodRations >= n;
+    }
+
+    public void roundEnd(boolean forDeparture) {
+        Player player = null;
+        boolean end = isThereEnoughGoodsForAll(forDeparture);
+        while (!end && getNbPlayersAlive() > 0) {
+            boolean cardUsed = askPlayersForCards();
+            if (!cardUsed) {
+                if (player == null) {
+                    player = choosePlayerToDie();
+                }
+                boolean cardUsedAgain = askPlayersForCards();
+                if (!cardUsedAgain) {
+                    player.setState(PlayerState.DEAD);
+                    player = null;
+                }
+            }
+            end = isThereEnoughGoodsForAll(forDeparture);
+        }
+        goodsDistributionForAlive();
+    }
+
+    public void goodsDistributionForAlive() {
+        foodRations -= getNbPlayersAlive();
+        waterRations -= getNbPlayersAlive();
+    }
+
+    public Player choosePlayerToDie() {
+        int pickedPlayerIndex = random.nextInt(playerList.size());
+        while (playerList.get(pickedPlayerIndex).getState() == PlayerState.DEAD) {
+            pickedPlayerIndex = random.nextInt(playerList.size());
+        }
+        Player player = playerList.get(pickedPlayerIndex);
+        System.out.println("Oh " + player + " has been doomed by fate !");
+        return player;
     }
 
     public void distributeCardsFromDeadPlayer(Player player) {
@@ -270,18 +323,19 @@ public class Board implements Serializable {
         return player;
     }
 
-    public void voluntaryDeparture() {
-        voluntaryDepartureStarted = true;
-    }
+    /*
+     * public void voluntaryDeparture() { voluntaryDepartureStarted = true; }
+     */
 
-    public boolean isThereEnoughGoods(boolean forDeparture) {
-        int nbAlive = getNbPlayersAlive();
-        boolean departureCase = forDeparture && waterRations >= 2 * nbAlive && foodRations >= 2 * nbAlive
-                && nbWoodPlanks >= nbAlive;
-        boolean notDepartureCase = !forDeparture && waterRations >= nbAlive && foodRations >= nbAlive;
-
-        return departureCase || notDepartureCase;
-    }
+    /*
+     * public boolean isThereEnoughGoods(boolean forDeparture) { int nbAlive =
+     * getNbPlayersAlive(); boolean departureCase = forDeparture && waterRations >=
+     * 2 * nbAlive && foodRations >= 2 * nbAlive && nbWoodPlanks >= nbAlive; boolean
+     * notDepartureCase = !forDeparture && waterRations >= nbAlive && foodRations >=
+     * nbAlive;
+     * 
+     * return departureCase || notDepartureCase; }
+     */
 
     public void deathTime() {
         for (Player player : playerList) {
@@ -293,92 +347,60 @@ public class Board implements Serializable {
         }
     }
 
-    public void goodsDistribution(boolean forDeparture) {
-        int amountNeeded = forDeparture ? 2 : 1;
-        for (Player player : playerList) {
-            if (player.getState() != PlayerState.DEAD && player.isWatered()) {
-                waterRations -= amountNeeded;
-                waterDistributedThisRound += amountNeeded;
-            }
-            if (player.getState() != PlayerState.DEAD && player.isNourished()) {
-                foodRations -= amountNeeded;
-                foodDistributedThisRound += amountNeeded;
-            }
-            if (forDeparture && player.getState() != PlayerState.DEAD && player.hasPlank()) {
-                nbWoodPlanks--;
-                plankDistributedThisRound++;
-            }
-        }
-    }
-
-    public void goodsAttributionEnough(boolean forDeparture) {
-        System.out.println("There are enough goods !");
-        for (Player player : playerList) {
-            if (player.getState() != PlayerState.DEAD) {
-                player.setNourished(true);
-                player.setWatered(true);
-                if (forDeparture) {
-                    player.setNourishedForDeparture(true);
-                    player.setWateredForDeparture(true);
-                    player.setPlankForDeparture(true);
-                }
-            }
-        }
-    }
-
-    public void goodsAttributionNotEnough() {
-        System.out.println("There are not enough goods ! And no boat");
-        int foodToDistribute = foodRations;
-        int waterToDistribute = waterRations;
-        System.out.println("Someone will die, " + foodToDistribute + ", " + waterToDistribute);
-        while (isSomeoneDying(false) && foodToDistribute > 0 && waterToDistribute > 0) {
-            int pickedPlayer = random.nextInt(playerList.size());
-            Player player = playerList.get(pickedPlayer);
-
-            if (player.getState() != PlayerState.DEAD && !player.isNourished() && !player.isWatered()) {
-                player.setNourished(true);
-                player.setWatered(true);
-                foodToDistribute--;
-                waterToDistribute--;
-            }
-        }
-    }
-
-    public void goodsAttributionNotEnoughDeparture() {
-        System.out.println("There are not enough goods ! And a boat");
-        int foodToDistribute = foodRations;
-        int waterToDistribute = waterRations;
-        int plankToDistribute = nbWoodPlanks;
-        System.out.println("Someone will die, " + foodToDistribute + ", " + waterToDistribute + ", " + nbWoodPlanks);
-
-        while (isSomeoneDying(true) && foodToDistribute > 1 && waterToDistribute > 1 && plankToDistribute > 0) {
-            int pickedPlayer = random.nextInt(playerList.size());
-            Player player = playerList.get(pickedPlayer);
-            boolean readyForDeparture = !player.isNourishedForDeparture() && !player.isWateredForDeparture();
-            if (player.getState() != PlayerState.DEAD && !player.isNourished() && !player.isWatered()
-                    && readyForDeparture) {
-                player.setNourished(true);
-                player.setWatered(true);
-                player.setNourishedForDeparture(true);
-                player.setWateredForDeparture(true);
-                player.setPlankForDeparture(true);
-                foodToDistribute -= 2;
-                waterToDistribute -= 2;
-                plankToDistribute--;
-            }
-        }
-    }
-
-    public void goodsAttribution(boolean forDeparture) {
-        System.out.println("Goods attribution. Departure planned : " + forDeparture);
-        if (isThereEnoughGoods(forDeparture)) {
-            goodsAttributionEnough(forDeparture);
-        } else if (forDeparture) {
-            goodsAttributionNotEnoughDeparture();
-        } else {
-            goodsAttributionNotEnough();
-        }
-    }
+    /*
+     * public void goodsDistribution(boolean forDeparture) { int amountNeeded =
+     * forDeparture ? 2 : 1; for (Player player : playerList) { if
+     * (player.getState() != PlayerState.DEAD && player.isWatered()) { waterRations
+     * -= amountNeeded; waterDistributedThisRound += amountNeeded; } if
+     * (player.getState() != PlayerState.DEAD && player.isNourished()) { foodRations
+     * -= amountNeeded; foodDistributedThisRound += amountNeeded; } if (forDeparture
+     * && player.getState() != PlayerState.DEAD && player.hasPlank()) {
+     * nbWoodPlanks--; plankDistributedThisRound++; } } }
+     * 
+     * public void goodsAttributionEnough(boolean forDeparture) {
+     * System.out.println("There are enough goods !"); for (Player player :
+     * playerList) { if (player.getState() != PlayerState.DEAD) {
+     * player.setNourished(true); player.setWatered(true); if (forDeparture) {
+     * player.setNourishedForDeparture(true); player.setWateredForDeparture(true);
+     * player.setPlankForDeparture(true); } } } }
+     * 
+     * public void goodsAttributionNotEnough() {
+     * System.out.println("There are not enough goods ! And no boat"); int
+     * foodToDistribute = foodRations; int waterToDistribute = waterRations;
+     * System.out.println("Someone will die, " + foodToDistribute + ", " +
+     * waterToDistribute); while (isSomeoneDying(false) && foodToDistribute > 0 &&
+     * waterToDistribute > 0) { int pickedPlayer =
+     * random.nextInt(playerList.size()); Player player =
+     * playerList.get(pickedPlayer);
+     * 
+     * if (player.getState() != PlayerState.DEAD && !player.isNourished() &&
+     * !player.isWatered()) { player.setNourished(true); player.setWatered(true);
+     * foodToDistribute--; waterToDistribute--; } } }
+     * 
+     * public void goodsAttributionNotEnoughDeparture() {
+     * System.out.println("There are not enough goods ! And a boat"); int
+     * foodToDistribute = foodRations; int waterToDistribute = waterRations; int
+     * plankToDistribute = nbWoodPlanks; System.out.println("Someone will die, " +
+     * foodToDistribute + ", " + waterToDistribute + ", " + nbWoodPlanks);
+     * 
+     * while (isSomeoneDying(true) && foodToDistribute > 1 && waterToDistribute > 1
+     * && plankToDistribute > 0) { int pickedPlayer =
+     * random.nextInt(playerList.size()); Player player =
+     * playerList.get(pickedPlayer); // TODO faire ca sous forme de vote boolean
+     * readyForDeparture = !player.isNourishedForDeparture() &&
+     * !player.isWateredForDeparture(); if (player.getState() != PlayerState.DEAD &&
+     * !player.isNourished() && !player.isWatered() && readyForDeparture) {
+     * player.setNourished(true); player.setWatered(true);
+     * player.setNourishedForDeparture(true); player.setWateredForDeparture(true);
+     * player.setPlankForDeparture(true); foodToDistribute -= 2; waterToDistribute
+     * -= 2; plankToDistribute--; } } }
+     * 
+     * public void goodsAttribution(boolean forDeparture) {
+     * System.out.println("Goods attribution. Departure planned : " + forDeparture);
+     * if (isThereEnoughGoods(forDeparture)) { goodsAttributionEnough(forDeparture);
+     * } else if (forDeparture) { goodsAttributionNotEnoughDeparture(); } else {
+     * goodsAttributionNotEnough(); } }
+     */
 
     public int getNbPlayersAlive() {
         int alive = 0;
@@ -390,29 +412,21 @@ public class Board implements Serializable {
         return alive;
     }
 
-    public void retakeAllGoods() {
-        for (Player player : playerList) {
-            player.setNourished(false);
-            player.setWatered(false);
-            player.setNourishedForDeparture(false);
-            player.setWateredForDeparture(false);
-            player.setPlankForDeparture(false);
-        }
-    }
-
-    public boolean isSomeoneDying(boolean forDeparture) {
-        boolean someoneWillDie = false;
-
-        for (Player player : playerList) {
-            someoneWillDie = someoneWillDie || !player.isNourished() || !player.isWatered();
-            if (forDeparture) {
-                boolean readyForDeparture = !player.isNourishedForDeparture() || !player.isWateredForDeparture()
-                        || !player.hasPlank();
-                someoneWillDie = someoneWillDie || !readyForDeparture;
-            }
-        }
-        return someoneWillDie;
-    }
+    /*
+     * public void retakeAllGoods() { for (Player player : playerList) {
+     * player.setNourished(false); player.setWatered(false);
+     * player.setNourishedForDeparture(false); player.setWateredForDeparture(false);
+     * player.setPlankForDeparture(false); } }
+     * 
+     * public boolean isSomeoneDying(boolean forDeparture) { boolean someoneWillDie
+     * = false;
+     * 
+     * for (Player player : playerList) { someoneWillDie = someoneWillDie ||
+     * !player.isNourished() || !player.isWatered(); if (forDeparture) { boolean
+     * readyForDeparture = !player.isNourishedForDeparture() ||
+     * !player.isWateredForDeparture() || !player.hasPlank(); someoneWillDie =
+     * someoneWillDie || !readyForDeparture; } } return someoneWillDie; }
+     */
 
     public void endGame() {
         currentPhase = GamePhase.END;
@@ -424,7 +438,6 @@ public class Board implements Serializable {
     public void discardCard(Player player, Card card) {
         player.discardCard(card);
         discardDeck.add(card);
-        card.discard();
     }
 
     public int seekFood() {
@@ -509,7 +522,7 @@ public class Board implements Serializable {
     public void addFragmentPlank(int fragment) {
         nbWoodPlanksFragment += fragment;
         nbWoodPlanks += nbWoodPlanksFragment / 6;
-        nbWoodPlanks = nbWoodPlanksFragment % 6;
+        nbWoodPlanksFragment %= 6;
     }
 
     public void removeFood(int food) {

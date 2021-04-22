@@ -1,10 +1,10 @@
-package src.old;
+package old;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import src.back.cards.Card;
+import back.cards.Card;
 
 import java.awt.Color;
 import java.awt.FlowLayout;

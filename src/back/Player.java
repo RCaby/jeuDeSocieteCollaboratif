@@ -112,6 +112,7 @@ public class Player implements Serializable {
             addCardHiddenPanel();
             inventoryHidden.add(card);
         }
+        card.setOwner(this);
     }
 
     public Card removeCard(Card card) {
@@ -140,12 +141,16 @@ public class Player implements Serializable {
         return card;
     }
 
-    public void trade(Player playerTarget, Card cardToGive) {
-        // TODO
+    public void trade(Player target, Card cardToGive, Card cardToGet) {
+        target.removeCard(cardToGet);
+        this.removeCard(cardToGive);
+        giveToPlayer(target, cardToGive);
+        giveToPlayer(this, cardToGet);
     }
 
     public void giveToPlayer(Player target, Card card) {
-        // TODO
+        card.setOwner(target);
+        target.addCardToInventory(card);
     }
 
     public void discardCard(Card card) {
@@ -162,18 +167,23 @@ public class Player implements Serializable {
         return cardUsable;
     }
 
-    public void wouldLikePlayCard() {
+    public boolean wouldLikePlayCard() {
         // Here the code called each time someone can use a card
+        boolean cardUsed = false;
         if (canUseCard()) {
-            for (Card card : inventory) {
-                if (card.canBeUsed()) {
-                    // System.out.println(card + " can be used !");
-                }
-                // System.out.println("");
+            int odds = random.nextInt(10);
+            int index = random.nextInt(inventory.size());
+            Card card = inventory.get(index);
+            if (inventory.get(index).canBeUsed() && odds == 0) {
+                System.out.println(this + " uses the card " + card);
+                card.useCard(this, null, null, "");
+                cardUsed = true;
             }
+
             // System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             // - -");
         }
+        return cardUsed;
     }
 
     public Card getMetalSheet() {

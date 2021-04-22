@@ -28,9 +28,10 @@ public class PlayerTest {
 
     @Test
     public void addCardToInventoryTest() {
-        Card cardRevealed = new Axe();
+        Board board = new Board(7, "Name", true);
+        Card cardRevealed = new Axe(board);
         cardRevealed.setCardRevealed(true);
-        Card cardHidden = new Axe();
+        Card cardHidden = new Axe(board);
         cardHidden.setCardRevealed(false);
         Player player = new Player("Nom");
         player.addCardToInventory(cardRevealed);
@@ -44,9 +45,10 @@ public class PlayerTest {
 
     @Test
     public void removeCardTest() {
-        Card cardRevealed = new Axe();
+        Board board = new Board(7, "Name", true);
+        Card cardRevealed = new Axe(board);
         cardRevealed.setCardRevealed(true);
-        Card cardHidden = new Axe();
+        Card cardHidden = new Axe(board);
         cardHidden.setCardRevealed(false);
         Player player = new Player("Nom");
         player.addCardToInventory(cardRevealed);

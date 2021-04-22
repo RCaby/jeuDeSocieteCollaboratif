@@ -22,4 +22,9 @@ public class Gourd extends Card {
 
     // board
 
+    @Override
+    public boolean canBeUsed() {
+        return !isRevealed;
+    }
+
 }
