@@ -3,6 +3,9 @@ package tests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -15,10 +18,12 @@ import back.cards.Axe;
 import back.cards.Card;
 
 public class PlayerTest {
+    private Locale locale = new Locale("en", "US");
+    private ResourceBundle stringsBundle = ResourceBundle.getBundle("Strings", locale);
 
     @Test
     public void buildDisplayTest() {
-        Player player = new Player("Nom");
+        Player player = new Player("Nom", stringsBundle);
         assertEquals(player.getPanelDisplay().getComponentCount(), 5);
         assertEquals(((JLabel) player.getPanelDisplay().getComponent(0)).getText(), "Nom");
         assertEquals(PlayerState.HEALTHY.toString(), ((JLabel) player.getPanelDisplay().getComponent(1)).getText());
@@ -29,11 +34,11 @@ public class PlayerTest {
     @Test
     public void addCardToInventoryTest() {
         Board board = new Board(7, "Name", true);
-        Card cardRevealed = new Axe(board);
+        Card cardRevealed = new Axe(board, stringsBundle);
         cardRevealed.setCardRevealed(true);
-        Card cardHidden = new Axe(board);
+        Card cardHidden = new Axe(board, stringsBundle);
         cardHidden.setCardRevealed(false);
-        Player player = new Player("Nom");
+        Player player = new Player("Nom", stringsBundle);
         player.addCardToInventory(cardRevealed);
         assertEquals(player.getCard(0), cardRevealed);
         assertEquals(((JLabel) ((JPanel) player.getPanelDisplay().getComponent(3)).getComponent(0)).getText(), "Axe");
@@ -46,11 +51,11 @@ public class PlayerTest {
     @Test
     public void removeCardTest() {
         Board board = new Board(7, "Name", true);
-        Card cardRevealed = new Axe(board);
+        Card cardRevealed = new Axe(board, stringsBundle);
         cardRevealed.setCardRevealed(true);
-        Card cardHidden = new Axe(board);
+        Card cardHidden = new Axe(board, stringsBundle);
         cardHidden.setCardRevealed(false);
-        Player player = new Player("Nom");
+        Player player = new Player("Nom", stringsBundle);
         player.addCardToInventory(cardRevealed);
         player.addCardToInventory(cardHidden);
         player.removeCard(0);
@@ -62,7 +67,7 @@ public class PlayerTest {
 
     @Test
     public void setPlayerChiefTest() {
-        Player player = new Player("Nom");
+        Player player = new Player("Nom", stringsBundle);
         assertEquals(((JLabel) player.getPanelDisplay().getComponent(2)).getText(), "     ");
         player.setPlayerChief(true);
         assertEquals(((JLabel) player.getPanelDisplay().getComponent(2)).getText(), "Chief");
@@ -70,7 +75,7 @@ public class PlayerTest {
 
     @Test
     public void setStateTest() {
-        Player player = new Player("Nom");
+        Player player = new Player("Nom", stringsBundle);
         assertEquals(PlayerState.HEALTHY.toString(), ((JLabel) player.getPanelDisplay().getComponent(1)).getText());
         player.setState(PlayerState.SICK);
         assertEquals(PlayerState.SICK.toString(), ((JLabel) player.getPanelDisplay().getComponent(1)).getText());

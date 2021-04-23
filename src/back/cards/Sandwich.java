@@ -1,18 +1,19 @@
 package back.cards;
 
+import java.util.ResourceBundle;
+
 import back.Board;
 import back.Player;
 
 public class Sandwich extends Card {
     private static final long serialVersionUID = -8278658344259908767L;
-    public static final String NAME = "Sandwich";
 
-    public Sandwich(Board board) {
-        super(board);
+    public Sandwich(Board board, ResourceBundle stringsBundle) {
+        super(board, stringsBundle);
     }
 
     public String toString() {
-        return NAME;
+        return stringsBundle.getString("Sandwich_name");
     }
 
     @Override

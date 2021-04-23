@@ -1,18 +1,19 @@
 package back.cards;
 
+import java.util.ResourceBundle;
+
 import back.Board;
 import back.Player;
 
 public class Spyglass extends Card {
     private static final long serialVersionUID = -4985929183848934161L;
-    public static final String NAME = "Spyglass";
 
-    public Spyglass(Board board) {
-        super(board);
+    public Spyglass(Board board, ResourceBundle stringsBundle) {
+        super(board, stringsBundle);
     }
 
     public String toString() {
-        return NAME;
+        return stringsBundle.getString("Spyglass_name");
     }
 
     @Override

@@ -1,5 +1,7 @@
 package back.cards;
 
+import java.util.ResourceBundle;
+
 import back.Board;
 import back.GamePhase;
 import back.Player;
@@ -7,14 +9,13 @@ import back.PlayerState;
 
 public class VoodooDoll extends Card {
     private static final long serialVersionUID = 8543007868222050206L;
-    public static final String NAME = "Voodoo Doll";
 
-    public VoodooDoll(Board board) {
-        super(board);
+    public VoodooDoll(Board board, ResourceBundle stringsBundle) {
+        super(board, stringsBundle);
     }
 
     public String toString() {
-        return NAME;
+        return stringsBundle.getString("VoodooDoll_name");
     }
 
     @Override

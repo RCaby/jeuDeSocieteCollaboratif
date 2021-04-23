@@ -1,20 +1,21 @@
 package back.cards;
 
+import java.util.ResourceBundle;
+
 import back.Board;
 import back.Player;
 import back.PlayerState;
 
 public class Gun extends Card {
     private static final long serialVersionUID = 8554178826025991327L;
-    public static final String NAME = "Gun";
 
-    public Gun(Board board) {
-        super(board);
+    public Gun(Board board, ResourceBundle stringsBundle) {
+        super(board, stringsBundle);
         isSingleUse = false;
     }
 
     public String toString() {
-        return NAME;
+        return stringsBundle.getString("Gun_name");
     }
 
     // PLayer x2

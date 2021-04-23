@@ -1,17 +1,18 @@
 package back.cards;
 
+import java.util.ResourceBundle;
+
 import back.Board;
 
 public class Cartridge extends Card {
     private static final long serialVersionUID = 4958491342904749988L;
-    public static final String NAME = "Cartridge";
 
-    public Cartridge(Board board) {
-        super(board);
+    public Cartridge(Board board, ResourceBundle stringsBundle) {
+        super(board, stringsBundle);
     }
 
     public String toString() {
-        return NAME;
+        return stringsBundle.getString("Cartridge_name");
     }
 
     // nothing

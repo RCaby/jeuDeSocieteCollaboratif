@@ -3,7 +3,9 @@ package tests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Locale;
 import java.util.Random;
+import java.util.ResourceBundle;
 
 import org.junit.Test;
 
@@ -15,12 +17,14 @@ import back.cards.Card;
 public class BoardTest {
 
     private Random random = new Random();
+    private Locale locale = new Locale("en", "US");
+    private ResourceBundle stringsBundle = ResourceBundle.getBundle("Strings", locale);
 
     @Test
     public void giveCardToPlayerTest() {
         Board board = new Board(7, "nom", true);
         Player player = board.getPlayerList().get(3);
-        Axe axe = new Axe(board);
+        Axe axe = new Axe(board, stringsBundle);
         board.giveCardToPlayer(player, axe);
         assertEquals((Axe) player.getCard(4), axe);
     }

@@ -1,18 +1,19 @@
 package back.cards;
 
+import java.util.ResourceBundle;
+
 import back.Board;
 import back.Player;
 
 public class KitBBQCannibal extends Card {
     private static final long serialVersionUID = -1603389040110928591L;
-    public static final String NAME = "Kit BBQ Cannibal";
 
-    public KitBBQCannibal(Board board) {
-        super(board);
+    public KitBBQCannibal(Board board, ResourceBundle stringsBundle) {
+        super(board, stringsBundle);
     }
 
     public String toString() {
-        return NAME;
+        return stringsBundle.getString("KitBBQCanibal_name");
     }
 
     @Override

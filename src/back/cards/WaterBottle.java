@@ -1,18 +1,19 @@
 package back.cards;
 
+import java.util.ResourceBundle;
+
 import back.Board;
 import back.Player;
 
 public class WaterBottle extends Card {
     private static final long serialVersionUID = -6627360822903550195L;
-    public static final String NAME = "Water Bottle";
 
-    public WaterBottle(Board board) {
-        super(board);
+    public WaterBottle(Board board, ResourceBundle stringsBundle) {
+        super(board, stringsBundle);
     }
 
     public String toString() {
-        return NAME;
+        return stringsBundle.getString("WaterBottle_name");
     }
 
     @Override

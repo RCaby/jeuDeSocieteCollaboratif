@@ -1,18 +1,19 @@
 package back.cards;
 
+import java.util.ResourceBundle;
+
 import back.Board;
 import back.Player;
 
 public class WoodenPlank extends Card {
     private static final long serialVersionUID = 8325546132605573941L;
-    public static final String NAME = "Wooden Plank";
 
-    public WoodenPlank(Board board) {
-        super(board);
+    public WoodenPlank(Board board, ResourceBundle stringsBundle) {
+        super(board, stringsBundle);
     }
 
     public String toString() {
-        return NAME;
+        return stringsBundle.getString("WoodenPlank_name");
     }
 
     @Override

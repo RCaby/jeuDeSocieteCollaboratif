@@ -1,19 +1,21 @@
 package back.cards;
 
+import java.util.ResourceBundle;
+
 import back.Board;
 
 public class Club extends Card {
     private static final long serialVersionUID = -8286765403755107392L;
-    public static final String NAME = "Club";
 
-    public Club(Board board) {
-        super(board);
+    public Club(Board board, ResourceBundle stringsBundle) {
+        super(board, stringsBundle);
         isSingleUse = false;
         discardOnDeath = true;
+
     }
 
     public String toString() {
-        return NAME;
+        return stringsBundle.getString("Club_name");
     }
 
     // permanent

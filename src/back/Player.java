@@ -3,6 +3,7 @@ package back;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.ResourceBundle;
 import java.awt.FlowLayout;
 import java.io.Serializable;
 
@@ -17,8 +18,6 @@ import back.cards.MetalSheet;
 public class Player implements Serializable {
 
     private static final long serialVersionUID = 2874539910717357461L;
-    private static final String NOT_CHIEF = "     ";
-    private static final String CHIEF = "Chief";
     private List<Card> inventory;
     private List<Card> inventoryRevealed;
     private List<Card> inventoryHidden;
@@ -30,23 +29,19 @@ public class Player implements Serializable {
     private JLabel stateLabel;
     private JPanel cardRevealedPanel;
     private JPanel cardHiddenPanel;
-    private boolean hasBeenNourished;
-    private boolean hasBeenWatered;
-    private boolean hasBeenNourishedForDeparture;
-    private boolean hasBeenWateredForDeparture;
     private Random random = new Random();
     private boolean hasPlankForDeparture;
     private int sickRound;
+    private transient ResourceBundle stringsBundle;
 
-    public Player(String name) {
+    public Player(String name, ResourceBundle stringsBundle) {
         this.name = name;
         inventory = new ArrayList<>();
         inventoryHidden = new ArrayList<>();
         inventoryRevealed = new ArrayList<>();
         state = PlayerState.HEALTHY;
+        this.stringsBundle = stringsBundle;
         buildDisplay();
-        hasBeenNourished = false;
-        hasBeenWatered = false;
 
     }
 
@@ -64,7 +59,7 @@ public class Player implements Serializable {
         stateLabel = new JLabel(state.toString());
         display.add(stateLabel);
 
-        chiefLabel = new JLabel(NOT_CHIEF);
+        chiefLabel = new JLabel(stringsBundle.getString("not_chief_label"));
         display.add(chiefLabel);
 
         cardRevealedPanel = new JPanel();
@@ -224,7 +219,7 @@ public class Player implements Serializable {
     }
 
     private void addCardHiddenPanel() {
-        JLabel cardLabel = new JLabel("Card !");
+        JLabel cardLabel = new JLabel(stringsBundle.getString("hidden_card_label"));
         cardHiddenPanel.add(cardLabel);
     }
 
@@ -256,9 +251,9 @@ public class Player implements Serializable {
     public void setPlayerChief(boolean playerChief) {
         isChief = playerChief;
         if (isChief) {
-            chiefLabel.setText(CHIEF);
+            chiefLabel.setText(stringsBundle.getString("chief_label"));
         } else {
-            chiefLabel.setText(NOT_CHIEF);
+            chiefLabel.setText(stringsBundle.getString("not_chief_label"));
         }
     }
 
@@ -289,38 +284,6 @@ public class Player implements Serializable {
 
     public boolean hasCard(Card card) {
         return inventory.contains(card);
-    }
-
-    public boolean isNourished() {
-        return hasBeenNourished;
-    }
-
-    public void setNourished(boolean food) {
-        hasBeenNourished = food;
-    }
-
-    public boolean isWatered() {
-        return hasBeenWatered;
-    }
-
-    public void setWatered(boolean water) {
-        hasBeenWatered = water;
-    }
-
-    public boolean isNourishedForDeparture() {
-        return hasBeenNourishedForDeparture;
-    }
-
-    public void setNourishedForDeparture(boolean food) {
-        hasBeenNourishedForDeparture = food;
-    }
-
-    public boolean isWateredForDeparture() {
-        return hasBeenWateredForDeparture;
-    }
-
-    public void setWateredForDeparture(boolean water) {
-        hasBeenWateredForDeparture = water;
     }
 
     public boolean hasPlank() {

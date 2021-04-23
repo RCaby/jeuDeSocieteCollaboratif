@@ -1,6 +1,7 @@
 package back.cards;
 
 import java.io.Serializable;
+import java.util.ResourceBundle;
 
 import back.Board;
 import back.Player;
@@ -14,8 +15,10 @@ public abstract class Card implements Serializable {
     protected boolean isSingleUse;
     protected boolean discardOnDeath;
     protected Board board;
+    protected transient ResourceBundle stringsBundle;
 
-    protected Card(Board board) {
+    protected Card(Board board, ResourceBundle stringsBundle) {
+        this.stringsBundle = stringsBundle;
         isRevealed = false;
         owner = null;
         isSingleUse = true;

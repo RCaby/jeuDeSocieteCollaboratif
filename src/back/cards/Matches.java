@@ -1,17 +1,18 @@
 package back.cards;
 
+import java.util.ResourceBundle;
+
 import back.Board;
 
 public class Matches extends Card {
     private static final long serialVersionUID = -5512438010000301669L;
-    public static final String NAME = "Matches";
 
-    public Matches(Board board) {
-        super(board);
+    public Matches(Board board, ResourceBundle stringsBundle) {
+        super(board, stringsBundle);
     }
 
     public String toString() {
-        return NAME;
+        return stringsBundle.getString("Matches_name");
     }
 
     // Nothing for now

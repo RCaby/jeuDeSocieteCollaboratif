@@ -1,17 +1,18 @@
 package back.cards;
 
+import java.util.ResourceBundle;
+
 import back.Board;
 
 public class FishingRod extends Card {
     private static final long serialVersionUID = -2072913005557800074L;
-    public static final String NAME = "Fishing Rod";
 
     public String toString() {
-        return NAME;
+        return stringsBundle.getString("FishingRod_name");
     }
 
-    public FishingRod(Board board) {
-        super(board);
+    public FishingRod(Board board, ResourceBundle stringsBundle) {
+        super(board, stringsBundle);
         isSingleUse = false;
         discardOnDeath = true;
     }

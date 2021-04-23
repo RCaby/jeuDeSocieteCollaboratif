@@ -1,5 +1,7 @@
 package back.cards;
 
+import java.util.ResourceBundle;
+
 import back.Board;
 import back.Player;
 import back.PlayerState;
@@ -7,14 +9,13 @@ import back.PlayerState;
 public class Antivenom extends Card {
 
     private static final long serialVersionUID = 6436526438360639610L;
-    public static final String NAME = "Anti-venom";
 
-    public Antivenom(Board board) {
-        super(board);
+    public Antivenom(Board board, ResourceBundle stringsBundle) {
+        super(board, stringsBundle);
     }
 
     public String toString() {
-        return NAME;
+        return stringsBundle.getString("Antivenom_name");
     }
 
     @Override

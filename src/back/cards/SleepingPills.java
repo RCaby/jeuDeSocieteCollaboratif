@@ -1,18 +1,19 @@
 package back.cards;
 
+import java.util.ResourceBundle;
+
 import back.Board;
 import back.Player;
 
 public class SleepingPills extends Card {
     private static final long serialVersionUID = -722036692167231970L;
-    public static final String NAME = "Sleeping Pills";
 
-    public SleepingPills(Board board) {
-        super(board);
+    public SleepingPills(Board board, ResourceBundle stringsBundle) {
+        super(board, stringsBundle);
     }
 
     public String toString() {
-        return NAME;
+        return stringsBundle.getString("SleepingPills_name");
     }
 
     @Override

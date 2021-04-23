@@ -1,19 +1,20 @@
 package back.cards;
 
+import java.util.ResourceBundle;
+
 import back.Board;
 
 public class Gourd extends Card {
     private static final long serialVersionUID = -6073595887835577054L;
-    public static final String NAME = "Gourd";
 
-    public Gourd(Board board) {
-        super(board);
+    public Gourd(Board board, ResourceBundle stringsBundle) {
+        super(board, stringsBundle);
         isSingleUse = false;
         discardOnDeath = true;
     }
 
     public String toString() {
-        return NAME;
+        return stringsBundle.getString("Gourd_name");
     }
 
     // discard after death

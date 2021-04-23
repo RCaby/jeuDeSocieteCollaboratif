@@ -1,7 +1,9 @@
 package tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import org.junit.Test;
 
@@ -12,10 +14,13 @@ import back.cards.Card;
 import back.cards.WaterBottle;
 
 public class CardTest {
+    private Locale locale = new Locale("en", "US");
+    private ResourceBundle stringsBundle = ResourceBundle.getBundle("Strings", locale);
+
     @Test
     public void setCardRevealedTest() {
         Board board = new Board(6, "name", true);
-        Card card = new Axe(board);
+        Card card = new Axe(board, stringsBundle);
         card.setCardRevealed(true);
         assertEquals(true, card.isCardRevealed());
         card.setCardRevealed(false);
@@ -25,7 +30,7 @@ public class CardTest {
     @Test
     public void useCardTest() {
         Board board = new Board(6, "name", true);
-        Card card = new WaterBottle(board);
+        Card card = new WaterBottle(board, stringsBundle);
         Player player = board.getPlayerList().get(0);
         player.addCardToInventory(card);
         int nbCard = player.getCardNumber();

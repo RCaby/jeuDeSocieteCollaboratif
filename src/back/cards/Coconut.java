@@ -1,18 +1,19 @@
 package back.cards;
 
+import java.util.ResourceBundle;
+
 import back.Board;
 import back.Player;
 
 public class Coconut extends Card {
     private static final long serialVersionUID = 9141126346453648197L;
-    public static final String NAME = "Coconut";
 
-    public Coconut(Board board) {
-        super(board);
+    public Coconut(Board board, ResourceBundle stringsBundle) {
+        super(board, stringsBundle);
     }
 
     public String toString() {
-        return NAME;
+        return stringsBundle.getString("Coconut_name");
     }
 
     @Override

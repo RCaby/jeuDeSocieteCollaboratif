@@ -1,19 +1,20 @@
 package back.cards;
 
+import java.util.ResourceBundle;
+
 import back.Board;
 import back.Player;
 import back.PlayerState;
 
 public class RottenFish extends Card {
     private static final long serialVersionUID = 4118478202921704382L;
-    public static final String NAME = "Rotten Fish";
 
-    public RottenFish(Board board) {
-        super(board);
+    public RottenFish(Board board, ResourceBundle stringsBundle) {
+        super(board, stringsBundle);
     }
 
     public String toString() {
-        return NAME;
+        return stringsBundle.getString("RottenFish_name");
     }
 
     @Override

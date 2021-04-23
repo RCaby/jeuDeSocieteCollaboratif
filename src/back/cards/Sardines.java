@@ -1,18 +1,19 @@
 package back.cards;
 
+import java.util.ResourceBundle;
+
 import back.Board;
 import back.Player;
 
 public class Sardines extends Card {
     private static final long serialVersionUID = -1179600934965433180L;
-    public static final String NAME = "Sardines";
 
-    public Sardines(Board board) {
-        super(board);
+    public Sardines(Board board, ResourceBundle stringsBundle) {
+        super(board, stringsBundle);
     }
 
     public String toString() {
-        return NAME;
+        return stringsBundle.getString("Sardines_name");
     }
 
     @Override

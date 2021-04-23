@@ -1,17 +1,18 @@
 package back.cards;
 
+import java.util.ResourceBundle;
+
 import back.Board;
 
 public class Barometer extends Card {
     private static final long serialVersionUID = -1846990989485437371L;
-    public static final String NAME = "Barometer";
 
-    public Barometer(Board board) {
-        super(board);
+    public Barometer(Board board, ResourceBundle stringsBundle) {
+        super(board, stringsBundle);
     }
 
     public String toString() {
-        return NAME;
+        return stringsBundle.getString("Barometer_name");
     }
 
     // Board

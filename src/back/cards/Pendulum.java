@@ -1,18 +1,19 @@
 package back.cards;
 
+import java.util.ResourceBundle;
+
 import back.Board;
 import back.Player;
 
 public class Pendulum extends Card {
     private static final long serialVersionUID = 9023151678122174623L;
-    public static final String NAME = "Pendulum";
 
-    public Pendulum(Board board) {
-        super(board);
+    public Pendulum(Board board, ResourceBundle stringsBundle) {
+        super(board, stringsBundle);
     }
 
     public String toString() {
-        return NAME;
+        return stringsBundle.getString("Pendulum_name");
     }
 
     @Override

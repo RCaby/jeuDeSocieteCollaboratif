@@ -1,18 +1,19 @@
 package back.cards;
 
+import java.util.ResourceBundle;
+
 import back.Board;
 import back.Player;
 
 public class VegetableMill extends Card {
     private static final long serialVersionUID = -660399664086162903L;
-    public static final String NAME = "Vegetable Mill";
 
-    public VegetableMill(Board board) {
-        super(board);
+    public VegetableMill(Board board, ResourceBundle stringsBundle) {
+        super(board, stringsBundle);
     }
 
     public String toString() {
-        return NAME;
+        return stringsBundle.getString("VegetableMill_name");
     }
 
     @Override

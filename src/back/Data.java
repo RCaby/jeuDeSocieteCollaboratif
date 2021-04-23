@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.ResourceBundle;
 
 import back.cards.AlarmClock;
 import back.cards.Antivenom;
@@ -47,9 +48,11 @@ public class Data implements Serializable {
     private static final long serialVersionUID = 2040640105155032989L;
     private Map<Integer, Integer[]> initialRations;
     private List<Integer> weatherList;
+    private transient ResourceBundle stringsBundle;
     Random random;
 
-    public Data() {
+    public Data(ResourceBundle strings) {
+        stringsBundle = strings;
         initialRations = new HashMap<>();
         weatherList = new ArrayList<>();
         Integer[] tempRation3 = { 5, 6 };
@@ -121,50 +124,50 @@ public class Data implements Serializable {
     public List<Card> getDeck(Board board) {
         List<Card> cardList = new ArrayList<>();
 
-        cardList.add(new AlarmClock(board));
-        cardList.add(new Antivenom(board));
-        cardList.add(new Axe(board));
-        cardList.add(new Barometer(board));
-        cardList.add(new BoardGameQuoridor(board));
+        cardList.add(new AlarmClock(board, stringsBundle));
+        cardList.add(new Antivenom(board, stringsBundle));
+        cardList.add(new Axe(board, stringsBundle));
+        cardList.add(new Barometer(board, stringsBundle));
+        cardList.add(new BoardGameQuoridor(board, stringsBundle));
         for (int index = 0; index < 6; index++) {
-            cardList.add(new Cartridge(board));
+            cardList.add(new Cartridge(board, stringsBundle));
         }
-        cardList.add(new Club(board));
-        cardList.add(new Coconut(board));
-        cardList.add(new Coffee(board));
-        cardList.add(new Conch(board));
-        cardList.add(new CrystalBall(board));
-        cardList.add(new FishingRod(board));
-        cardList.add(new Flashlight(board));
-        cardList.add(new GiftBasket(board));
-        cardList.add(new Gourd(board));
+        cardList.add(new Club(board, stringsBundle));
+        cardList.add(new Coconut(board, stringsBundle));
+        cardList.add(new Coffee(board, stringsBundle));
+        cardList.add(new Conch(board, stringsBundle));
+        cardList.add(new CrystalBall(board, stringsBundle));
+        cardList.add(new FishingRod(board, stringsBundle));
+        cardList.add(new Flashlight(board, stringsBundle));
+        cardList.add(new GiftBasket(board, stringsBundle));
+        cardList.add(new Gourd(board, stringsBundle));
         for (int index = 0; index < 3; index++) {
-            cardList.add(new Gun(board));
+            cardList.add(new Gun(board, stringsBundle));
         }
 
-        cardList.add(new KitBBQCannibal(board));
-        cardList.add(new LuxuryCarKey(board));
-        cardList.add(new Matches(board));
-        cardList.add(new MetalSheet(board));
-        cardList.add(new MetalSheet(board));
-        cardList.add(new OldBrief(board));
-        cardList.add(new Pendulum(board));
-        cardList.add(new RottenFish(board));
+        cardList.add(new KitBBQCannibal(board, stringsBundle));
+        cardList.add(new LuxuryCarKey(board, stringsBundle));
+        cardList.add(new Matches(board, stringsBundle));
+        cardList.add(new MetalSheet(board, stringsBundle));
+        cardList.add(new MetalSheet(board, stringsBundle));
+        cardList.add(new OldBrief(board, stringsBundle));
+        cardList.add(new Pendulum(board, stringsBundle));
+        cardList.add(new RottenFish(board, stringsBundle));
         for (int index = 0; index < 7; index++) {
-            cardList.add(new Sandwich(board));
+            cardList.add(new Sandwich(board, stringsBundle));
         }
-        cardList.add(new Sardines(board));
-        cardList.add(new SleepingPills(board));
-        cardList.add(new Spyglass(board));
-        cardList.add(new StagnantWater(board));
-        cardList.add(new ToiletBrush(board));
-        cardList.add(new VegetableMill(board));
-        cardList.add(new VoodooDoll(board));
+        cardList.add(new Sardines(board, stringsBundle));
+        cardList.add(new SleepingPills(board, stringsBundle));
+        cardList.add(new Spyglass(board, stringsBundle));
+        cardList.add(new StagnantWater(board, stringsBundle));
+        cardList.add(new ToiletBrush(board, stringsBundle));
+        cardList.add(new VegetableMill(board, stringsBundle));
+        cardList.add(new VoodooDoll(board, stringsBundle));
         for (int index = 0; index < 7; index++) {
-            cardList.add(new WaterBottle(board));
+            cardList.add(new WaterBottle(board, stringsBundle));
         }
-        cardList.add(new WinningLotteryTicket(board));
-        cardList.add(new WoodenPlank(board));
+        cardList.add(new WinningLotteryTicket(board, stringsBundle));
+        cardList.add(new WoodenPlank(board, stringsBundle));
 
         java.util.Collections.shuffle(cardList);
 
