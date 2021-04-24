@@ -27,11 +27,8 @@ public class Board implements Serializable {
     private boolean gameOver;
     private GamePhase currentPhase;
     private boolean voluntaryDepartureStarted;
-    private boolean shouldGoodsBeRedistributed;
-    private int waterDistributedThisRound;
-    private int plankDistributedThisRound;
-    private int foodDistributedThisRound;
-    private int deadThisRound;
+    private boolean matchesUsedThisRound;
+    private List<Player> deadThisRound;
     private transient ResourceBundle stringsBundle;
 
     public Board(int nbPlayers, String namePlayer, Boolean forTest) {
@@ -47,13 +44,11 @@ public class Board implements Serializable {
         indexOfCurrentPlayer = 0;
         nbWoodPlanks = 0;
         nbWoodPlanksFragment = 0;
+        deadThisRound = new ArrayList<Player>();
+        matchesUsedThisRound = false;
         random = new Random();
         weatherList = data.getWeatherList();
         indexOfThisPlayer = random.nextInt(nbPlayers);
-        shouldGoodsBeRedistributed = false;
-        foodDistributedThisRound = 0;
-        plankDistributedThisRound = 0;
-        waterDistributedThisRound = 0;
         voluntaryDepartureStarted = false;
         playerList = new ArrayList<>();
         discardDeck = new ArrayList<>();
@@ -74,7 +69,6 @@ public class Board implements Serializable {
         System.out.println("End of initialisation");
         if (Boolean.FALSE.equals(forTest)) {
             System.out.println("Ce n'est pas un test !");
-            deadThisRound = 0;
             askPlayersForCards();
             currentPhase = GamePhase.GATHERING_RESSOURCES;
             play(playerList.get(0), forTest);
@@ -211,7 +205,11 @@ public class Board implements Serializable {
                 endGame();
             } else if (!forTest) {
                 System.out.println("\nGoing to next round ! Bye bye -------------------------");
-                deadThisRound = 0;
+                deadThisRound.clear();
+                currentPhase = GamePhase.ROUND_BEGINNING;
+                matchesUsedThisRound = false;
+                askPlayersForCards();
+                currentPhase = GamePhase.GATHERING_RESSOURCES;
                 play(playerList.get(0), forTest);
             }
 
@@ -371,12 +369,23 @@ public class Board implements Serializable {
         return weatherList[round];
     }
 
-    public int getDeadThisRound() {
+    public int getWeather(int index) {
+        if (0 <= index && index <= 11) {
+            return weatherList[index];
+        }
+        return -1;
+    }
+
+    public List<Player> getDeadThisRound() {
         return deadThisRound;
     }
 
-    public void setDeadThisRound(int dead) {
-        deadThisRound = dead;
+    public boolean getMatchesUsedThisRound() {
+        return matchesUsedThisRound;
+    }
+
+    public void setMatchesUsedThisRound(boolean matches) {
+        matchesUsedThisRound = matches;
     }
 
     public List<Player> getPlayerList() {
@@ -448,4 +457,5 @@ public class Board implements Serializable {
     public GamePhase getPhase() {
         return currentPhase;
     }
+
 }

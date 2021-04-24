@@ -10,6 +10,7 @@ import java.io.Serializable;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import back.cards.Axe;
 import back.cards.Card;
 import back.cards.Cartridge;
 import back.cards.Matches;
@@ -181,30 +182,19 @@ public class Player implements Serializable {
         return cardUsed;
     }
 
-    public Card getMetalSheet() {
-        Card card = null;
+    public boolean hasCardType(Class<?> cardClass) {
         for (Card cardInInventory : inventory) {
-            if (cardInInventory instanceof MetalSheet) {
-                card = cardInInventory;
+            if (cardClass.isInstance(cardInInventory)) {
+                return true;
             }
         }
-        return card;
+        return false;
     }
 
-    public Card getMatches() {
+    public Card getCardType(Class<?> cardClass) {
         Card card = null;
         for (Card cardInInventory : inventory) {
-            if (cardInInventory instanceof Matches) {
-                card = cardInInventory;
-            }
-        }
-        return card;
-    }
-
-    public Card getCartridge() {
-        Card card = null;
-        for (Card cardInInventory : inventory) {
-            if (cardInInventory instanceof Cartridge) {
+            if (cardClass.isInstance(cardInInventory)) {
                 card = cardInInventory;
             }
         }

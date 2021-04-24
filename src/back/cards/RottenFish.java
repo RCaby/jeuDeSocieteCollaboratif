@@ -20,16 +20,14 @@ public class RottenFish extends Card {
     @Override
     public void useCard(Player player1, Player player2, Player player3, String string) {
         super.useCard(player1, player2, player3, string);
-        if (player1 != null && player2 != null) {
+        if (player1 != null) {
             board.addFood(1);
-            Card matchesFromOwner = player1.getMatches();
-            Card matchesFromUser = player2.getMatches();
-            if (matchesFromOwner != null || matchesFromUser != null) {
-                // TODO
+            if (!board.getMatchesUsedThisRound()) {
+                player1.setState(PlayerState.SICK);
             } else {
-                // TODO
+                board.setMatchesUsedThisRound(false);
             }
-            player2.setState(PlayerState.SICK);
+
         }
 
     }

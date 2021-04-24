@@ -1,9 +1,12 @@
 package back.cards;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import back.Board;
 import back.Player;
+import back.PlayerState;
 
 public class Spyglass extends Card {
     private static final long serialVersionUID = -4985929183848934161L;
@@ -19,7 +22,15 @@ public class Spyglass extends Card {
     @Override
     public void useCard(Player player1, Player player2, Player player3, String string) {
         super.useCard(player1, player2, player3, string);
-        // Nothing for now
+        List<Card> cardList = new ArrayList<>();
+        for (Player player : board.getPlayerList()) {
+            if (player.getState() != PlayerState.DEAD) {
+                for (int index = 0; index < player.getCardNumber(); index++) {
+                    cardList.add(player.getCard(index));
+                }
+            }
+        }
+        System.out.println(cardList);
     }
 
 }

@@ -3,6 +3,7 @@ package back.cards;
 import java.util.ResourceBundle;
 
 import back.Board;
+import back.Player;
 
 public class Matches extends Card {
     private static final long serialVersionUID = -5512438010000301669L;
@@ -15,9 +16,15 @@ public class Matches extends Card {
         return stringsBundle.getString("Matches_name");
     }
 
+    @Override
+    public void useCard(Player player1, Player player2, Player player3, String string) {
+        super.useCard(player1, player2, player3, string);
+        board.setMatchesUsedThisRound(true);
+    }
+
     // Nothing for now
     @Override
     public boolean canBeUsed() {
-        return false;
+        return true;
     }
 }
