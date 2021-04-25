@@ -12,7 +12,7 @@ public class OldBrief extends Card {
     }
 
     public String toString() {
-        return stringsBundle.getString("OldBrief");
+        return stringsBundle.getString("OldBrief_name");
     }
 
 }

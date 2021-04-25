@@ -2,6 +2,7 @@ package back;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.awt.FlowLayout;
@@ -224,6 +225,16 @@ public class Player implements Serializable {
             inventoryRevealed.add(card);
             addCardToRevealedPanel(card);
         }
+    }
+
+    public Player vote(List<Player> pickablePlayers) {
+        int pickedIndex = random.nextInt(pickablePlayers.size());
+        System.out.println(this + " votes for " + pickablePlayers.get(pickedIndex));
+        return pickablePlayers.get(pickedIndex);
+    }
+
+    public Player decideWhoDie(List<Player> playerList) {
+        return playerList.get(random.nextInt(playerList.size()));
     }
 
     public void deathPurge() {

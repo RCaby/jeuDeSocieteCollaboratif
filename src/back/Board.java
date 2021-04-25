@@ -3,12 +3,18 @@ package back;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.Map.Entry;
 
 import back.cards.Card;
+import back.cards.Club;
+import back.cards.Conch;
+import back.cards.CrystalBall;
 
 public class Board implements Serializable {
     private int foodRations;
@@ -30,6 +36,8 @@ public class Board implements Serializable {
     private boolean matchesUsedThisRound;
     private List<Player> deadThisRound;
     private transient ResourceBundle stringsBundle;
+    private List<Card> cardsPlayedThisRound;
+    private Player chief;
 
     public Board(int nbPlayers, String namePlayer, Boolean forTest) {
         currentPhase = GamePhase.INITIALISATION;
@@ -44,7 +52,8 @@ public class Board implements Serializable {
         indexOfCurrentPlayer = 0;
         nbWoodPlanks = 0;
         nbWoodPlanksFragment = 0;
-        deadThisRound = new ArrayList<Player>();
+        deadThisRound = new ArrayList<>();
+        cardsPlayedThisRound = new ArrayList<>();
         matchesUsedThisRound = false;
         random = new Random();
         weatherList = data.getWeatherList();
@@ -71,6 +80,7 @@ public class Board implements Serializable {
             System.out.println("Ce n'est pas un test !");
             askPlayersForCards();
             currentPhase = GamePhase.GATHERING_RESSOURCES;
+            chief = playerList.get(0);
             play(playerList.get(0), forTest);
         }
 
@@ -176,8 +186,9 @@ public class Board implements Serializable {
             } else {
                 indexOfThisPlayer--;
             }
-            Player chief = playerList.remove(0);
-            playerList.add(chief);
+            Player oldChief = playerList.remove(0);
+            playerList.add(oldChief);
+            chief = playerList.get(0);
 
             currentPhase = GamePhase.GOODS_DISTRIBUTION;
 
@@ -206,6 +217,7 @@ public class Board implements Serializable {
             } else if (!forTest) {
                 System.out.println("\nGoing to next round ! Bye bye -------------------------");
                 deadThisRound.clear();
+                cardsPlayedThisRound.clear();
                 currentPhase = GamePhase.ROUND_BEGINNING;
                 matchesUsedThisRound = false;
                 askPlayersForCards();
@@ -234,6 +246,7 @@ public class Board implements Serializable {
                 boolean cardUsedAgain = askPlayersForCards();
                 if (!cardUsedAgain) {
                     player.setState(PlayerState.DEAD);
+                    System.out.println(player + " has been sacrified for the sake of the crew :(");
                     player = null;
                 }
             }
@@ -248,13 +261,75 @@ public class Board implements Serializable {
     }
 
     public Player choosePlayerToDie() {
-        int pickedPlayerIndex = random.nextInt(playerList.size());
-        while (playerList.get(pickedPlayerIndex).getState() == PlayerState.DEAD) {
-            pickedPlayerIndex = random.nextInt(playerList.size());
+
+        Map<Player, Integer> votes = new HashMap<>();
+        List<Player> pickablePlayers = new ArrayList<>();
+        List<Player> votingPlayers = new ArrayList<>();
+        for (Player player : playerList) {
+            Card conch = player.getCardType(Conch.class);
+            if (player.getState() != PlayerState.DEAD && (conch == null || !conch.isCardRevealed()
+                    || (conch.isCardRevealed() && getNbPlayersAlive() == 1))) {
+                pickablePlayers.add(player);
+                votes.put(player, 0);
+            }
+            if (player.getState() == PlayerState.HEALTHY) {
+                votingPlayers.add(player);
+                Card cardClub = player.getCardType(Club.class);
+                if (cardClub != null && cardClub.isCardRevealed()) {
+                    votingPlayers.add(player);
+                }
+            }
         }
-        Player player = playerList.get(pickedPlayerIndex);
-        System.out.println("Oh " + player + " has been doomed by fate !");
-        return player;
+
+        conchVote(votingPlayers);
+
+        for (Player player : votingPlayers) {
+            Player designated = player.vote(pickablePlayers);
+            int prevValue = votes.get(designated);
+            votes.put(designated, prevValue + 1);
+        }
+
+        return voteResults(votes);
+
+    }
+
+    public void conchVote(List<Player> listVotingPlayers) {
+        int indexCrystalBall = -1;
+        for (int index = 0; index < listVotingPlayers.size(); index++) {
+            Card crystalBall = listVotingPlayers.get(index).getCardType(CrystalBall.class);
+            if (crystalBall != null && crystalBall.isCardRevealed()) {
+                indexCrystalBall = index;
+            }
+        }
+        if (indexCrystalBall != -1) {
+            Player player = listVotingPlayers.remove(indexCrystalBall);
+            listVotingPlayers.add(player); // Last to vote
+        }
+    }
+
+    public Player voteResults(Map<Player, Integer> votes) {
+        Integer max = 0;
+        int nbOfMax = 0;
+        List<Player> maxPlayers = new ArrayList<>();
+        for (Entry<Player, Integer> entry : votes.entrySet()) {
+            Integer value = entry.getValue();
+            Player key = entry.getKey();
+            if (value > max) {
+                max = value;
+                maxPlayers.clear();
+                maxPlayers.add(key);
+                nbOfMax = 1;
+            } else if (value.equals(max)) {
+                maxPlayers.add(key);
+                nbOfMax++;
+            }
+        }
+
+        if (nbOfMax == 1) {
+            return maxPlayers.get(0);
+        }
+
+        return chief.decideWhoDie(maxPlayers);
     }
 
     public void distributeCardsFromDeadPlayer(Player player) {
@@ -400,6 +475,10 @@ public class Board implements Serializable {
         return discardDeck;
     }
 
+    public void setChief(Player player) {
+        chief = player;
+    }
+
     public void addFood(int food) {
         foodRations += food;
     }
@@ -424,6 +503,10 @@ public class Board implements Serializable {
 
     public void removeWater(int water) {
         waterRations -= water;
+    }
+
+    public List<Card> getCardsPlayedThisRound() {
+        return cardsPlayedThisRound;
     }
 
     public int getFoodRations() {

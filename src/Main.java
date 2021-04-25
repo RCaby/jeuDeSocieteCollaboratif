@@ -13,6 +13,7 @@ public class Main {
 
         Board board = new Board(5, "Raph", false);
 
-        // TODO Give/Exchange cards
+        // TODO gourd/ fishing rods etc used in resources gathering
+        // TODO play two action this turn + impose other player action
     }
 }
