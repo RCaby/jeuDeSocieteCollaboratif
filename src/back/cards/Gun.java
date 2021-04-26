@@ -2,6 +2,7 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import back.ActionType;
 import back.Board;
 import back.Player;
 import back.PlayerState;
@@ -24,14 +25,14 @@ public class Gun extends Card {
     // permanent
 
     @Override
-    public void useCard(Player player1, Player player2, Player player3, String string) {
+    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         if (player1 != null && player2 != null) {
             Card card = player1.getCardType(Gun.class);
             if (card != null) {
-                card.useCard(player1, player2, player3, string);
+                card.useCard(player1, player2, player3, action);
                 Card metalSheet = player2.getCardType(MetalSheet.class);
                 if (metalSheet != null) {
-                    metalSheet.useCard(player1, player2, player3, string);
+                    metalSheet.useCard(player1, player2, player3, action);
                 } else {
                     board.getDeadThisRound().add(player2);
                     player2.setState(PlayerState.DEAD);

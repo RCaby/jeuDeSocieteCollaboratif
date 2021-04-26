@@ -11,10 +11,13 @@ import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Map.Entry;
 
+import back.cards.Axe;
 import back.cards.Card;
 import back.cards.Club;
 import back.cards.Conch;
 import back.cards.CrystalBall;
+import back.cards.FishingRod;
+import back.cards.Gourd;
 
 public class Board implements Serializable {
     private int foodRations;
@@ -38,6 +41,7 @@ public class Board implements Serializable {
     private transient ResourceBundle stringsBundle;
     private List<Card> cardsPlayedThisRound;
     private Player chief;
+    private Player thisPlayer;
 
     public Board(int nbPlayers, String namePlayer, Boolean forTest) {
         currentPhase = GamePhase.INITIALISATION;
@@ -66,7 +70,8 @@ public class Board implements Serializable {
             Player player = new Player(stringsBundle.getString("player_name") + index, stringsBundle);
             playerList.add(player);
         }
-        playerList.add(indexOfThisPlayer, new Player(namePlayer, stringsBundle));
+        thisPlayer = new Player(namePlayer, stringsBundle);
+        playerList.add(indexOfThisPlayer, thisPlayer);
         int nbCardToGive = nbPlayers >= 9 ? 3 : 4;
         for (Player player : playerList) {
             for (int nbCard = 0; nbCard < nbCardToGive; nbCard++) {
@@ -115,12 +120,10 @@ public class Board implements Serializable {
             player.setState(PlayerState.HEALTHY);
             System.out.println(player + " was sick and could not play, now cured");
             play(nextPlayer(), forTest);
-        } else if (player != null && player.getState() == PlayerState.HEALTHY
-                && player != playerList.get(indexOfThisPlayer)) {
+        } else if (player != null && player.getState() == PlayerState.HEALTHY && !player.equals(thisPlayer)) {
             System.out.println("CPU Play");
             playAsCPU(player, forTest);
-        } else if (player != null && player.getState() == PlayerState.HEALTHY
-                && player == playerList.get(indexOfThisPlayer)) {
+        } else if (player != null && player.getState() == PlayerState.HEALTHY && player.equals(thisPlayer)) {
             System.out.println("Player play");
             playAsPlayer(player, forTest);
         } else if (player == null) {
@@ -135,6 +138,14 @@ public class Board implements Serializable {
             // Case not expected
             System.out.println("Player is sick !");
             play(nextPlayer(), forTest);
+        } else {
+            System.out.println("Aie");
+        }
+    }
+
+    public void clearImposedDecisions() {
+        for (Player player : playerList) {
+            player.setImposedActionThisRound(ActionType.NONE);
         }
     }
 
@@ -143,23 +154,26 @@ public class Board implements Serializable {
     }
 
     public void playAsCPU(Player player, boolean forTest) {
+        ActionType imposedAction = player.getImposedActionThisRound();
+        if (imposedAction == ActionType.NONE) {
+            imposedAction = ActionType.getRandomActionType();
+        }
 
-        int indexAction = random.nextInt(4);
-        switch (indexAction) {
-        case 0:
+        switch (imposedAction) {
+        case FOOD:
             System.out.println(player.toString() + " is getting food !\n");
             player.playAsCPUFood(this);
 
             break;
-        case 1:
+        case WATER:
             System.out.println(player.toString() + " is getting water !\n");
             player.playAsCPUWater(this);
             break;
-        case 2:
+        case WOOD:
             System.out.println(player.toString() + " is getting wood !\n");
             player.playAsCPUWood(this);
             break;
-        case 3:
+        case CARD:
             System.out.println(player.toString() + " is getting a card !\n");
             player.playAsCPUCard(this);
             break;
@@ -179,17 +193,6 @@ public class Board implements Serializable {
             endGame();
         } else {
 
-            round++;
-            indexOfCurrentPlayer = 0;
-            if (indexOfThisPlayer == 0) {
-                indexOfThisPlayer = playerList.size() - 1;
-            } else {
-                indexOfThisPlayer--;
-            }
-            Player oldChief = playerList.remove(0);
-            playerList.add(oldChief);
-            chief = playerList.get(0);
-
             currentPhase = GamePhase.GOODS_DISTRIBUTION;
 
             System.out.println("Water " + waterRations + ", Food " + foodRations + ", Wood " + nbWoodPlanks);
@@ -206,7 +209,7 @@ public class Board implements Serializable {
                 System.out.println("All dead :(");
                 gameOver = true;
                 endGame();
-            } else if (weatherList[round - 1] == -2) {
+            } else if (weatherList[round] == -2) {
                 System.out.println("Hurricane !");
                 gameOver = true;
                 endGame();
@@ -216,13 +219,31 @@ public class Board implements Serializable {
                 endGame();
             } else if (!forTest) {
                 System.out.println("\nGoing to next round ! Bye bye -------------------------");
+                round++; // !!! has been moved
                 deadThisRound.clear();
                 cardsPlayedThisRound.clear();
                 currentPhase = GamePhase.ROUND_BEGINNING;
+                clearImposedDecisions();
                 matchesUsedThisRound = false;
+                nextRoundPlayerList();
+                chief = playerList.get(0);
                 askPlayersForCards();
+
                 currentPhase = GamePhase.GATHERING_RESSOURCES;
                 play(playerList.get(0), forTest);
+            }
+
+        }
+    }
+
+    public void nextRoundPlayerList() {
+        if (getNbPlayersAlive() > 0) {
+
+            Player futureChief = playerList.remove(playerList.size() - 1);
+            playerList.add(0, futureChief);
+            while (playerList.get(0).getState() == PlayerState.DEAD) {
+                futureChief = playerList.remove(playerList.size() - 1);
+                playerList.add(0, futureChief);
             }
 
         }
@@ -247,6 +268,11 @@ public class Board implements Serializable {
                 if (!cardUsedAgain) {
                     player.setState(PlayerState.DEAD);
                     System.out.println(player + " has been sacrified for the sake of the crew :(");
+                    if (player.equals(chief) && getNbPlayersAlive() > 0) {
+                        chief = getPlayerAliveAfterBefore(playerList.indexOf(player), false);
+                        System.out.println("The new chief is " + chief);
+
+                    }
                     player = null;
                 }
             }
@@ -265,6 +291,7 @@ public class Board implements Serializable {
         Map<Player, Integer> votes = new HashMap<>();
         List<Player> pickablePlayers = new ArrayList<>();
         List<Player> votingPlayers = new ArrayList<>();
+        System.out.println("Vote session ------------------");
         for (Player player : playerList) {
             Card conch = player.getCardType(Conch.class);
             if (player.getState() != PlayerState.DEAD && (conch == null || !conch.isCardRevealed()
@@ -288,8 +315,9 @@ public class Board implements Serializable {
             int prevValue = votes.get(designated);
             votes.put(designated, prevValue + 1);
         }
-
-        return voteResults(votes);
+        Player resultPlayer = voteResults(votes);
+        System.out.println("End of vote session ----------------");
+        return resultPlayer;
 
     }
 
@@ -329,7 +357,7 @@ public class Board implements Serializable {
             return maxPlayers.get(0);
         }
 
-        return chief.decideWhoDie(maxPlayers);
+        return chief.decideWhoDie(playerList);
     }
 
     public void distributeCardsFromDeadPlayer(Player player) {
@@ -397,35 +425,62 @@ public class Board implements Serializable {
         discardDeck.add(card);
     }
 
-    public int seekFood() {
+    public int seekFood(Player player) {
         int pickedIndex = random.nextInt(6) + 1;
+
+        int foodGot = howMuchFood(pickedIndex);
+
+        Card fishingRod = player.getCardType(FishingRod.class);
+        if (fishingRod != null && fishingRod.isCardRevealed()) {
+            System.out.println("Fishing Rod is used !");
+            int pickedIndex2 = random.nextInt(6) + 1;
+            while (pickedIndex2 == pickedIndex) {
+                pickedIndex2 = random.nextInt(6) + 1;
+            }
+            foodGot += howMuchFood(pickedIndex2);
+        }
+
+        return foodGot;
+
+    }
+
+    private int howMuchFood(int index) {
         int foodGot;
-        if (pickedIndex == 6) {
+        if (index == 6) {
             foodGot = 3;
-        } else if (pickedIndex == 5 || pickedIndex == 4) {
+        } else if (index == 5 || index == 4) {
             foodGot = 2;
         } else {
             foodGot = 1;
         }
         return foodGot;
-
     }
 
-    public int seekWater() {
-        return Math.abs(getWeather());
-    }
-
-    public int seekWood(int nbTries) {
-        int wood = 0;
-        List<Integer> givenList = new ArrayList<>();
-        for (int index = 0; index < 6; index++) {
-            givenList.add(index);
+    public int seekWater(Player player) {
+        int waterGot = Math.abs(getWeather());
+        Card gourd = player.getCardType(Gourd.class);
+        if (gourd != null && gourd.isCardRevealed()) {
+            waterGot *= 2;
         }
-        Collections.shuffle(givenList);
+        return waterGot;
+    }
 
-        List<Integer> randomSeries = givenList.subList(0, nbTries);
+    public int seekWood(int nbTries, Player player) {
+        int wood = 1;
+        List<Integer> diceList = new ArrayList<>();
+        for (int index = 0; index < 6; index++) {
+            diceList.add(index);
+        }
+        Collections.shuffle(diceList);
+
+        List<Integer> randomSeries = diceList.subList(0, nbTries);
         if (!randomSeries.contains(0)) {
-            wood += nbTries + 1;
+            wood += nbTries;
+        }
+
+        Card axe = player.getCardType(Axe.class);
+        if (axe != null && axe.isCardRevealed()) {
+            wood++;
         }
         return wood;
     }

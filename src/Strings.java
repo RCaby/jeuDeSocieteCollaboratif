@@ -12,7 +12,7 @@ public class Strings extends ListResourceBundle {
             { "Club_name", "Club" }, { "Coconut_name", "Coconut" }, { "Coffee_name", "Coffee" },
             { "Conch_name", "Conch" }, { "CrystalBall_name", "Crystal Ball" }, { "FishingRod_name", "Fishing Rod" },
             { "Flashlight_name", "Flashlight" }, { "GiftBasket_name", "Gift Basket" }, { "Gourd_name", "Gourd" },
-            { "Gun_name", "Gun" }, { "KitBBQCannibal_name", "Kit BBQ Canibal" },
+            { "Gun_name", "Gun" }, { "KitBBQCanibal_name", "Kit BBQ Canibal" },
             { "LuxuryCarKey_name", "Luxury Car Key" }, { "Matches_name", "Matches" },
             { "MetalSheet_name", "Metal Sheet" }, { "OldBrief_name", "Old Brief" }, { "Pendulum_name", "Pendulum" },
             { "RottenFish_name", "Rotten Fish" }, { "Sandwich_name", "Sandwich" }, { "Sardines_name", "Sardines" },

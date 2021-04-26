@@ -3,6 +3,7 @@ package back.cards;
 import java.util.Random;
 import java.util.ResourceBundle;
 
+import back.ActionType;
 import back.Board;
 import back.GamePhase;
 import back.Player;
@@ -22,9 +23,9 @@ public class VoodooDoll extends Card {
     }
 
     @Override
-    public void useCard(Player player1, Player player2, Player player3, String string) {
+    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         if (!board.getDeadThisRound().isEmpty()) {
-            super.useCard(player1, player2, player3, string);
+            super.useCard(player1, player2, player3, action);
             int pickedPlayer = random.nextInt(board.getDeadThisRound().size());
             Player player = board.getDeadThisRound().get(pickedPlayer);
             player.setState(PlayerState.HEALTHY);

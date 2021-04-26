@@ -3,6 +3,7 @@ package back.cards;
 import java.io.Serializable;
 import java.util.ResourceBundle;
 
+import back.ActionType;
 import back.Board;
 import back.Player;
 
@@ -26,8 +27,9 @@ public abstract class Card implements Serializable {
         this.board = board;
     }
 
-    public void useCard(Player player1, Player player2, Player player3, String string) {
+    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         board.getCardsPlayedThisRound().add(this);
+
         if (!isRevealed) {
             isRevealed = true;
             if (owner != null) {

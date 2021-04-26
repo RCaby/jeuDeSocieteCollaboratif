@@ -31,6 +31,7 @@ public class Player implements Serializable {
     private JLabel stateLabel;
     private JPanel cardRevealedPanel;
     private JPanel cardHiddenPanel;
+    private ActionType imposedActionThisRound;
     private Random random = new Random();
     private boolean hasPlankForDeparture;
     private int sickRound;
@@ -41,6 +42,7 @@ public class Player implements Serializable {
         inventory = new ArrayList<>();
         inventoryHidden = new ArrayList<>();
         inventoryRevealed = new ArrayList<>();
+        imposedActionThisRound = ActionType.NONE;
         state = PlayerState.HEALTHY;
         this.stringsBundle = stringsBundle;
         buildDisplay();
@@ -72,20 +74,20 @@ public class Player implements Serializable {
     }
 
     public int playAsCPUFood(Board board) {
-        int food = board.seekFood();
+        int food = board.seekFood(this);
         board.addFood(food);
         return food;
     }
 
     public int playAsCPUWater(Board board) {
-        int water = board.seekWater();
+        int water = board.seekWater(this);
         board.addWater(water);
         return water;
     }
 
     public int playAsCPUWood(Board board) {
         int nbTries = random.nextInt(6) + 1;
-        int wood = board.seekWood(nbTries);
+        int wood = board.seekWood(nbTries, this);
         if (wood == 0) {
             setState(PlayerState.SICK);
             sickRound = board.getRound();
@@ -173,7 +175,7 @@ public class Player implements Serializable {
             Card card = inventory.get(index);
             if (inventory.get(index).canBeUsed() && odds == 0) {
                 System.out.println(this + " uses the card " + card);
-                card.useCard(this, null, null, "");
+                card.useCard(this, null, null, ActionType.NONE);
                 cardUsed = true;
             }
 
@@ -234,6 +236,10 @@ public class Player implements Serializable {
     }
 
     public Player decideWhoDie(List<Player> playerList) {
+        Player player = playerList.get(random.nextInt(playerList.size()));
+        while (player.getState() == PlayerState.DEAD) {
+            player = playerList.get(random.nextInt(playerList.size()));
+        }
         return playerList.get(random.nextInt(playerList.size()));
     }
 
@@ -273,6 +279,14 @@ public class Player implements Serializable {
 
     public JPanel getPanelDisplay() {
         return display;
+    }
+
+    public ActionType getImposedActionThisRound() {
+        return imposedActionThisRound;
+    }
+
+    public void setImposedActionThisRound(ActionType imposedActionThisRound) {
+        this.imposedActionThisRound = imposedActionThisRound;
     }
 
     public Card getCard(int index) {

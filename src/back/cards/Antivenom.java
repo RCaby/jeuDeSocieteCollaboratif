@@ -2,6 +2,7 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import back.ActionType;
 import back.Board;
 import back.Player;
 import back.PlayerState;
@@ -19,9 +20,9 @@ public class Antivenom extends Card {
     }
 
     @Override
-    public void useCard(Player player1, Player player2, Player player3, String string) {
+    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         if (player1 != null) {
-            super.useCard(player1, player2, player3, string);
+            super.useCard(player1, player2, player3, action);
             player1.setState(PlayerState.HEALTHY);
         }
 

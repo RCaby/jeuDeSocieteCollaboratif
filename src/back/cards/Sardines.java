@@ -2,6 +2,7 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import back.ActionType;
 import back.Board;
 import back.Player;
 
@@ -17,8 +18,8 @@ public class Sardines extends Card {
     }
 
     @Override
-    public void useCard(Player player1, Player player2, Player player3, String string) {
-        super.useCard(player1, player2, player3, string);
+    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
+        super.useCard(player1, player2, player3, action);
         board.addFood(3);
     }
 }
