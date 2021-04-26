@@ -29,7 +29,6 @@ public abstract class Card implements Serializable {
 
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         board.getCardsPlayedThisRound().add(this);
-
         if (!isRevealed) {
             isRevealed = true;
             if (owner != null) {
