@@ -42,8 +42,10 @@ public class Board implements Serializable {
     private List<Card> cardsPlayedThisRound;
     private Player chief;
     private Player thisPlayer;
+    private Player nextChief;
+    private Player twicePlayingPlayer;
 
-    public Board(int nbPlayers, String namePlayer, Boolean forTest) {
+    public Board(int nbPlayers, String namePlayer) {
         currentPhase = GamePhase.INITIALISATION;
         Locale locale = new Locale("en", "US");
         stringsBundle = ResourceBundle.getBundle("Strings", locale);
@@ -65,6 +67,8 @@ public class Board implements Serializable {
         voluntaryDepartureStarted = false;
         playerList = new ArrayList<>();
         discardDeck = new ArrayList<>();
+        nextChief = null;
+        twicePlayingPlayer = null;
 
         for (int index = 0; index < nbPlayers - 1; index++) {
             Player player = new Player(stringsBundle.getString("player_name") + index, stringsBundle);
@@ -81,13 +85,11 @@ public class Board implements Serializable {
         }
 
         System.out.println("End of initialisation");
-        if (Boolean.FALSE.equals(forTest)) {
-            System.out.println("Ce n'est pas un test !");
-            askPlayersForCards();
-            currentPhase = GamePhase.GATHERING_RESSOURCES;
-            chief = playerList.get(0);
-            play(playerList.get(0), forTest);
-        }
+
+        askPlayersForCards();
+        currentPhase = GamePhase.GATHERING_RESSOURCES;
+        chief = playerList.get(0);
+        play(playerList.get(0));
 
     }
 
@@ -113,33 +115,33 @@ public class Board implements Serializable {
         return player;
     }
 
-    public void play(Player player, boolean forTest) {
+    public void play(Player player) {
         if (gameOver) {
             endGame();
         } else if (player != null && player.getState() == PlayerState.SICK && player.getRoundSick() == round - 1) {
             player.setState(PlayerState.HEALTHY);
             System.out.println(player + " was sick and could not play, now cured");
-            play(nextPlayer(), forTest);
+            play(nextPlayer());
         } else if (player != null && player.getState() == PlayerState.HEALTHY && !player.equals(thisPlayer)) {
             System.out.println("CPU Play");
-            playAsCPU(player, forTest);
+            playAsCPU(player);
         } else if (player != null && player.getState() == PlayerState.HEALTHY && player.equals(thisPlayer)) {
             System.out.println("Player play");
-            playAsPlayer(player, forTest);
+            playAsPlayer(player);
         } else if (player == null) {
-            switchToNextRound(forTest);
+            switchToNextRound();
             if (!gameOver) {
-                play(playerList.get(0), forTest);
+                play(playerList.get(0));
             }
         } else if (player.getState() == PlayerState.DEAD) {
             System.out.println("Player is dead !");
-            play(nextPlayer(), forTest);
+            play(nextPlayer());
         } else if (player.getState() == PlayerState.SICK) {
             // Case not expected
             System.out.println("Player is sick !");
-            play(nextPlayer(), forTest);
+            play(nextPlayer());
         } else {
-            System.out.println("Aie");
+            System.out.println("Default Case ! Something is fishy ~");
         }
     }
 
@@ -149,11 +151,11 @@ public class Board implements Serializable {
         }
     }
 
-    public void playAsPlayer(Player player, boolean forTest) {
-        playAsCPU(player, forTest);
+    public void playAsPlayer(Player player) {
+        playAsCPU(player);
     }
 
-    public void playAsCPU(Player player, boolean forTest) {
+    public void playAsCPU(Player player) {
         ActionType imposedAction = player.getImposedActionThisRound();
         if (imposedAction == ActionType.NONE) {
             imposedAction = ActionType.getRandomActionType();
@@ -181,14 +183,20 @@ public class Board implements Serializable {
             break;
         }
         askPlayersForCards();
-        play(nextPlayer(), forTest);
+        if (twicePlayingPlayer != null && twicePlayingPlayer.equals(player)) {
+            twicePlayingPlayer = null;
+            System.out.println(player + " will play again !");
+            playAsCPU(player);
+        } else {
+            play(nextPlayer());
+        }
     }
 
     public void giveCardToPlayer(Player player, Card card) {
         player.addCardToInventory(card);
     }
 
-    public void switchToNextRound(boolean forTest) {
+    public void switchToNextRound() {
         if (gameOver || getNbPlayersAlive() == 0) {
             endGame();
         } else {
@@ -217,7 +225,7 @@ public class Board implements Serializable {
                 System.out.println("Volontary Departure !");
                 gameOver = true;
                 endGame();
-            } else if (!forTest) {
+            } else {
                 System.out.println("\nGoing to next round ! Bye bye -------------------------");
                 round++; // !!! has been moved
                 deadThisRound.clear();
@@ -227,10 +235,13 @@ public class Board implements Serializable {
                 matchesUsedThisRound = false;
                 nextRoundPlayerList();
                 chief = playerList.get(0);
+                nextChief = null;
+                twicePlayingPlayer = null;
                 askPlayersForCards();
 
                 currentPhase = GamePhase.GATHERING_RESSOURCES;
-                play(playerList.get(0), forTest);
+                indexOfCurrentPlayer = 0;
+                // play(playerList.get(0));
             }
 
         }
@@ -241,12 +252,14 @@ public class Board implements Serializable {
 
             Player futureChief = playerList.remove(playerList.size() - 1);
             playerList.add(0, futureChief);
-            while (playerList.get(0).getState() == PlayerState.DEAD) {
+            while (playerList.get(0).getState() == PlayerState.DEAD
+                    || (nextChief != null && !playerList.get(0).equals(nextChief))) {
                 futureChief = playerList.remove(playerList.size() - 1);
                 playerList.add(0, futureChief);
             }
 
         }
+        System.out.println("Next round playerList : " + playerList);
     }
 
     public boolean isThereEnoughGoodsForAll(boolean departure) {
@@ -304,6 +317,7 @@ public class Board implements Serializable {
                 Card cardClub = player.getCardType(Club.class);
                 if (cardClub != null && cardClub.isCardRevealed()) {
                     votingPlayers.add(player);
+                    System.out.println(player + " will be voting twice ! Thanks to his club");
                 }
             }
         }
@@ -554,6 +568,14 @@ public class Board implements Serializable {
 
     public void removeFood(int food) {
         foodRations -= food;
+    }
+
+    public void setNextChief(Player nextChief) {
+        this.nextChief = nextChief;
+    }
+
+    public void setTwicePlayingPlayer(Player twicePlayingPlayer) {
+        this.twicePlayingPlayer = twicePlayingPlayer;
     }
 
     public void removeWater(int water) {

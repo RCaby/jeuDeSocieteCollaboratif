@@ -240,7 +240,7 @@ public class Player implements Serializable {
         while (player.getState() == PlayerState.DEAD) {
             player = playerList.get(random.nextInt(playerList.size()));
         }
-        return playerList.get(random.nextInt(playerList.size()));
+        return player;
     }
 
     public void deathPurge() {

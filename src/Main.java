@@ -11,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Board board = new Board(5, "Raph", false);
+        Board board = new Board(5, "Raph");
 
         // TODO gourd/ fishing rods etc used in resources gathering
         // TODO play two action this turn + impose other player action
