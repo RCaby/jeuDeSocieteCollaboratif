@@ -7,18 +7,48 @@ import back.Board;
 import back.Player;
 import back.PlayerState;
 
+/**
+ * The {@code AlarmClock} class represents the Alarm Clock Card.
+ * 
+ * <p>
+ * The card AlarmClock cures a sick player. It is a single-use card, discarded
+ * after utilisation.
+ * 
+ * <p>
+ * The class {@code Antivenom} extends the abstract class {@link Card}.
+ * 
+ */
 public class AlarmClock extends Card {
 
     private static final long serialVersionUID = -4056999539348867224L;
+    public static final int NUMBER_THIS_IN_DECK = 1;
 
+    /**
+     * Generates a new {@code AlarmClock} card.
+     * 
+     * @param board         the main board, not null
+     * @param stringsBundle the strings used by the card such as its name or its
+     *                      description, not null
+     */
     public AlarmClock(Board board, ResourceBundle stringsBundle) {
         super(board, stringsBundle);
+        cardName = stringsBundle.getString("AlarmClock_name");
+        cardDescription = stringsBundle.getString("AlarmClock_description");
     }
 
     public String toString() {
-        return stringsBundle.getString("AlarmClock_name");
+        return cardName;
     }
 
+    /**
+     * Simulates the utilisation of the card, herited from {@link Card}. Needs one
+     * player as a target for the action.
+     * 
+     * @param player1 target of the action, not null, player has to be alive
+     * @param player2 not needed for this card
+     * @param player3 not needed for this card
+     * @param action  not needed for this card
+     */
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         if (player1 != null && player1.getState() != PlayerState.DEAD) {
@@ -27,5 +57,6 @@ public class AlarmClock extends Card {
             System.out.println(player1 + " will be the next chief !");
         }
     }
+    // FIXME play card conch then alarm clock would erase the conch chief
 
 }

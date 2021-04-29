@@ -13,7 +13,7 @@ public class Main {
 
         Board board = new Board(5, "Raph");
 
-        // TODO gourd/ fishing rods etc used in resources gathering
-        // TODO play two action this turn + impose other player action
+        // TODO s'inspirer de la java doc officielle (classe String) pour rédiger une
+        // bonne javadoc.
     }
 }
