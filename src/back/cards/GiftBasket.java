@@ -59,7 +59,7 @@ public class GiftBasket extends Card {
         }
         if (board.getFoodRations() < board.getNbPlayersAlive()) {
             int foodToAdd = board.getNbPlayersAlive() - board.getFoodRations();
-            board.addWater(foodToAdd);
+            board.addFood(foodToAdd);
         }
     }
 
@@ -70,7 +70,8 @@ public class GiftBasket extends Card {
      */
     @Override
     public boolean canBeUsed() {
-        return board.getPhase() == GamePhase.GOODS_DISTRIBUTION && (!board.isThereEnoughGoodsForAll(false));// To be
-                                                                                                            // ended
+        return board.getCurrentPhase() == GamePhase.GOODS_DISTRIBUTION && (!board.isThereEnoughGoodsForAll(false));// To
+                                                                                                                   // be
+        // ended
     }
 }

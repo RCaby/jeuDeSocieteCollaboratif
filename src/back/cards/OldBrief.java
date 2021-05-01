@@ -28,8 +28,8 @@ public class OldBrief extends Card {
      */
     public OldBrief(Board board, ResourceBundle stringsBundle) {
         super(board, stringsBundle);
-        cardName = stringsBundle.getString("VoodooDoll_name");
-        cardDescription = stringsBundle.getString("VoodooDoll_description");
+        cardName = stringsBundle.getString("OldBrief_name");
+        cardDescription = stringsBundle.getString("OldBrief_description");
     }
 
     public String toString() {

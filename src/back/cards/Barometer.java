@@ -59,9 +59,10 @@ public class Barometer extends Card {
             toBeDisplayed.add(weather);
             if (n <= 9) {
                 weather = board.getWeather(10);
-                toBeDisplayed.add(weather);
+                toBeDisplayed.add(0, weather);
             }
         }
+        board.setBarometerList(toBeDisplayed);
         System.out.println(toBeDisplayed);
     }
 }

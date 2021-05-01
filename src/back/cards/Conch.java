@@ -49,10 +49,10 @@ public class Conch extends Card {
      */
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
-        super.useCard(player1, player2, player3, action);
         if (owner != null) {
-            board.setChief(owner);
+            board.setConchOwner(owner);
         }
+        super.useCard(player1, player2, player3, action);
 
     }
 

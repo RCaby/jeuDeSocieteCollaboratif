@@ -44,8 +44,15 @@ public class Board implements Serializable {
     private Player thisPlayer;
     private Player nextChief;
     private Player twicePlayingPlayer;
+    private List<Card> spyglassList;
+    private List<Card> flashLightList;
+    private List<Integer> barometerList;
+    private Player conchOwner;
 
-    public Board(int nbPlayers, String namePlayer) {
+    /**
+     * Used for test
+     */
+    public Board(int nbPlayers) {
         currentPhase = GamePhase.INITIALISATION;
         Locale locale = new Locale("en", "US");
         stringsBundle = ResourceBundle.getBundle("Strings", locale);
@@ -60,37 +67,51 @@ public class Board implements Serializable {
         nbWoodPlanksFragment = 0;
         deadThisRound = new ArrayList<>();
         cardsPlayedThisRound = new ArrayList<>();
+        flashLightList = new ArrayList<>();
+        barometerList = new ArrayList<>();
         matchesUsedThisRound = false;
         random = new Random();
         weatherList = data.getWeatherList();
-        indexOfThisPlayer = random.nextInt(nbPlayers);
+
         voluntaryDepartureStarted = false;
         playerList = new ArrayList<>();
         discardDeck = new ArrayList<>();
         nextChief = null;
         twicePlayingPlayer = null;
 
-        for (int index = 0; index < nbPlayers - 1; index++) {
+        for (int index = 0; index < nbPlayers; index++) {
             Player player = new Player(stringsBundle.getString("player_name") + index, stringsBundle);
             playerList.add(player);
         }
+        indexOfThisPlayer = random.nextInt(nbPlayers);
+    }
+
+    public Board(int nbPlayers, String namePlayer) {
+        this(nbPlayers);
+        indexOfThisPlayer = random.nextInt(nbPlayers);
         thisPlayer = new Player(namePlayer, stringsBundle);
+        playerList.remove(indexOfThisPlayer);
         playerList.add(indexOfThisPlayer, thisPlayer);
-        int nbCardToGive = nbPlayers >= 9 ? 3 : 4;
+
+        cardsDistribution();
+
+        System.out.println("End of initialisation");
+
+        askPlayersForCards();
+        currentPhase = GamePhase.GATHERING_RESSOURCES;
+        chief = playerList.get(0); // FIXME
+        play(playerList.get(0));
+
+    }
+
+    public void cardsDistribution() {
+        int nbCardToGive = playerList.size() >= 9 ? 3 : 4;
         for (Player player : playerList) {
             for (int nbCard = 0; nbCard < nbCardToGive; nbCard++) {
                 Card card = deck.remove(0);
                 giveCardToPlayer(player, card);
             }
         }
-
-        System.out.println("End of initialisation");
-
-        askPlayersForCards();
-        currentPhase = GamePhase.GATHERING_RESSOURCES;
-        chief = playerList.get(0);
-        play(playerList.get(0));
-
     }
 
     public boolean askPlayersForCards() {
@@ -162,25 +183,25 @@ public class Board implements Serializable {
         }
 
         switch (imposedAction) {
-        case FOOD:
-            System.out.println(player.toString() + " is getting food !\n");
-            player.playAsCPUFood(this);
+            case FOOD:
+                System.out.println(player.toString() + " is getting food !\n");
+                player.playAsCPUFood(this);
 
-            break;
-        case WATER:
-            System.out.println(player.toString() + " is getting water !\n");
-            player.playAsCPUWater(this);
-            break;
-        case WOOD:
-            System.out.println(player.toString() + " is getting wood !\n");
-            player.playAsCPUWood(this);
-            break;
-        case CARD:
-            System.out.println(player.toString() + " is getting a card !\n");
-            player.playAsCPUCard(this);
-            break;
-        default:
-            break;
+                break;
+            case WATER:
+                System.out.println(player.toString() + " is getting water !\n");
+                player.playAsCPUWater(this);
+                break;
+            case WOOD:
+                System.out.println(player.toString() + " is getting wood !\n");
+                player.playAsCPUWood(this);
+                break;
+            case CARD:
+                System.out.println(player.toString() + " is getting a card !\n");
+                player.playAsCPUCard(this);
+                break;
+            default:
+                break;
         }
         askPlayersForCards();
         if (twicePlayingPlayer != null && twicePlayingPlayer.equals(player)) {
@@ -230,8 +251,11 @@ public class Board implements Serializable {
                 round++; // !!! has been moved
                 deadThisRound.clear();
                 cardsPlayedThisRound.clear();
+                flashLightList.clear();
+                barometerList.clear();
                 currentPhase = GamePhase.ROUND_BEGINNING;
                 clearImposedDecisions();
+                conchOwner = null;
                 matchesUsedThisRound = false;
                 nextRoundPlayerList();
                 chief = playerList.get(0);
@@ -279,7 +303,7 @@ public class Board implements Serializable {
                 }
                 boolean cardUsedAgain = askPlayersForCards();
                 if (!cardUsedAgain) {
-                    player.setState(PlayerState.DEAD);
+                    killPlayer(player);
                     System.out.println(player + " has been sacrified for the sake of the crew :(");
                     if (player.equals(chief) && getNbPlayersAlive() > 0) {
                         chief = getPlayerAliveAfterBefore(playerList.indexOf(player), false);
@@ -292,6 +316,12 @@ public class Board implements Serializable {
             end = isThereEnoughGoodsForAll(forDeparture);
         }
         goodsDistributionForAlive();
+    }
+
+    public void killPlayer(Player player) {
+        player.setState(PlayerState.DEAD);
+        distributeCardsFromDeadPlayer(player);
+        deadThisRound.add(player);
     }
 
     public void goodsDistributionForAlive() {
@@ -375,12 +405,12 @@ public class Board implements Serializable {
     }
 
     public void distributeCardsFromDeadPlayer(Player player) {
+        player.deathPurgeCards();
+
         if (getNbPlayersAlive() > 1) {
             int indexOfPlayer = playerList.indexOf(player);
             Player playerBefore = getPlayerAliveAfterBefore(indexOfPlayer, false);
             Player playerAfter = getPlayerAliveAfterBefore(indexOfPlayer, true);
-
-            player.deathPurge();
 
             int indexMax = player.getCardNumber();
             for (int index = 0; index < indexMax; index++) {
@@ -582,8 +612,24 @@ public class Board implements Serializable {
         waterRations -= water;
     }
 
+    public void setCurrentPhase(GamePhase currentPhase) {
+        this.currentPhase = currentPhase;
+    }
+
+    public GamePhase getCurrentPhase() {
+        return currentPhase;
+    }
+
     public List<Card> getCardsPlayedThisRound() {
         return cardsPlayedThisRound;
+    }
+
+    public void setSpyglassList(List<Card> spyglassList) {
+        this.spyglassList = spyglassList;
+    }
+
+    public List<Card> getSpyglassList() {
+        return spyglassList;
     }
 
     public int getFoodRations() {
@@ -614,8 +660,55 @@ public class Board implements Serializable {
         return round;
     }
 
-    public GamePhase getPhase() {
-        return currentPhase;
+    public void setFoodRations(int foodRations) {
+        this.foodRations = foodRations;
     }
 
+    public void setWaterRations(int waterRations) {
+        this.waterRations = waterRations;
+    }
+
+    public List<Integer> getBarometerList() {
+        return barometerList;
+    }
+
+    public List<Card> getFlashLightList() {
+        return flashLightList;
+    }
+
+    public void setFlashLightList(List<Card> flashLightList) {
+        this.flashLightList = flashLightList;
+    }
+
+    public void setBarometerList(List<Integer> barometerList) {
+        this.barometerList = barometerList;
+    }
+
+    public void setDeck(List<Card> deck) {
+        this.deck = deck;
+    }
+
+    public Player getConchOwner() {
+        return conchOwner;
+    }
+
+    public void setConchOwner(Player conchOwner) {
+        this.conchOwner = conchOwner;
+    }
+
+    public Player getTwicePlayingPlayer() {
+        return twicePlayingPlayer;
+    }
+
+    public void setRound(int round) {
+        this.round = round;
+    }
+
+    public Player getNextChief() {
+        return nextChief;
+    }
+
+    public Player getChief() {
+        return chief;
+    }
 }

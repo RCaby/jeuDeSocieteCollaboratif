@@ -62,7 +62,7 @@ public class Flashlight extends Card {
                 }
             }
         }
-
+        board.setFlashLightList(toBeDisplayed);
         System.out.println(toBeDisplayed);
     }
 }

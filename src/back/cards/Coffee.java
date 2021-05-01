@@ -50,9 +50,9 @@ public class Coffee extends Card {
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         if (owner != null) {
-            super.useCard(player1, player2, player3, action);
             board.setTwicePlayingPlayer(owner);
         }
+        super.useCard(player1, player2, player3, action);
     }
 
 }

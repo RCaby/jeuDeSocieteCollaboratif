@@ -88,7 +88,9 @@ public abstract class Card implements Serializable {
         }
         if (isSingleUse) {
             setCardRevealed(false);
-            discard();
+            if (owner != null) {
+                owner.discardCard(this);
+            }
         }
     }
 
@@ -121,10 +123,6 @@ public abstract class Card implements Serializable {
      * picked in the deck, as the card goes to the discard deck.
      */
     public void discard() {
-        if (owner != null) {
-            System.out.println(owner + " discards " + this);
-            owner.discardCard(this);
-        }
         owner = null;
         board.getDiscardDeck().add(this);
     }

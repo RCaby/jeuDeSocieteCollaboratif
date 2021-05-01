@@ -243,10 +243,10 @@ public class Player implements Serializable {
         return player;
     }
 
-    public void deathPurge() {
-        for (int index = inventory.size() - 1; index > 0; index--) {
+    public void deathPurgeCards() {
+        for (int index = inventory.size() - 1; index >= 0; index--) {
             if (inventory.get(index).discardOnDeath()) {
-                inventory.get(index).discard();
+                discardCard(inventory.get(index));
             }
         }
     }
@@ -275,6 +275,10 @@ public class Player implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public List<Card> getInventory() {
+        return inventory;
     }
 
     public JPanel getPanelDisplay() {
