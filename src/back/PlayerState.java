@@ -1,5 +1,9 @@
 package back;
 
+/**
+ * The different states of a {@link Player}. A Player can be {@code HEALTHY},
+ * {@code SICK} or {@code DEAD}.
+ */
 public enum PlayerState {
     HEALTHY("Healthy"), SICK("Sick"), DEAD("Dead");
 
@@ -13,4 +17,5 @@ public enum PlayerState {
     public String toString() {
         return name;
     }
+    // TODO link this class with the Strings bundle
 }

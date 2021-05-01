@@ -2,6 +2,9 @@ package back;
 
 import java.util.Random;
 
+/**
+ * The different actions a {@link Player} can do during a turn.
+ */
 public enum ActionType {
     FOOD, WATER, WOOD, CARD, NONE;
 
