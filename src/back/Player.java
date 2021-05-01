@@ -73,16 +73,14 @@ public class Player implements Serializable {
         display.add(cardHiddenPanel);
     }
 
-    public int playAsCPUFood(Board board) {
+    public void playAsCPUFood(Board board) {
         int food = board.seekFood(this);
         board.addFood(food);
-        return food;
     }
 
-    public int playAsCPUWater(Board board) {
+    public void playAsCPUWater(Board board) {
         int water = board.seekWater(this);
         board.addWater(water);
-        return water;
     }
 
     public int playAsCPUWood(Board board) {
@@ -141,15 +139,12 @@ public class Player implements Serializable {
     }
 
     public void trade(Player target, Card cardToGive, Card cardToGet) {
-        target.removeCard(cardToGet);
-        this.removeCard(cardToGive);
-        giveToPlayer(target, cardToGive);
-        giveToPlayer(this, cardToGet);
-    }
-
-    public void giveToPlayer(Player target, Card card) {
-        card.setOwner(target);
-        target.addCardToInventory(card);
+        if (hasCard(cardToGive) && target != null && target.hasCard(cardToGet)) {
+            target.removeCard(cardToGet);
+            this.removeCard(cardToGive);
+            target.addCardToInventory(cardToGive);
+            addCardToInventory(cardToGet);
+        }
     }
 
     public void discardCard(Card card) {
@@ -159,9 +154,12 @@ public class Player implements Serializable {
     }
 
     public boolean canUseCard() {
-        boolean cardUsable = !inventory.isEmpty() && this.getState() == PlayerState.HEALTHY;
-        for (Card card : inventory) {
-            cardUsable = cardUsable || card.canBeUsed();
+        boolean cardUsable = false;
+        if (!inventory.isEmpty() && this.getState() == PlayerState.HEALTHY) {
+            for (Card card : inventory) {
+                cardUsable = cardUsable || card.canBeUsed();
+            }
+
         }
         return cardUsable;
     }
