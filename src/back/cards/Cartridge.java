@@ -17,7 +17,7 @@ import back.Board;
  */
 public class Cartridge extends Card {
     private static final long serialVersionUID = 4958491342904749988L;
-    public static final int NUMBER_THIS_IN_DECK = 1;
+    public static final int NUMBER_THIS_IN_DECK = 6;
 
     /**
      * Generates a new {@code Cartridge} card.

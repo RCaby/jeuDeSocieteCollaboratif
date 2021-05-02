@@ -19,7 +19,7 @@ import back.Player;
  */
 public class Sandwich extends Card {
     private static final long serialVersionUID = -8278658344259908767L;
-    public static final int NUMBER_THIS_IN_DECK = 1;
+    public static final int NUMBER_THIS_IN_DECK = 7;
 
     /**
      * Generates a new {@code Sandwich} card.

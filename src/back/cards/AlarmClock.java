@@ -57,7 +57,5 @@ public class AlarmClock extends Card {
             System.out.println(player1 + " will be the next chief !");
         }
     }
-    // FIXME play card conch then alarm clock would erase the conch chief //may have
-    // been fixed by ConchChief attribute
 
 }

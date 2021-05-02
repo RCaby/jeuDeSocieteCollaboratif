@@ -17,7 +17,7 @@ import back.Board;
  */
 public class MetalSheet extends Card {
     private static final long serialVersionUID = -4745104393826579400L;
-    public static final int NUMBER_THIS_IN_DECK = 1;
+    public static final int NUMBER_THIS_IN_DECK = 2;
 
     /**
      * Generates a new {@code MetalSheet} card.

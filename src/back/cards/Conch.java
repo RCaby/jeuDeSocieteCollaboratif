@@ -14,7 +14,7 @@ import back.Player;
  * against the owner. It is a single-use card, discarded after utilisation.
  * 
  * <p>
- * The class {@code VoodooDoll} extends the abstract class {@link Card}.
+ * The class {@code Conch} extends the abstract class {@link Card}.
  * 
  */
 public class Conch extends Card {

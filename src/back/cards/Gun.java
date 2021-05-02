@@ -23,7 +23,7 @@ import back.PlayerState;
  */
 public class Gun extends Card {
     private static final long serialVersionUID = 8554178826025991327L;
-    public static final int NUMBER_THIS_IN_DECK = 1;
+    public static final int NUMBER_THIS_IN_DECK = 3;
 
     /**
      * Generates a new {@code Gun} card.

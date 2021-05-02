@@ -19,7 +19,7 @@ import back.Player;
  */
 public class WaterBottle extends Card {
     private static final long serialVersionUID = -6627360822903550195L;
-    public static final int NUMBER_THIS_IN_DECK = 6;
+    public static final int NUMBER_THIS_IN_DECK = 7;
 
     /**
      * Generates a new {@code WaterBottle} card.
