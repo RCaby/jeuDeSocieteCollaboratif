@@ -117,7 +117,7 @@ public class Board implements Serializable {
     public boolean askPlayersForCards() {
         boolean cardUsed = false;
         for (Player player : playerList) {
-            if (player.getState() != PlayerState.DEAD && player.getState() != PlayerState.SICK) {
+            if (player.getState() == PlayerState.HEALTHY) {
                 cardUsed = cardUsed || player.wouldLikePlayCard();
             }
         }
@@ -329,16 +329,12 @@ public class Board implements Serializable {
         waterRations -= getNbPlayersAlive();
     }
 
-    public Player choosePlayerToDie() {
-
-        Map<Player, Integer> votes = new HashMap<>();
-        List<Player> pickablePlayers = new ArrayList<>();
-        List<Player> votingPlayers = new ArrayList<>();
-        System.out.println("Vote session ------------------");
+    public void beginVotingSession(List<Player> pickablePlayers, List<Player> votingPlayers,
+            Map<Player, Integer> votes) {
         for (Player player : playerList) {
-            Card conch = player.getCardType(Conch.class);
-            if (player.getState() != PlayerState.DEAD && (conch == null || !conch.isCardRevealed()
-                    || (conch.isCardRevealed() && getNbPlayersAlive() == 1))) {
+
+            if (player.getState() != PlayerState.DEAD
+                    && (!player.equals(conchOwner) || (player.equals(conchOwner) && getNbPlayersAlive() == 1))) {
                 pickablePlayers.add(player);
                 votes.put(player, 0);
             }
@@ -352,7 +348,17 @@ public class Board implements Serializable {
             }
         }
 
-        conchVote(votingPlayers);
+    }
+
+    public Player choosePlayerToDie() {
+
+        Map<Player, Integer> votes = new HashMap<>();
+        List<Player> pickablePlayers = new ArrayList<>();
+        List<Player> votingPlayers = new ArrayList<>();
+        System.out.println("Vote session ------------------");
+
+        beginVotingSession(pickablePlayers, votingPlayers, votes);
+        crystalBallVote(votingPlayers);
 
         for (Player player : votingPlayers) {
             Player designated = player.vote(pickablePlayers);
@@ -365,12 +371,13 @@ public class Board implements Serializable {
 
     }
 
-    public void conchVote(List<Player> listVotingPlayers) {
+    public void crystalBallVote(List<Player> listVotingPlayers) {
         int indexCrystalBall = -1;
         for (int index = 0; index < listVotingPlayers.size(); index++) {
             Card crystalBall = listVotingPlayers.get(index).getCardType(CrystalBall.class);
             if (crystalBall != null && crystalBall.isCardRevealed()) {
                 indexCrystalBall = index;
+                System.out.println("Oh, a crystalball");
             }
         }
         if (indexCrystalBall != -1) {
@@ -710,5 +717,9 @@ public class Board implements Serializable {
 
     public Player getChief() {
         return chief;
+    }
+
+    public ResourceBundle getStringsBundle() {
+        return stringsBundle;
     }
 }

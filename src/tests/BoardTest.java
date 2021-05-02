@@ -3,118 +3,112 @@ package tests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
-import java.util.Random;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.junit.Test;
 
+import back.ActionType;
 import back.Board;
 import back.Player;
-import back.cards.Axe;
+import back.PlayerState;
 import back.cards.Card;
+import back.cards.Club;
+import back.cards.Conch;
+import back.cards.CrystalBall;
+import back.cards.Sandwich;
+import back.cards.WaterBottle;
 
 public class BoardTest {
 
-    private Random random = new Random();
     private Locale locale = new Locale("en", "US");
     private ResourceBundle stringsBundle = ResourceBundle.getBundle("Strings", locale);
 
     @Test
-    public void giveCardToPlayerTest() {
-        Board board = new Board(7, "nom", true);
-        Player player = board.getPlayerList().get(3);
-        Axe axe = new Axe(board, stringsBundle);
-        board.giveCardToPlayer(player, axe);
-        assertEquals((Axe) player.getCard(4), axe);
+    public void beginVotingSessionTest() {//
+        Board board = new Board(5);
+        Player player0 = board.getPlayerList().get(0);
+        Player player1 = board.getPlayerList().get(1);
+        Player player2 = board.getPlayerList().get(2);
+        Player player3 = board.getPlayerList().get(3);
+        Player player4 = board.getPlayerList().get(4);
+        Card conch = new Conch(board, stringsBundle);
+        Card club = new Club(board, stringsBundle);
+        board.giveCardToPlayer(player0, conch);
+        board.giveCardToPlayer(player1, club);
+
+        conch.useCard(null, null, null, ActionType.NONE);
+        club.useCard(null, null, null, ActionType.NONE);
+
+        player2.setState(PlayerState.SICK);
+        player3.setState(PlayerState.DEAD);
+        List<Player> votingPlayers = new ArrayList<>();
+        List<Player> pickablePlayers = new ArrayList<>();
+        Map<Player, Integer> votes = new HashMap<>();
+        board.beginVotingSession(pickablePlayers, votingPlayers, votes);
+        List<Player> expectedVotingPlayers = new ArrayList<>();
+        List<Player> expectedPickablePlayers = new ArrayList<>();
+        Map<Player, Integer> expectedVotes = new HashMap<>();
+        expectedPickablePlayers.add(player1);
+        expectedPickablePlayers.add(player2);
+        expectedPickablePlayers.add(player4);
+        expectedVotingPlayers.add(player0);
+        expectedVotingPlayers.add(player1);
+        expectedVotingPlayers.add(player1);
+        expectedVotingPlayers.add(player4);
+        expectedVotes.put(player1, 0);
+        expectedVotes.put(player2, 0);
+        expectedVotes.put(player4, 0);
+
+        assertEquals(expectedPickablePlayers, pickablePlayers);
+        assertEquals(expectedVotes, votes);
+        assertEquals(expectedVotingPlayers, votingPlayers);
     }
 
     @Test
-    public void switchToNextRoundTest() {
+    public void crystalBallVoteTest() {
+        Board board = new Board(5);
+        Card crystalBall = new CrystalBall(board, stringsBundle);
+        Player target = board.getPlayerList().get(0);
+        crystalBall.useCard(null, null, null, ActionType.NONE);
+        board.giveCardToPlayer(target, crystalBall);
 
-        Board board = new Board(7, "nom", true);
-        int size = board.getPlayerList().size();
-        int previousIndexOfThisPlayer = board.getIndexThisPlayer();
-        Player player = board.getPlayerList().get(0);
-        board.switchToNextRound(true);
-        assertEquals(size, board.getPlayerList().size());
-        assertEquals(player, board.getPlayerList().get(board.getPlayerList().size() - 1));
-        assertEquals(0, board.getIndexCurrentPlayer());
-        boolean indexNot0Case = board.getIndexThisPlayer() == previousIndexOfThisPlayer - 1;
-        boolean index0Case = board.getIndexThisPlayer() == (board.getPlayerList().size() - 1)
-                && previousIndexOfThisPlayer == 0;
-        assertTrue(indexNot0Case || index0Case);
+        board.crystalBallVote(board.getPlayerList());
+        assertEquals(target, board.getPlayerList().get(board.getPlayerList().size() - 1));
 
     }
 
     @Test
-    public void seekFoodTest() {
-        Board board = new Board(6, "Nom", true);
-        int food = board.seekFood();
-        assertTrue(1 <= food && food <= 3);
-
+    public void voteResultsTest() {
+        Map<Player, Integer> results = new HashMap<>();
+        Board board = new Board(5);
+        Player player0 = board.getPlayerList().get(0);
+        Player player3 = board.getPlayerList().get(3);
+        results.put(player0, 3);
+        results.put(player3, 2);
+        assertEquals(player0, board.voteResults(results));
     }
 
     @Test
-    public void seekWaterTest() {
-        Board board = new Board(6, "Nom", true);
-        int water = board.seekWater();
-        assertTrue(0 <= water && water <= 3);
-        assertTrue(board.getWeather() == water);
-    }
-
-    @Test
-    public void seekWoodTest() {
-        Board board = new Board(6, "Nom", true);
-        int wood = board.seekWood(6);
-        assertEquals(0, wood);
-        wood = board.seekWood(0);
-        assertEquals(1, wood);
-        for (int index = 0; index < 5000; index++) {
-            int nbTries = random.nextInt(6) + 1;
-            wood = board.seekWood(nbTries);
-            assertTrue((wood == 0) || (wood == nbTries + 1));
-        }
-    }
-
-    @Test
-    public void seekCardTest() {
-        Board board = new Board(6, "Nom", true);
-        Card cardInDeck = board.getDeck().get(0);
-        int size = board.getDeck().size();
-        Card card = board.seekCard();
-        assertTrue(size > board.getDeck().size());
-        assertEquals(card, cardInDeck);
-        size = board.getDeck().size();
-        for (int index = 0; index < size; index++) {
-            board.getDeck().remove(0);
-        }
-        assertTrue(board.getDeck().isEmpty());
-        assertEquals(null, board.seekCard());
-    }
-
-    @Test
-    public void discardCardTest() {
-        Board board = new Board(6, "Name", true);
-        Player player = board.getPlayerList().get(3);
-        Card card = player.getCard(2);
-        board.discardCard(player, card);
-        assertTrue(card.getOwner() == null);
-        assertTrue(board.getDiscardDeck().contains(card));
-        assertTrue(!player.hasCard(card));
-    }
-
-    @Test
-    public void nextPlayerTest() {
-        Board board = new Board(5, "Name", true);
-        for (int index = 0; index < 5; index++) {
-            Player player = board.nextPlayer();
-            if (index < 4) {
-                assertEquals(board.getPlayerList().get(index + 1), player);
-            } else {
-                assertEquals(null, player);
-            }
-        }
+    public void distributeCardsFromDeadPlayerTest() {
+        Board board = new Board(5);
+        Card waterBottle = new WaterBottle(board, stringsBundle);
+        Card sandwich = new Sandwich(board, stringsBundle);
+        Player target = board.getPlayerList().get(2);
+        board.giveCardToPlayer(target, waterBottle);
+        board.giveCardToPlayer(target, sandwich);
+        board.getPlayerList().get(3).setState(PlayerState.DEAD);
+        target.setState(PlayerState.DEAD);
+        board.distributeCardsFromDeadPlayer(target);
+        boolean beforeGotWater = board.getPlayerList().get(1).hasCard(waterBottle)
+                && board.getPlayerList().get(4).hasCard(sandwich);
+        boolean beforeGotFood = board.getPlayerList().get(1).hasCard(sandwich)
+                && board.getPlayerList().get(4).hasCard(waterBottle);
+        assertTrue(beforeGotFood || beforeGotWater);
     }
 
 }
