@@ -1,4 +1,4 @@
-# jeuDeSocieteCollaboratif
+# Collaborative board game
 
 ## The project
 The aim of this project is to develop a **one player** version of the board game "Galèrapagos", normally intended for 3 to 12 players.
