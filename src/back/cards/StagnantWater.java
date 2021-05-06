@@ -57,7 +57,11 @@ public class StagnantWater extends Card {
             } else {
                 board.setMatchesUsedThisRound(false);
             }
-
         }
+    }
+
+    @Override
+    public boolean[] getNeededParameters() {
+        return new boolean[] { true, false, false, false };
     }
 }

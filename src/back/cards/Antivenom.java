@@ -51,7 +51,6 @@ public class Antivenom extends Card {
             super.useCard(player1, player2, player3, action);
             player1.setState(PlayerState.HEALTHY);
         }
-
     }
 
     /**
@@ -65,5 +64,10 @@ public class Antivenom extends Card {
             flag = flag || player.getState() == PlayerState.SICK;
         }
         return flag;
+    }
+
+    @Override
+    public boolean[] getNeededParameters() {
+        return new boolean[] { true, false, false, false };
     }
 }

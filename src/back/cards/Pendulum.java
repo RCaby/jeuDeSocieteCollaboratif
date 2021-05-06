@@ -36,12 +36,14 @@ public class Pendulum extends Card {
 
     /**
      * Simulates the utilisation of the card, herited from {@link Card}. Needs one
-     * player as a target for the action imposition.
+     * player as a target for the action imposition and the type of the imposed
+     * action.
      * 
      * @param player1 target of the imposition, not null, player has to be alive
      * @param player2 not needed for this card
      * @param player3 not needed for this card
-     * @param action  not needed for this card
+     * @param action  the type of the imposed action, in the enum :
+     *                {@link ActionType}
      */
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
@@ -58,5 +60,10 @@ public class Pendulum extends Card {
     @Override
     public boolean canBeUsed() {
         return board.getNbPlayersAlive() > 1;
+    }
+
+    @Override
+    public boolean[] getNeededParameters() {
+        return new boolean[] { true, false, false, true };
     }
 }

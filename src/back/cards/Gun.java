@@ -73,4 +73,9 @@ public class Gun extends Card {
     public boolean canBeUsed() {
         return owner != null && owner.getCardType(Cartridge.class) != null;
     }
+
+    @Override
+    public boolean[] getNeededParameters() {
+        return new boolean[] { true, false, false, false };
+    }
 }

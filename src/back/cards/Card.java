@@ -138,6 +138,23 @@ public abstract class Card implements Serializable {
         return true;
     }
 
+    /**
+     * Indicates which parameters are needed for the {@link Card#useCard} method.
+     * 
+     * <p>
+     * If the boolean of index {@code i} is {@code true} then it is needed. For
+     * instance the {@link Antivenom#getNeededParameters} method would return
+     * {@code (true, false, false, false)} while the
+     * {@link Pendulum#getNeededParameters} method would return {@code (true, false,
+     * false, true)}.
+     * 
+     * @return an array of booleans which indicates the needed parameters of the
+     *         useCard method.
+     */
+    public boolean[] getNeededParameters() {
+        return new boolean[] { false, false, false, false };
+    }
+
     public void setOwner(Player player) {
         owner = player;
     }

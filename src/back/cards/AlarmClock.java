@@ -54,4 +54,9 @@ public class AlarmClock extends Card {
         }
     }
 
+    @Override
+    public boolean[] getNeededParameters() {
+        return new boolean[] { true, false, false, false };
+    }
+
 }

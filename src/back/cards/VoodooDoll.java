@@ -62,4 +62,9 @@ public class VoodooDoll extends Card {
     public boolean canBeUsed() {
         return board.getCurrentPhase() == GamePhase.ROUND_BEGINNING && !board.getDeadThisRound().isEmpty();
     }
+
+    @Override
+    public boolean[] getNeededParameters() {
+        return new boolean[] { true, false, false, false };
+    }
 }
