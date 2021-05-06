@@ -27,9 +27,6 @@ import back.cards.Gourd;
  * gathering to player sacrifices.
  */
 public class Board implements Serializable {
-    /**
-     * gae
-     */
     private int foodRations;
     private int waterRations;
     private List<Player> playerList;
