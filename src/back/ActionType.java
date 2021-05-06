@@ -16,4 +16,8 @@ public enum ActionType {
         return L_ACTION_TYPES[pickedAction];
     }
 
+    public static final ActionType[] getLActionTypes() {
+        return L_ACTION_TYPES;
+    }
+
 }

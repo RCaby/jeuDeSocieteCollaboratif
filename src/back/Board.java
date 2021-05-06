@@ -9,6 +9,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 import java.util.Map.Entry;
 
 import back.cards.Axe;
@@ -27,9 +28,7 @@ import back.cards.Gourd;
  * gathering to player sacrifices.
  */
 public class Board implements Serializable {
-    /**
-     * gae
-     */
+
     private int foodRations;
     private int waterRations;
     private List<Player> playerList;
@@ -58,6 +57,7 @@ public class Board implements Serializable {
     private List<Card> flashLightList;
     private List<Integer> barometerList;
     private Player conchOwner;
+    private transient Scanner inputReader;
 
     /**
      * Builds the game without launching it and without incorporating any
@@ -113,6 +113,7 @@ public class Board implements Serializable {
         playerList.add(indexOfThisPlayer, thisPlayer);
 
         cardsDistribution();
+        inputReader = new Scanner(System.in);
 
         System.out.println("End of initialisation");
 
@@ -144,8 +145,11 @@ public class Board implements Serializable {
     public boolean askPlayersForCards() {
         boolean cardUsed = false;
         for (Player player : playerList) {
-            if (player.getState() == PlayerState.HEALTHY) {
-                cardUsed = cardUsed || player.wouldLikePlayCard();
+            if (player.getState() == PlayerState.HEALTHY && !player.equals(thisPlayer)) {
+                cardUsed = cardUsed || player.wouldLikePlayCardAsCpu(this);
+            } else if (player.getState() == PlayerState.HEALTHY) {
+
+                cardUsed = cardUsed || player.wouldLikePlayCard(this);
             }
         }
         return cardUsed;
@@ -290,6 +294,7 @@ public class Board implements Serializable {
      */
     public void endGame() {
         currentPhase = GamePhase.END;
+        inputReader.close();
         gameOver = true;
         System.out.println(String.format(
                 "End of the game. There were %d rounds, %d players are still alive, the current weather is %d. The raft had %d planks",
@@ -560,6 +565,57 @@ public class Board implements Serializable {
 
     // Tools functions #####################################################
 
+    // TODO Javadoc
+    public String getUserInput() {
+        String input = "";
+        if (inputReader.hasNextLine()) {
+            input = inputReader.nextLine();
+        }
+        return input;
+    }
+
+    // TODO Javadoc
+    public boolean getYesNoAnswer() {
+        System.out.println(stringsBundle.getString("yesNoQuestion"));
+        String answer = getUserInput();
+        answer = answer.substring(0, 1).toLowerCase();
+        while (!answer.equals("y") && !answer.equals("n")) {
+            System.out.println(stringsBundle.getString("yesNoQuestion"));
+            answer = getUserInput();
+            answer = answer.substring(0, 1).toLowerCase();
+        }
+        return answer.equals("y");
+    }
+
+    // TODO Javadoc
+    public int getUserIntChoice(int minBound, int maxBound) {
+        int choice = minBound - 1;
+
+        while (choice < minBound || choice > maxBound) {
+            try {
+                choice = Integer.parseInt(inputReader.nextLine());
+            } catch (NumberFormatException e) {
+                choice = minBound - 1;
+            }
+        }
+        return choice;
+
+    }
+
+    // TODO Javadoc
+    public List<Integer> getUserPlayerChoice(int nbPlayers) {
+        List<Integer> pickedPlayers = new ArrayList<>();
+        for (int index = 0; index < nbPlayers; index++) {
+            int indexPickedPlayer = -1;
+            while (indexPickedPlayer < 0 || indexPickedPlayer >= playerList.size()) {
+                System.out.println(stringsBundle.getString("choosePlayerList") + playerList);
+                indexPickedPlayer = getUserIntChoice(0, playerList.size() - 1);
+            }
+            pickedPlayers.add(indexPickedPlayer);
+        }
+        return pickedPlayers;
+    }
+
     /**
      * Gives a card to a player.
      * 
@@ -621,7 +677,6 @@ public class Board implements Serializable {
             }
 
         }
-        System.out.println("The player list of the next round : " + playerList);
     }
 
     /**

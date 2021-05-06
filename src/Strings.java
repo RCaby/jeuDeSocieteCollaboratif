@@ -32,5 +32,10 @@ public class Strings extends ListResourceBundle {
             { "WaterBottle_name", "Water Bottle" }, { "WaterBottle_description", "" },
             { "WinningLotteryTicket_name", "Winning Lottery Ticket" }, { "WinningLotteryTicket_description", "" },
             { "WoodenPlank_name", "Wooden Plank" }, { "WoodenPlank_description", "Adds one place on the raft." },
-            { "player_name", "Player" } };
+            { "player_name", "Player" }, { "yesNoQuestion", "(y/n)" },
+            { "wouldLikePlayCard?", "Would like to play a card ?" }, { "cardsDisplay", "Your cards are : " },
+            { "invalidChoice", "Invalid choice !" }, { "chooseACard", "Choose a card with its index" },
+            { "choiceResult", "You choose " }, { "cannotPlayCard", "You cannot play this card now !" },
+            { "choosePlayerList", "Choose a player in this list : " },
+            { "chooseActionList", "Choose an action in this list : " } };
 }

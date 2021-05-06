@@ -1,6 +1,7 @@
 package back;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -244,7 +245,7 @@ public class Player implements Serializable {
      * 
      * @return a boolean indicating if one card has been used.
      */
-    public boolean wouldLikePlayCard() {
+    public boolean wouldLikePlayCardAsCpu(Board board) {
 
         boolean cardUsed = false;
         if (canUseCard()) {
@@ -252,12 +253,73 @@ public class Player implements Serializable {
             int index = random.nextInt(inventory.size());
             Card card = inventory.get(index);
             if (inventory.get(index).canBeUsed() && odds == 0) {
-                System.out.println(this + " uses the card " + card);
-                card.useCard(this, null, null, ActionType.NONE);
+                boolean[] neededParameters = card.getNeededParameters();
+                if (Arrays.equals(neededParameters, new boolean[] { true, true, true, false })) {
+                    List<Integer> pickedPlayers = new ArrayList<>();
+                    int pickedIndex = -1;
+                    for (int anotherIndex = 0; anotherIndex < 3; anotherIndex++) {
+                        pickedIndex = random.nextInt(board.getPlayerList().size());
+                        pickedPlayers.add(pickedIndex);
+                    }
+                    Player player0 = board.getPlayerList().get(pickedPlayers.get(0));
+                    Player player1 = board.getPlayerList().get(pickedPlayers.get(1));
+                    Player player2 = board.getPlayerList().get(pickedPlayers.get(2));
+                    card.useCard(player0, player1, player2, ActionType.NONE);
+                } else if (Arrays.equals(neededParameters, new boolean[] { true, false, false, true })) {
+                    Player pickedPlayer = board.getPlayerList().get(random.nextInt(board.getPlayerList().size()));
+                    int pickedActionIndex = random.nextInt(4);
+                    ActionType pickedAction = ActionType.getLActionTypes()[pickedActionIndex];
+                    card.useCard(pickedPlayer, null, null, pickedAction);
+                } else if (Arrays.equals(neededParameters, new boolean[] { true, false, false, false })) {
+                    Player pickedPlayer = board.getPlayerList().get(random.nextInt(board.getPlayerList().size()));
+                    card.useCard(pickedPlayer, null, null, ActionType.NONE);
+                } else {
+                    card.useCard(null, null, null, ActionType.NONE);
+                }
                 cardUsed = true;
             }
         }
         return cardUsed;
+    }
+
+    public boolean wouldLikePlayCard(Board board) {
+        System.out.println(stringsBundle.getString("cardsDisplay") + inventory);
+        System.out.println(stringsBundle.getString("wouldLikePlayCard?"));
+        boolean wouldPlayerPlayACard = board.getYesNoAnswer();
+        if (wouldPlayerPlayACard) {
+            System.out.println(stringsBundle.getString("chooseACard"));
+            int pickedCardIndex = board.getUserIntChoice(0, inventory.size() - 1);
+            Card cardChoosed = inventory.get(pickedCardIndex);
+            System.out.println(stringsBundle.getString("choiceResult") + cardChoosed);
+            if (cardChoosed.canBeUsed()) {
+                boolean[] neededParameters = cardChoosed.getNeededParameters();
+                if (Arrays.equals(neededParameters, new boolean[] { true, true, true, false })) {
+                    List<Integer> pickedPlayers = board.getUserPlayerChoice(3);
+                    Player player0 = board.getPlayerList().get(pickedPlayers.get(0));
+                    Player player1 = board.getPlayerList().get(pickedPlayers.get(1));
+                    Player player2 = board.getPlayerList().get(pickedPlayers.get(2));
+                    cardChoosed.useCard(player0, player1, player2, ActionType.NONE);
+                } else if (Arrays.equals(neededParameters, new boolean[] { true, false, false, true })) {
+                    List<Integer> pickedPlayers = board.getUserPlayerChoice(1);
+                    System.out.println(stringsBundle.getString("chooseActionList") + ActionType.getLActionTypes());
+                    int pickedActionIndex = board.getUserIntChoice(0, 3);
+                    ActionType pickedAction = ActionType.getLActionTypes()[pickedActionIndex];
+                    Player player0 = board.getPlayerList().get(pickedPlayers.get(0));
+                    cardChoosed.useCard(player0, null, null, pickedAction);
+                } else if (Arrays.equals(neededParameters, new boolean[] { true, false, false, false })) {
+                    List<Integer> pickedPlayers = board.getUserPlayerChoice(1);
+                    Player player0 = board.getPlayerList().get(pickedPlayers.get(0));
+                    cardChoosed.useCard(player0, null, null, ActionType.NONE);
+                } else {
+                    cardChoosed.useCard(null, null, null, ActionType.NONE);
+                }
+
+            } else {
+                System.out.println(stringsBundle.getString("cannotPlayCard"));
+            }
+
+        }
+        return false;
     }
 
     /**
@@ -352,7 +414,8 @@ public class Player implements Serializable {
     }
 
     /**
-     * Asks this player to vote for one the player in the list given in parameter.
+     * Asks this player to vote for one of the player in the list given in
+     * parameter.
      * 
      * @param pickablePlayers the list of the players whose can be selected by this
      *                        player
