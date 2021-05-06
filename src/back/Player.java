@@ -475,10 +475,25 @@ public class Player implements Serializable {
      *                        player
      * @return the selected player designated by this player
      */
-    public Player vote(List<Player> pickablePlayers) {
+    public Player voteAsCPU(List<Player> pickablePlayers) {
         int pickedIndex = random.nextInt(pickablePlayers.size());
-        System.out.println(this + " votes for " + pickablePlayers.get(pickedIndex));
         return pickablePlayers.get(pickedIndex);
+
+    }
+
+    /**
+     * Asks this player to vote for one of the player in the list given in
+     * parameter.
+     * 
+     * @param board           the main board
+     * @param pickablePlayers the list of the players whose can be selected by this
+     *                        player
+     * @return the selected player designated by this player
+     */
+    public Player vote(Board board, List<Player> pickablePlayers) {
+        System.out.println(stringsBundle.getString("decideWhoVote") + pickablePlayers);
+        return pickablePlayers.get(board.getUserIntChoice(0, pickablePlayers.size() - 1));
+
     }
 
     /**
@@ -488,10 +503,28 @@ public class Player implements Serializable {
      * @param playerList the list of player who can be sacrificed
      * @return the player selected to be sacrificed
      */
-    public Player decideWhoDie(List<Player> playerList) {
+    public Player decideWhoDieAsCPU(List<Player> playerList) {
         Player player = playerList.get(random.nextInt(playerList.size()));
         while (player.getState() == PlayerState.DEAD) {
             player = playerList.get(random.nextInt(playerList.size()));
+        }
+        return player;
+    }
+
+    /**
+     * Asks this player to choose one player to be sacrificed without any discussion
+     * or vote.
+     * 
+     * @param board      the main board
+     * @param playerList the list of player who can be sacrificed
+     * @return the player selected to be sacrificed
+     */
+    public Player decideWhoDie(Board board, List<Player> playerList) {
+        System.out.println(stringsBundle.getString("decideWhoDie") + playerList);
+
+        Player player = playerList.get(board.getUserIntChoice(0, playerList.size() - 1));
+        while (player.getState() == PlayerState.DEAD) {
+            player = playerList.get(board.getUserIntChoice(0, playerList.size() - 1));
         }
         return player;
     }

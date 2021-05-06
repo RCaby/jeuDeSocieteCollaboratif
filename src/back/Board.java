@@ -443,10 +443,12 @@ public class Board implements Serializable {
         crystalBallVote(votingPlayers);
 
         for (Player player : votingPlayers) {
-            Player designated = player.vote(pickablePlayers);
+            Player designated = player.equals(thisPlayer) ? player.vote(this, pickablePlayers)
+                    : player.voteAsCPU(pickablePlayers);
             int prevValue = votes.get(designated);
             votes.put(designated, prevValue + 1);
         }
+        displayVoteResult(votes);
         Player resultPlayer = voteResults(votes);
         System.out.println("End of vote session ----------------");
         return resultPlayer;
@@ -502,7 +504,7 @@ public class Board implements Serializable {
             return maxPlayers.get(0);
         }
 
-        return chief.decideWhoDie(playerList);
+        return chief.equals(thisPlayer) ? chief.decideWhoDie(this, playerList) : chief.decideWhoDieAsCPU(playerList);
     }
 
     /**
@@ -514,6 +516,16 @@ public class Board implements Serializable {
     }
 
     // Tools functions #####################################################
+
+    // TODO Javadoc
+    public void displayVoteResult(Map<Player, Integer> votes) {
+        for (Entry<Player, Integer> entry : votes.entrySet()) {
+            if (entry.getValue() > 0) {
+                System.out.println(entry.getKey() + stringsBundle.getString("playerGotVoteBegin") + entry.getValue()
+                        + stringsBundle.getString("playerGotVoteEnd"));
+            }
+        }
+    }
 
     // TODO Javadoc
     public String getUserInput() {
