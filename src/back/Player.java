@@ -2,6 +2,7 @@ package back;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -11,7 +12,10 @@ import java.io.Serializable;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import back.cards.Axe;
 import back.cards.Card;
+import back.cards.FishingRod;
+import back.cards.Gourd;
 
 /**
  * The {@code Player} class represents a Player.
@@ -39,7 +43,6 @@ public class Player implements Serializable {
     private JPanel cardHiddenPanel;
     private ActionType imposedActionThisRound;
     private Random random = new Random();
-    private boolean hasPlankForDeparture;
     private int sickRound;
     private transient ResourceBundle stringsBundle;
 
@@ -94,9 +97,22 @@ public class Player implements Serializable {
      * 
      * @param board The main board, used to store the new rations.
      */
-    public void playAsCPUFood(Board board) {
-        int food = board.seekFood(this);
-        board.addFood(food);
+    public void playerSeeksFood(Board board) {
+        int pickedIndex = random.nextInt(6) + 1;
+
+        int foodGot = board.howMuchFood(pickedIndex);
+
+        Card fishingRod = getCardType(FishingRod.class);
+        if (fishingRod != null && fishingRod.isCardRevealed()) {
+            int pickedIndex2 = random.nextInt(6) + 1;
+            while (pickedIndex2 == pickedIndex) {
+                pickedIndex2 = random.nextInt(6) + 1;
+            }
+            foodGot += board.howMuchFood(pickedIndex2);
+        }
+        System.out.println(stringsBundle.getString("gotFood") + foodGot);
+
+        board.addFood(foodGot);
     }
 
     /**
@@ -104,9 +120,14 @@ public class Player implements Serializable {
      * 
      * @param board The main board, used to store the new rations.
      */
-    public void playAsCPUWater(Board board) {
-        int water = board.seekWater(this);
-        board.addWater(water);
+    public void playerSeeksWater(Board board) {
+        int waterGot = Math.abs(board.getWeather());
+        Card gourd = getCardType(Gourd.class);
+        if (gourd != null && gourd.isCardRevealed()) {
+            waterGot *= 2;
+        }
+        System.out.println(stringsBundle.getString("gotWater") + waterGot);
+        board.addWater(waterGot);
     }
 
     /**
@@ -114,14 +135,32 @@ public class Player implements Serializable {
      * 
      * @param board The main board, used to store the new rations.
      */
-    public void playAsCPUWood(Board board) {
-        int nbTries = random.nextInt(6) + 1;
-        int wood = board.seekWood(nbTries, this);
-        if (wood < 0) {
+    public void playerSeeksWood(Board board, int nbTries) {
+
+        int wood = 1;
+
+        Card axe = getCardType(Axe.class);
+        if (axe != null && axe.isCardRevealed()) {
+            wood++;
+        }
+
+        List<Integer> diceList = new ArrayList<>();
+        for (int index = 0; index < 6; index++) {
+            diceList.add(index);
+        }
+        Collections.shuffle(diceList);
+
+        List<Integer> randomSeries = diceList.subList(0, nbTries);
+        if (!randomSeries.contains(0)) {
+            wood += nbTries;
+        } else {
+            System.out.println(this + stringsBundle.getString("playerGotSick"));
             setState(PlayerState.SICK);
             sickRound = board.getRound();
         }
-        board.addFragmentPlank(Math.abs(wood));
+        System.out.println(stringsBundle.getString("gotWood") + Math.abs(wood));
+
+        board.addFragmentPlank(wood);
     }
 
     /**
@@ -129,10 +168,16 @@ public class Player implements Serializable {
      * 
      * @param board The main board, used to store the new rations.
      */
-    public Card playAsCPUCard(Board board) {
-        Card card = board.seekCard();
-        addCardToInventory(card);
-        return card;
+    public Card playerSeeksCard(Board board) {
+        Card pickedCard;
+        try {
+            pickedCard = board.getDeck().remove(0);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+        System.out.println(this + stringsBundle.getString("gotCard"));
+        addCardToInventory(pickedCard);
+        return pickedCard;
     }
 
     /**
@@ -243,6 +288,7 @@ public class Player implements Serializable {
      * Determines whether this player would like to use a card. If one card can be
      * used, the player may decide to use it.
      * 
+     * @param board the main board
      * @return a boolean indicating if one card has been used.
      */
     public boolean wouldLikePlayCardAsCpu(Board board) {
@@ -282,6 +328,13 @@ public class Player implements Serializable {
         return cardUsed;
     }
 
+    /**
+     * Determines whether this player would like to use a card. If one card can be
+     * used, the player may decide to use it.
+     * 
+     * @param board the main board
+     * @return a boolean indicating if one card has been used.
+     */
     public boolean wouldLikePlayCard(Board board) {
         System.out.println(stringsBundle.getString("cardsDisplay") + inventory);
         System.out.println(stringsBundle.getString("wouldLikePlayCard?"));
@@ -301,7 +354,8 @@ public class Player implements Serializable {
                     cardChoosed.useCard(player0, player1, player2, ActionType.NONE);
                 } else if (Arrays.equals(neededParameters, new boolean[] { true, false, false, true })) {
                     List<Integer> pickedPlayers = board.getUserPlayerChoice(1);
-                    System.out.println(stringsBundle.getString("chooseActionList") + ActionType.getLActionTypes());
+                    System.out.println(stringsBundle.getString("chooseActionList")
+                            + Arrays.toString(ActionType.getLActionTypes()));
                     int pickedActionIndex = board.getUserIntChoice(0, 3);
                     ActionType pickedAction = ActionType.getLActionTypes()[pickedActionIndex];
                     Player player0 = board.getPlayerList().get(pickedPlayers.get(0));

@@ -37,5 +37,9 @@ public class Strings extends ListResourceBundle {
             { "invalidChoice", "Invalid choice !" }, { "chooseACard", "Choose a card with its index" },
             { "choiceResult", "You choose " }, { "cannotPlayCard", "You cannot play this card now !" },
             { "choosePlayerList", "Choose a player in this list : " },
-            { "chooseActionList", "Choose an action in this list : " } };
+            { "chooseActionList", "Choose an action in this list : " },
+            { "howManyFragments", "How many plank fragments would you like to get ?" },
+            { "gotFood", "Food rations acquired : " }, { "gotWater", "Water rations acquired : " },
+            { "gotWood", "Plank fragments acquired : " }, { "gotCard", " got a card" },
+            { "playerGotSick", " got sick !" } };
 }

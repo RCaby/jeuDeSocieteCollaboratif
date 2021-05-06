@@ -2,6 +2,7 @@ package back;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -312,7 +313,44 @@ public class Board implements Serializable {
      * @param player the player that will do an action
      */
     public void playAsPlayer(Player player) {
-        playAsCPU(player);
+        int nbTries = 0;
+        ActionType imposedAction = player.getImposedActionThisRound();
+        if (imposedAction == ActionType.NONE) {
+            System.out.println(
+                    stringsBundle.getString("chooseActionList") + Arrays.toString(ActionType.getLActionTypes()));
+            imposedAction = ActionType.getLActionTypes()[getUserIntChoice(0, 3)];
+        }
+
+        switch (imposedAction) {
+            case FOOD:
+                System.out.println(player + " is getting food !\n");
+                player.playerSeeksFood(this);
+                break;
+            case WATER:
+                System.out.println(player + " is getting water !\n");
+                player.playerSeeksWater(this);
+                break;
+            case WOOD:
+                System.out.println(player + " is getting wood !\n");
+                System.out.println(stringsBundle.getString("howManyFragments"));
+                nbTries = getUserIntChoice(0, 6);
+                player.playerSeeksWood(this, nbTries);
+                break;
+            case CARD:
+                System.out.println(player + " is getting a card !\n");
+                player.playerSeeksCard(this);
+                break;
+            default:
+                break;
+        }
+        askPlayersForCards();
+        if (twicePlayingPlayer != null && twicePlayingPlayer.equals(player)) {
+            twicePlayingPlayer = null;
+            System.out.println(player + " will play again !");
+            playAsCPU(player);
+        } else {
+            play(nextPlayer());
+        }
     }
 
     /**
@@ -332,19 +370,20 @@ public class Board implements Serializable {
         switch (imposedAction) {
             case FOOD:
                 System.out.println(player + " is getting food !\n");
-                player.playAsCPUFood(this);
+                player.playerSeeksFood(this);
                 break;
             case WATER:
                 System.out.println(player + " is getting water !\n");
-                player.playAsCPUWater(this);
+                player.playerSeeksWater(this);
                 break;
             case WOOD:
                 System.out.println(player + " is getting wood !\n");
-                player.playAsCPUWood(this);
+                int nbTries = random.nextInt(6) + 1;
+                player.playerSeeksWood(this, nbTries);
                 break;
             case CARD:
                 System.out.println(player + " is getting a card !\n");
-                player.playAsCPUCard(this);
+                player.playerSeeksCard(this);
                 break;
             default:
                 break;
@@ -357,95 +396,6 @@ public class Board implements Serializable {
         } else {
             play(nextPlayer());
         }
-    }
-
-    /**
-     * The food seeking action of a player.
-     * 
-     * @param player the player who seeks food
-     * @return the amount of food rations gotten by the player
-     */
-    public int seekFood(Player player) {
-        int pickedIndex = random.nextInt(6) + 1;
-
-        int foodGot = howMuchFood(pickedIndex);
-
-        Card fishingRod = player.getCardType(FishingRod.class);
-        if (fishingRod != null && fishingRod.isCardRevealed()) {
-            System.out.println("Fishing Rod is used !");
-            int pickedIndex2 = random.nextInt(6) + 1;
-            while (pickedIndex2 == pickedIndex) {
-                pickedIndex2 = random.nextInt(6) + 1;
-            }
-            foodGot += howMuchFood(pickedIndex2);
-        }
-
-        return foodGot;
-
-    }
-
-    /**
-     * The water seeking action of a player.
-     * 
-     * @param player the player who seeks water
-     * @return the amount of water rations gotten by the player
-     */
-    public int seekWater(Player player) {
-        int waterGot = Math.abs(getWeather());
-        Card gourd = player.getCardType(Gourd.class);
-        if (gourd != null && gourd.isCardRevealed()) {
-            waterGot *= 2;
-        }
-        return waterGot;
-    }
-
-    /**
-     * The wood seeking action of a player.
-     * 
-     * @param nbTries the number of plank fragments seeked by the player
-     * @param player  the player who seeks wood
-     * @return the number of fragments gotten by the player, may be negative which
-     *         means the player is now sick and only got the absolute value of this
-     *         negative int in plank fragments.
-     */
-    public int seekWood(int nbTries, Player player) {
-        int wood = 1;
-
-        Card axe = player.getCardType(Axe.class);
-        if (axe != null && axe.isCardRevealed()) {
-            wood++;
-        }
-
-        List<Integer> diceList = new ArrayList<>();
-        for (int index = 0; index < 6; index++) {
-            diceList.add(index);
-        }
-        Collections.shuffle(diceList);
-
-        List<Integer> randomSeries = diceList.subList(0, nbTries);
-        if (!randomSeries.contains(0)) {
-            wood += nbTries;
-        } else {
-            wood *= -1;
-        }
-
-        return wood;
-    }
-
-    /**
-     * The card seeking action of a player.
-     * 
-     * @param player the player who seeks a card
-     * @return the card got by the player
-     */
-    public Card seekCard() {
-        Card pickedCard;
-        try {
-            pickedCard = deck.remove(0);
-        } catch (IndexOutOfBoundsException e) {
-            return null;
-        }
-        return pickedCard;
     }
 
     // Round end functions #####################################################
@@ -632,7 +582,7 @@ public class Board implements Serializable {
      * @param index the number picked by the player
      * @return the amount of food got by the player
      */
-    private int howMuchFood(int index) {
+    public int howMuchFood(int index) {
         int foodGot;
         if (index == 6) {
             foodGot = 3;
