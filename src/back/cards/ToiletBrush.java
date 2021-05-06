@@ -32,8 +32,4 @@ public class ToiletBrush extends Card {
         cardDescription = stringsBundle.getString("ToiletBrush_description");
     }
 
-    public String toString() {
-        return cardName;
-    }
-
 }

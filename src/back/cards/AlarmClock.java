@@ -36,10 +36,6 @@ public class AlarmClock extends Card {
         cardDescription = stringsBundle.getString("AlarmClock_description");
     }
 
-    public String toString() {
-        return cardName;
-    }
-
     /**
      * Simulates the utilisation of the card, herited from {@link Card}. Needs one
      * player as a target for the action.

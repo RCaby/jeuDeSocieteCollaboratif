@@ -32,8 +32,4 @@ public class OldBrief extends Card {
         cardDescription = stringsBundle.getString("OldBrief_description");
     }
 
-    public String toString() {
-        return cardName;
-    }
-
 }

@@ -34,10 +34,6 @@ public class SleepingPills extends Card {
         cardDescription = stringsBundle.getString("SleepingPills_description");
     }
 
-    public String toString() {
-        return cardName;
-    }
-
     /**
      * Simulates the utilisation of the card, herited from {@link Card}. Needs three
      * players as target for the robbery.

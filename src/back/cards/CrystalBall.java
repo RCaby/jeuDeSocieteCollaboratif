@@ -34,10 +34,6 @@ public class CrystalBall extends Card {
         cardDescription = stringsBundle.getString("CrystalBall_description");
     }
 
-    public String toString() {
-        return cardName;
-    }
-
     /**
      * Indicates whether the card can be played. This card can be played only to
      * reveal it to the other player.

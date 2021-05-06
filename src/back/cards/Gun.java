@@ -39,10 +39,6 @@ public class Gun extends Card {
         cardDescription = stringsBundle.getString("Gun_description");
     }
 
-    public String toString() {
-        return cardName;
-    }
-
     /**
      * Simulates the utilisation of the card, herited from {@link Card}. Needs one
      * player as a target for the kill attempt.

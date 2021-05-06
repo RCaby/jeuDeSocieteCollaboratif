@@ -32,7 +32,4 @@ public class LuxuryCarKey extends Card {
         cardDescription = stringsBundle.getString("LuxuryCarKey_description");
     }
 
-    public String toString() {
-        return cardName;
-    }
 }

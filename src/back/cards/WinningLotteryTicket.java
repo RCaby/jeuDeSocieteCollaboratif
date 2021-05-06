@@ -34,8 +34,4 @@ public class WinningLotteryTicket extends Card {
         cardDescription = stringsBundle.getString("WinningLotteryTicket_description");
     }
 
-    public String toString() {
-        return cardName;
-    }
-
 }

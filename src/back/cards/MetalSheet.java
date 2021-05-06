@@ -32,10 +32,6 @@ public class MetalSheet extends Card {
         cardDescription = stringsBundle.getString("MetalSheet_description");
     }
 
-    public String toString() {
-        return cardName;
-    }
-
     /**
      * Indicates whether the card can be played. This card cannot be used, as it is
      * only used in response of another card.

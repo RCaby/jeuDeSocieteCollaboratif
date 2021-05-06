@@ -36,10 +36,6 @@ public class RottenFish extends Card {
         cardDescription = stringsBundle.getString("RottenFish_description");
     }
 
-    public String toString() {
-        return cardName;
-    }
-
     /**
      * Simulates the utilisation of the card, herited from {@link Card}. Needs one
      * player as a target for the sickness.

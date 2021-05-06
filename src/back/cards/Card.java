@@ -161,4 +161,8 @@ public abstract class Card implements Serializable {
     public boolean discardOnDeath() {
         return discardOnDeath;
     }
+
+    public String toString() {
+        return isCardRevealed() ? cardName : "(" + cardName + ")";
+    }
 }

@@ -32,7 +32,4 @@ public class BoardGameQuoridor extends Card {
         cardDescription = stringsBundle.getString("BoardGameQuoridor_description");
     }
 
-    public String toString() {
-        return cardName;
-    }
 }

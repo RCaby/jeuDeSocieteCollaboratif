@@ -35,10 +35,6 @@ public class Matches extends Card {
         cardDescription = stringsBundle.getString("Matches_description");
     }
 
-    public String toString() {
-        return cardName;
-    }
-
     /**
      * Simulates the utilisation of the card, herited from {@link Card}. Does not
      * need any parameter.
