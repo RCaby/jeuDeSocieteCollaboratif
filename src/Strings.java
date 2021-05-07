@@ -44,5 +44,5 @@ public class Strings extends ListResourceBundle {
             { "playerGotSick", " got sick !" },
             { "decideWhoDie", "Someone has to die. Choose one player in this list." },
             { "decideWhoVote", "Someone has to die. Vote for one player in this list." },
-            { "playerGotVoteBegin", " got designated " }, { "playerGotVoteEnd", " times !" } };
+            { "votesFor", " votes for " } };
 }

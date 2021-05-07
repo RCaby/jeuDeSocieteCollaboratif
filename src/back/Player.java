@@ -292,7 +292,6 @@ public class Player implements Serializable {
      * @return a boolean indicating if one card has been used.
      */
     public boolean wouldLikePlayCardAsCpu(Board board) {
-
         boolean cardUsed = false;
         if (canUseCard()) {
             int odds = random.nextInt(10);
@@ -410,15 +409,22 @@ public class Player implements Serializable {
     }
 
     /**
-     * Robs a random card from this player.
+     * Robs a random hidden card from this player.
      * 
      * @return the robbed card and removes it from the inventory of the player
      */
     public Card robRandomCard() {
-        int index = random.nextInt(inventory.size());
-        Card card = inventory.get(index);
-        removeCard(index);
-        return card;
+        if (!inventoryHidden.isEmpty()) {
+            int index = random.nextInt(inventory.size());
+            Card card = inventory.get(index);
+            while (card.isCardRevealed()) {
+                index = random.nextInt(inventory.size());
+                card = inventory.get(index);
+            }
+            removeCard(index);
+            return card;
+        }
+        return null;
     }
 
     /**

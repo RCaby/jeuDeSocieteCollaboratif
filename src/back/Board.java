@@ -3,7 +3,6 @@ package back;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -13,12 +12,9 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.Map.Entry;
 
-import back.cards.Axe;
 import back.cards.Card;
 import back.cards.Club;
 import back.cards.CrystalBall;
-import back.cards.FishingRod;
-import back.cards.Gourd;
 
 /**
  * The main board of the game.
@@ -119,6 +115,7 @@ public class Board implements Serializable {
         System.out.println("End of initialisation");
 
         askPlayersForCards();
+        System.out.println("End of first card ask !");
         currentPhase = GamePhase.GATHERING_RESSOURCES;
         chief = playerList.get(0);
         play(playerList.get(0));
@@ -140,18 +137,31 @@ public class Board implements Serializable {
         }
     }
 
+    // TODO update this javadoc
     /**
      * Allows each player to play a card if they would like to.
      */
     public boolean askPlayersForCards() {
-        boolean cardUsed = false;
-        for (Player player : playerList) {
-            if (player.getState() == PlayerState.HEALTHY && !player.equals(thisPlayer)) {
-                cardUsed = cardUsed || player.wouldLikePlayCardAsCpu(this);
-            } else if (player.getState() == PlayerState.HEALTHY) {
 
-                cardUsed = cardUsed || player.wouldLikePlayCard(this);
+        boolean cardUsed = false;
+        boolean allSaidNo = false;
+        int index = 0;
+        while (!allSaidNo) {
+
+            Player player = playerList.get(index);
+            if (player.getState() != PlayerState.HEALTHY) {
+                index++;
+            } else {
+                boolean playerUsedCard = !player.equals(thisPlayer) ? player.wouldLikePlayCardAsCpu(this)
+                        : player.wouldLikePlayCard(this);
+                cardUsed = cardUsed || playerUsedCard;
+                index = playerUsedCard ? 0 : index + 1;
             }
+
+            if (index == playerList.size()) {
+                allSaidNo = true;
+            }
+
         }
         return cardUsed;
 
@@ -184,7 +194,6 @@ public class Board implements Serializable {
             System.out.println(player + " is dead and cannot play !\n");
             play(nextPlayer());
         } else if (player.getState() == PlayerState.SICK) {
-            // Case not expected
             System.out.println(player + " is sick and cannot play !\n");
             play(nextPlayer());
         } else {
@@ -214,6 +223,7 @@ public class Board implements Serializable {
                     "It is time to distribute the rations of the round %d. There are currently %d water rations, %d food rations. There are %d players alive and %d planks in the raft.",
                     round, waterRations, foodRations, getNbPlayersAlive(), nbWoodPlanks));
 
+            System.out.println(getSickPlayersList() + " are sicks !");
             roundEnd(false); // Goods distribution not for departure
             System.out.println("Distribution ended !");
             boolean departure = weatherList[round] == -2 || isThereEnoughGoodsForAll(true);
@@ -399,6 +409,7 @@ public class Board implements Serializable {
     }
 
     // Round end functions #####################################################
+    // TODO update this
     /**
      * Initializes the voting session.
      * 
@@ -406,27 +417,55 @@ public class Board implements Serializable {
      * @param votingPlayers   the list of the players who can vote
      * @param votes           the results of the voting session
      */
-    public void beginVotingSession(List<Player> pickablePlayers, List<Player> votingPlayers,
-            Map<Player, Integer> votes) {
+    public Player[] beginVotingSession(List<Player> pickablePlayers, List<Player> votingPlayers,
+            Map<Player, List<Player>> votes) {
+        Player crystalBallOwner = null;
+        Player crystalBallClubOwner = null;
         for (Player player : playerList) {
+            PlayerState playerState = player.getState();
+            boolean isConchOwner = player.equals(conchOwner);
+            Card cardClub = player.getCardType(Club.class);
+            Card cardCrystalBall = player.getCardType(CrystalBall.class);
 
-            if (player.getState() != PlayerState.DEAD
-                    && (!player.equals(conchOwner) || (player.equals(conchOwner) && getNbPlayersAlive() == 1))) {
+            if (playerState != PlayerState.DEAD && (!isConchOwner || (isConchOwner && getNbPlayersAlive() == 1))) {
                 pickablePlayers.add(player);
-                votes.put(player, 0);
             }
-            if (player.getState() == PlayerState.HEALTHY) {
-                votingPlayers.add(player);
-                Card cardClub = player.getCardType(Club.class);
-                if (cardClub != null && cardClub.isCardRevealed()) {
-                    votingPlayers.add(player);
-                    System.out.println(player + " will be voting twice ! Thanks to his club");
+            if (playerState == PlayerState.HEALTHY) {
+                if (cardClub != null && cardCrystalBall != null) {
+                    crystalBallClubOwner = player;
+                    System.out.println("Club and crystal ball owner detected !");
+                } else if (cardCrystalBall != null) {
+                    crystalBallOwner = player;
+                    System.out.println("Crystal ball owner detected !");
                 }
+
+                if (crystalBallOwner == null) {
+                    votingPlayers.add(player);
+                    votes.put(player, new ArrayList<>());
+                    if (crystalBallClubOwner == null && cardClub != null && cardClub.isCardRevealed()) {
+                        votingPlayers.add(player);
+                        System.out.println(player + " will be voting twice ! Thanks to his club");
+                    }
+                }
+
             }
         }
+        System.out.println("Those who vote : " + votingPlayers);
+        if (crystalBallOwner != null) {
+            votingPlayers.add(crystalBallOwner);
+            votes.put(crystalBallOwner, new ArrayList<>());
+            System.out.println("You are at the end of the list !");
+        } else if (crystalBallClubOwner != null) {
+            votes.put(crystalBallClubOwner, new ArrayList<>());
+            votingPlayers.add(crystalBallClubOwner);
+            votingPlayers.add(crystalBallClubOwner);
+
+        }
+        return new Player[] { crystalBallOwner, crystalBallClubOwner };
 
     }
 
+    // TODO update this javadoc
     /**
      * Handles the voting session and selects one player to be sacrificied
      * 
@@ -434,24 +473,50 @@ public class Board implements Serializable {
      */
     public Player choosePlayerToDie() {
 
-        Map<Player, Integer> votes = new HashMap<>();
+        Map<Player, List<Player>> votes = new HashMap<>();
         List<Player> pickablePlayers = new ArrayList<>();
         List<Player> votingPlayers = new ArrayList<>();
+        Player crystalBallOwner = null;
+        Player crystalBallClubOwner = null;
         System.out.println("Vote session ------------------");
 
-        beginVotingSession(pickablePlayers, votingPlayers, votes);
-        crystalBallVote(votingPlayers);
+        Player[] ownersArray = beginVotingSession(pickablePlayers, votingPlayers, votes);
+        crystalBallOwner = ownersArray[0];
+        crystalBallClubOwner = ownersArray[1];
 
         for (Player player : votingPlayers) {
-            Player designated = player.equals(thisPlayer) ? player.vote(this, pickablePlayers)
-                    : player.voteAsCPU(pickablePlayers);
-            int prevValue = votes.get(designated);
-            votes.put(designated, prevValue + 1);
+            if (!player.equals(crystalBallOwner) && !player.equals(crystalBallClubOwner)) {
+                System.out.println("Not owner is voting !");
+                makePlayerVote(player, votes, pickablePlayers);
+            }
         }
+
+        if (crystalBallOwner != null) {
+            displayVoteResult(votes);
+            System.out.println(stringsBundle.getString("decideWhoVote"));
+            System.out.println("Crystal ball owner is voting");
+            makePlayerVote(crystalBallOwner, votes, pickablePlayers);
+        } else if (crystalBallClubOwner != null) {
+            displayVoteResult(votes);
+            System.out.println(stringsBundle.getString("decideWhoVote"));
+            System.out.println("Crystal ball owner is voting twice");
+            makePlayerVote(crystalBallClubOwner, votes, pickablePlayers);
+            makePlayerVote(crystalBallClubOwner, votes, pickablePlayers);
+        }
+
         displayVoteResult(votes);
         Player resultPlayer = voteResults(votes);
         System.out.println("End of vote session ----------------");
         return resultPlayer;
+
+    }
+
+    // TODO java doc
+    public void makePlayerVote(Player player, Map<Player, List<Player>> votes, List<Player> pickablePlayers) {
+        Player designated = player.equals(thisPlayer) ? player.vote(this, pickablePlayers)
+                : player.voteAsCPU(pickablePlayers);
+        List<Player> prevValue = votes.get(player);
+        prevValue.add(designated);
 
     }
 
@@ -482,11 +547,22 @@ public class Board implements Serializable {
      * @param votes the map which contains the results of the vote
      * @return the Player designated by the votes
      */
-    public Player voteResults(Map<Player, Integer> votes) {
+    public Player voteResults(Map<Player, List<Player>> votes) {
+        Map<Player, Integer> results = new HashMap<>();
+        for (Player player : playerList) {
+            results.put(player, 0);
+        }
+
         Integer max = 0;
         int nbOfMax = 0;
         List<Player> maxPlayers = new ArrayList<>();
-        for (Entry<Player, Integer> entry : votes.entrySet()) {
+        for (Entry<Player, List<Player>> entry : votes.entrySet()) {
+            for (Player designated : entry.getValue()) {
+                results.put(designated, results.get(designated) + 1);
+            }
+        }
+        for (Entry<Player, Integer> entry : results.entrySet()) {
+
             Integer value = entry.getValue();
             Player key = entry.getKey();
             if (value > max) {
@@ -517,12 +593,22 @@ public class Board implements Serializable {
 
     // Tools functions #####################################################
 
+    // TOTO Javadoc
+    public List<Player> getSickPlayersList() {
+        List<Player> sickPlayers = new ArrayList<>();
+        for (Player player : playerList) {
+            if (player.getState() == PlayerState.SICK) {
+                sickPlayers.add(player);
+            }
+        }
+        return sickPlayers;
+    }
+
     // TODO Javadoc
-    public void displayVoteResult(Map<Player, Integer> votes) {
-        for (Entry<Player, Integer> entry : votes.entrySet()) {
-            if (entry.getValue() > 0) {
-                System.out.println(entry.getKey() + stringsBundle.getString("playerGotVoteBegin") + entry.getValue()
-                        + stringsBundle.getString("playerGotVoteEnd"));
+    public void displayVoteResult(Map<Player, List<Player>> votes) {
+        for (Entry<Player, List<Player>> entry : votes.entrySet()) {
+            if (!entry.getValue().isEmpty()) {
+                System.out.println(entry.getKey() + stringsBundle.getString("votesFor") + entry.getValue());
             }
         }
     }
@@ -581,11 +667,13 @@ public class Board implements Serializable {
     /**
      * Gives a card to a player.
      * 
-     * @param player the player who will have a new card
-     * @param card   the new card
+     * @param player the player who will have a new card, not null
+     * @param card   the new card, not null
      */
     public void giveCardToPlayer(Player player, Card card) {
-        player.addCardToInventory(card);
+        if (card != null && player != null) {
+            player.addCardToInventory(card);
+        }
     }
 
     /**
