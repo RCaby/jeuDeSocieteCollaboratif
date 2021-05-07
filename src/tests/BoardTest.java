@@ -29,7 +29,7 @@ public class BoardTest {
     private ResourceBundle stringsBundle = ResourceBundle.getBundle("Strings", locale);
 
     @Test
-    public void beginVotingSessionTest() {//
+    public void beginVotingSessionTest() {
         Board board = new Board(5);
         Player player0 = board.getPlayerList().get(0);
         Player player1 = board.getPlayerList().get(1);
@@ -48,11 +48,11 @@ public class BoardTest {
         player3.setState(PlayerState.DEAD);
         List<Player> votingPlayers = new ArrayList<>();
         List<Player> pickablePlayers = new ArrayList<>();
-        Map<Player, Integer> votes = new HashMap<>();
+        Map<Player, List<Player>> votes = new HashMap<>();
         board.beginVotingSession(pickablePlayers, votingPlayers, votes);
         List<Player> expectedVotingPlayers = new ArrayList<>();
         List<Player> expectedPickablePlayers = new ArrayList<>();
-        Map<Player, Integer> expectedVotes = new HashMap<>();
+        Map<Player, List<Player>> expectedVotes = new HashMap<>();
         expectedPickablePlayers.add(player1);
         expectedPickablePlayers.add(player2);
         expectedPickablePlayers.add(player4);
@@ -60,9 +60,13 @@ public class BoardTest {
         expectedVotingPlayers.add(player1);
         expectedVotingPlayers.add(player1);
         expectedVotingPlayers.add(player4);
-        expectedVotes.put(player1, 0);
-        expectedVotes.put(player2, 0);
-        expectedVotes.put(player4, 0);
+        List<Player> voteForP0 = new ArrayList<>();
+        List<Player> voteForP1 = new ArrayList<>();
+        List<Player> voteForP4 = new ArrayList<>();
+
+        expectedVotes.put(player0, voteForP0);
+        expectedVotes.put(player1, voteForP1);
+        expectedVotes.put(player4, voteForP4);
 
         assertEquals(expectedPickablePlayers, pickablePlayers);
         assertEquals(expectedVotes, votes);
@@ -70,26 +74,31 @@ public class BoardTest {
     }
 
     @Test
-    public void crystalBallVoteTest() {
-        Board board = new Board(5);
-        Card crystalBall = new CrystalBall(board, stringsBundle);
-        Player target = board.getPlayerList().get(0);
-        crystalBall.useCard(null, null, null, ActionType.NONE);
-        board.giveCardToPlayer(target, crystalBall);
-
-        board.crystalBallVote(board.getPlayerList());
-        assertEquals(target, board.getPlayerList().get(board.getPlayerList().size() - 1));
-
-    }
-
-    @Test
     public void voteResultsTest() {
-        Map<Player, Integer> results = new HashMap<>();
+        Map<Player, List<Player>> results = new HashMap<>();
         Board board = new Board(5);
         Player player0 = board.getPlayerList().get(0);
+        Player player1 = board.getPlayerList().get(1);
+        Player player2 = board.getPlayerList().get(2);
         Player player3 = board.getPlayerList().get(3);
-        results.put(player0, 3);
-        results.put(player3, 2);
+        Player player4 = board.getPlayerList().get(4);
+        List<Player> votesForP0 = new ArrayList<>();
+        List<Player> votesForP1 = new ArrayList<>();
+        List<Player> votesForP2 = new ArrayList<>();
+        List<Player> votesForP3 = new ArrayList<>();
+        List<Player> votesForP4 = new ArrayList<>();
+        votesForP0.add(player1);
+        votesForP0.add(player2);
+        votesForP0.add(player3);
+        votesForP3.add(player4);
+        votesForP3.add(player0);
+        results.put(player0, votesForP0);
+        results.put(player1, votesForP1);
+        results.put(player2, votesForP2);
+        results.put(player3, votesForP3);
+        results.put(player4, votesForP4);
+        board.setThisPlayer(player4);
+        board.setChief(player3);
         assertEquals(player0, board.voteResults(results));
     }
 

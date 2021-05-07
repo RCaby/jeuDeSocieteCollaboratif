@@ -1,21 +1,15 @@
 package tests;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import org.junit.Test;
 
 import back.Board;
 import back.Player;
-import back.PlayerState;
-import back.cards.Axe;
 import back.cards.Card;
 import back.cards.Cartridge;
 import back.cards.Gun;
