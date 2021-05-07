@@ -137,9 +137,15 @@ public class Board implements Serializable {
         }
     }
 
-    // TODO update this javadoc
     /**
      * Allows each player to play a card if they would like to.
+     * 
+     * <p>
+     * To simulate the fact that a player is allowed by the rules to use several
+     * cards at the same time, each player has to refuse to play a card for the game
+     * to continue.
+     * 
+     * @return a boolean that indicates if a card was played.
      */
     public boolean askPlayersForCards() {
 
@@ -409,7 +415,6 @@ public class Board implements Serializable {
     }
 
     // Round end functions #####################################################
-    // TODO update this
     /**
      * Initializes the voting session.
      * 
@@ -431,43 +436,91 @@ public class Board implements Serializable {
                 pickablePlayers.add(player);
             }
             if (playerState == PlayerState.HEALTHY) {
-                if (cardClub != null && cardCrystalBall != null) {
-                    crystalBallClubOwner = player;
-                    System.out.println("Club and crystal ball owner detected !");
-                } else if (cardCrystalBall != null) {
-                    crystalBallOwner = player;
-                    System.out.println("Crystal ball owner detected !");
-                }
+                Player[] owners = detectCrystalBallOrClub(cardClub, cardCrystalBall, player);
+                crystalBallOwner = owners[0];
+                crystalBallClubOwner = owners[1];
 
-                if (crystalBallOwner == null) {
-                    votingPlayers.add(player);
-                    votes.put(player, new ArrayList<>());
-                    if (crystalBallClubOwner == null && cardClub != null && cardClub.isCardRevealed()) {
-                        votingPlayers.add(player);
-                        System.out.println(player + " will be voting twice ! Thanks to his club");
-                    }
-                }
+                addVotingPlayer(crystalBallClubOwner, crystalBallOwner, votingPlayers, votes, player, cardClub);
 
             }
+
         }
+        checkForCrystalBallOrClub(crystalBallOwner, crystalBallClubOwner, votingPlayers, votes);
+
         System.out.println("Those who vote : " + votingPlayers);
+        return new Player[] { crystalBallOwner, crystalBallClubOwner };
+
+    }
+
+    /**
+     * Adds the voters who do not have a crystal ball to the list of voting players.
+     * 
+     * @param crystalBallClubOwner the player who owns a crystal ball and a club
+     * @param crystalBallOwner     the player who owns a crystal ball but no club
+     * @param votingPlayers        the list of the voting players for this vote
+     *                             session
+     * @param votes                the votes results
+     * @param player               the player currently analyzed
+     * @param cardClub             the club card of the player
+     */
+    public void addVotingPlayer(Player crystalBallClubOwner, Player crystalBallOwner, List<Player> votingPlayers,
+            Map<Player, List<Player>> votes, Player player, Card cardClub) {
+        if (crystalBallOwner == null) {
+            votingPlayers.add(player);
+            votes.put(player, new ArrayList<>());
+            if (crystalBallClubOwner == null && cardClub != null && cardClub.isCardRevealed()) {
+                votingPlayers.add(player);
+                System.out.println(player + " will be voting twice ! Thanks to his club");
+            }
+        }
+    }
+
+    /**
+     * Checks if the player analysed is the owner of a crystal ball and/or a club.
+     * 
+     * @param cardClub        the club card of the player
+     * @param cardCrystalBall the crystal ball card of the player
+     * @param player          the player currently analysed
+     * @return
+     */
+    public Player[] detectCrystalBallOrClub(Card cardClub, Card cardCrystalBall, Player player) {
+        Player crystalBallClubOwner = null;
+        Player crystalBallOwner = null;
+        if (cardClub != null && cardCrystalBall != null) {
+            crystalBallClubOwner = player;
+            System.out.println("Club and crystal ball owner detected !");
+        } else if (cardCrystalBall != null) {
+            crystalBallOwner = player;
+            System.out.println("Crystal ball owner detected !");
+        }
+        return new Player[] { crystalBallOwner, crystalBallClubOwner };
+    }
+
+    /**
+     * Distributes the right to vote after any other player to the owner of a
+     * crystal ball.
+     * 
+     * @param crystalBallOwner     the player who owns a crystal ball but no club
+     * @param crystalBallClubOwner the player who owns a crystal ball and a club
+     * @param votingPlayers        the list of players who will vote during this
+     *                             voting session
+     * @param votes                the results of the votes
+     */
+    public void checkForCrystalBallOrClub(Player crystalBallOwner, Player crystalBallClubOwner,
+            List<Player> votingPlayers, Map<Player, List<Player>> votes) {
         if (crystalBallOwner != null) {
             votingPlayers.add(crystalBallOwner);
             votes.put(crystalBallOwner, new ArrayList<>());
-            System.out.println("You are at the end of the list !");
         } else if (crystalBallClubOwner != null) {
             votes.put(crystalBallClubOwner, new ArrayList<>());
             votingPlayers.add(crystalBallClubOwner);
             votingPlayers.add(crystalBallClubOwner);
 
         }
-        return new Player[] { crystalBallOwner, crystalBallClubOwner };
-
     }
 
-    // TODO update this javadoc
     /**
-     * Handles the voting session and selects one player to be sacrificied
+     * Handles the voting session and selects one player to be sacrificied.
      * 
      * @return the player who will be sacrificied
      */
@@ -511,7 +564,15 @@ public class Board implements Serializable {
 
     }
 
-    // TODO java doc
+    /**
+     * Asks a player to vote for a player in a given list and saves the vote in a
+     * map.
+     * 
+     * @param player          the voting player
+     * @param votes           the map which contains the votes of every voting
+     *                        player
+     * @param pickablePlayers the list of the players who can be "elected"
+     */
     public void makePlayerVote(Player player, Map<Player, List<Player>> votes, List<Player> pickablePlayers) {
         Player designated = player.equals(thisPlayer) ? player.vote(this, pickablePlayers)
                 : player.voteAsCPU(pickablePlayers);
@@ -548,6 +609,7 @@ public class Board implements Serializable {
      * @return the Player designated by the votes
      */
     public Player voteResults(Map<Player, List<Player>> votes) {
+
         Map<Player, Integer> results = new HashMap<>();
         for (Player player : playerList) {
             results.put(player, 0);
@@ -561,6 +623,7 @@ public class Board implements Serializable {
                 results.put(designated, results.get(designated) + 1);
             }
         }
+
         for (Entry<Player, Integer> entry : results.entrySet()) {
 
             Integer value = entry.getValue();
@@ -575,7 +638,6 @@ public class Board implements Serializable {
                 nbOfMax++;
             }
         }
-
         if (nbOfMax == 1) {
             return maxPlayers.get(0);
         }
@@ -604,7 +666,12 @@ public class Board implements Serializable {
         return sickPlayers;
     }
 
-    // TODO Javadoc
+    /**
+     * Displays for the non computer player the results of a vote, which means the
+     * designated player(s) for each voting player.
+     * 
+     * @param votes the map which contains the vote results.
+     */
     public void displayVoteResult(Map<Player, List<Player>> votes) {
         for (Entry<Player, List<Player>> entry : votes.entrySet()) {
             if (!entry.getValue().isEmpty()) {
@@ -613,7 +680,11 @@ public class Board implements Serializable {
         }
     }
 
-    // TODO Javadoc
+    /**
+     * Gets an user input.
+     * 
+     * @return the input
+     */
     public String getUserInput() {
         String input = "";
         if (inputReader.hasNextLine()) {
@@ -622,7 +693,11 @@ public class Board implements Serializable {
         return input;
     }
 
-    // TODO Javadoc
+    /**
+     * Gets a yes or no answer.
+     * 
+     * @return the answer, on a boolean form
+     */
     public boolean getYesNoAnswer() {
         System.out.println(stringsBundle.getString("yesNoQuestion"));
         String answer = getUserInput();
@@ -635,7 +710,13 @@ public class Board implements Serializable {
         return answer.equals("y");
     }
 
-    // TODO Javadoc
+    /**
+     * Gets a int input by the user, between two int, both inclusive.
+     * 
+     * @param minBound the min bound
+     * @param maxBound the max bound
+     * @return the input
+     */
     public int getUserIntChoice(int minBound, int maxBound) {
         int choice = minBound - 1;
 
@@ -650,7 +731,12 @@ public class Board implements Serializable {
 
     }
 
-    // TODO Javadoc
+    /**
+     * Asks the user to choose several players in the players list.
+     * 
+     * @param nbPlayers the number of player that the user have to pick
+     * @return the picked players
+     */
     public List<Integer> getUserPlayerChoice(int nbPlayers) {
         List<Integer> pickedPlayers = new ArrayList<>();
         for (int index = 0; index < nbPlayers; index++) {
@@ -1070,6 +1156,15 @@ public class Board implements Serializable {
      */
     public int getIndexCurrentPlayer() {
         return indexOfCurrentPlayer;
+    }
+
+    /**
+     * The setter for the attribute {@link Board#thisPlayer}
+     * 
+     * @param thisPlayer the player controled by the user
+     */
+    public void setThisPlayer(Player thisPlayer) {
+        this.thisPlayer = thisPlayer;
     }
 
     /**

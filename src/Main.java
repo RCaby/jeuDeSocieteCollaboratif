@@ -9,5 +9,8 @@ public class Main {
     public static void main(String[] args) {
 
         Board board = new Board(NB_PLAYERS, YOUR_NAME);
+
+        // TODO mettre a jour les test + nouveaux tests quand nécessaire
+        // TODO mettre à jour la javadoc.
     }
 }
