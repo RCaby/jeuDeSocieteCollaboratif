@@ -16,6 +16,7 @@ Different steps are envisaged, based on the progress of the project :
 
 
 ## How to use
-* Download the projet [Link](https://github.com/RCaby/jeuDeSocieteCollaboratif.git)
+* Download the projet : [Link](https://github.com/RCaby/jeuDeSocieteCollaboratif.git)
 * Execute the main file in the src folder
 * You can personalize the game by editing the number of players or the name of one of the player
+* When the game asks you to choose something in a list, write down the index of your choice, starting from 0
