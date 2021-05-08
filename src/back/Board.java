@@ -15,6 +15,7 @@ import java.util.Map.Entry;
 import back.cards.Card;
 import back.cards.Club;
 import back.cards.CrystalBall;
+import front.MainBoardFront;
 
 /**
  * The main board of the game.
@@ -55,6 +56,7 @@ public class Board implements Serializable {
     private List<Integer> barometerList;
     private Player conchOwner;
     private transient Scanner inputReader;
+    private MainBoardFront mainBoardFront;
 
     /**
      * Builds the game without launching it and without incorporating any
@@ -104,6 +106,7 @@ public class Board implements Serializable {
      */
     public Board(int nbPlayers, String namePlayer) {
         this(nbPlayers);
+
         indexOfThisPlayer = random.nextInt(nbPlayers);
         thisPlayer = new Player(namePlayer, stringsBundle);
         playerList.remove(indexOfThisPlayer);
@@ -113,6 +116,8 @@ public class Board implements Serializable {
         inputReader = new Scanner(System.in);
 
         System.out.println("End of initialisation. Good luck !");
+
+        mainBoardFront = new MainBoardFront();
 
         askPlayersForCards();
         currentPhase = GamePhase.GATHERING_RESSOURCES;
