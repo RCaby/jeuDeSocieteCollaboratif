@@ -90,8 +90,6 @@ public class CardTest {
         assertTrue(board.getDiscardDeck().contains(bottle));
     }
 
-    // TODO Tests pour chaque type de carte
-
     @Test
     public void getOwnerTest() {
         Board board = new Board(5);

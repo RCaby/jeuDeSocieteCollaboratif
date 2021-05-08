@@ -47,7 +47,7 @@ public class Barometer extends Card {
      */
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
-        super.useCard(player1, player2, player3, action);
+
         List<Integer> toBeDisplayed = new ArrayList<>();
         int n = board.getRound();
         if (n <= 10) {
@@ -59,6 +59,7 @@ public class Barometer extends Card {
             }
         }
         board.setBarometerList(toBeDisplayed);
-        System.out.println(toBeDisplayed);
+        board.showBarometerList(owner);
+        super.useCard(player1, player2, player3, action);
     }
 }

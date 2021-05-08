@@ -53,6 +53,7 @@ public class Gun extends Card {
         if (player1 != null && owner != null) {
             Card cardCartridge = owner.getCardType(Cartridge.class);
             if (cardCartridge != null) {
+                System.out.println(owner + " uses his card " + this + " on " + player1);
                 cardCartridge.useCard(player1, player2, player3, action);
                 Card metalSheet = player1.getCardType(MetalSheet.class);
                 if (metalSheet != null) {

@@ -112,10 +112,9 @@ public class Board implements Serializable {
         cardsDistribution();
         inputReader = new Scanner(System.in);
 
-        System.out.println("End of initialisation");
+        System.out.println("End of initialisation. Good luck !");
 
         askPlayersForCards();
-        System.out.println("End of first card ask !");
         currentPhase = GamePhase.GATHERING_RESSOURCES;
         chief = playerList.get(0);
         play(playerList.get(0));
@@ -269,6 +268,7 @@ public class Board implements Serializable {
 
                 currentPhase = GamePhase.GATHERING_RESSOURCES;
                 indexOfCurrentPlayer = 0;
+                System.out.println("Current weather is " + getWeather());
             }
 
         }
@@ -539,7 +539,6 @@ public class Board implements Serializable {
 
         for (Player player : votingPlayers) {
             if (!player.equals(crystalBallOwner) && !player.equals(crystalBallClubOwner)) {
-                System.out.println("Not owner is voting !");
                 makePlayerVote(player, votes, pickablePlayers);
             }
         }
@@ -547,12 +546,10 @@ public class Board implements Serializable {
         if (crystalBallOwner != null) {
             displayVoteResult(votes);
             System.out.println(stringsBundle.getString("decideWhoVote"));
-            System.out.println("Crystal ball owner is voting");
             makePlayerVote(crystalBallOwner, votes, pickablePlayers);
         } else if (crystalBallClubOwner != null) {
             displayVoteResult(votes);
             System.out.println(stringsBundle.getString("decideWhoVote"));
-            System.out.println("Crystal ball owner is voting twice");
             makePlayerVote(crystalBallClubOwner, votes, pickablePlayers);
             makePlayerVote(crystalBallClubOwner, votes, pickablePlayers);
         }
@@ -968,6 +965,30 @@ public class Board implements Serializable {
     }
 
     // Getters and setters ######################################################
+
+    /**
+     * Shows the next meteo cards to the player. Currently only working for the non
+     * computer player as the others are playing randomly.
+     * 
+     * @param player the player who owns the card
+     */
+    public void showBarometerList(Player player) {
+        if (player.equals(thisPlayer)) {
+            System.out.println(stringsBundle.getString("nextWeather") + barometerList);
+        }
+    }
+
+    /**
+     * Shows cards of all other players to this player. Currently only working for
+     * the non computer player as the others are playing randomly.
+     * 
+     * @param player the player who owns the card
+     */
+    public void showSpyglassList(Player player) {
+        if (player.equals(thisPlayer)) {
+            System.out.println(stringsBundle.getString("cardsOfAllPlayers") + spyglassList);
+        }
+    }
 
     /**
      * A getter for the attribute {@link Board#weatherList}.

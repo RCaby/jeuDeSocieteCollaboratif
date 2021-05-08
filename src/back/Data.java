@@ -4,55 +4,19 @@ import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-import back.cards.AlarmClock;
-import back.cards.Antivenom;
-import back.cards.Axe;
-import back.cards.Barometer;
-import back.cards.BoardGameQuoridor;
 import back.cards.Card;
-import back.cards.Cartridge;
-import back.cards.Club;
-import back.cards.Coconut;
-import back.cards.Coffee;
-import back.cards.Conch;
-import back.cards.CrystalBall;
-import back.cards.FishingRod;
-import back.cards.Flashlight;
-import back.cards.GiftBasket;
-import back.cards.Gourd;
-import back.cards.Gun;
-import back.cards.KitBBQCannibal;
-import back.cards.LuxuryCarKey;
-import back.cards.Matches;
-import back.cards.MetalSheet;
-import back.cards.OldBrief;
-import back.cards.Pendulum;
-import back.cards.RottenFish;
-import back.cards.Sandwich;
-import back.cards.Sardines;
-import back.cards.SleepingPills;
-import back.cards.Spyglass;
-import back.cards.StagnantWater;
-import back.cards.ToiletBrush;
-import back.cards.VegetableMill;
-import back.cards.VoodooDoll;
-import back.cards.WaterBottle;
-import back.cards.WinningLotteryTicket;
-import back.cards.WoodenPlank;
 
 public class Data implements Serializable {
     private static final long serialVersionUID = 2040640105155032989L;
     private Map<Integer, Integer[]> initialRations;
     private List<Integer> weatherList;
     private transient ResourceBundle stringsBundle;
-    private transient Class<?>[] truc = new Class<?>[] { Axe.class };
     Random random;
 
     public Data(ResourceBundle strings) {

@@ -10,8 +10,10 @@ import org.junit.Test;
 
 import back.Board;
 import back.Player;
+import back.PlayerState;
 import back.cards.Card;
 import back.cards.Cartridge;
+import back.cards.FishingRod;
 import back.cards.Gun;
 import back.cards.MetalSheet;
 import back.cards.Sandwich;
@@ -70,6 +72,32 @@ public class PlayerTest {
 
     @Test
     public void wouldLikePlayCardTest() {// Waiting for a better wouldLikePlayCard function...
+    }
+
+    @Test
+    public void deathPurgeCardsTest() {
+        Board board = new Board(6);
+        Player player0 = board.getPlayerList().get(0);
+        Card gun = new Gun(board, stringsBundle);
+        Card gun2 = new Gun(board, stringsBundle);
+        Card fishingRod = new FishingRod(board, stringsBundle);
+        Card bottle = new WaterBottle(board, stringsBundle);
+        board.giveCardToPlayer(player0, gun);
+        board.giveCardToPlayer(player0, gun2);
+        board.giveCardToPlayer(player0, fishingRod);
+        board.giveCardToPlayer(player0, bottle);
+        player0.revealCard(gun);
+        player0.revealCard(fishingRod);
+        player0.revealCard(bottle);
+        player0.setState(PlayerState.DEAD);
+        player0.deathPurgeCards();
+        assertTrue(player0.hasCard(gun));
+        assertTrue(player0.hasCard(gun2));
+        assertTrue(player0.hasCard(bottle));
+        assertTrue(!player0.hasCard(fishingRod));
+        board.distributeCardsFromDeadPlayer(player0);
+        assertTrue(!player0.hasCard(gun) && !player0.hasCard(gun2) && !player0.hasCard(bottle));
+
     }
 
 }

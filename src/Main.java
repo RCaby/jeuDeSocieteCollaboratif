@@ -10,7 +10,5 @@ public class Main {
 
         Board board = new Board(NB_PLAYERS, YOUR_NAME);
 
-        // TODO mettre a jour les test + nouveaux tests quand nécessaire
-        // TODO mettre à jour la javadoc.
     }
 }
