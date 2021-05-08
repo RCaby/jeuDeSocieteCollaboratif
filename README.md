@@ -9,7 +9,7 @@ This project is an opportunity to experience the developement of a complete Java
 Different steps are envisaged, based on the progress of the project : 
 - [x] modelling of the game and its elements (class diagram, UML).
 - [x] realisation of a console version of the game, without any user interaction (the game plays by itself with random behaviours)
-- [ ] interactive console version with randomly acting computer players
+- [x] interactive console version with randomly acting computer players
 - [ ] design of a HMI with Swing
 - [ ] better behaviours for the computer players (no more random behaviours)
 - [ ] integration of the "Tribus et personnages" expansion which adds new features
