@@ -2,14 +2,12 @@ package back;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 import java.util.Map.Entry;
 
 import back.cards.Card;
@@ -55,7 +53,6 @@ public class Board implements Serializable {
     private List<Card> flashLightList;
     private List<Integer> barometerList;
     private Player conchOwner;
-    private transient Scanner inputReader;
     private MainBoardFront mainBoardFront;
     private Player crystalBallClubOwner;
     private Player crystalBallOwner;
@@ -124,7 +121,6 @@ public class Board implements Serializable {
         playerList.add(indexOfThisPlayer, thisPlayer);
 
         cardsDistribution();
-        inputReader = new Scanner(System.in);
 
         boardFront.displayMessage("End of initialisation. Good luck !");
         mainBoardFront.setBoard(this);
@@ -136,8 +132,6 @@ public class Board implements Serializable {
         askPlayersForCards();
         currentPhase = GamePhase.GATHERING_RESSOURCES;
         setChief(playerList.get(0));
-
-        // play(playerList.get(0));
 
     }
 
@@ -201,7 +195,6 @@ public class Board implements Serializable {
         } else if (player != null && player.getState() == PlayerState.SICK && player.getRoundSick() == round - 1) {
             player.setState(PlayerState.HEALTHY);
             mainBoardFront.displayMessage(player + " was sick and could not play, now cured");
-            // play(nextPlayer());
         } else if (player != null && player.getState() == PlayerState.HEALTHY && !player.equals(thisPlayer)) {
             mainBoardFront.displayMessage(player + "'s turn !");
             playAsCPU(player);
@@ -212,10 +205,8 @@ public class Board implements Serializable {
             switchToNextRound();
         } else if (player.getState() == PlayerState.DEAD) {
             mainBoardFront.displayMessage(player + " is dead and cannot play !\n");
-            // play(nextPlayer());
         } else if (player.getState() == PlayerState.SICK) {
             mainBoardFront.displayMessage(player + " is sick and cannot play !\n");
-            // play(nextPlayer());
         } else {
             mainBoardFront.displayMessage("Default Case ! Something is fishy ~");
         }
@@ -291,11 +282,9 @@ public class Board implements Serializable {
     }
 
     public void roundEnd(boolean forDeparture) {
-        System.out.println("Round end " + forDeparture);
         currentlyForDeparture = forDeparture;
         boolean end = isThereEnoughGoodsForAll(forDeparture);
         if (end) {
-            System.out.println("case 1");
             goodsDistributionForAlive();
             designated = null;
             cardUsedVoteSession = false;
@@ -303,19 +292,15 @@ public class Board implements Serializable {
             postDistributionRoundEnd();
 
         } else if (designated == null) {
-            System.out.println("case 2");
             cardUsedVoteSession = askPlayersForCards();
             if (cardUsedVoteSession) {
-                System.out.println("Card used");
                 cardUsedVoteSession = false;
                 roundEnd(forDeparture);
             } else {
-                System.out.println("No card used");
                 mainBoardFront.allowPlayerToBeginVoteSession();
             }
 
         } else if (!killValidated) {
-            System.out.println("case 3");
             cardUsedVoteSession = askPlayersForCards();
             if (cardUsedVoteSession) {
                 cardUsedVoteSession = false;
@@ -324,7 +309,6 @@ public class Board implements Serializable {
                 mainBoardFront.allowPlayerToKillPlayerAfterVote(forDeparture);
             }
         } else {
-            System.out.println("case 4");
             killPlayer(designated);
             designated = null;
             cardUsedVoteSession = false;
@@ -339,61 +323,11 @@ public class Board implements Serializable {
      */
     public void endGame() {
         currentPhase = GamePhase.END;
-        inputReader.close();
         gameOver = true;
         mainBoardFront.displayMessage("End of the game!");
     }
 
     // Ressources gathering function ##############################################
-
-    /**
-     * Asks a non-computer player to do an action (maybe imposed) for this round.
-     * 
-     * <p>
-     * Will be moved in the {@code Player} class in a future release.
-     * 
-     * @param player the player that will do an action
-     */
-    public void playAsPlayer(Player player) {
-        int nbTries = 0;
-        ActionType imposedAction = player.getImposedActionThisRound();
-        if (imposedAction == ActionType.NONE) {
-            System.out.println(
-                    stringsBundle.getString("chooseActionList") + Arrays.toString(ActionType.getLActionTypes()));
-            imposedAction = ActionType.getLActionTypes()[getUserIntChoice(0, 3)];
-        }
-
-        switch (imposedAction) {
-            case FOOD:
-                System.out.println(player + " is getting food !\n");
-                player.playerSeeksFood(this);
-                break;
-            case WATER:
-                System.out.println(player + " is getting water !\n");
-                player.playerSeeksWater(this);
-                break;
-            case WOOD:
-                System.out.println(player + " is getting wood !\n");
-                System.out.println(stringsBundle.getString("howManyFragments"));
-                nbTries = getUserIntChoice(0, 6);
-                player.playerSeeksWood(this, nbTries);
-                break;
-            case CARD:
-                System.out.println(player + " is getting a card !\n");
-                player.playerSeeksCard(this);
-                break;
-            default:
-                break;
-        }
-        askPlayersForCards();
-        if (twicePlayingPlayer != null && twicePlayingPlayer.equals(player)) {
-            twicePlayingPlayer = null;
-            System.out.println(player + " will play again !");
-            playAsCPU(player);
-        } else {
-            play(nextPlayer());
-        }
-    }
 
     /**
      * Asks a computer player to do an action (maybe imposed) for this round.
@@ -411,20 +345,20 @@ public class Board implements Serializable {
 
         switch (imposedAction) {
             case FOOD:
-                System.out.println(player + " is getting food !\n");
+                mainBoardFront.displayMessage(player + " is getting food !\n");
                 player.playerSeeksFood(this);
                 break;
             case WATER:
-                System.out.println(player + " is getting water !\n");
+                mainBoardFront.displayMessage(player + " is getting water !\n");
                 player.playerSeeksWater(this);
                 break;
             case WOOD:
-                System.out.println(player + " is getting wood !\n");
+                mainBoardFront.displayMessage(player + " is getting wood !\n");
                 int nbTries = random.nextInt(6) + 1;
                 player.playerSeeksWood(this, nbTries);
                 break;
             case CARD:
-                System.out.println(player + " is getting a card !\n");
+                mainBoardFront.displayMessage(player + " is getting a card !\n");
                 player.playerSeeksCard(this);
                 break;
             default:
@@ -433,7 +367,7 @@ public class Board implements Serializable {
         askPlayersForCards();
         if (twicePlayingPlayer != null && twicePlayingPlayer.equals(player)) {
             twicePlayingPlayer = null;
-            System.out.println(player + " will play again !");
+            mainBoardFront.displayMessage(player + " will play again !");
             playAsCPU(player);
         }
     }
@@ -504,10 +438,8 @@ public class Board implements Serializable {
         if (cardClub != null && cardClub.isCardRevealed() && cardCrystalBall != null
                 && cardCrystalBall.isCardRevealed()) {
             crystalBallClubOwner = player;
-            System.out.println("Club and crystal ball owner detected !");
         } else if (cardCrystalBall != null && cardCrystalBall.isCardRevealed()) {
             crystalBallOwner = player;
-            System.out.println("Crystal ball owner detected !");
         }
 
     }
@@ -555,14 +487,11 @@ public class Board implements Serializable {
     }
 
     public void endOfVote() {
-        System.out.println("End of vote !");
         designated = voteResults();
         if (designated == null && !chief.equals(thisPlayer)) {
-            System.out.println("CPU Chief");
             designated = chief.decideWhoDieAsCPU(pickablePlayers);
             roundEnd(currentlyForDeparture);
         } else if (designated == null) {
-            System.out.println("Human chief");
             mainBoardFront.makePlayerChiefDesignates(pickablePlayers);
         } else {
             roundEnd(currentlyForDeparture);
@@ -570,7 +499,6 @@ public class Board implements Serializable {
     }
 
     public void voteTimeForNonOwners() {
-        System.out.println("Vote time for non owners");
         for (Player player : votingPlayers) {
             if (!player.equals(crystalBallOwner) && !player.equals(crystalBallClubOwner)
                     && votes.get(player).isEmpty()) {
@@ -583,7 +511,6 @@ public class Board implements Serializable {
     }
 
     public void voteTimeForOwners() {
-        System.out.println("voteTimeForOwners !");
         for (Player player : votingPlayers) {
             if (player.equals(crystalBallOwner)) {
                 makePlayerVote(player);
@@ -603,11 +530,9 @@ public class Board implements Serializable {
         for (Player player : votingPlayers) {
             if ((player.equals(crystalBallOwner) && votes.get(player).isEmpty())
                     || (player.equals(crystalBallClubOwner) && votes.get(player).size() != 2)) {
-                System.out.println("Check owner false");
                 return false;
             }
         }
-        System.out.println("Check owner true");
         return true;
     }
 
@@ -615,11 +540,9 @@ public class Board implements Serializable {
         for (Player player : votingPlayers) {
             if (!player.equals(crystalBallOwner) && !player.equals(crystalBallClubOwner)
                     && votes.get(player).isEmpty()) {
-                System.out.println("Check non owner false");
                 return false;
             }
         }
-        System.out.println("Check non owner true");
         return true;
     }
 
@@ -726,76 +649,6 @@ public class Board implements Serializable {
                 mainBoardFront.displayMessage(entry.getKey() + stringsBundle.getString("votesFor") + entry.getValue());
             }
         }
-    }
-
-    /**
-     * Gets an user input.
-     * 
-     * @return the input
-     */
-    public String getUserInput() {
-        String input = "";
-        if (inputReader.hasNextLine()) {
-            input = inputReader.nextLine();
-        }
-        return input;
-    }
-
-    /**
-     * Gets a yes or no answer.
-     * 
-     * @return the answer, on a boolean form
-     */
-    public boolean getYesNoAnswer() {
-        System.out.println(stringsBundle.getString("yesNoQuestion"));
-        String answer = getUserInput();
-        answer = answer.substring(0, 1).toLowerCase();
-        while (!answer.equals("y") && !answer.equals("n")) {
-            System.out.println(stringsBundle.getString("yesNoQuestion"));
-            answer = getUserInput();
-            answer = answer.substring(0, 1).toLowerCase();
-        }
-        return answer.equals("y");
-    }
-
-    /**
-     * Gets a int input by the user, between two int, both inclusive.
-     * 
-     * @param minBound the min bound
-     * @param maxBound the max bound
-     * @return the input
-     */
-    public int getUserIntChoice(int minBound, int maxBound) {
-        int choice = minBound - 1;
-
-        while (choice < minBound || choice > maxBound) {
-            try {
-                choice = Integer.parseInt(inputReader.nextLine());
-            } catch (NumberFormatException e) {
-                choice = minBound - 1;
-            }
-        }
-        return choice;
-
-    }
-
-    /**
-     * Asks the user to choose several players in the players list.
-     * 
-     * @param nbPlayers the number of player that the user have to pick
-     * @return the picked players
-     */
-    public List<Integer> getUserPlayerChoice(int nbPlayers) {
-        List<Integer> pickedPlayers = new ArrayList<>();
-        for (int index = 0; index < nbPlayers; index++) {
-            int indexPickedPlayer = -1;
-            while (indexPickedPlayer < 0 || indexPickedPlayer >= playerList.size()) {
-                System.out.println(stringsBundle.getString("choosePlayerList") + playerList);
-                indexPickedPlayer = getUserIntChoice(0, playerList.size() - 1);
-            }
-            pickedPlayers.add(indexPickedPlayer);
-        }
-        return pickedPlayers;
     }
 
     /**
@@ -955,7 +808,6 @@ public class Board implements Serializable {
             int indexMax = player.getCardNumber();
             for (int index = 0; index < indexMax; index++) {
                 Card card = player.getCard(0);
-                System.out.println("player.removeCard appelée");
                 player.removeCard(0);
 
                 if (index % 2 == 0) {

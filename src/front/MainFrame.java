@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 import back.Board;
 
 import java.awt.CardLayout;
-import java.awt.Color;
 
 public class MainFrame {
     JFrame frame;

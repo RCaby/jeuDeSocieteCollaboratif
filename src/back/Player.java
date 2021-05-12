@@ -182,7 +182,7 @@ public class Player implements Serializable {
         if (!randomSeries.contains(0)) {
             wood += nbTries;
         } else {
-            System.out.println(this + stringsBundle.getString("playerGotSick"));
+            board.getMainBoardFront().displayMessage(this + stringsBundle.getString("playerGotSick"));
             setState(PlayerState.SICK);
             sickRound = board.getRound();
         }
@@ -355,54 +355,6 @@ public class Player implements Serializable {
     }
 
     /**
-     * Determines whether this player would like to use a card. If one card can be
-     * used, the player may decide to use it.
-     * 
-     * @param board the main board
-     * @return a boolean indicating if one card has been used.
-     */
-    public boolean wouldLikePlayCard(Board board) {
-        System.out.println(stringsBundle.getString("cardsDisplay") + inventory);
-        System.out.println(stringsBundle.getString("wouldLikePlayCard?"));
-        boolean wouldPlayerPlayACard = board.getYesNoAnswer();
-        if (wouldPlayerPlayACard) {
-            System.out.println(stringsBundle.getString("chooseACard"));
-            int pickedCardIndex = board.getUserIntChoice(0, inventory.size() - 1);
-            Card cardChoosed = inventory.get(pickedCardIndex);
-            System.out.println(stringsBundle.getString("choiceResult") + cardChoosed);
-            if (cardChoosed.canBeUsed()) {
-                boolean[] neededParameters = cardChoosed.getNeededParameters();
-                if (Arrays.equals(neededParameters, new boolean[] { true, true, true, false })) {
-                    List<Integer> pickedPlayers = board.getUserPlayerChoice(3);
-                    Player player0 = board.getPlayerList().get(pickedPlayers.get(0));
-                    Player player1 = board.getPlayerList().get(pickedPlayers.get(1));
-                    Player player2 = board.getPlayerList().get(pickedPlayers.get(2));
-                    cardChoosed.useCard(player0, player1, player2, ActionType.NONE);
-                } else if (Arrays.equals(neededParameters, new boolean[] { true, false, false, true })) {
-                    List<Integer> pickedPlayers = board.getUserPlayerChoice(1);
-                    System.out.println(stringsBundle.getString("chooseActionList")
-                            + Arrays.toString(ActionType.getLActionTypes()));
-                    int pickedActionIndex = board.getUserIntChoice(0, 3);
-                    ActionType pickedAction = ActionType.getLActionTypes()[pickedActionIndex];
-                    Player player0 = board.getPlayerList().get(pickedPlayers.get(0));
-                    cardChoosed.useCard(player0, null, null, pickedAction);
-                } else if (Arrays.equals(neededParameters, new boolean[] { true, false, false, false })) {
-                    List<Integer> pickedPlayers = board.getUserPlayerChoice(1);
-                    Player player0 = board.getPlayerList().get(pickedPlayers.get(0));
-                    cardChoosed.useCard(player0, null, null, ActionType.NONE);
-                } else {
-                    cardChoosed.useCard(null, null, null, ActionType.NONE);
-                }
-
-            } else {
-                System.out.println(stringsBundle.getString("cannotPlayCard"));
-            }
-
-        }
-        return false;
-    }
-
-    /**
      * Determines whether this player has an instance of one of the card class in
      * their inventory.
      * 
@@ -546,24 +498,6 @@ public class Player implements Serializable {
         Player player = playerList.get(random.nextInt(playerList.size()));
         while (player.getState() == PlayerState.DEAD) {
             player = playerList.get(random.nextInt(playerList.size()));
-        }
-        return player;
-    }
-
-    /**
-     * Asks this player to choose one player to be sacrificed without any discussion
-     * or vote.
-     * 
-     * @param board      the main board
-     * @param playerList the list of player who can be sacrificed
-     * @return the player selected to be sacrificed
-     */
-    public Player decideWhoDie(Board board, List<Player> playerList) {
-        System.out.println(stringsBundle.getString("decideWhoDie") + playerList);
-
-        Player player = playerList.get(board.getUserIntChoice(0, playerList.size() - 1));
-        while (player.getState() == PlayerState.DEAD) {
-            player = playerList.get(board.getUserIntChoice(0, playerList.size() - 1));
         }
         return player;
     }
