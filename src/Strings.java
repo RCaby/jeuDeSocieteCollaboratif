@@ -41,8 +41,7 @@ public class Strings extends ListResourceBundle {
             { "howManyFragments", "How many plank fragments would you like to get ?" },
             { "gotFood", "Food rations acquired : " }, { "gotWater", "Water rations acquired : " },
             { "gotWood", "Plank fragments acquired : " }, { "gotCard", " got a card" },
-            { "playerGotSick", " got sick !" },
-            { "decideWhoDie", "Someone has to die. Choose one player in this list." },
-            { "decideWhoVote", "Someone has to die. Vote for one player in this list." }, { "votesFor", " votes for " },
+            { "playerGotSick", " got sick !" }, { "decideWhoDie", "Someone has to die. Choose one player." },
+            { "decideWhoVote", "Someone has to die. Vote for one player." }, { "votesFor", " votes for " },
             { "nextWeather", "The next two weather : " }, { "cardsOfAllPlayers", "The cards of all players : " } };
 }

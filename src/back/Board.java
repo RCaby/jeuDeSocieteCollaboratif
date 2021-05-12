@@ -135,7 +135,7 @@ public class Board implements Serializable {
 
         askPlayersForCards();
         currentPhase = GamePhase.GATHERING_RESSOURCES;
-        chief = playerList.get(0);
+        setChief(playerList.get(0));
 
         // play(playerList.get(0));
 
@@ -275,7 +275,8 @@ public class Board implements Serializable {
             conchOwner = null;
             matchesUsedThisRound = false;
             nextRoundPlayerList();
-            chief = playerList.get(0);
+            setChief(playerList.get(0));
+
             nextChief = null;
             twicePlayingPlayer = null;
             askPlayersForCards();
@@ -463,8 +464,6 @@ public class Board implements Serializable {
 
         }
         checkForCrystalBallOrClub();
-
-        mainBoardFront.displayMessage("Those who vote : " + votingPlayers);
 
     }
 
@@ -1139,8 +1138,13 @@ public class Board implements Serializable {
         return discardDeck;
     }
 
-    public void setChief(Player player) {
-        chief = player;
+    public void setChief(Player chief) {
+        this.chief = chief;
+        for (Player player : playerList) {
+            player.setPlayerChief(false);
+        }
+        chief.setPlayerChief(true);
+
     }
 
     public void setDesignated(Player designated) {
@@ -1154,6 +1158,7 @@ public class Board implements Serializable {
      */
     public void setNextChief(Player nextChief) {
         this.nextChief = nextChief;
+
     }
 
     /**

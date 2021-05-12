@@ -506,7 +506,7 @@ public class Player implements Serializable {
      * @return the selected player designated by this player
      */
     public void vote(Board board, List<Player> pickablePlayers) {
-        board.getMainBoardFront().displayMessage(stringsBundle.getString("decideWhoVote") + pickablePlayers);
+        board.getMainBoardFront().displayMessage(stringsBundle.getString("decideWhoVote"));
         board.getMainBoardFront().makePlayerVoteFor(pickablePlayers);
 
     }
