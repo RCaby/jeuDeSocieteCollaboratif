@@ -7,5 +7,7 @@ public class Main {
 
         MainFrame mainFrame = new MainFrame();
 
+        // TODO les cartes pour le joueur !
+
     }
 }

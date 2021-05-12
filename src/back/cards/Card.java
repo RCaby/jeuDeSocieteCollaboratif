@@ -179,6 +179,6 @@ public abstract class Card implements Serializable {
     }
 
     public String toString() {
-        return isCardRevealed() ? cardName : "(" + cardName + ")";
+        return cardName;
     }
 }
