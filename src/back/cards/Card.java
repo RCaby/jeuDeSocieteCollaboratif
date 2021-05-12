@@ -83,15 +83,13 @@ public abstract class Card implements Serializable {
      */
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         board.getCardsPlayedThisRound().add(this);
-        System.out.println(owner + " uses the card " + this);
+        board.getMainBoardFront().displayMessage(owner + " uses the card " + this);
         if (!isRevealed) {
             setCardRevealed(true);
         }
-        if (isSingleUse) {
-            setCardRevealed(false);
-            if (owner != null) {
-                owner.discardCard(this);
-            }
+        if (isSingleUse && owner != null) {
+            owner.discardCard(this);
+
         }
     }
 
@@ -125,6 +123,7 @@ public abstract class Card implements Serializable {
      */
     public void discard() {
         owner = null;
+        setCardRevealed(false);
         board.getDiscardDeck().add(this);
     }
 

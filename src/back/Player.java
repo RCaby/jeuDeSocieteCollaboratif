@@ -6,9 +6,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.io.Serializable;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -75,6 +77,7 @@ public class Player implements Serializable {
      */
     private void buildDisplay() {
         display = new JPanel();
+        display.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         display.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         JLabel nameLabel = new JLabel(name);
         display.add(nameLabel);
@@ -110,9 +113,9 @@ public class Player implements Serializable {
             }
             foodGot += board.howMuchFood(pickedIndex2);
         }
-        System.out.println(stringsBundle.getString("gotFood") + foodGot);
-
+        board.getMainBoardFront().displayMessage(stringsBundle.getString("gotFood") + foodGot);
         board.addFood(foodGot);
+        board.updateDisplayResources();
     }
 
     /**
@@ -126,8 +129,9 @@ public class Player implements Serializable {
         if (gourd != null && gourd.isCardRevealed()) {
             waterGot *= 2;
         }
-        System.out.println(stringsBundle.getString("gotWater") + waterGot);
+        board.getMainBoardFront().displayMessage(stringsBundle.getString("gotWater") + waterGot);
         board.addWater(waterGot);
+        board.updateDisplayResources();
     }
 
     /**
@@ -158,9 +162,10 @@ public class Player implements Serializable {
             setState(PlayerState.SICK);
             sickRound = board.getRound();
         }
-        System.out.println(stringsBundle.getString("gotWood") + Math.abs(wood));
+        board.getMainBoardFront().displayMessage(stringsBundle.getString("gotWood") + Math.abs(wood));
 
         board.addFragmentPlank(wood);
+        board.updateDisplayResources();
     }
 
     /**
@@ -175,7 +180,7 @@ public class Player implements Serializable {
         } catch (IndexOutOfBoundsException e) {
             return null;
         }
-        System.out.println(this + stringsBundle.getString("gotCard"));
+        board.getMainBoardFront().displayMessage(this + stringsBundle.getString("gotCard"));
         addCardToInventory(pickedCard);
         return pickedCard;
     }
@@ -229,14 +234,11 @@ public class Player implements Serializable {
                     inventoryRevealed.remove(card);
                 }
             }
-        } else {
-            for (int indexInPanel = 0; indexInPanel < cardHiddenPanel.getComponentCount(); indexInPanel++) {
-                if (((JLabel) cardHiddenPanel.getComponent(indexInPanel)).getText().equals(card.getCardName())) {
-                    cardHiddenPanel.remove(indexInPanel);
-                    inventoryHidden.remove(card);
-                }
-            }
+        } else if (cardHiddenPanel.getComponentCount() > 0) {
+            cardHiddenPanel.remove(0);
+            inventoryHidden.remove(card);
         }
+
         return card;
     }
 
@@ -264,8 +266,9 @@ public class Player implements Serializable {
      */
     public void discardCard(Card card) {
         int index = inventory.indexOf(card);
-        card.discard();
         removeCard(index);
+        card.discard();
+
     }
 
     /**
@@ -455,9 +458,15 @@ public class Player implements Serializable {
      */
     public void revealCard(Card card) {
         if (!inventoryRevealed.contains(card) && inventory.contains(card) && inventoryHidden.contains(card)) {
-            inventoryHidden.remove(card);
+
+            if (cardHiddenPanel.getComponentCount() > 0) {
+                cardHiddenPanel.remove(0);
+                inventoryHidden.remove(card);
+            }
+
             inventoryRevealed.add(card);
             addCardToRevealedPanel(card);
+
         }
     }
 
@@ -496,9 +505,9 @@ public class Player implements Serializable {
      *                        player
      * @return the selected player designated by this player
      */
-    public Player vote(Board board, List<Player> pickablePlayers) {
-        System.out.println(stringsBundle.getString("decideWhoVote") + pickablePlayers);
-        return pickablePlayers.get(board.getUserIntChoice(0, pickablePlayers.size() - 1));
+    public void vote(Board board, List<Player> pickablePlayers) {
+        board.getMainBoardFront().displayMessage(stringsBundle.getString("decideWhoVote") + pickablePlayers);
+        board.getMainBoardFront().makePlayerVoteFor(pickablePlayers);
 
     }
 
@@ -585,6 +594,16 @@ public class Player implements Serializable {
      */
     public String getName() {
         return name;
+    }
+
+    // TODO
+    public List<Card> getInventoryHidden() {
+        return inventoryHidden;
+    }
+
+    // TODO
+    public List<Card> getInventoryRevealed() {
+        return inventoryRevealed;
     }
 
     /**
