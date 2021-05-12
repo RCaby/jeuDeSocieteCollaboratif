@@ -15,9 +15,3 @@ public class Main {
 
     }
 }
-/*
- * TODO afficher le joueur qui joue actuellement mettre une taille max pour les
- * panels -> mettre scrollable display activer les cartes pour le joueur
- * améliorer systeme X utilise carte sur Y
- * 
- */

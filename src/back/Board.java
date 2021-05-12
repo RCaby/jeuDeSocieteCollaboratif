@@ -839,6 +839,10 @@ public class Board implements Serializable {
         if (indexOfCurrentPlayer != playerList.size() - 1) {
             indexOfCurrentPlayer++;
             player = playerList.get(indexOfCurrentPlayer);
+            for (Player oldCurrentPlayer : playerList) {
+                oldCurrentPlayer.setCurrentPlayer(false);
+            }
+            player.setCurrentPlayer(true);
         } else {
             player = null;
         }

@@ -6,13 +6,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
+
+import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
+import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER;
+
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.io.Serializable;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import back.cards.Axe;
 import back.cards.Card;
@@ -39,6 +45,7 @@ public class Player implements Serializable {
     private String name;
     private PlayerState state;
     private boolean isChief;
+    private boolean currentPlayer;
     private JLabel chiefLabel;
     private JLabel stateLabel;
     private JPanel cardRevealedPanel;
@@ -78,10 +85,12 @@ public class Player implements Serializable {
     private void buildDisplay() {
         display = new JPanel();
         display.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        display.setMaximumSize(new Dimension(400, 200));
         display.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         JLabel nameLabel = new JLabel(name);
         display.add(nameLabel);
 
+        // TODO scrollpane
         stateLabel = new JLabel(state.toString());
         display.add(stateLabel);
 
@@ -89,10 +98,25 @@ public class Player implements Serializable {
         display.add(chiefLabel);
 
         cardRevealedPanel = new JPanel();
-        display.add(cardRevealedPanel);
+        JPanel cardRevealedScrollableContener = new JPanel();
+        cardRevealedScrollableContener.setMaximumSize(new Dimension(100, 200));
+        display.add(cardRevealedScrollableContener);
+
+        JScrollPane scrollPaneRevealed = new JScrollPane(cardRevealedPanel);
+        cardRevealedScrollableContener.add(scrollPaneRevealed);
+        scrollPaneRevealed.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPaneRevealed.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_NEVER);
+        scrollPaneRevealed.setPreferredSize(new Dimension(100, 100));
 
         cardHiddenPanel = new JPanel();
-        display.add(cardHiddenPanel);
+        JPanel cardHiddenScrollableContener = new JPanel();
+        cardHiddenScrollableContener.setMaximumSize(new Dimension(100, 200));
+        display.add(cardHiddenScrollableContener);
+        JScrollPane scrollPaneHidden = new JScrollPane(cardHiddenPanel);
+        cardHiddenScrollableContener.add(scrollPaneHidden);
+        scrollPaneHidden.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPaneHidden.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_NEVER);
+        scrollPaneHidden.setPreferredSize(new Dimension(100, 100));
     }
 
     /**
@@ -551,6 +575,17 @@ public class Player implements Serializable {
      */
     public boolean isPlayerChief() {
         return isChief;
+    }
+
+    public void setCurrentPlayer(boolean currentPlayer) {
+        this.currentPlayer = currentPlayer;
+        Color color = currentPlayer ? Color.RED : Color.BLACK;
+        display.setBorder(BorderFactory.createLineBorder(color));
+
+    }
+
+    public boolean isCurrentPlayer() {
+        return currentPlayer;
     }
 
     /**

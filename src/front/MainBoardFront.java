@@ -4,9 +4,9 @@ import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -17,6 +17,7 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -158,6 +159,7 @@ public class MainBoardFront implements Serializable {
         chooseActionPanelPanel.add(cardButtonAction);
 
         notificationPanelTextPane = new JTextPane();
+        changePolice(notificationPanelTextPane, 16);
         notificationPanelTextPaneScrollable = new JScrollPane(notificationPanelTextPane);
 
         notificationPanelTextPaneScrollable.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -289,7 +291,7 @@ public class MainBoardFront implements Serializable {
         int newNbPlayers = nbPlayers;
         if (nbPlayers % 2 == 0) {
             JPanel voidPanel = new JPanel();
-            voidPanel.setBackground(Color.RED);
+
             listPlayerDisplays.add(voidPanel);
             newNbPlayers++;
         }
@@ -305,7 +307,7 @@ public class MainBoardFront implements Serializable {
 
     private JPanel buildCard(String title) {
         JPanel cardPanel = new JPanel();
-        cardPanel.setBackground(Color.RED);
+
         JLabel cardLabel = new JLabel(title);
         cardPanel.add(cardLabel);
         return cardPanel;
@@ -428,6 +430,11 @@ public class MainBoardFront implements Serializable {
 
     public void setBoard(Board board) {
         this.board = board;
+    }
+
+    private void changePolice(JComponent component, int size) {
+        component.setFont(new Font(component.getFont().getName(), component.getFont().getStyle(), size));
+
     }
 
     private class NextActionListener implements ActionListener {
