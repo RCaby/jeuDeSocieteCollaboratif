@@ -48,9 +48,10 @@ public class VoodooDoll extends Card {
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         if (player1 != null && player1.getState() == PlayerState.DEAD) {
-            super.useCard(player1, player2, player3, action);
+            board.getMainBoardFront().displayMessage(owner + " uses the card " + this + " on " + player1 + ".");
             player1.setState(PlayerState.HEALTHY);
             board.getDeadThisRound().remove(player1);
+            super.useCard(player1, player2, player3, action);
         }
     }
 

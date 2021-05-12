@@ -2,7 +2,9 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import back.ActionType;
 import back.Board;
+import back.Player;
 
 /**
  * The {@code ToiletBrush} class represents the Toilet Brush Card.
@@ -30,6 +32,12 @@ public class ToiletBrush extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("ToiletBrush_name");
         cardDescription = stringsBundle.getString("ToiletBrush_description");
+    }
+
+    @Override
+    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
+        board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
+        super.useCard(player1, player2, player3, action);
     }
 
 }

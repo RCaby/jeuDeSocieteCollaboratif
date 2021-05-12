@@ -47,8 +47,8 @@ public class GiftBasket extends Card {
      */
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
-        super.useCard(player1, player2, player3, action);
-        System.out.println("Panier garni !");
+
+        board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
         if (board.getWaterRations() < board.getNbPlayersAlive()) {
             int waterToAdd = board.getNbPlayersAlive() - board.getWaterRations();
             board.addWater(waterToAdd);
@@ -57,6 +57,7 @@ public class GiftBasket extends Card {
             int foodToAdd = board.getNbPlayersAlive() - board.getFoodRations();
             board.addFood(foodToAdd);
         }
+        super.useCard(player1, player2, player3, action);
     }
 
     /**

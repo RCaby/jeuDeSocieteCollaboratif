@@ -49,7 +49,7 @@ public class StagnantWater extends Card {
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         if (player1 != null) {
 
-            super.useCard(player1, player2, player3, action);
+            board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
             board.addWater(1);
             if (!board.getMatchesUsedThisRound()) {
                 player1.setState(PlayerState.SICK);
@@ -57,6 +57,7 @@ public class StagnantWater extends Card {
             } else {
                 board.setMatchesUsedThisRound(false);
             }
+            super.useCard(player1, player2, player3, action);
         }
     }
 

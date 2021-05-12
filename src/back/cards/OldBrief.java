@@ -2,7 +2,9 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import back.ActionType;
 import back.Board;
+import back.Player;
 
 /**
  * The {@code OldBrief} class represents the Old Brief Card.
@@ -32,4 +34,9 @@ public class OldBrief extends Card {
         cardDescription = stringsBundle.getString("OldBrief_description");
     }
 
+    @Override
+    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
+        board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
+        super.useCard(player1, player2, player3, action);
+    }
 }

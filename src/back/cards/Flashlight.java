@@ -47,7 +47,7 @@ public class Flashlight extends Card {
      */
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
-        super.useCard(player1, player2, player3, action);
+
         List<Card> toBeDisplayed = new ArrayList<>();
         if (!board.getDeck().isEmpty()) {
             toBeDisplayed.add(board.getDeck().get(0));
@@ -59,6 +59,8 @@ public class Flashlight extends Card {
             }
         }
         board.setFlashLightList(toBeDisplayed);
-        System.out.println(toBeDisplayed);
+        board.showFlashLightList(owner);
+        board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
+        super.useCard(player1, player2, player3, action);
     }
 }

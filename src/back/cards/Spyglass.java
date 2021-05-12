@@ -57,6 +57,7 @@ public class Spyglass extends Card {
         }
         board.setSpyglassList(cardList);
         board.showSpyglassList(owner);
+        board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
         super.useCard(player1, player2, player3, action);
     }
 

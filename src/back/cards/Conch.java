@@ -47,8 +47,9 @@ public class Conch extends Card {
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         if (owner != null) {
             board.setConchOwner(owner);
+            board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
+            super.useCard(player1, player2, player3, action);
         }
-        super.useCard(player1, player2, player3, action);
 
     }
 

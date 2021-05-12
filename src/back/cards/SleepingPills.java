@@ -46,17 +46,27 @@ public class SleepingPills extends Card {
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         if (owner != null) {
-            if (player1 != null) {
+            String string = " uses the card ";
+            if (player1 != null && player2 != null && player3 != null) {
                 board.giveCardToPlayer(owner, player1.robRandomCard());
-                if (player2 != null) {
-                    board.giveCardToPlayer(owner, player2.robRandomCard());
-                    if (player3 != null) {
-                        board.giveCardToPlayer(owner, player3.robRandomCard());
-                    }
-                }
+                board.giveCardToPlayer(owner, player2.robRandomCard());
+                board.giveCardToPlayer(owner, player3.robRandomCard());
+                board.getMainBoardFront().displayMessage(
+                        owner + string + this + " on " + player1 + ", on " + player2 + " and on " + player3 + ".");
+            } else if (player1 != null && player2 != null) {
+                board.giveCardToPlayer(owner, player1.robRandomCard());
+                board.giveCardToPlayer(owner, player2.robRandomCard());
+                board.getMainBoardFront()
+                        .displayMessage(owner + string + this + " on " + player1 + " and on " + player2 + ".");
+
+            } else if (player1 != null) {
+                board.giveCardToPlayer(owner, player1.robRandomCard());
+                board.getMainBoardFront().displayMessage(owner + string + this + " on " + player1 + ".");
             }
-            super.useCard(player1, player2, player3, action);
+
         }
+        super.useCard(player1, player2, player3, action);
+
     }
 
     @Override

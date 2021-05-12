@@ -48,9 +48,10 @@ public class AlarmClock extends Card {
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         if (player1 != null && player1.getState() != PlayerState.DEAD) {
-            super.useCard(player1, player2, player3, action);
             board.setNextChief(player1);
-            System.out.println(player1 + " will be the next chief !");
+            board.getMainBoardFront().displayMessage(owner + " uses the card " + this + " on " + player1 + ".");
+            board.getMainBoardFront().displayMessage(player1 + " will be the next chief !");
+            super.useCard(player1, player2, player3, action);
         }
     }
 

@@ -2,7 +2,9 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import back.ActionType;
 import back.Board;
+import back.Player;
 
 /**
  * The {@code MetalSheet} class represents the Metal Sheet Card.
@@ -39,6 +41,12 @@ public class MetalSheet extends Card {
     @Override
     public boolean canBeUsed() {
         return false;
+    }
+
+    @Override
+    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
+        board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
+        super.useCard(player1, player2, player3, action);
     }
 
 }

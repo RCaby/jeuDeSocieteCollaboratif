@@ -47,14 +47,16 @@ public class RottenFish extends Card {
      */
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
-        super.useCard(player1, player2, player3, action);
+
         if (player1 != null) {
+            board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
             board.addFood(1);
             if (!board.getMatchesUsedThisRound()) {
                 player1.setState(PlayerState.SICK);
             } else {
                 board.setMatchesUsedThisRound(false);
             }
+            super.useCard(player1, player2, player3, action);
         }
     }
 

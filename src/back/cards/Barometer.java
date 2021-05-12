@@ -60,6 +60,7 @@ public class Barometer extends Card {
         }
         board.setBarometerList(toBeDisplayed);
         board.showBarometerList(owner);
+        board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
         super.useCard(player1, player2, player3, action);
     }
 }

@@ -2,7 +2,9 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import back.ActionType;
 import back.Board;
+import back.Player;
 
 /**
  * The {@code CrystalBall} class represents the CrystalBall Card.
@@ -41,5 +43,11 @@ public class CrystalBall extends Card {
     @Override
     public boolean canBeUsed() {
         return !isRevealed;
+    }
+
+    @Override
+    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
+        board.getMainBoardFront().displayMessage(owner + " reveals his card " + this + ".");
+        super.useCard(player1, player2, player3, action);
     }
 }

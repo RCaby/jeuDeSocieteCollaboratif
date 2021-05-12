@@ -1041,6 +1041,18 @@ public class Board implements Serializable {
     }
 
     /**
+     * Shows the next cards in the deck to the player. Currently only working for
+     * the non computer player as the others are playing randomly.
+     * 
+     * @param player the player who owns the card
+     */
+    public void showFlashLightList(Player player) {
+        if (player.equals(thisPlayer)) {
+            mainBoardFront.displayMessage(stringsBundle.getString("nextCards") + flashLightList);
+        }
+    }
+
+    /**
      * Shows cards of all other players to this player. Currently only working for
      * the non computer player as the others are playing randomly.
      * 

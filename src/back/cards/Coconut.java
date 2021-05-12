@@ -45,8 +45,9 @@ public class Coconut extends Card {
      */
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
-        super.useCard(player1, player2, player3, action);
+        board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
         board.addWater(3);
+        super.useCard(player1, player2, player3, action);
     }
 
 }
