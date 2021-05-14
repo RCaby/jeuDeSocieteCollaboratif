@@ -6,6 +6,9 @@ import java.util.ResourceBundle;
 import back.ActionType;
 import back.Board;
 import back.Player;
+import front.MainBoardFront;
+
+import java.awt.event.ActionListener;
 
 /**
  * The {@code Card} class represents a Card.
@@ -124,6 +127,15 @@ public abstract class Card implements Serializable {
         owner = null;
         setCardRevealed(false);
         board.getDiscardDeck().add(this);
+    }
+
+    /**
+     * TODO
+     * 
+     * @return
+     */
+    public ActionListener getActionListener() {
+        return board.getMainBoardFront().new CardPlayerActionListener(this);
     }
 
     /**

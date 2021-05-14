@@ -23,6 +23,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
+import org.junit.Test.None;
+
+import back.ActionType;
 import back.Board;
 import back.Player;
 import back.cards.Card;
@@ -57,6 +60,7 @@ public class MainBoardFront implements Serializable {
     private static final String CHOOSE_PLAYER_PANEL = "CHOOSE_PLAYER_PANEL";
     private static final String CHOOSE_VOID_PANEL = "CHOOSE_VOID_PANEL";
     private static final String CHOOSE_WOOD_TRIES_PANEL = "CHOOSE_WOOD_TRIES_PANEL";
+    private static final String CHOOSE_PLAYER_TARGET = "CHOOSE_PLAYER_TARGET";
     private JButton foodButtonAction;
     private JButton waterButtonAction;
     private JButton woodButtonAction;
@@ -74,6 +78,9 @@ public class MainBoardFront implements Serializable {
     private JButton allowKillNotForDeparture;
     private JButton allowKillForDeparture;
     private JPanel chooseWoodNbTriesPanel;
+    private JPanel choosePlayerTargetPanel;
+    private JPanel choosePlayerTargetPanelPanelPlayers;
+    private JPanel choosePlayerTargetPanelPanelAction;
 
     public MainBoardFront(int nbPlayers) {
         mainPanel = new JPanel();
@@ -113,17 +120,20 @@ public class MainBoardFront implements Serializable {
         chooseWoodNbTriesPanel = new JPanel();
         notificationPanel = new JPanel();
         choosePlayerPanel = new JPanel();
+        choosePlayerTargetPanel = new JPanel();
         centerPanelCenterNotificationPanel.add(notificationPanel);
         JPanel voidChoicePanel = new JPanel();
         centerPanelCenterChoicePanel.add(voidChoicePanel, CHOOSE_VOID_PANEL);
         centerPanelCenterChoicePanel.add(chooseActionPanel, CHOOSE_ACTION_PANEL);
         centerPanelCenterChoicePanel.add(choosePlayerPanel, CHOOSE_PLAYER_PANEL);
         centerPanelCenterChoicePanel.add(chooseWoodNbTriesPanel, CHOOSE_WOOD_TRIES_PANEL);
+        centerPanelCenterChoicePanel.add(choosePlayerTargetPanel, CHOOSE_PLAYER_TARGET);
 
         chooseActionPanel.setLayout(new BoxLayout(chooseActionPanel, BoxLayout.Y_AXIS));
         notificationPanel.setLayout(new BoxLayout(notificationPanel, BoxLayout.Y_AXIS));
         choosePlayerPanel.setLayout(new BoxLayout(choosePlayerPanel, BoxLayout.Y_AXIS));
         chooseWoodNbTriesPanel.setLayout(new BoxLayout(chooseWoodNbTriesPanel, BoxLayout.Y_AXIS));
+        choosePlayerTargetPanel.setLayout(new BoxLayout(choosePlayerTargetPanel, BoxLayout.Y_AXIS));
 
         JPanel chooseActionLabelPanel = new JPanel();
         JLabel chooseActionLabel = new JLabel("Choose your action");
@@ -137,25 +147,32 @@ public class MainBoardFront implements Serializable {
         JPanel chooseWoodNbTriesLabelPanel = new JPanel();
         JLabel chooseWoodNbTriesLabel = new JLabel("Choose your number of tries");
         chooseWoodNbTriesLabelPanel.add(chooseWoodNbTriesLabel);
+        JPanel choosePlayerTargetLabelPanel = new JPanel();
+        JLabel choosePlayerTargetLabel = new JLabel("Choose your target(s)");
+        choosePlayerTargetLabelPanel.add(choosePlayerTargetLabel);
 
         chooseActionPanel.add(chooseActionLabelPanel);
         notificationPanel.add(notificationLabelPanel);
         choosePlayerPanel.add(choosePlayerLabelPanel);
         chooseWoodNbTriesPanel.add(chooseWoodNbTriesLabelPanel);
+        choosePlayerTargetPanel.add(choosePlayerTargetLabelPanel);
 
         JPanel chooseActionPanelPanel = new JPanel();
         JPanel notificationPanelPanel = new JPanel();
         choosePlayerPanelPanel = new JPanel();
         JPanel chooseWoodNbTriesPanelPanel = new JPanel();
+        JPanel choosePlayerTargetPanelPanel = new JPanel();
         chooseActionPanel.add(chooseActionPanelPanel);
         notificationPanel.add(notificationPanelPanel);
         choosePlayerPanel.add(choosePlayerPanelPanel);
         chooseWoodNbTriesPanel.add(chooseWoodNbTriesPanelPanel);
+        choosePlayerTargetPanel.add(choosePlayerTargetPanelPanel);
 
         chooseActionPanelPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         notificationPanelPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         choosePlayerPanelPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         chooseWoodNbTriesPanelPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        choosePlayerTargetPanelPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         foodButtonAction = new JButton("Food");
         foodButtonAction.addActionListener(new FoodActionListener());
@@ -202,6 +219,26 @@ public class MainBoardFront implements Serializable {
             chooseWoodNbTriesPanelPanel.add(woodButton);
             woodButton.addActionListener(new WoodTryListener(index));
         }
+
+        choosePlayerTargetPanelPanelPlayers = new JPanel();
+        choosePlayerTargetPanelPanelAction = new JPanel();
+        choosePlayerTargetPanelPanel.setLayout(new BorderLayout());
+        JPanel choosePlayerTargetPanelPanelCenter = new JPanel(new GridLayout(1, 0));
+        JPanel choosePlayerTargetPanelPanelSouth = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        choosePlayerTargetPanelPanel.add(choosePlayerTargetPanelPanelCenter, BorderLayout.CENTER);
+        choosePlayerTargetPanelPanel.add(choosePlayerTargetPanelPanelSouth, BorderLayout.SOUTH);
+        choosePlayerTargetPanelPanelCenter.add(choosePlayerTargetPanelPanelPlayers);
+        choosePlayerTargetPanelPanelCenter.add(choosePlayerTargetPanelPanelAction);
+
+        JLabel joueurLabel = new JLabel("Joueur");
+        choosePlayerTargetPanelPanelPlayers.add(joueurLabel);
+
+        JLabel actionLabel = new JLabel("Action");
+        choosePlayerTargetPanelPanelAction.add(actionLabel);
+
+        JButton actionValidate = new JButton("Use the card");
+        actionValidate.addActionListener(new ValidateCardUseListener());
+        choosePlayerTargetPanelPanelSouth.add(actionValidate);
 
     }
 
@@ -323,21 +360,22 @@ public class MainBoardFront implements Serializable {
 
     }
 
-    private JPanel buildCard(String title) {
+    private JPanel buildCard(Card card) {
         JPanel cardPanel = new JPanel();
 
-        JLabel cardLabel = new JLabel(title);
-        cardPanel.add(cardLabel);
+        JButton cardButton = new JButton(card + "");
+        cardButton.addActionListener(card.getActionListener());
+        cardPanel.add(cardButton);
         return cardPanel;
     }
 
-    public void addRevealedCard(String title) {
-        JPanel cardPanel = buildCard(title);
+    public void addRevealedCard(Card card) {
+        JPanel cardPanel = buildCard(card);
         revealedCardPanelPanel.add(cardPanel);
     }
 
-    public void addHiddenCard(String title) {
-        JPanel cardPanel = buildCard(title);
+    public void addHiddenCard(Card card) {
+        JPanel cardPanel = buildCard(card);
         hiddenCardPanelPanel.add(cardPanel);
     }
 
@@ -346,11 +384,12 @@ public class MainBoardFront implements Serializable {
         revealedCardPanelPanel.removeAll();
         Player thisPlayer = board.getThisPlayer();
         for (Card card : thisPlayer.getInventoryHidden()) {
-            addHiddenCard(card + "");
+            addHiddenCard(card);
         }
         for (Card card : thisPlayer.getInventoryRevealed()) {
-            addRevealedCard(card + "");
+            addRevealedCard(card);
         }
+        southPanel.update(southPanel.getGraphics());
     }
 
     public void updateCurrentPlayer() {
@@ -586,6 +625,77 @@ public class MainBoardFront implements Serializable {
             board.setDesignated(target);
             board.roundEnd(board.getCurrentlyForDeparture());
         }
+    }
+
+    public class CardPlayerActionListener implements ActionListener {
+        Card card;
+
+        public CardPlayerActionListener(Card card) {
+            this.card = card;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            card.useCard(null, null, null, ActionType.NONE);
+            board.updateDisplayResources();
+            updateSouth();
+        }
+
+        public class CardPlayerActionListenerOneTarget extends CardPlayerActionListener {
+
+            public CardPlayerActionListenerOneTarget(Card card) {
+                super(card);
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayoutCentralPanel.show(centerPanelCenterChoicePanel, CHOOSE_PLAYER_TARGET);
+                // TODO
+                choosePlayerTargetPanelPanelAction.setVisible(false);
+            }
+
+        }
+
+        public class CardPlayerActionListenerOneTargetOneAction extends CardPlayerActionListener {
+
+            public CardPlayerActionListenerOneTargetOneAction(Card card) {
+                super(card);
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayoutCentralPanel.show(centerPanelCenterChoicePanel, CHOOSE_PLAYER_TARGET);
+                choosePlayerTargetPanelPanelAction.setVisible(true);
+
+            }
+        }
+
+        public class CardPlayerActionListenerThreeTargets extends CardPlayerActionListener {
+
+            public CardPlayerActionListenerThreeTargets(Card card) {
+                super(card);
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO Auto-generated method stub
+                cardLayoutCentralPanel.show(centerPanelCenterChoicePanel, CHOOSE_PLAYER_TARGET);
+                choosePlayerTargetPanelPanelAction.setVisible(false);
+
+            }
+        }
+    }
+
+    public class ValidateCardUseListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            updateSouth();
+            board.updateDisplayResources();
+
+        }
+
+        // TODO faire les classes filles spécialisées de ca + mettre à jour les
+        // getActionListener des cartes + test
     }
 
 }
