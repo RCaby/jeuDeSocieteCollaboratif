@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 import back.ActionType;
 import back.Board;
 import back.Player;
+import java.awt.event.ActionListener;
 
 /**
  * The {@code Pendulum} class represents the Pendulum Card.
@@ -68,5 +69,10 @@ public class Pendulum extends Card {
     @Override
     public boolean[] getNeededParameters() {
         return new boolean[] { true, false, false, true };
+    }
+
+    @Override
+    public ActionListener getActionListener() {
+        return board.getMainBoardFront().new CardPlayerActionListenerOneTargetOneAction(this);
     }
 }

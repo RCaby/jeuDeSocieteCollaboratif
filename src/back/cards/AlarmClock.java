@@ -3,6 +3,7 @@ package back.cards;
 import java.util.ResourceBundle;
 
 import back.ActionType;
+import java.awt.event.ActionListener;
 import back.Board;
 import back.Player;
 import back.PlayerState;
@@ -58,6 +59,11 @@ public class AlarmClock extends Card {
     @Override
     public boolean[] getNeededParameters() {
         return new boolean[] { true, false, false, false };
+    }
+
+    @Override
+    public ActionListener getActionListener() {
+        return board.getMainBoardFront().new CardPlayerActionListenerOneTarget(this);
     }
 
 }

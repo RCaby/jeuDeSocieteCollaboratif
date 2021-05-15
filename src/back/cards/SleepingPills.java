@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 import back.ActionType;
 import back.Board;
 import back.Player;
+import java.awt.event.ActionListener;
 
 /**
  * The {@code SleepingPills} class represents the Sleeping Pills Card.
@@ -72,5 +73,10 @@ public class SleepingPills extends Card {
     @Override
     public boolean[] getNeededParameters() {
         return new boolean[] { true, true, true, false };
+    }
+
+    @Override
+    public ActionListener getActionListener() {
+        return board.getMainBoardFront().new CardPlayerActionListenerThreeTargets(this);
     }
 }

@@ -7,7 +7,9 @@ public class Main {
 
         MainFrame mainFrame = new MainFrame();
 
-        // TODO les cartes pour le joueur !
+        // TODO joueur est chief vote buggé
+        // TODO quand le dernier ordi meurt
+        // TODO rendre panel cartes du joueur scrollable marche pas
 
     }
 }

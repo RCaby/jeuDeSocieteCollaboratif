@@ -128,6 +128,7 @@ public class Board implements Serializable {
         mainBoardFront.buildPlayersDisplay(indexOfThisPlayer);
 
         mainBoardFront.updateSouth();
+        mainBoardFront.buildCardTargetPanel();
 
         askPlayersForCards();
         currentPhase = GamePhase.GATHERING_RESSOURCES;
@@ -787,8 +788,9 @@ public class Board implements Serializable {
     public void killPlayer(Player player) {
         player.setState(PlayerState.DEAD);
         distributeCardsFromDeadPlayer(player);
+        mainBoardFront.updateSouth();
         deadThisRound.add(player);
-        mainBoardFront.displayMessage(player + "has been sacrificed for the sake of the crew :(");
+        mainBoardFront.displayMessage(player + " has been sacrificed for the sake of the crew :(");
     }
 
     /**

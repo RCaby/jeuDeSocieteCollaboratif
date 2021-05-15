@@ -6,6 +6,7 @@ import back.ActionType;
 import back.Board;
 import back.Player;
 import back.PlayerState;
+import java.awt.event.ActionListener;
 
 /**
  * The {@code StagnantWater} class represents the Stagnant Water Card.
@@ -64,5 +65,10 @@ public class StagnantWater extends Card {
     @Override
     public boolean[] getNeededParameters() {
         return new boolean[] { true, false, false, false };
+    }
+
+    @Override
+    public ActionListener getActionListener() {
+        return board.getMainBoardFront().new CardPlayerActionListenerOneTarget(this);
     }
 }

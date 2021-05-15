@@ -8,15 +8,24 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import javax.swing.Action;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -28,6 +37,7 @@ import org.junit.Test.None;
 import back.ActionType;
 import back.Board;
 import back.Player;
+import back.PlayerState;
 import back.cards.Card;
 
 public class MainBoardFront implements Serializable {
@@ -81,6 +91,12 @@ public class MainBoardFront implements Serializable {
     private JPanel choosePlayerTargetPanel;
     private JPanel choosePlayerTargetPanelPanelPlayers;
     private JPanel choosePlayerTargetPanelPanelAction;
+    private JButton actionValidate;
+    private int nbTargetsRequired = 0;
+    private Map<Player, JCheckBox> targetMap;
+    private Map<ActionType, JCheckBox> actionCheckBoxMap;
+    public Card cardCurrentlyUsed;
+    private int nbActionRequired = 0;
 
     public MainBoardFront(int nbPlayers) {
         mainPanel = new JPanel();
@@ -122,7 +138,7 @@ public class MainBoardFront implements Serializable {
         choosePlayerPanel = new JPanel();
         choosePlayerTargetPanel = new JPanel();
         centerPanelCenterNotificationPanel.add(notificationPanel);
-        JPanel voidChoicePanel = new JPanel();
+        var voidChoicePanel = new JPanel();
         centerPanelCenterChoicePanel.add(voidChoicePanel, CHOOSE_VOID_PANEL);
         centerPanelCenterChoicePanel.add(chooseActionPanel, CHOOSE_ACTION_PANEL);
         centerPanelCenterChoicePanel.add(choosePlayerPanel, CHOOSE_PLAYER_PANEL);
@@ -135,20 +151,20 @@ public class MainBoardFront implements Serializable {
         chooseWoodNbTriesPanel.setLayout(new BoxLayout(chooseWoodNbTriesPanel, BoxLayout.Y_AXIS));
         choosePlayerTargetPanel.setLayout(new BoxLayout(choosePlayerTargetPanel, BoxLayout.Y_AXIS));
 
-        JPanel chooseActionLabelPanel = new JPanel();
-        JLabel chooseActionLabel = new JLabel("Choose your action");
+        var chooseActionLabelPanel = new JPanel();
+        var chooseActionLabel = new JLabel("Choose your action");
         chooseActionLabelPanel.add(chooseActionLabel);
-        JPanel notificationLabelPanel = new JPanel();
+        var notificationLabelPanel = new JPanel();
         notificationLabel = new JLabel("Notification !");
         notificationLabelPanel.add(notificationLabel);
-        JPanel choosePlayerLabelPanel = new JPanel();
-        JLabel choosePlayerLabel = new JLabel("Choose a player");
+        var choosePlayerLabelPanel = new JPanel();
+        var choosePlayerLabel = new JLabel("Choose a player");
         choosePlayerLabelPanel.add(choosePlayerLabel);
-        JPanel chooseWoodNbTriesLabelPanel = new JPanel();
-        JLabel chooseWoodNbTriesLabel = new JLabel("Choose your number of tries");
+        var chooseWoodNbTriesLabelPanel = new JPanel();
+        var chooseWoodNbTriesLabel = new JLabel("Choose your number of tries");
         chooseWoodNbTriesLabelPanel.add(chooseWoodNbTriesLabel);
-        JPanel choosePlayerTargetLabelPanel = new JPanel();
-        JLabel choosePlayerTargetLabel = new JLabel("Choose your target(s)");
+        var choosePlayerTargetLabelPanel = new JPanel();
+        var choosePlayerTargetLabel = new JLabel("Card Validation");
         choosePlayerTargetLabelPanel.add(choosePlayerTargetLabel);
 
         chooseActionPanel.add(chooseActionLabelPanel);
@@ -157,11 +173,11 @@ public class MainBoardFront implements Serializable {
         chooseWoodNbTriesPanel.add(chooseWoodNbTriesLabelPanel);
         choosePlayerTargetPanel.add(choosePlayerTargetLabelPanel);
 
-        JPanel chooseActionPanelPanel = new JPanel();
-        JPanel notificationPanelPanel = new JPanel();
+        var chooseActionPanelPanel = new JPanel();
+        var notificationPanelPanel = new JPanel();
         choosePlayerPanelPanel = new JPanel();
-        JPanel chooseWoodNbTriesPanelPanel = new JPanel();
-        JPanel choosePlayerTargetPanelPanel = new JPanel();
+        var chooseWoodNbTriesPanelPanel = new JPanel();
+        var choosePlayerTargetPanelPanel = new JPanel();
         chooseActionPanel.add(chooseActionPanelPanel);
         notificationPanel.add(notificationPanelPanel);
         choosePlayerPanel.add(choosePlayerPanelPanel);
@@ -214,32 +230,55 @@ public class MainBoardFront implements Serializable {
         allowKillNotForDeparture.setVisible(false);
         allowKillForDeparture.setVisible(false);
 
-        for (int index = 0; index < 7; index++) {
-            JButton woodButton = new JButton(index + "");
+        for (var index = 0; index < 7; index++) {
+            var woodButton = new JButton(index + "");
             chooseWoodNbTriesPanelPanel.add(woodButton);
             woodButton.addActionListener(new WoodTryListener(index));
         }
 
         choosePlayerTargetPanelPanelPlayers = new JPanel();
+
         choosePlayerTargetPanelPanelAction = new JPanel();
         choosePlayerTargetPanelPanel.setLayout(new BorderLayout());
-        JPanel choosePlayerTargetPanelPanelCenter = new JPanel(new GridLayout(1, 0));
-        JPanel choosePlayerTargetPanelPanelSouth = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        var choosePlayerTargetPanelPanelCenter = new JPanel(new GridLayout(1, 0));
+        var choosePlayerTargetPanelPanelSouth = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         choosePlayerTargetPanelPanel.add(choosePlayerTargetPanelPanelCenter, BorderLayout.CENTER);
         choosePlayerTargetPanelPanel.add(choosePlayerTargetPanelPanelSouth, BorderLayout.SOUTH);
         choosePlayerTargetPanelPanelCenter.add(choosePlayerTargetPanelPanelPlayers);
         choosePlayerTargetPanelPanelCenter.add(choosePlayerTargetPanelPanelAction);
 
-        JLabel joueurLabel = new JLabel("Joueur");
-        choosePlayerTargetPanelPanelPlayers.add(joueurLabel);
+        actionCheckBoxMap = new EnumMap<>(ActionType.class);
+        var foodAction = new JCheckBox("Food");
+        foodAction.addItemListener(new ActionChoiceItemListener());
+        actionCheckBoxMap.put(ActionType.FOOD, foodAction);
+        choosePlayerTargetPanelPanelAction.add(foodAction);
+        var waterAction = new JCheckBox("Water");
+        waterAction.addItemListener(new ActionChoiceItemListener());
+        actionCheckBoxMap.put(ActionType.WATER, waterAction);
+        choosePlayerTargetPanelPanelAction.add(waterAction);
+        var woodAction = new JCheckBox("Wood");
+        foodAction.addItemListener(new ActionChoiceItemListener());
+        actionCheckBoxMap.put(ActionType.WOOD, woodAction);
+        choosePlayerTargetPanelPanelAction.add(woodAction);
+        var cardAction = new JCheckBox("Card");
+        cardAction.addItemListener(new ActionChoiceItemListener());
+        actionCheckBoxMap.put(ActionType.CARD, cardAction);
+        choosePlayerTargetPanelPanelAction.add(cardAction);
 
-        JLabel actionLabel = new JLabel("Action");
-        choosePlayerTargetPanelPanelAction.add(actionLabel);
-
-        JButton actionValidate = new JButton("Use the card");
+        actionValidate = new JButton("Use the card");
         actionValidate.addActionListener(new ValidateCardUseListener());
         choosePlayerTargetPanelPanelSouth.add(actionValidate);
 
+    }
+
+    public void buildCardTargetPanel() {
+        targetMap = new HashMap<>();
+        for (Player player : board.getPlayerList()) {
+            var box = new JCheckBox(player.getName());
+            choosePlayerTargetPanelPanelPlayers.add(box);
+            box.addItemListener(new ActionChoiceItemListener());
+            targetMap.put(player, box);
+        }
     }
 
     public void buildEastPanel() {
@@ -250,10 +289,20 @@ public class MainBoardFront implements Serializable {
     public void buildSouthPanel() {
         southPanel = new JPanel(new GridLayout(1, 2));
         mainPanel.add(southPanel, BorderLayout.SOUTH);
+        var hiddenCardPanelContainer = new JPanel();
+        var revealedCardPanelContainer = new JPanel();
+
         hiddenCardPanel = new JPanel();
         revealedCardPanel = new JPanel();
-        southPanel.add(hiddenCardPanel);
-        southPanel.add(revealedCardPanel);
+        var hiddenCardPanelScrollable = new JScrollPane(hiddenCardPanel, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        var revealedCardPanelScrollable = new JScrollPane(revealedCardPanel);
+        hiddenCardPanelContainer.setMaximumSize(new Dimension(800, 200));
+        revealedCardPanelContainer.setMaximumSize(new Dimension(800, 200));
+        hiddenCardPanelContainer.add(hiddenCardPanelScrollable);
+        revealedCardPanelContainer.add(revealedCardPanelScrollable);
+        southPanel.add(hiddenCardPanelContainer);
+        southPanel.add(revealedCardPanelContainer);
         hiddenCardPanel.setLayout(new BoxLayout(hiddenCardPanel, BoxLayout.Y_AXIS));
         revealedCardPanel.setLayout(new BoxLayout(revealedCardPanel, BoxLayout.Y_AXIS));
 
@@ -275,56 +324,56 @@ public class MainBoardFront implements Serializable {
 
     public void buildNorthPanel() {
         northPanel = new JPanel(new GridLayout(1, 2));
-        JPanel northWestPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JPanel northEastPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        var northWestPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        var northEastPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         northPanel.add(northWestPanel);
         northPanel.add(northEastPanel);
         mainPanel.add(northPanel, BorderLayout.NORTH);
 
-        JPanel resourcesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
+        var resourcesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
         northWestPanel.add(resourcesPanel);
 
-        JPanel foodPanel = new JPanel();
-        JPanel waterPanel = new JPanel();
-        JPanel woodFragmentsPanel = new JPanel();
-        JPanel woodPlanksPanel = new JPanel();
+        var foodPanel = new JPanel();
+        var waterPanel = new JPanel();
+        var woodFragmentsPanel = new JPanel();
+        var woodPlanksPanel = new JPanel();
 
         resourcesPanel.add(foodPanel);
         resourcesPanel.add(waterPanel);
         resourcesPanel.add(woodFragmentsPanel);
         resourcesPanel.add(woodPlanksPanel);
 
-        JLabel foodLabel = new JLabel("Food : ");
+        var foodLabel = new JLabel("Food : ");
         foodQuantityLabel = new JLabel("0");
         foodPanel.add(foodLabel);
         foodPanel.add(foodQuantityLabel);
-        JLabel waterLabel = new JLabel("Water : ");
+        var waterLabel = new JLabel("Water : ");
         waterQuantityLabel = new JLabel("0");
         waterPanel.add(waterLabel);
         waterPanel.add(waterQuantityLabel);
-        JLabel woodFragmentsLabel = new JLabel("Wood Plank Fragments : ");
+        var woodFragmentsLabel = new JLabel("Wood Plank Fragments : ");
         woodFragmentsQuantityLabel = new JLabel("0");
         woodFragmentsPanel.add(woodFragmentsLabel);
         woodFragmentsPanel.add(woodFragmentsQuantityLabel);
-        JLabel woodPlanksLabel = new JLabel("Wood Planks : ");
+        var woodPlanksLabel = new JLabel("Wood Planks : ");
         woodPlanksQuantityLabel = new JLabel("0");
         woodPlanksPanel.add(woodPlanksLabel);
         woodPlanksPanel.add(woodPlanksQuantityLabel);
 
-        JPanel roundDataPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 20));
+        var roundDataPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 20));
         northEastPanel.add(roundDataPanel);
-        JPanel weatherPanel = new JPanel();
-        JPanel nbAlivePanel = new JPanel();
-        JPanel roundNumberPanel = new JPanel();
+        var weatherPanel = new JPanel();
+        var nbAlivePanel = new JPanel();
+        var roundNumberPanel = new JPanel();
 
         roundDataPanel.add(weatherPanel);
         roundDataPanel.add(nbAlivePanel);
         roundDataPanel.add(roundNumberPanel);
-        JLabel weatherLabel = new JLabel("Weather : ");
+        var weatherLabel = new JLabel("Weather : ");
         weatherLabelNumber = new JLabel("0");
-        JLabel nbAliveLabel = new JLabel("Alive : ");
+        var nbAliveLabel = new JLabel("Alive : ");
         nbAliveLabelNumber = new JLabel("0");
-        JLabel roundLabel = new JLabel("Round : ");
+        var roundLabel = new JLabel("Round : ");
         roundLabelNumber = new JLabel("0");
         weatherPanel.add(weatherLabel);
         weatherPanel.add(weatherLabelNumber);
@@ -338,14 +387,14 @@ public class MainBoardFront implements Serializable {
     public void buildPlayersDisplay(int indexOfThisPlayer) {
         this.indexOfThisPlayer = indexOfThisPlayer;
         listPlayerDisplays = new ArrayList<>();
-        for (int index = 0; index < board.getPlayerList().size(); index++) {
-            Player player = board.getPlayerList().get(index);
+        for (var index = 0; index < board.getPlayerList().size(); index++) {
+            var player = board.getPlayerList().get(index);
             listPlayerDisplays.add(player.getPanelDisplay());
 
         }
         int newNbPlayers = nbPlayers;
         if (nbPlayers % 2 == 0) {
-            JPanel voidPanel = new JPanel();
+            var voidPanel = new JPanel();
 
             listPlayerDisplays.add(voidPanel);
             newNbPlayers++;
@@ -361,9 +410,9 @@ public class MainBoardFront implements Serializable {
     }
 
     private JPanel buildCard(Card card) {
-        JPanel cardPanel = new JPanel();
+        var cardPanel = new JPanel();
 
-        JButton cardButton = new JButton(card + "");
+        var cardButton = new JButton(card + "");
         cardButton.addActionListener(card.getActionListener());
         cardPanel.add(cardButton);
         return cardPanel;
@@ -382,7 +431,7 @@ public class MainBoardFront implements Serializable {
     public void updateSouth() {
         hiddenCardPanelPanel.removeAll();
         revealedCardPanelPanel.removeAll();
-        Player thisPlayer = board.getThisPlayer();
+        var thisPlayer = board.getThisPlayer();
         for (Card card : thisPlayer.getInventoryHidden()) {
             addHiddenCard(card);
         }
@@ -390,6 +439,7 @@ public class MainBoardFront implements Serializable {
             addRevealedCard(card);
         }
         southPanel.update(southPanel.getGraphics());
+        System.out.println(thisPlayer.getInventory());
     }
 
     public void updateCurrentPlayer() {
@@ -404,7 +454,7 @@ public class MainBoardFront implements Serializable {
     public void makePlayerChiefDesignates(List<Player> pickablePlayers) {
         choosePlayerPanelPanel.removeAll();
         for (Player player : pickablePlayers) {
-            JButton voteButton = new JButton(player + "");
+            var voteButton = new JButton(player + "");
             choosePlayerPanelPanel.add(voteButton);
             voteButton.addActionListener(new ChiefVoteListener(player));
         }
@@ -414,7 +464,7 @@ public class MainBoardFront implements Serializable {
         choosePlayerPanelPanel.removeAll();
         cardLayoutCentralPanel.show(centerPanelCenterChoicePanel, CHOOSE_PLAYER_PANEL);
         for (Player player : pickablePlayers) {
-            JButton voteButton = new JButton(player + "");
+            var voteButton = new JButton(player + "");
             choosePlayerPanelPanel.add(voteButton);
             voteButton.addActionListener(new VoteListener(player));
         }
@@ -531,7 +581,7 @@ public class MainBoardFront implements Serializable {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            Player player = board.getThisPlayer();
+            var player = board.getThisPlayer();
             player.playerSeeksFood(board);
             cardLayoutCentralPanel.show(centerPanelCenterChoicePanel, CHOOSE_VOID_PANEL);
             nextButton.setEnabled(true);
@@ -543,7 +593,7 @@ public class MainBoardFront implements Serializable {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            Player player = board.getThisPlayer();
+            var player = board.getThisPlayer();
             player.playerSeeksWater(board);
             nextButton.setEnabled(true);
             cardLayoutCentralPanel.show(centerPanelCenterChoicePanel, CHOOSE_VOID_PANEL);
@@ -569,7 +619,7 @@ public class MainBoardFront implements Serializable {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            Player player = board.getThisPlayer();
+            var player = board.getThisPlayer();
             player.playerSeeksWood(board, nbTries);
             nextButton.setEnabled(true);
             cardLayoutCentralPanel.show(centerPanelCenterChoicePanel, CHOOSE_VOID_PANEL);
@@ -581,7 +631,7 @@ public class MainBoardFront implements Serializable {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            Player player = board.getThisPlayer();
+            var player = board.getThisPlayer();
             player.playerSeeksCard(board);
             nextButton.setEnabled(true);
             updateSouth();
@@ -636,66 +686,179 @@ public class MainBoardFront implements Serializable {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            card.useCard(null, null, null, ActionType.NONE);
-            board.updateDisplayResources();
-            updateSouth();
-        }
-
-        public class CardPlayerActionListenerOneTarget extends CardPlayerActionListener {
-
-            public CardPlayerActionListenerOneTarget(Card card) {
-                super(card);
-            }
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            if (card.equals(cardCurrentlyUsed)) {
+                cardCurrentlyUsed = null;
+                boolean isPlayerTurn = board.getIndexCurrentPlayer() != -1
+                        && board.getPlayerList().get(board.getIndexCurrentPlayer()).equals(board.getThisPlayer())
+                        && board.getThisPlayer().getState() != PlayerState.SICK;
+                cardLayoutCentralPanel.show(centerPanelCenterChoicePanel,
+                        isPlayerTurn ? CHOOSE_ACTION_PANEL : CHOOSE_VOID_PANEL);
+            } else if (card.canBeUsed()) {
+                cardCurrentlyUsed = card;
+                nbTargetsRequired = 0;
+                nbActionRequired = 0;
                 cardLayoutCentralPanel.show(centerPanelCenterChoicePanel, CHOOSE_PLAYER_TARGET);
-                // TODO
                 choosePlayerTargetPanelPanelAction.setVisible(false);
+                choosePlayerTargetPanelPanelPlayers.setVisible(false);
             }
+        }
+    }
 
+    public class CardPlayerActionListenerOneTarget extends CardPlayerActionListener {
+
+        public CardPlayerActionListenerOneTarget(Card card) {
+            super(card);
         }
 
-        public class CardPlayerActionListenerOneTargetOneAction extends CardPlayerActionListener {
-
-            public CardPlayerActionListenerOneTargetOneAction(Card card) {
-                super(card);
-            }
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (card.equals(cardCurrentlyUsed)) {
+                cardCurrentlyUsed = null;
+                cardLayoutCentralPanel.show(centerPanelCenterChoicePanel, CHOOSE_VOID_PANEL);
+            } else if (card.canBeUsed()) {
+                super.actionPerformed(e);
                 cardLayoutCentralPanel.show(centerPanelCenterChoicePanel, CHOOSE_PLAYER_TARGET);
+                nbTargetsRequired = 1;
+                nbActionRequired = 0;
+                choosePlayerTargetPanelPanelAction.setVisible(false);
+                choosePlayerTargetPanelPanelPlayers.setVisible(true);
+                for (var box : targetMap.values()) {
+                    box.setEnabled(true);
+                    box.setSelected(false);
+                }
+            }
+        }
+
+    }
+
+    public class CardPlayerActionListenerOneTargetOneAction extends CardPlayerActionListener {
+
+        public CardPlayerActionListenerOneTargetOneAction(Card card) {
+            super(card);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (card.equals(cardCurrentlyUsed)) {
+                cardCurrentlyUsed = null;
+                cardLayoutCentralPanel.show(centerPanelCenterChoicePanel, CHOOSE_VOID_PANEL);
+            } else if (card.canBeUsed()) {
+                super.actionPerformed(e);
+                cardLayoutCentralPanel.show(centerPanelCenterChoicePanel, CHOOSE_PLAYER_TARGET);
+                nbTargetsRequired = 1;
+                nbActionRequired = 1;
                 choosePlayerTargetPanelPanelAction.setVisible(true);
-
+                choosePlayerTargetPanelPanelPlayers.setVisible(true);
+                for (var box : targetMap.values()) {
+                    box.setEnabled(true);
+                    box.setSelected(false);
+                }
             }
         }
+    }
 
-        public class CardPlayerActionListenerThreeTargets extends CardPlayerActionListener {
+    public class CardPlayerActionListenerThreeTargets extends CardPlayerActionListener {
 
-            public CardPlayerActionListenerThreeTargets(Card card) {
-                super(card);
-            }
+        public CardPlayerActionListenerThreeTargets(Card card) {
+            super(card);
+        }
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (card.equals(cardCurrentlyUsed)) {
+                cardCurrentlyUsed = null;
+                cardLayoutCentralPanel.show(centerPanelCenterChoicePanel, CHOOSE_VOID_PANEL);
+            } else if (card.canBeUsed()) {
+                super.actionPerformed(e);
+                nbTargetsRequired = 3;
+                nbActionRequired = 0;
                 cardLayoutCentralPanel.show(centerPanelCenterChoicePanel, CHOOSE_PLAYER_TARGET);
                 choosePlayerTargetPanelPanelAction.setVisible(false);
-
+                choosePlayerTargetPanelPanelPlayers.setVisible(true);
+                for (var box : targetMap.values()) {
+                    box.setEnabled(true);
+                    box.setSelected(false);
+                }
             }
         }
     }
 
     public class ValidateCardUseListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            updateSouth();
-            board.updateDisplayResources();
 
+        private Player[] fillTargetsArray() {
+            var targetsArray = new Player[] { null, null, null };
+            for (var index = 0; index < nbTargetsRequired; index++) {
+                for (Entry<Player, JCheckBox> entry : targetMap.entrySet()) {
+                    if (entry.getValue().isSelected()) {
+                        var selectedPlayer = entry.getKey();
+                        if (targetsArray[0] == null) {
+                            targetsArray[0] = selectedPlayer;
+                        } else if (targetsArray[1] == null && !selectedPlayer.equals(targetsArray[0])) {
+                            targetsArray[1] = selectedPlayer;
+                        } else if (targetsArray[2] == null && !selectedPlayer.equals(targetsArray[1])
+                                && !selectedPlayer.equals(targetsArray[0])) {
+                            targetsArray[2] = selectedPlayer;
+                        }
+                    }
+                }
+            }
+            return targetsArray;
         }
 
-        // TODO faire les classes filles spécialisées de ca + mettre à jour les
-        // getActionListener des cartes + test
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            var targetsArray = fillTargetsArray();
+            ActionType action = ActionType.NONE;
+
+            for (Entry<ActionType, JCheckBox> entry : actionCheckBoxMap.entrySet()) {
+                if (entry.getValue().isSelected()) {
+                    action = entry.getKey();
+                }
+            }
+            cardCurrentlyUsed.useCard(targetsArray[0], targetsArray[1], targetsArray[2], action);
+            cardCurrentlyUsed = null;
+            nbTargetsRequired = 0;
+            updateSouth();
+            board.updateDisplayResources();
+            boolean isPlayerTurn = board.getIndexCurrentPlayer() != -1
+                    && board.getPlayerList().get(board.getIndexCurrentPlayer()).equals(board.getThisPlayer())
+                    && board.getThisPlayer().getState() != PlayerState.SICK;
+            cardLayoutCentralPanel.show(centerPanelCenterChoicePanel,
+                    isPlayerTurn ? CHOOSE_ACTION_PANEL : CHOOSE_VOID_PANEL);
+
+        }
     }
 
+    private class ActionChoiceItemListener implements ItemListener {
+
+        @Override
+        public void itemStateChanged(ItemEvent e) {
+            var nbTargetsSelected = 0;
+            var nbActionSelected = 0;
+            for (Entry<Player, JCheckBox> entry : targetMap.entrySet()) {
+                if (entry.getValue().isSelected()) {
+                    nbTargetsSelected++;
+                }
+            }
+            for (Entry<ActionType, JCheckBox> entry : actionCheckBoxMap.entrySet()) {
+                if (entry.getValue().isSelected()) {
+                    nbActionSelected++;
+                }
+            }
+
+            for (Entry<Player, JCheckBox> entry : targetMap.entrySet()) {
+                if (!entry.getValue().isSelected()) {
+                    entry.getValue().setEnabled(nbTargetsSelected < nbTargetsRequired);
+                }
+            }
+            for (Entry<ActionType, JCheckBox> entry : actionCheckBoxMap.entrySet()) {
+                if (!entry.getValue().isSelected()) {
+                    entry.getValue().setEnabled(nbActionSelected != 1);
+                }
+            }
+            actionValidate.setEnabled(nbTargetsRequired > 0 && nbTargetsSelected >= 1
+                    && nbTargetsSelected <= nbTargetsRequired && nbActionSelected == nbActionRequired);
+
+        }
+    }
 }

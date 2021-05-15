@@ -7,6 +7,7 @@ import back.Board;
 import back.GamePhase;
 import back.Player;
 import back.PlayerState;
+import java.awt.event.ActionListener;
 
 /**
  * The {@code VoodooDoll} class represents the Voodoo Doll Card.
@@ -67,5 +68,10 @@ public class VoodooDoll extends Card {
     @Override
     public boolean[] getNeededParameters() {
         return new boolean[] { true, false, false, false };
+    }
+
+    @Override
+    public ActionListener getActionListener() {
+        return board.getMainBoardFront().new CardPlayerActionListenerOneTarget(this);
     }
 }
