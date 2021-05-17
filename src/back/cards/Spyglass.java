@@ -1,7 +1,9 @@
 package back.cards;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import back.ActionType;
@@ -48,15 +50,20 @@ public class Spyglass extends Card {
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
 
-        List<Card> cardList = new ArrayList<>();
+        Map<Player, List<Card>> cardsMap = new HashMap<>();
         for (Player player : board.getPlayerList()) {
-            for (int index = 0; index < player.getCardNumber(); index++) {
-                cardList.add(player.getCard(index));
+            if (!player.equals(owner)) {
+                List<Card> cardsOfPlayer = new ArrayList<>();
+                for (var index = 0; index < player.getCardNumber(); index++) {
+
+                    cardsOfPlayer.add(player.getCard(index));
+                }
+                cardsMap.put(player, cardsOfPlayer);
             }
 
         }
-        board.setSpyglassList(cardList);
-        board.showSpyglassList(owner);
+        board.setSpyglassMap(cardsMap);
+        board.showSpyglassMap(owner);
         board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
         super.useCard(player1, player2, player3, action);
     }

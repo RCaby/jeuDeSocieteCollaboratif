@@ -10,9 +10,6 @@ public class Main {
         // TODO changer place label chief
         // TODO display player state + chief
 
-        // TODO Le jeu continue même après l'ouragan : penser à modifier endGame de
-        // board
-        // pour changer le front
         // TODO Spyglass pas du tout opti : elle affiche a la suite les cartes de tout
         // le
         // monde sans savoir a qui appartient quoi, y compris celles du joueur

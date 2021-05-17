@@ -516,6 +516,12 @@ public class MainBoardFront implements Serializable {
         setRoundDisplay(round);
     }
 
+    public void endGame() {
+        updateSouth();
+        nextButton.setVisible(false);
+        allowedToPlayCard = false;
+    }
+
     public void setNbAliveDisplay(int nbAlive) {
         nbAliveLabelNumber.setText(nbAlive + "");
     }

@@ -2,7 +2,6 @@ package back;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -50,7 +49,7 @@ public class Board implements Serializable {
     private Player thisPlayer;
     private Player nextChief;
     private Player twicePlayingPlayer;
-    private List<Card> spyglassList;
+    private Map<Player, List<Card>> spyglassMap;
     private List<Card> flashLightList;
     private List<Integer> barometerList;
     private Player conchOwner;
@@ -92,9 +91,6 @@ public class Board implements Serializable {
         matchesUsedThisRound = false;
         random = new Random();
         weatherList = data.getWeatherList();
-        for (var elt : weatherList) {
-            System.out.println(elt);
-        }
 
         voluntaryDepartureStarted = false;
         playerList = new ArrayList<>();
@@ -330,6 +326,7 @@ public class Board implements Serializable {
         currentPhase = GamePhase.END;
         gameOver = true;
         mainBoardFront.displayMessage("End of the game!");
+        mainBoardFront.endGame();
     }
 
     // Ressources gathering function ##############################################
@@ -838,6 +835,10 @@ public class Board implements Serializable {
                 }
 
             }
+        } else {
+            for (var index = player.getCardNumber() - 1; index >= 0; index--) {
+                player.removeCard(index);
+            }
         }
     }
 
@@ -935,9 +936,10 @@ public class Board implements Serializable {
      * 
      * @param player the player who owns the card
      */
-    public void showSpyglassList(Player player) {
-        if (player.equals(thisPlayer)) {
-            mainBoardFront.displayMessage(stringsBundle.getString("cardsOfAllPlayers") + spyglassList);
+    public void showSpyglassMap(Player player) {
+        mainBoardFront.displayMessage("The cards of the players : ");
+        for (Entry<Player, List<Card>> entry : spyglassMap.entrySet()) {
+            mainBoardFront.displayMessage(entry.getKey() + " has the cards " + entry.getKey());
         }
     }
 
@@ -1087,21 +1089,21 @@ public class Board implements Serializable {
     }
 
     /**
-     * The setter for the attribute {@link Board#spyglassList}.
+     * The setter for the attribute {@link Board#spyglassMap}.
      * 
-     * @param spyglassList the list of cards seen by with spyglass
+     * @param spyglassMap the map of cards seen with spyglass
      */
-    public void setSpyglassList(List<Card> spyglassList) {
-        this.spyglassList = spyglassList;
+    public void setSpyglassMap(Map<Player, List<Card>> spyglassMap) {
+        this.spyglassMap = spyglassMap;
     }
 
     /**
-     * The getter for the attribute {@link Board#spyglassList}.
+     * The getter for the attribute {@link Board#spyglassMap}.
      * 
-     * @return the list of cards seen with the spyglass
+     * @return the map of cards seen with the spyglass
      */
-    public List<Card> getSpyglassList() {
-        return spyglassList;
+    public Map<Player, List<Card>> getSpyglassMap() {
+        return spyglassMap;
     }
 
     /**
