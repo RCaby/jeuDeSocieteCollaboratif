@@ -183,7 +183,8 @@ public class Player implements Serializable {
             wood += nbTries;
         } else {
             board.getMainBoardFront().displayMessage(this + stringsBundle.getString("playerGotSick"));
-            setState(PlayerState.SICK);
+
+            board.sickPlayer(this);
             sickRound = board.getRound();
         }
         board.getMainBoardFront().displayMessage(stringsBundle.getString("gotWood") + Math.abs(wood));
@@ -452,8 +453,9 @@ public class Player implements Serializable {
      */
     public void deathPurgeCards() {
         for (int index = inventory.size() - 1; index >= 0; index--) {
-            if (inventory.get(index).discardOnDeath()) {
-                discardCard(inventory.get(index));
+            var card = inventory.get(index);
+            if (card.discardOnDeath()) {
+                discardCard(card);
             }
         }
     }
@@ -645,8 +647,13 @@ public class Player implements Serializable {
      * 
      * @return the round during which the player got sick
      */
-    public int getRoundSick() {
+    public int getSickRound() {
         return sickRound;
+    }
+
+    // TODO
+    public void setSickRound(int roundSick) {
+        this.sickRound = roundSick;
     }
 
 }

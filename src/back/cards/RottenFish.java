@@ -5,7 +5,6 @@ import java.util.ResourceBundle;
 import back.ActionType;
 import back.Board;
 import back.Player;
-import back.PlayerState;
 import java.awt.event.ActionListener;
 
 /**
@@ -53,7 +52,7 @@ public class RottenFish extends Card {
             board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
             board.addFood(1);
             if (!board.getMatchesUsedThisRound()) {
-                player1.setState(PlayerState.SICK);
+                board.sickPlayer(player1);
             } else {
                 board.setMatchesUsedThisRound(false);
             }

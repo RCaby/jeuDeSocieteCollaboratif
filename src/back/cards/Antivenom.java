@@ -50,7 +50,7 @@ public class Antivenom extends Card {
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         if (player1 != null && player1.getState() == PlayerState.SICK) {
 
-            player1.setState(PlayerState.HEALTHY);
+            board.curePlayer(player1);
             board.getMainBoardFront().displayMessage(owner + " uses the card " + this + " on " + player1 + ".");
             board.getMainBoardFront().displayMessage(player1 + " is now cured !");
             super.useCard(player1, player2, player3, action);

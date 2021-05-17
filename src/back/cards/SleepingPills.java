@@ -47,7 +47,7 @@ public class SleepingPills extends Card {
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         if (owner != null) {
-            String string = " uses the card ";
+            var string = " uses the card ";
             if (player1 != null && player2 != null && player3 != null) {
                 board.giveCardToPlayer(owner, player1.robRandomCard());
                 board.giveCardToPlayer(owner, player2.robRandomCard());
@@ -66,6 +66,7 @@ public class SleepingPills extends Card {
             }
 
         }
+        board.getMainBoardFront().updateSouth();
         super.useCard(player1, player2, player3, action);
 
     }

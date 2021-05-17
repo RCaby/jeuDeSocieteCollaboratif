@@ -50,13 +50,11 @@ public class Barometer extends Card {
 
         List<Integer> toBeDisplayed = new ArrayList<>();
         int n = board.getRound();
-        if (n <= 10) {
-            int weather = board.getWeather(11);
-            toBeDisplayed.add(weather);
-            if (n <= 9) {
-                weather = board.getWeather(10);
-                toBeDisplayed.add(0, weather);
-            }
+        if (n <= 9) {
+            toBeDisplayed.add(board.getWeather(n + 1));
+            toBeDisplayed.add(board.getWeather(n + 2));
+        } else if (n == 10) {
+            toBeDisplayed.add(board.getWeather(n + 1));
         }
         board.setBarometerList(toBeDisplayed);
         board.showBarometerList(owner);

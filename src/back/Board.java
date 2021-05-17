@@ -2,6 +2,7 @@ package back;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -91,6 +92,9 @@ public class Board implements Serializable {
         matchesUsedThisRound = false;
         random = new Random();
         weatherList = data.getWeatherList();
+        for (var elt : weatherList) {
+            System.out.println(elt);
+        }
 
         voluntaryDepartureStarted = false;
         playerList = new ArrayList<>();
@@ -144,8 +148,8 @@ public class Board implements Serializable {
     public void cardsDistribution() {
         int nbCardToGive = playerList.size() >= 9 ? 3 : 4;
         for (Player player : playerList) {
-            for (int nbCard = 0; nbCard < nbCardToGive; nbCard++) {
-                Card card = deck.remove(0);
+            for (var nbCard = 0; nbCard < nbCardToGive; nbCard++) {
+                var card = deck.remove(0);
                 giveCardToPlayer(player, card);
             }
         }
@@ -193,8 +197,8 @@ public class Board implements Serializable {
     public void play(Player player) {
         if (gameOver) {
             endGame();
-        } else if (player != null && player.getState() == PlayerState.SICK && player.getRoundSick() == round - 1) {
-            player.setState(PlayerState.HEALTHY);
+        } else if (player != null && player.getState() == PlayerState.SICK && player.getSickRound() == round - 1) {
+            curePlayer(player);
             mainBoardFront.displayMessage(player + " was sick and could not play, now cured");
         } else if (player != null && player.getState() == PlayerState.HEALTHY && !player.equals(thisPlayer)) {
             mainBoardFront.displayMessage(player + "'s turn !");
@@ -237,7 +241,7 @@ public class Board implements Serializable {
 
     public void postDistributionRoundEnd() {
         mainBoardFront.displayMessage("Distribution ended !");
-        boolean departure = weatherList[round] == -2 || isThereEnoughGoodsForAll(true);
+        boolean departure = getNbPlayersAlive() > 0 && (weatherList[round] == -2 || isThereEnoughGoodsForAll(true));
         if (departure) {
             voluntaryDepartureStarted = true;
             roundEnd(true);
@@ -558,7 +562,7 @@ public class Board implements Serializable {
      */
     public void makePlayerVote(Player player) {
         if (!player.equals(thisPlayer)) {
-            Player designatedPlayer = player.voteAsCPU(pickablePlayers);
+            var designatedPlayer = player.voteAsCPU(pickablePlayers);
             votes.get(player).add(designatedPlayer);
         } else {
             player.vote(this, pickablePlayers);
@@ -793,6 +797,21 @@ public class Board implements Serializable {
         mainBoardFront.displayMessage(player + " has been sacrificed for the sake of the crew :(");
     }
 
+    // TODO
+    public void sickPlayer(Player player) {
+        player.setState(PlayerState.SICK);
+        if (thisPlayer.equals(player)) {
+            mainBoardFront.setAllowedToPlayCard(false);
+        }
+    }
+
+    public void curePlayer(Player player) {
+        player.setState(PlayerState.HEALTHY);
+        if (thisPlayer.equals(player)) {
+            mainBoardFront.setAllowedToPlayCard(true);
+        }
+    }
+
     /**
      * Redistributes the remaining cards of a dead player (such as a {@code Gun} for
      * instance)
@@ -802,14 +821,14 @@ public class Board implements Serializable {
     public void distributeCardsFromDeadPlayer(Player player) {
         player.deathPurgeCards();
 
-        if (getNbPlayersAlive() > 1) {
+        if (getNbPlayersAlive() > 0) {
             int indexOfPlayer = playerList.indexOf(player);
-            Player playerBefore = getPlayerAliveAfterBefore(indexOfPlayer, false);
-            Player playerAfter = getPlayerAliveAfterBefore(indexOfPlayer, true);
+            var playerBefore = getPlayerAliveAfterBefore(indexOfPlayer, false);
+            var playerAfter = getPlayerAliveAfterBefore(indexOfPlayer, true);
 
             int indexMax = player.getCardNumber();
-            for (int index = 0; index < indexMax; index++) {
-                Card card = player.getCard(0);
+            for (var index = 0; index < indexMax; index++) {
+                var card = player.getCard(0);
                 player.removeCard(0);
 
                 if (index % 2 == 0) {
