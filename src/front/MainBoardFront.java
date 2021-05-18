@@ -1,6 +1,5 @@
 package front;
 
-import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER;
@@ -159,18 +158,23 @@ public class MainBoardFront implements Serializable {
 
         var chooseActionLabelPanel = new JPanel();
         var chooseActionLabel = new JLabel("Choose your action");
+        changePolice(chooseActionLabel, 18);
         chooseActionLabelPanel.add(chooseActionLabel);
         var notificationLabelPanel = new JPanel();
         notificationLabel = new JLabel("Notification !");
+        changePolice(notificationLabel, 18);
         notificationLabelPanel.add(notificationLabel);
         var choosePlayerLabelPanel = new JPanel();
         var choosePlayerLabel = new JLabel("Choose a player");
+        changePolice(choosePlayerLabel, 18);
         choosePlayerLabelPanel.add(choosePlayerLabel);
         var chooseWoodNbTriesLabelPanel = new JPanel();
         var chooseWoodNbTriesLabel = new JLabel("Choose your number of tries");
+        changePolice(chooseWoodNbTriesLabel, 18);
         chooseWoodNbTriesLabelPanel.add(chooseWoodNbTriesLabel);
         var choosePlayerTargetLabelPanel = new JPanel();
-        var choosePlayerTargetLabel = new JLabel("Card Validation");
+        var choosePlayerTargetLabel = new JLabel("Card Description");
+        changePolice(choosePlayerTargetLabel, 18);
         choosePlayerTargetLabelPanel.add(choosePlayerTargetLabel);
 
         chooseActionPanel.add(chooseActionLabelPanel);
@@ -217,7 +221,7 @@ public class MainBoardFront implements Serializable {
         notificationPanelTextPaneScrollable.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_ALWAYS);
 
         notificationPanelTextPane.setEditable(false);
-        notificationPanelTextPaneScrollable.setPreferredSize(new Dimension(800, 400));
+        notificationPanelTextPaneScrollable.setPreferredSize(new Dimension(800, 300));
         notificationPanelPanel.add(notificationPanelTextPaneScrollable);
 
         nextButton = new JButton("Next");
@@ -250,6 +254,11 @@ public class MainBoardFront implements Serializable {
         var choosePlayerTargetPanelPanelCenterCardDescription = new JPanel();
         cardDescription = new JTextPane();
         var cardDescriptionScrollPane = new JScrollPane(cardDescription);
+        cardDescriptionScrollPane.setPreferredSize(new Dimension(800, 100));
+        changePolice(cardDescription, 16);
+        cardDescriptionScrollPane.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        cardDescriptionScrollPane.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_ALWAYS);
+        cardDescription.setEditable(false);
         choosePlayerTargetPanelPanelCenterCardDescription.add(cardDescriptionScrollPane);
 
         var choosePlayerTargetPanelPanelCenterCardUse = new JPanel(new GridLayout(1, 2));
@@ -527,7 +536,7 @@ public class MainBoardFront implements Serializable {
 
     public void displayMessage(String text) {
 
-        String newText = notificationPanelTextPane.getText() + "\n" + text;
+        String newText = notificationPanelTextPane.getText() + text + "\n";
         notificationPanelTextPane.setText(newText);
 
     }
@@ -750,13 +759,15 @@ public class MainBoardFront implements Serializable {
             if (card.equals(cardCurrentlyUsed)) {
                 cardCurrentlyUsed = null;
                 switchToPanel(previousPanel);
-            } else if (card.canBeUsed()) {
+            } else {
+                actionValidate.setEnabled(card.canBeUsed());
                 cardCurrentlyUsed = card;
                 nbTargetsRequired = 0;
                 nbActionRequired = 0;
                 switchToPanel(CHOOSE_PLAYER_TARGET);
                 choosePlayerTargetPanelPanelAction.setVisible(false);
                 choosePlayerTargetPanelPanelPlayers.setVisible(false);
+                cardDescription.setText(card.getCardDescription());
             }
         }
     }
@@ -772,7 +783,7 @@ public class MainBoardFront implements Serializable {
             if (card.equals(cardCurrentlyUsed)) {
                 cardCurrentlyUsed = null;
                 switchToPanel(previousPanel);
-            } else if (card.canBeUsed()) {
+            } else {
                 super.actionPerformed(e);
                 switchToPanel(CHOOSE_PLAYER_TARGET);
                 nbTargetsRequired = 1;
@@ -799,13 +810,14 @@ public class MainBoardFront implements Serializable {
             if (card.equals(cardCurrentlyUsed)) {
                 cardCurrentlyUsed = null;
                 switchToPanel(previousPanel);
-            } else if (card.canBeUsed()) {
+            } else {
                 super.actionPerformed(e);
                 switchToPanel(CHOOSE_PLAYER_TARGET);
                 nbTargetsRequired = 1;
                 nbActionRequired = 1;
                 choosePlayerTargetPanelPanelAction.setVisible(true);
                 choosePlayerTargetPanelPanelPlayers.setVisible(true);
+
                 for (var box : targetMap.values()) {
                     box.setEnabled(true);
                     box.setSelected(false);
@@ -825,7 +837,7 @@ public class MainBoardFront implements Serializable {
             if (card.equals(cardCurrentlyUsed)) {
                 cardCurrentlyUsed = null;
                 switchToPanel(previousPanel);
-            } else if (card.canBeUsed()) {
+            } else {
                 super.actionPerformed(e);
                 nbTargetsRequired = 3;
                 nbActionRequired = 0;
@@ -910,8 +922,9 @@ public class MainBoardFront implements Serializable {
                     entry.getValue().setEnabled(nbActionSelected != 1);
                 }
             }
-            actionValidate.setEnabled(nbTargetsRequired > 0 && allowedToPlayCard && nbTargetsSelected >= 1
-                    && nbTargetsSelected <= nbTargetsRequired && nbActionSelected == nbActionRequired);
+            actionValidate.setEnabled(cardCurrentlyUsed.canBeUsed() && nbTargetsRequired > 0 && allowedToPlayCard
+                    && nbTargetsSelected >= 1 && nbTargetsSelected <= nbTargetsRequired
+                    && nbActionSelected == nbActionRequired);
 
         }
     }

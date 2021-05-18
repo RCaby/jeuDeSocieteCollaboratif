@@ -29,7 +29,7 @@ public class Strings extends ListResourceBundle {
             { "ToiletBrush_name", "Toilet Brush" }, { "ToiletBrush_description", "" },
             { "VegetableMill_name", "Vegetable Mill" }, { "VegetableMill_description", "" },
             { "VoodooDoll_name", "Voodoo Doll" }, { "VoodooDoll_description", "" },
-            { "WaterBottle_name", "Water Bottle" }, { "WaterBottle_description", "" },
+            { "WaterBottle_name", "Water Bottle" }, { "WaterBottle_description", "description water bottle" },
             { "WinningLotteryTicket_name", "Winning Lottery Ticket" }, { "WinningLotteryTicket_description", "" },
             { "WoodenPlank_name", "Wooden Plank" }, { "WoodenPlank_description", "Adds one place on the raft." },
             { "player_name", "Player" }, { "yesNoQuestion", "(y/n)" },
