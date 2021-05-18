@@ -102,6 +102,7 @@ public class MainBoardFront implements Serializable {
     private String currentPanel = CHOOSE_VOID_PANEL;
     private JLabel chiefLabel;
     private JLabel stateLabel;
+    private JTextPane cardDescription;
 
     public MainBoardFront(int nbPlayers) {
         mainPanel = new JPanel();
@@ -193,7 +194,7 @@ public class MainBoardFront implements Serializable {
         notificationPanelPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         choosePlayerPanelPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         chooseWoodNbTriesPanelPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        choosePlayerTargetPanelPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        choosePlayerTargetPanelPanel.setLayout(new BorderLayout());
 
         foodButtonAction = new JButton("Food");
         foodButtonAction.addActionListener(new FoodActionListener());
@@ -212,11 +213,11 @@ public class MainBoardFront implements Serializable {
         changePolice(notificationPanelTextPane, 16);
         notificationPanelTextPaneScrollable = new JScrollPane(notificationPanelTextPane);
 
-        notificationPanelTextPaneScrollable.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_ALWAYS);
+        notificationPanelTextPaneScrollable.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
         notificationPanelTextPaneScrollable.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_ALWAYS);
 
         notificationPanelTextPane.setEditable(false);
-        notificationPanelTextPaneScrollable.setPreferredSize(new Dimension(800, 250));
+        notificationPanelTextPaneScrollable.setPreferredSize(new Dimension(800, 400));
         notificationPanelPanel.add(notificationPanelTextPaneScrollable);
 
         nextButton = new JButton("Next");
@@ -241,16 +242,23 @@ public class MainBoardFront implements Serializable {
             woodButton.addActionListener(new WoodTryListener(index));
         }
 
+        var choosePlayerTargetPanelPanelCenterContainer = new JPanel(new GridLayout(2, 1));
+        choosePlayerTargetPanelPanel.add(choosePlayerTargetPanelPanelCenterContainer, BorderLayout.CENTER);
         choosePlayerTargetPanelPanelPlayers = new JPanel();
-
         choosePlayerTargetPanelPanelAction = new JPanel();
-        choosePlayerTargetPanelPanel.setLayout(new BorderLayout());
-        var choosePlayerTargetPanelPanelCenter = new JPanel(new GridLayout(1, 0));
+
+        var choosePlayerTargetPanelPanelCenterCardDescription = new JPanel();
+        cardDescription = new JTextPane();
+        var cardDescriptionScrollPane = new JScrollPane(cardDescription);
+        choosePlayerTargetPanelPanelCenterCardDescription.add(cardDescriptionScrollPane);
+
+        var choosePlayerTargetPanelPanelCenterCardUse = new JPanel(new GridLayout(1, 2));
         var choosePlayerTargetPanelPanelSouth = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        choosePlayerTargetPanelPanel.add(choosePlayerTargetPanelPanelCenter, BorderLayout.CENTER);
         choosePlayerTargetPanelPanel.add(choosePlayerTargetPanelPanelSouth, BorderLayout.SOUTH);
-        choosePlayerTargetPanelPanelCenter.add(choosePlayerTargetPanelPanelPlayers);
-        choosePlayerTargetPanelPanelCenter.add(choosePlayerTargetPanelPanelAction);
+        choosePlayerTargetPanelPanelCenterContainer.add(choosePlayerTargetPanelPanelCenterCardDescription);
+        choosePlayerTargetPanelPanelCenterContainer.add(choosePlayerTargetPanelPanelCenterCardUse);
+        choosePlayerTargetPanelPanelCenterCardUse.add(choosePlayerTargetPanelPanelPlayers);
+        choosePlayerTargetPanelPanelCenterCardUse.add(choosePlayerTargetPanelPanelAction);
 
         actionCheckBoxMap = new EnumMap<>(ActionType.class);
         var foodAction = new JCheckBox("Food");
@@ -325,17 +333,17 @@ public class MainBoardFront implements Serializable {
         hiddenCardPanel.setLayout(new BoxLayout(hiddenCardPanel, BoxLayout.Y_AXIS));
         revealedCardPanel.setLayout(new BoxLayout(revealedCardPanel, BoxLayout.Y_AXIS));
 
-        JPanel hiddenCardLabelPanel = new JPanel();
+        var hiddenCardLabelPanel = new JPanel();
         hiddenCardPanel.add(hiddenCardLabelPanel);
-        JPanel revealedCardLabelPanel = new JPanel();
+        var revealedCardLabelPanel = new JPanel();
         revealedCardPanel.add(revealedCardLabelPanel);
         hiddenCardPanelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         hiddenCardPanel.add(hiddenCardPanelPanel);
         revealedCardPanelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         revealedCardPanel.add(revealedCardPanelPanel);
 
-        JLabel hiddenCardLabel = new JLabel("Hidden Cards");
-        JLabel revealedCardLabel = new JLabel("Revealed Cards");
+        var hiddenCardLabel = new JLabel("Hidden Cards");
+        var revealedCardLabel = new JLabel("Revealed Cards");
         hiddenCardLabelPanel.add(hiddenCardLabel);
         revealedCardLabelPanel.add(revealedCardLabel);
 
