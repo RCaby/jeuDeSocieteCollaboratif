@@ -13,9 +13,12 @@ import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.io.Serializable;
 
 import javax.swing.BorderFactory;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -83,40 +86,61 @@ public class Player implements Serializable {
      * The data displayer of the Player.
      */
     private void buildDisplay() {
-        display = new JPanel();
-        display.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        display.setMaximumSize(new Dimension(400, 200));
-        display.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        JLabel nameLabel = new JLabel(name);
-        display.add(nameLabel);
+        display = new JPanel(new BorderLayout());
 
-        // TODO scrollpane
+        var displayCenter = new JPanel();
+        display.add(displayCenter, BorderLayout.CENTER);
+        var displayNorth = new JPanel();
+        display.add(displayNorth, BorderLayout.NORTH);
+        var voidPanelSouth = new JPanel();
+        display.add(voidPanelSouth, BorderLayout.SOUTH);
+
+        display.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        display.setMaximumSize(new Dimension(600, 200));
+        displayCenter.setLayout(new GridLayout(1, 0, 10, 10));
+
+        var nameLabel = new JLabel(name);
+        displayNorth.add(nameLabel);
+
+        var statePanelContainer = new JPanel(new GridLayout(1, 1));
+
+        var statePanel = new JPanel(new BorderLayout());
+        statePanelContainer.add(statePanel);
         stateLabel = new JLabel(state.toString());
-        display.add(stateLabel);
+
+        displayCenter.add(statePanelContainer);
+        var statePanelNorth = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        var statePanelCenter = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        statePanel.add(statePanelNorth, BorderLayout.NORTH);
+        statePanel.add(statePanelCenter, BorderLayout.CENTER);
+        statePanelNorth.add(stateLabel);
+        statePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         chiefLabel = new JLabel(stringsBundle.getString("not_chief_label"));
-        display.add(chiefLabel);
 
-        cardRevealedPanel = new JPanel();
-        JPanel cardRevealedScrollableContener = new JPanel();
-        cardRevealedScrollableContener.setMaximumSize(new Dimension(100, 200));
-        display.add(cardRevealedScrollableContener);
+        statePanelCenter.add(chiefLabel);
 
-        JScrollPane scrollPaneRevealed = new JScrollPane(cardRevealedPanel);
+        cardRevealedPanel = new JPanel(new GridLayout(1, 0, 10, 10));
+
+        var cardRevealedScrollableContener = new JPanel(new GridLayout(1, 1));
+
+        displayCenter.add(cardRevealedScrollableContener);
+
+        var scrollPaneRevealed = new JScrollPane(cardRevealedPanel);
         cardRevealedScrollableContener.add(scrollPaneRevealed);
         scrollPaneRevealed.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneRevealed.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_NEVER);
-        scrollPaneRevealed.setPreferredSize(new Dimension(100, 100));
+        scrollPaneRevealed.setPreferredSize(new Dimension(170, 100));
 
-        cardHiddenPanel = new JPanel();
-        JPanel cardHiddenScrollableContener = new JPanel();
-        cardHiddenScrollableContener.setMaximumSize(new Dimension(100, 200));
-        display.add(cardHiddenScrollableContener);
-        JScrollPane scrollPaneHidden = new JScrollPane(cardHiddenPanel);
+        cardHiddenPanel = new JPanel(new GridLayout(1, 0, 10, 10));
+        var cardHiddenScrollableContener = new JPanel(new GridLayout(1, 1));
+
+        displayCenter.add(cardHiddenScrollableContener);
+        var scrollPaneHidden = new JScrollPane(cardHiddenPanel);
         cardHiddenScrollableContener.add(scrollPaneHidden);
         scrollPaneHidden.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneHidden.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_NEVER);
-        scrollPaneHidden.setPreferredSize(new Dimension(100, 100));
+        scrollPaneHidden.setPreferredSize(new Dimension(170, 100));
     }
 
     /**
@@ -129,7 +153,7 @@ public class Player implements Serializable {
 
         int foodGot = board.howMuchFood(pickedIndex);
 
-        Card fishingRod = getCardType(FishingRod.class);
+        var fishingRod = getCardType(FishingRod.class);
         if (fishingRod != null && fishingRod.isCardRevealed()) {
             int pickedIndex2 = random.nextInt(6) + 1;
             while (pickedIndex2 == pickedIndex) {
@@ -149,7 +173,7 @@ public class Player implements Serializable {
      */
     public void playerSeeksWater(Board board) {
         int waterGot = Math.abs(board.getWeather());
-        Card gourd = getCardType(Gourd.class);
+        var gourd = getCardType(Gourd.class);
         if (gourd != null && gourd.isCardRevealed()) {
             waterGot *= 2;
         }
@@ -165,15 +189,15 @@ public class Player implements Serializable {
      */
     public void playerSeeksWood(Board board, int nbTries) {
 
-        int wood = 1;
+        var wood = 1;
 
-        Card axe = getCardType(Axe.class);
+        var axe = getCardType(Axe.class);
         if (axe != null && axe.isCardRevealed()) {
             wood++;
         }
 
         List<Integer> diceList = new ArrayList<>();
-        for (int index = 0; index < 6; index++) {
+        for (var index = 0; index < 6; index++) {
             diceList.add(index);
         }
         Collections.shuffle(diceList);
@@ -250,11 +274,12 @@ public class Player implements Serializable {
      * @return the card removed
      */
     public Card removeCard(int index) {
-        Card card = inventory.get(index);
+        var card = inventory.get(index);
         inventory.remove(index);
         if (card.isCardRevealed()) {
-            for (int indexInPanel = 0; indexInPanel < cardRevealedPanel.getComponentCount(); indexInPanel++) {
-                if (((JLabel) cardRevealedPanel.getComponent(indexInPanel)).getText().equals(card.getCardName())) {
+            for (var indexInPanel = 0; indexInPanel < cardRevealedPanel.getComponentCount(); indexInPanel++) {
+                var label = (JLabel) cardRevealedPanel.getComponent(indexInPanel);
+                if (label.getText().equals(card.getCardName())) {
                     cardRevealedPanel.remove(indexInPanel);
                     inventoryRevealed.remove(card);
                 }
@@ -531,12 +556,9 @@ public class Player implements Serializable {
      *                    chief
      */
     public void setPlayerChief(boolean playerChief) {
-        isChief = playerChief;
-        if (isChief) {
-            chiefLabel.setText(stringsBundle.getString("chief_label"));
-        } else {
-            chiefLabel.setText(stringsBundle.getString("not_chief_label"));
-        }
+        String text = playerChief ? stringsBundle.getString("chief_label") : stringsBundle.getString("not_chief_label");
+        chiefLabel.setText(text);
+
     }
 
     /**

@@ -501,6 +501,7 @@ public class Board implements Serializable {
     }
 
     public void voteTimeForNonOwners() {
+        System.out.println("Vote Time for non owners");
         for (Player player : votingPlayers) {
             if (!player.equals(crystalBallOwner) && !player.equals(crystalBallClubOwner)
                     && votes.get(player).isEmpty()) {
@@ -513,6 +514,7 @@ public class Board implements Serializable {
     }
 
     public void voteTimeForOwners() {
+        System.out.println("Vote Time for owners");
         for (Player player : votingPlayers) {
             if (player.equals(crystalBallOwner)) {
                 makePlayerVote(player);
@@ -529,6 +531,7 @@ public class Board implements Serializable {
     }
 
     public boolean checkVoteOwnersOver() {
+        System.out.println("Check Vote Owners");
         for (Player player : votingPlayers) {
             if ((player.equals(crystalBallOwner) && votes.get(player).isEmpty())
                     || (player.equals(crystalBallClubOwner) && votes.get(player).size() != 2)) {
@@ -539,6 +542,7 @@ public class Board implements Serializable {
     }
 
     public boolean checkVoteNonOwnersOver() {
+        System.out.println("Check Vote Non Owners");
         for (Player player : votingPlayers) {
             if (!player.equals(crystalBallOwner) && !player.equals(crystalBallClubOwner)
                     && votes.get(player).isEmpty()) {
@@ -789,9 +793,9 @@ public class Board implements Serializable {
     public void killPlayer(Player player) {
         player.setState(PlayerState.DEAD);
         distributeCardsFromDeadPlayer(player);
-        mainBoardFront.updateSouth();
         deadThisRound.add(player);
         mainBoardFront.displayMessage(player + " has been sacrificed for the sake of the crew :(");
+        mainBoardFront.updateSouth();
     }
 
     // TODO
@@ -799,6 +803,7 @@ public class Board implements Serializable {
         player.setState(PlayerState.SICK);
         if (thisPlayer.equals(player)) {
             mainBoardFront.setAllowedToPlayCard(false);
+            mainBoardFront.updateSouth();
         }
     }
 
@@ -806,6 +811,7 @@ public class Board implements Serializable {
         player.setState(PlayerState.HEALTHY);
         if (thisPlayer.equals(player)) {
             mainBoardFront.setAllowedToPlayCard(true);
+            mainBoardFront.updateSouth();
         }
     }
 
@@ -1035,7 +1041,7 @@ public class Board implements Serializable {
             player.setPlayerChief(false);
         }
         chief.setPlayerChief(true);
-
+        mainBoardFront.updateSouth();
     }
 
     public void setDesignated(Player designated) {

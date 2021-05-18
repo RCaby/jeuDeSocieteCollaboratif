@@ -100,6 +100,8 @@ public class MainBoardFront implements Serializable {
     private int nbActionRequired = 0;
     private String previousPanel = CHOOSE_VOID_PANEL;
     private String currentPanel = CHOOSE_VOID_PANEL;
+    private JLabel chiefLabel;
+    private JLabel stateLabel;
 
     public MainBoardFront(int nbPlayers) {
         mainPanel = new JPanel();
@@ -290,10 +292,21 @@ public class MainBoardFront implements Serializable {
     }
 
     public void buildSouthPanel() {
-        southPanel = new JPanel(new GridLayout(1, 2));
+        southPanel = new JPanel(new BorderLayout());
         mainPanel.add(southPanel, BorderLayout.SOUTH);
         var hiddenCardPanelContainer = new JPanel();
         var revealedCardPanelContainer = new JPanel();
+
+        var playerStatePanel = new JPanel(new GridLayout(2, 1, 10, 10));
+        var chiefPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        var statePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        chiefLabel = new JLabel("");
+        stateLabel = new JLabel(PlayerState.HEALTHY.toString());
+
+        chiefPanel.add(chiefLabel);
+        statePanel.add(stateLabel);
+        playerStatePanel.add(statePanel);
+        playerStatePanel.add(chiefPanel);
 
         hiddenCardPanel = new JPanel();
         revealedCardPanel = new JPanel();
@@ -301,12 +314,14 @@ public class MainBoardFront implements Serializable {
                 HORIZONTAL_SCROLLBAR_AS_NEEDED);
         var revealedCardPanelScrollable = new JScrollPane(revealedCardPanel, VERTICAL_SCROLLBAR_NEVER,
                 HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        playerStatePanel.setPreferredSize(new Dimension(20, 20));
         hiddenCardPanelScrollable.setPreferredSize(new Dimension(900, 100));
         revealedCardPanelScrollable.setPreferredSize(new Dimension(900, 100));
         hiddenCardPanelContainer.add(hiddenCardPanelScrollable);
         revealedCardPanelContainer.add(revealedCardPanelScrollable);
-        southPanel.add(hiddenCardPanelContainer);
-        southPanel.add(revealedCardPanelContainer);
+        southPanel.add(hiddenCardPanelContainer, BorderLayout.WEST);
+        southPanel.add(playerStatePanel, BorderLayout.CENTER);
+        southPanel.add(revealedCardPanelContainer, BorderLayout.EAST);
         hiddenCardPanel.setLayout(new BoxLayout(hiddenCardPanel, BoxLayout.Y_AXIS));
         revealedCardPanel.setLayout(new BoxLayout(revealedCardPanel, BoxLayout.Y_AXIS));
 
@@ -406,9 +421,12 @@ public class MainBoardFront implements Serializable {
         int nbWest = nbPlayers / 2;
 
         for (int index = nbWest; index >= 1; index--) {
-
-            westPanel.add(listPlayerDisplays.get((indexOfThisPlayer + index + newNbPlayers) % newNbPlayers));
-            eastPanel.add(listPlayerDisplays.get((indexOfThisPlayer - index + newNbPlayers) % newNbPlayers));
+            var panelForWest = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            var panelForEast = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            panelForWest.add(listPlayerDisplays.get((indexOfThisPlayer + index + newNbPlayers) % newNbPlayers));
+            panelForEast.add(listPlayerDisplays.get((indexOfThisPlayer - index + newNbPlayers) % newNbPlayers));
+            westPanel.add(panelForWest);
+            eastPanel.add(panelForEast);
         }
 
     }
@@ -442,6 +460,11 @@ public class MainBoardFront implements Serializable {
         for (Card card : thisPlayer.getInventoryRevealed()) {
             addRevealedCard(card);
         }
+        stateLabel.setText(board.getThisPlayer().getState().toString());
+        String chiefString = board.getThisPlayer().equals(board.getChief())
+                ? board.getStringsBundle().getString("chief_label")
+                : board.getStringsBundle().getString("not_chief_label");
+        chiefLabel.setText(chiefString);
         southPanel.update(southPanel.getGraphics());
 
     }
