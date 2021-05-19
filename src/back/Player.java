@@ -327,7 +327,7 @@ public class Player implements Serializable {
      * @return a boolean indicating if one card can be used.
      */
     public boolean canUseCard() {
-        boolean cardUsable = false;
+        var cardUsable = false;
         if (!inventory.isEmpty() && this.getState() == PlayerState.HEALTHY) {
             for (Card card : inventory) {
                 cardUsable = cardUsable || card.canBeUsed();
@@ -345,31 +345,31 @@ public class Player implements Serializable {
      * @return a boolean indicating if one card has been used.
      */
     public boolean wouldLikePlayCardAsCpu(Board board) {
-        boolean cardUsed = false;
+        var cardUsed = false;
         if (canUseCard()) {
-            int odds = random.nextInt(10);
-            int index = random.nextInt(inventory.size());
-            Card card = inventory.get(index);
+            var odds = random.nextInt(10);
+            var index = random.nextInt(inventory.size());
+            var card = inventory.get(index);
             if (inventory.get(index).canBeUsed() && odds == 0) {
                 boolean[] neededParameters = card.getNeededParameters();
                 if (Arrays.equals(neededParameters, new boolean[] { true, true, true, false })) {
                     List<Integer> pickedPlayers = new ArrayList<>();
                     int pickedIndex = -1;
-                    for (int anotherIndex = 0; anotherIndex < 3; anotherIndex++) {
+                    for (var anotherIndex = 0; anotherIndex < 3; anotherIndex++) {
                         pickedIndex = random.nextInt(board.getPlayerList().size());
                         pickedPlayers.add(pickedIndex);
                     }
-                    Player player0 = board.getPlayerList().get(pickedPlayers.get(0));
-                    Player player1 = board.getPlayerList().get(pickedPlayers.get(1));
-                    Player player2 = board.getPlayerList().get(pickedPlayers.get(2));
+                    var player0 = board.getPlayerList().get(pickedPlayers.get(0));
+                    var player1 = board.getPlayerList().get(pickedPlayers.get(1));
+                    var player2 = board.getPlayerList().get(pickedPlayers.get(2));
                     card.useCard(player0, player1, player2, ActionType.NONE);
                 } else if (Arrays.equals(neededParameters, new boolean[] { true, false, false, true })) {
-                    Player pickedPlayer = board.getPlayerList().get(random.nextInt(board.getPlayerList().size()));
-                    int pickedActionIndex = random.nextInt(4);
+                    var pickedPlayer = board.getPlayerList().get(random.nextInt(board.getPlayerList().size()));
+                    var pickedActionIndex = random.nextInt(4);
                     ActionType pickedAction = ActionType.getLActionTypes()[pickedActionIndex];
                     card.useCard(pickedPlayer, null, null, pickedAction);
                 } else if (Arrays.equals(neededParameters, new boolean[] { true, false, false, false })) {
-                    Player pickedPlayer = board.getPlayerList().get(random.nextInt(board.getPlayerList().size()));
+                    var pickedPlayer = board.getPlayerList().get(random.nextInt(board.getPlayerList().size()));
                     card.useCard(pickedPlayer, null, null, ActionType.NONE);
                 } else {
                     card.useCard(null, null, null, ActionType.NONE);
@@ -420,8 +420,8 @@ public class Player implements Serializable {
      */
     public Card robRandomCard() {
         if (!inventoryHidden.isEmpty()) {
-            int index = random.nextInt(inventory.size());
-            Card card = inventory.get(index);
+            var index = random.nextInt(inventory.size());
+            var card = inventory.get(index);
             while (card.isCardRevealed()) {
                 index = random.nextInt(inventory.size());
                 card = inventory.get(index);
@@ -437,7 +437,7 @@ public class Player implements Serializable {
      * players that this player has a card but has not revealed it yet.
      */
     private void addCardHiddenPanel() {
-        JLabel cardLabel = new JLabel(stringsBundle.getString("hidden_card_label"));
+        var cardLabel = new JLabel(stringsBundle.getString("hidden_card_label"));
         cardHiddenPanel.add(cardLabel);
     }
 
@@ -448,7 +448,7 @@ public class Player implements Serializable {
      * @param card the card revealed to add to the panel
      */
     private void addCardToRevealedPanel(Card card) {
-        JLabel cardLabel = new JLabel(card.toString());
+        var cardLabel = new JLabel(card.toString());
         cardRevealedPanel.add(cardLabel);
     }
 
@@ -494,7 +494,7 @@ public class Player implements Serializable {
      * @return the selected player designated by this player
      */
     public Player voteAsCPU(List<Player> pickablePlayers) {
-        int pickedIndex = random.nextInt(pickablePlayers.size());
+        var pickedIndex = random.nextInt(pickablePlayers.size());
         return pickablePlayers.get(pickedIndex);
 
     }
@@ -522,7 +522,7 @@ public class Player implements Serializable {
      * @return the player selected to be sacrificed
      */
     public Player decideWhoDieAsCPU(List<Player> playerList) {
-        Player player = playerList.get(random.nextInt(playerList.size()));
+        var player = playerList.get(random.nextInt(playerList.size()));
         while (player.getState() == PlayerState.DEAD) {
             player = playerList.get(random.nextInt(playerList.size()));
         }
@@ -589,12 +589,20 @@ public class Player implements Serializable {
         return name;
     }
 
-    // TODO
+    /**
+     * The getter for the attribute {@link Player#inventoryHidden}.
+     * 
+     * @return the list of hidden cards of the player
+     */
     public List<Card> getInventoryHidden() {
         return inventoryHidden;
     }
 
-    // TODO
+    /**
+     * The getter for the attribute {@link Player#inventoryRevealed}.
+     * 
+     * @return the list of revealed cards of the player
+     */
     public List<Card> getInventoryRevealed() {
         return inventoryRevealed;
     }
@@ -673,7 +681,11 @@ public class Player implements Serializable {
         return sickRound;
     }
 
-    // TODO
+    /**
+     * The setter for the attribute {@link Player#sickRound}.
+     * 
+     * @param roundSick the round during which the player got sick
+     */
     public void setSickRound(int roundSick) {
         this.sickRound = roundSick;
     }
