@@ -22,6 +22,11 @@ import front.MainBoardFront;
  * This board stores data for the game such as the number of rations or the card
  * list. The different steps of the game are implemented here, from food
  * gathering to player sacrifices.
+ * 
+ * <p>
+ * The board uses an instance of the class {@link MainBoardFront} to display
+ * information and get user inputs. For instance the message displayed on the
+ * main board are emitted here.
  */
 public class Board implements Serializable {
 
@@ -60,7 +65,6 @@ public class Board implements Serializable {
     private List<Player> pickablePlayers;
     private List<Player> votingPlayers;
     private Player designated;
-    private boolean cardUsedVoteSession;
     private boolean killValidated;
     private boolean currentlyForDeparture;
 
@@ -73,7 +77,7 @@ public class Board implements Serializable {
     public Board(MainBoardFront boardFront, int nbPlayers) {
         mainBoardFront = boardFront;
         currentPhase = GamePhase.INITIALISATION;
-        Locale locale = new Locale("en", "US");
+        var locale = new Locale("en", "US");
         stringsBundle = ResourceBundle.getBundle("Strings", locale);
         data = new Data(stringsBundle);
         deck = data.getDeck(this);
@@ -98,8 +102,8 @@ public class Board implements Serializable {
         nextChief = null;
         twicePlayingPlayer = null;
 
-        for (int index = 0; index < nbPlayers; index++) {
-            Player player = new Player(stringsBundle.getString("player_name") + index, stringsBundle);
+        for (var index = 0; index < nbPlayers; index++) {
+            var player = new Player(stringsBundle.getString("player_name") + index, stringsBundle);
             playerList.add(player);
         }
         indexOfThisPlayer = random.nextInt(nbPlayers);
@@ -109,6 +113,7 @@ public class Board implements Serializable {
     /**
      * Builds the game and incorporates a non-computer user
      * 
+     * @param boardFront the instance of the application interface
      * @param nbPlayers  the number of players in this game
      * @param namePlayer the name of the only non-computer user
      */
@@ -141,7 +146,7 @@ public class Board implements Serializable {
     /**
      * Distributes the required number of card for each player.
      */
-    public void cardsDistribution() {
+    private void cardsDistribution() {
         int nbCardToGive = playerList.size() >= 9 ? 3 : 4;
         for (Player player : playerList) {
             for (var nbCard = 0; nbCard < nbCardToGive; nbCard++) {
@@ -156,18 +161,18 @@ public class Board implements Serializable {
      * 
      * <p>
      * To simulate the fact that a player is allowed by the rules to use several
-     * cards at the same time, each player has to refuse to play a card for the game
-     * to continue.
+     * cards at the same time, each computer player has to refuse to play a card for
+     * the game to continue.
      * 
      * @return a boolean that indicates if a card was played.
      */
-    public boolean askPlayersForCards() {
-        boolean cardUsed = false;
-        boolean allSaidNo = false;
-        int index = 0;
+    private boolean askPlayersForCards() {
+        var cardUsed = false;
+        var allSaidNo = false;
+        var index = 0;
         while (!allSaidNo) {
 
-            Player player = playerList.get(index);
+            var player = playerList.get(index);
             if (player.getState() != PlayerState.HEALTHY || player.equals(thisPlayer)) {
                 index++;
             } else {
@@ -195,19 +200,19 @@ public class Board implements Serializable {
             endGame();
         } else if (player != null && player.getState() == PlayerState.SICK && player.getSickRound() == round - 1) {
             curePlayer(player);
-            mainBoardFront.displayMessage(player + " was sick and could not play, now cured");
+            mainBoardFront.displayMessage(player + stringsBundle.getString("sickNowCuredPlayer"));
         } else if (player != null && player.getState() == PlayerState.HEALTHY && !player.equals(thisPlayer)) {
-            mainBoardFront.displayMessage(player + "'s turn !");
+            mainBoardFront.displayMessage(player + stringsBundle.getString("playerTurn"));
             playAsCPU(player);
         } else if (player != null && player.getState() == PlayerState.HEALTHY && player.equals(thisPlayer)) {
-            mainBoardFront.displayMessage(player + "'s turn");
+            mainBoardFront.displayMessage(player + stringsBundle.getString("playerTurn"));
             mainBoardFront.makePlayerChooseAction();
         } else if (player == null) {
             switchToNextRound();
         } else if (player.getState() == PlayerState.DEAD) {
-            mainBoardFront.displayMessage(player + " is dead and cannot play !\n");
+            mainBoardFront.displayMessage(player + stringsBundle.getString("isDeadPlayer"));
         } else if (player.getState() == PlayerState.SICK) {
-            mainBoardFront.displayMessage(player + " is sick and cannot play !\n");
+            mainBoardFront.displayMessage(player + stringsBundle.getString("isSickPlayer"));
         } else {
             mainBoardFront.displayMessage("Default Case ! Something is fishy ~");
         }
@@ -215,48 +220,44 @@ public class Board implements Serializable {
     }
 
     /**
-     * Handles the end of this round.
-     * 
-     * <p>
-     * The steps to end this round and to get to the next one are :
-     * <ul>
-     * <li>Rations distribution with a potential voting session
-     * <li>Potential voluntary departure
-     * <li>Next round initialization
-     * </ul>
+     * Handles the end of this round or the end of the game if players are all dead.
      */
-    public void switchToNextRound() {
+    private void switchToNextRound() {
         if (gameOver || getNbPlayersAlive() == 0) {
             endGame();
         } else {
             currentPhase = GamePhase.GOODS_DISTRIBUTION;
-            mainBoardFront.displayMessage("It is time to distribute the rations of the round !");
+            mainBoardFront.displayMessage(stringsBundle.getString("distributionTime"));
             roundEnd(false); // Goods distribution not for departure
         }
     }
 
-    public void postDistributionRoundEnd() {
-        mainBoardFront.displayMessage("Distribution ended !");
+    /**
+     * Determines if the game shall start a new round or end because of a departure
+     * or a game over.
+     */
+    private void postDistributionRoundEnd() {
+        mainBoardFront.displayMessage(stringsBundle.getString("distributionEnd"));
         boolean departure = getNbPlayersAlive() > 0 && (weatherList[round] == -2 || isThereEnoughGoodsForAll(true));
         if (departure) {
             voluntaryDepartureStarted = true;
             roundEnd(true);
-
         }
+
         if (getNbPlayersAlive() == 0) {
-            mainBoardFront.displayMessage("All players are dead :(");
+            mainBoardFront.displayMessage(stringsBundle.getString("allPlayersDead"));
             gameOver = true;
             endGame();
         } else if (weatherList[round] == -2) {
-            mainBoardFront.displayMessage("Hurricane !");
+            mainBoardFront.displayMessage(stringsBundle.getString("hurricane"));
             gameOver = true;
             endGame();
         } else if (voluntaryDepartureStarted) {
-            mainBoardFront.displayMessage("Volontary Departure !");
+            mainBoardFront.displayMessage(stringsBundle.getString("volontaryDeparture"));
             gameOver = true;
             endGame();
         } else {
-            mainBoardFront.displayMessage("Going to the next round !");
+            mainBoardFront.displayMessage(stringsBundle.getString("newRoundInit"));
             round++;
             deadThisRound.clear();
             cardsPlayedThisRound.clear();
@@ -275,27 +276,33 @@ public class Board implements Serializable {
 
             currentPhase = GamePhase.GATHERING_RESSOURCES;
             indexOfCurrentPlayer = -1;
-            Player nextToPlay = nextPlayer();
+            var nextToPlay = nextPlayer();
             play(nextToPlay);
 
         }
 
     }
 
+    /**
+     * Eliminates players until each one of them has their rations, and a plank on
+     * the raft if necessary.
+     * 
+     * @param forDeparture indicates if the function has to distributes only rations
+     *                     or planks as well
+     */
     public void roundEnd(boolean forDeparture) {
         currentlyForDeparture = forDeparture;
         boolean end = isThereEnoughGoodsForAll(forDeparture);
+        boolean cardUsedVoteSession;
         if (end) {
             goodsDistributionForAlive();
             designated = null;
-            cardUsedVoteSession = false;
             killValidated = false;
             postDistributionRoundEnd();
 
         } else if (designated == null) {
             cardUsedVoteSession = askPlayersForCards();
             if (cardUsedVoteSession) {
-                cardUsedVoteSession = false;
                 roundEnd(forDeparture);
             } else {
                 mainBoardFront.allowPlayerToBeginVoteSession();
@@ -304,7 +311,6 @@ public class Board implements Serializable {
         } else if (!killValidated) {
             cardUsedVoteSession = askPlayersForCards();
             if (cardUsedVoteSession) {
-                cardUsedVoteSession = false;
                 roundEnd(forDeparture);
             } else {
                 mainBoardFront.allowPlayerToKillPlayerAfterVote(forDeparture);
@@ -312,7 +318,6 @@ public class Board implements Serializable {
         } else {
             killPlayer(designated);
             designated = null;
-            cardUsedVoteSession = false;
             killValidated = false;
             roundEnd(forDeparture);
         }
@@ -322,10 +327,10 @@ public class Board implements Serializable {
     /**
      * Displays the end of the game
      */
-    public void endGame() {
+    private void endGame() {
         currentPhase = GamePhase.END;
         gameOver = true;
-        mainBoardFront.displayMessage("End of the game!");
+        mainBoardFront.displayMessage(stringsBundle.getString("endGame"));
         mainBoardFront.endGame();
     }
 
@@ -335,11 +340,11 @@ public class Board implements Serializable {
      * Asks a computer player to do an action (maybe imposed) for this round.
      * 
      * <p>
-     * Will be moved in the {@code Player} class in a future release.
+     * May be moved in the {@code Player} class in a future release.
      * 
      * @param player the player that will do an action
      */
-    public void playAsCPU(Player player) {
+    private void playAsCPU(Player player) {
         ActionType imposedAction = player.getImposedActionThisRound();
         if (imposedAction == ActionType.NONE) {
             imposedAction = ActionType.getRandomActionType();
@@ -347,20 +352,20 @@ public class Board implements Serializable {
 
         switch (imposedAction) {
             case FOOD:
-                mainBoardFront.displayMessage(player + " is getting food !\n");
+                mainBoardFront.displayMessage(player + stringsBundle.getString("foodAction"));
                 player.playerSeeksFood(this);
                 break;
             case WATER:
-                mainBoardFront.displayMessage(player + " is getting water !\n");
+                mainBoardFront.displayMessage(player + stringsBundle.getString("waterAction"));
                 player.playerSeeksWater(this);
                 break;
             case WOOD:
-                mainBoardFront.displayMessage(player + " is getting wood !\n");
+                mainBoardFront.displayMessage(player + stringsBundle.getString("woodAction"));
                 int nbTries = random.nextInt(6) + 1;
                 player.playerSeeksWood(this, nbTries);
                 break;
             case CARD:
-                mainBoardFront.displayMessage(player + " is getting a card !\n");
+                mainBoardFront.displayMessage(player + stringsBundle.getString("cardAction"));
                 player.playerSeeksCard(this);
                 break;
             default:
@@ -369,25 +374,22 @@ public class Board implements Serializable {
         askPlayersForCards();
         if (twicePlayingPlayer != null && twicePlayingPlayer.equals(player)) {
             twicePlayingPlayer = null;
-            mainBoardFront.displayMessage(player + " will play again !");
+            mainBoardFront.displayMessage(player + "playAgain");
             playAsCPU(player);
         }
     }
 
     // Round end functions #####################################################
     /**
-     * Initializes the voting session.
-     * 
-     * @param pickablePlayers the list of the players who can be "elected"
-     * @param votingPlayers   the list of the players who can vote
-     * @param votes           the results of the voting session
+     * Initializes the voting session by checking who can vote, for who and if some
+     * players vote after the others.
      */
-    public void beginVotingSession() {
+    private void beginVotingSession() {
         for (Player player : playerList) {
-            PlayerState playerState = player.getState();
+            var playerState = player.getState();
             boolean isConchOwner = player.equals(conchOwner);
-            Card cardClub = player.getCardType(Club.class);
-            Card cardCrystalBall = player.getCardType(CrystalBall.class);
+            var cardClub = player.getCardType(Club.class);
+            var cardCrystalBall = player.getCardType(CrystalBall.class);
 
             if (playerState != PlayerState.DEAD && (!isConchOwner || getNbPlayersAlive() == 1)) {
                 pickablePlayers.add(player);
@@ -406,22 +408,20 @@ public class Board implements Serializable {
     /**
      * Adds the voters who do not have a crystal ball to the list of voting players.
      * 
-     * @param crystalBallClubOwner the player who owns a crystal ball and a club
-     * @param crystalBallOwner     the player who owns a crystal ball but no club
-     * @param votingPlayers        the list of the voting players for this vote
-     *                             session
-     * @param votes                the votes results
-     * @param player               the player currently analyzed
-     * @param cardClub             the club card of the player
+     * 
+     * @param votingPlayers the list of the voting players for this vote session
+     * @param votes         the votes results
+     * @param player        the player currently analyzed
+     * @param cardClub      the club card of the player
      */
-    public void addVotingPlayer(List<Player> votingPlayers, Map<Player, List<Player>> votes, Player player,
+    private void addVotingPlayer(List<Player> votingPlayers, Map<Player, List<Player>> votes, Player player,
             Card cardClub) {
         if (crystalBallOwner == null) {
             votingPlayers.add(player);
             votes.put(player, new ArrayList<>());
             if (crystalBallClubOwner == null && cardClub != null && cardClub.isCardRevealed()) {
                 votingPlayers.add(player);
-                mainBoardFront.displayMessage(player + " will be voting twice ! Thanks to his club");
+                mainBoardFront.displayMessage(player + stringsBundle.getString("votingTwice"));
             }
         }
     }
@@ -434,7 +434,7 @@ public class Board implements Serializable {
      * @param player          the player currently analysed
      * @return
      */
-    public void detectCrystalBallOrClub(Card cardClub, Card cardCrystalBall, Player player) {
+    private void detectCrystalBallOrClub(Card cardClub, Card cardCrystalBall, Player player) {
         crystalBallClubOwner = null;
         crystalBallOwner = null;
         if (cardClub != null && cardClub.isCardRevealed() && cardCrystalBall != null
@@ -449,14 +449,8 @@ public class Board implements Serializable {
     /**
      * Distributes the right to vote after any other player to the owner of a
      * crystal ball.
-     * 
-     * @param crystalBallOwner     the player who owns a crystal ball but no club
-     * @param crystalBallClubOwner the player who owns a crystal ball and a club
-     * @param votingPlayers        the list of players who will vote during this
-     *                             voting session
-     * @param votes                the results of the votes
      */
-    public void checkForCrystalBallOrClub() {
+    private void checkForCrystalBallOrClub() {
         if (crystalBallOwner != null) {
             votingPlayers.add(crystalBallOwner);
             votes.put(crystalBallOwner, new ArrayList<>());
@@ -470,11 +464,8 @@ public class Board implements Serializable {
 
     /**
      * Handles the voting session and selects one player to be sacrificied.
-     * 
-     * @return the player who will be sacrificied
      */
     public void choosePlayerToDie() {
-
         votes = new HashMap<>();
         pickablePlayers = new ArrayList<>();
         votingPlayers = new ArrayList<>();
@@ -488,6 +479,10 @@ public class Board implements Serializable {
 
     }
 
+    /**
+     * Ends the vote session and if necessary asks the chief to designate one
+     * player.
+     */
     public void endOfVote() {
         designated = voteResults();
         if (designated == null && !chief.equals(thisPlayer)) {
@@ -500,6 +495,10 @@ public class Board implements Serializable {
         }
     }
 
+    /**
+     * Asks each player who does not own a crystal ball to vote, if they are allowed
+     * to.
+     */
     public void voteTimeForNonOwners() {
         System.out.println("Vote Time for non owners");
         for (Player player : votingPlayers) {
@@ -513,6 +512,9 @@ public class Board implements Serializable {
         }
     }
 
+    /**
+     * Aks the player owning a crystal ball to vote if they are allowed to.
+     */
     public void voteTimeForOwners() {
         System.out.println("Vote Time for owners");
         for (Player player : votingPlayers) {
@@ -530,6 +532,11 @@ public class Board implements Serializable {
 
     }
 
+    /**
+     * Checks if the player owning a crystal ball, has voted.
+     * 
+     * @return a boolean indicating if the player has voted
+     */
     public boolean checkVoteOwnersOver() {
         System.out.println("Check Vote Owners");
         for (Player player : votingPlayers) {
@@ -541,6 +548,11 @@ public class Board implements Serializable {
         return true;
     }
 
+    /**
+     * Checks if each player who does not own a crystal ball has voted.
+     * 
+     * @return a boolean indicating if the player has voted
+     */
     public boolean checkVoteNonOwnersOver() {
         System.out.println("Check Vote Non Owners");
         for (Player player : votingPlayers) {
@@ -553,15 +565,12 @@ public class Board implements Serializable {
     }
 
     /**
-     * Asks a player to vote for a player in a given list and saves the vote in a
-     * map.
+     * Asks a player to vote for a player in the {@link Board#pickablePlayers} list
+     * and saves the vote in the map {@link Board#votes}.
      * 
-     * @param player          the voting player
-     * @param votes           the map which contains the votes of every voting
-     *                        player
-     * @param pickablePlayers the list of the players who can be "elected"
+     * @param player the voting player
      */
-    public void makePlayerVote(Player player) {
+    private void makePlayerVote(Player player) {
         if (!player.equals(thisPlayer)) {
             var designatedPlayer = player.voteAsCPU(pickablePlayers);
             votes.get(player).add(designatedPlayer);
@@ -574,10 +583,9 @@ public class Board implements Serializable {
     /**
      * Calculates the results of the voting session.
      * 
-     * @param votes the map which contains the results of the vote
-     * @return the Player designated by the votes
+     * @return the {@code Player} designated by the votes
      */
-    public Player voteResults() {
+    private Player voteResults() {
         displayVoteResult();
         Map<Player, Integer> results = new HashMap<>();
         for (Player player : playerList) {
@@ -585,7 +593,7 @@ public class Board implements Serializable {
         }
 
         Integer max = 0;
-        int nbOfMax = 0;
+        var nbOfMax = 0;
         List<Player> maxPlayers = new ArrayList<>();
         for (Entry<Player, List<Player>> entry : votes.entrySet()) {
             for (Player designatedPlayer : entry.getValue()) {
@@ -608,31 +616,37 @@ public class Board implements Serializable {
             }
         }
         if (nbOfMax == 1) {
-            Player player = maxPlayers.get(0);
-            mainBoardFront.displayMessage(player + " is designated by the crew");
+            var player = maxPlayers.get(0);
+            mainBoardFront.displayMessage(stringsBundle.getString(player + "designatedPlayer"));
             return player;
         }
-        mainBoardFront.displayMessage("The chief will decide who will be sacrificied");
+        mainBoardFront.displayMessage(stringsBundle.getString("chiefWillDecide"));
         return null;
     }
 
     /**
      * Distributes the rations to the players still alive.
      */
-    public void goodsDistributionForAlive() {
+    private void goodsDistributionForAlive() {
         foodRations -= getNbPlayersAlive();
         waterRations -= getNbPlayersAlive();
     }
 
     // Tools functions #####################################################
 
-    // TODO javadoc
+    /**
+     * Updates the resources panel in the game interface.
+     */
     public void updateDisplayResources() {
         mainBoardFront.updateNorth(foodRations, waterRations, nbWoodPlanksFragment, nbWoodPlanks, getWeather(),
                 getNbPlayersAlive(), round);
     }
 
-    // TODO Javadoc
+    /**
+     * Gets the list of sick players.
+     * 
+     * @return the list of sick players
+     */
     public List<Player> getSickPlayersList() {
         List<Player> sickPlayers = new ArrayList<>();
         for (Player player : playerList) {
@@ -649,7 +663,7 @@ public class Board implements Serializable {
      * 
      * @param votes the map which contains the vote results.
      */
-    public void displayVoteResult() {
+    private void displayVoteResult() {
         for (Entry<Player, List<Player>> entry : votes.entrySet()) {
             if (!entry.getValue().isEmpty()) {
                 mainBoardFront.displayMessage(entry.getKey() + stringsBundle.getString("votesFor") + entry.getValue());
@@ -670,7 +684,7 @@ public class Board implements Serializable {
     }
 
     /**
-     * Tool function to calculate how much food a player got
+     * Tool function to calculate how much food a player got with the food action.
      * 
      * @param index the number picked by the player
      * @return the amount of food got by the player
@@ -711,12 +725,12 @@ public class Board implements Serializable {
 
     /**
      * Generates the player list for the next round. This list indicates the order
-     * in which player will play.
+     * in which players will play.
      */
     public void nextRoundPlayerList() {
         if (getNbPlayersAlive() > 0) {
 
-            Player futureChief = playerList.remove(playerList.size() - 1);
+            var futureChief = playerList.remove(playerList.size() - 1);
             playerList.add(0, futureChief);
             while (playerList.get(0).getState() == PlayerState.DEAD
                     || (nextChief != null && !playerList.get(0).equals(nextChief))) {
@@ -737,8 +751,8 @@ public class Board implements Serializable {
      * @return the next alive player
      */
     public Player getPlayerAliveAfterBefore(int indexOfPlayer, boolean after) {
-        Player player = playerList.get(indexOfPlayer);
-        boolean playerIsAlive = false;
+        var player = playerList.get(indexOfPlayer);
+        var playerIsAlive = false;
         int index = indexOfPlayer;
         while (!playerIsAlive) {
             index = index + (after ? 1 : -1);
@@ -762,8 +776,8 @@ public class Board implements Serializable {
      * @return the number of players alive
      */
     public int getNbPlayersAlive() {
-        int alive = 0;
-        for (int index = 0; index < playerList.size(); index++) {
+        var alive = 0;
+        for (var index = 0; index < playerList.size(); index++) {
             if (playerList.get(index).getState() != PlayerState.DEAD) {
                 alive++;
             }
@@ -775,7 +789,7 @@ public class Board implements Serializable {
      * Indicates whether a player have to be sacrificed in order to feed everyone.
      * 
      * @param departure if a departure if planned, players will need twice as much
-     *                  rations
+     *                  rations and a plank on the raft.
      * @return a boolean which indicates if there are enough rations for everyone
      */
     public boolean isThereEnoughGoodsForAll(boolean departure) {
@@ -794,11 +808,16 @@ public class Board implements Serializable {
         player.setState(PlayerState.DEAD);
         distributeCardsFromDeadPlayer(player);
         deadThisRound.add(player);
-        mainBoardFront.displayMessage(player + " has been sacrificed for the sake of the crew :(");
+        mainBoardFront.displayMessage(player + stringsBundle.getString("sacrificedForCrew"));
         mainBoardFront.updateSouth();
     }
 
-    // TODO
+    /**
+     * Makes a player sick and updates the game interface for the case it was a non
+     * computer player.
+     * 
+     * @param player the player to make sick
+     */
     public void sickPlayer(Player player) {
         player.setState(PlayerState.SICK);
         if (thisPlayer.equals(player)) {
@@ -807,6 +826,12 @@ public class Board implements Serializable {
         }
     }
 
+    /**
+     * Cures a player from sickness and updates the game interface for the case it
+     * was a non computer player.
+     * 
+     * @param player the player to cure
+     */
     public void curePlayer(Player player) {
         player.setState(PlayerState.HEALTHY);
         if (thisPlayer.equals(player)) {
@@ -817,7 +842,7 @@ public class Board implements Serializable {
 
     /**
      * Redistributes the remaining cards of a dead player (such as a {@code Gun} for
-     * instance)
+     * instance).
      * 
      * @param player the dead player from who cards are taken
      */
@@ -904,10 +929,20 @@ public class Board implements Serializable {
 
     // Getters and setters ######################################################
 
+    /**
+     * The setter for the attribute {@link Board#mainBoardFront}.
+     * 
+     * @param mainBoardFront the interface of the game
+     */
     public void setMainBoardFront(MainBoardFront mainBoardFront) {
         this.mainBoardFront = mainBoardFront;
     }
 
+    /**
+     * The getter for the attribute {@link Board#mainBoardFront}.
+     * 
+     * @return the interface of the game
+     */
     public MainBoardFront getMainBoardFront() {
         return mainBoardFront;
     }
@@ -943,9 +978,9 @@ public class Board implements Serializable {
      * @param player the player who owns the card
      */
     public void showSpyglassMap(Player player) {
-        mainBoardFront.displayMessage("The cards of the players : ");
+        mainBoardFront.displayMessage(stringsBundle.getString("cardsOfPlayersSpyglass"));
         for (Entry<Player, List<Card>> entry : spyglassMap.entrySet()) {
-            mainBoardFront.displayMessage(entry.getKey() + " has the cards " + entry.getKey());
+            mainBoardFront.displayMessage(entry.getKey() + stringsBundle.getString("hasCard") + entry.getKey());
         }
     }
 
@@ -959,9 +994,9 @@ public class Board implements Serializable {
     }
 
     /**
-     * TODO
+     * A getter for the attribute {@link Board#votes}.
      * 
-     * @return
+     * @return the map of the votes
      */
     public Map<Player, List<Player>> getVotes() {
         return votes;
@@ -1035,6 +1070,12 @@ public class Board implements Serializable {
         return discardDeck;
     }
 
+    /**
+     * The setter for the attribute {@link Board#chief}, updates the {@code chief}
+     * attribute of the player.
+     * 
+     * @param chief the new chief
+     */
     public void setChief(Player chief) {
         this.chief = chief;
         for (Player player : playerList) {
@@ -1044,6 +1085,11 @@ public class Board implements Serializable {
         mainBoardFront.updateSouth();
     }
 
+    /**
+     * The setter for the attribute {@link Board#designated}.
+     * 
+     * @param designated the player designated to be sacrificed
+     */
     public void setDesignated(Player designated) {
         this.designated = designated;
     }
@@ -1170,15 +1216,20 @@ public class Board implements Serializable {
         this.thisPlayer = thisPlayer;
     }
 
-    // TODO javadoc
+    /**
+     * The getter for the attribute {@link Board#thisPlayer}.
+     * 
+     * @return the non computer player
+     */
     public Player getThisPlayer() {
         return thisPlayer;
     }
 
     /**
-     * TODO
+     * The setter for the attribute {@link killValidated}.
      * 
-     * @param killValidated
+     * @param killValidated a boolean indicating whether the kill is validated by
+     *                      the user
      */
     public void setKillValidated(boolean killValidated) {
         this.killValidated = killValidated;

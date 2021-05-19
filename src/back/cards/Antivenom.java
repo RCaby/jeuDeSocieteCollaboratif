@@ -63,11 +63,7 @@ public class Antivenom extends Card {
      */
     @Override
     public boolean canBeUsed() {
-        boolean flag = false;
-        for (Player player : board.getPlayerList()) {
-            flag = flag || player.getState() == PlayerState.SICK;
-        }
-        return flag;
+        return !board.getSickPlayersList().isEmpty();
     }
 
     @Override
