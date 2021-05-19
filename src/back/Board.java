@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -74,11 +73,10 @@ public class Board implements Serializable {
      * 
      * @param nbPlayer the number of players in this game
      */
-    public Board(MainBoardFront boardFront, int nbPlayers) {
+    public Board(MainBoardFront boardFront, int nbPlayers, ResourceBundle stringsBundle) {
+        this.stringsBundle = stringsBundle;
         mainBoardFront = boardFront;
         currentPhase = GamePhase.INITIALISATION;
-        var locale = new Locale("en", "US");
-        stringsBundle = ResourceBundle.getBundle("Strings", locale);
         data = new Data(stringsBundle);
         deck = data.getDeck(this);
         gameOver = false;
@@ -117,8 +115,8 @@ public class Board implements Serializable {
      * @param nbPlayers  the number of players in this game
      * @param namePlayer the name of the only non-computer user
      */
-    public Board(MainBoardFront boardFront, int nbPlayers, String namePlayer) {
-        this(boardFront, nbPlayers);
+    public Board(MainBoardFront boardFront, int nbPlayers, ResourceBundle stringsBundle, String namePlayer) {
+        this(boardFront, nbPlayers, stringsBundle);
 
         indexOfThisPlayer = random.nextInt(nbPlayers);
         thisPlayer = new Player(namePlayer, stringsBundle);

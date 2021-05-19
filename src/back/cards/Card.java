@@ -6,7 +6,6 @@ import java.util.ResourceBundle;
 import back.ActionType;
 import back.Board;
 import back.Player;
-import front.MainBoardFront;
 
 import java.awt.event.ActionListener;
 
@@ -130,9 +129,10 @@ public abstract class Card implements Serializable {
     }
 
     /**
-     * TODO
+     * Returns the appropriate action listener to allow the non computer player to
+     * use this card.
      * 
-     * @return
+     * @return the appropriate action listener
      */
     public ActionListener getActionListener() {
         return board.getMainBoardFront().new CardPlayerActionListener(this);
@@ -143,7 +143,7 @@ public abstract class Card implements Serializable {
      * 
      * @return a boolean value that indicates if the card can be used at the current
      *         state of the game. The default value is true because most of cards
-     *         can be used at any time.
+     *         can be used at any time
      */
     public boolean canBeUsed() {
         return true;
@@ -160,32 +160,62 @@ public abstract class Card implements Serializable {
      * false, true)}.
      * 
      * @return an array of booleans which indicates the needed parameters of the
-     *         useCard method.
+     *         useCard method
      */
     public boolean[] getNeededParameters() {
         return new boolean[] { false, false, false, false };
     }
 
+    /**
+     * The setter for the attribute {@link Card#owner}.
+     * 
+     * @param player the players that owns this card
+     */
     public void setOwner(Player player) {
         owner = player;
     }
 
+    /**
+     * The getter for the attribute {@link Card#owner}.
+     * 
+     * @return the player that owns this card
+     */
     public Player getOwner() {
         return owner;
     }
 
+    /**
+     * The getter for the attribute {@link Card#isRevealed}.
+     * 
+     * @return a boolean indicating whether the card is revealed to every player
+     */
     public boolean isCardRevealed() {
         return isRevealed;
     }
 
+    /**
+     * The getter for the attribute {@link Card#cardDescription}.
+     * 
+     * @return the description of this card.
+     */
     public String getCardDescription() {
         return cardDescription;
     }
 
+    /**
+     * The getter for the attribute {@link Card#cardName}.
+     * 
+     * @return the name of the card
+     */
     public String getCardName() {
         return cardName;
     }
 
+    /**
+     * The getter for the attribute {@link Card#discardOnDeath}.
+     * 
+     * @return a boolean indicating whether this card should be discarded on death
+     */
     public boolean discardOnDeath() {
         return discardOnDeath;
     }

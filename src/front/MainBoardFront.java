@@ -21,6 +21,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
@@ -40,13 +41,17 @@ import back.PlayerState;
 import back.cards.Card;
 
 public class MainBoardFront implements Serializable {
+    private static final String CHOOSE_ACTION_PANEL = "CHOOSE_ACTION_PANEL";
+    private static final String CHOOSE_PLAYER_PANEL = "CHOOSE_PLAYER_PANEL";
+    private static final String CHOOSE_VOID_PANEL = "CHOOSE_VOID_PANEL";
+    private static final String CHOOSE_WOOD_TRIES_PANEL = "CHOOSE_WOOD_TRIES_PANEL";
+    private static final String CHOOSE_PLAYER_TARGET = "CHOOSE_PLAYER_TARGET";
+
     JPanel mainPanel;
     Board board;
     int nbPlayers;
     int indexOfThisPlayer;
-    private JPanel northPanel;
     private JPanel westPanel;
-    private JPanel centerPanel;
     private JPanel eastPanel;
     private JPanel southPanel;
     private JLabel foodQuantityLabel;
@@ -56,38 +61,18 @@ public class MainBoardFront implements Serializable {
     private JLabel roundLabelNumber;
     private JLabel woodPlanksQuantityLabel;
     private JLabel nbAliveLabelNumber;
-    private List<JPanel> listPlayerDisplays;
-    private JPanel hiddenCardPanel;
-    private JPanel revealedCardPanel;
     private JPanel hiddenCardPanelPanel;
     private JPanel revealedCardPanelPanel;
     private CardLayout cardLayoutCentralPanel;
-    private JPanel chooseActionPanel;
-    private JPanel notificationPanel;
-    private JPanel choosePlayerPanel;
-    private static final String CHOOSE_ACTION_PANEL = "CHOOSE_ACTION_PANEL";
-    private static final String CHOOSE_PLAYER_PANEL = "CHOOSE_PLAYER_PANEL";
-    private static final String CHOOSE_VOID_PANEL = "CHOOSE_VOID_PANEL";
-    private static final String CHOOSE_WOOD_TRIES_PANEL = "CHOOSE_WOOD_TRIES_PANEL";
-    private static final String CHOOSE_PLAYER_TARGET = "CHOOSE_PLAYER_TARGET";
-    private JButton foodButtonAction;
-    private JButton waterButtonAction;
-    private JButton woodButtonAction;
-    private JButton cardButtonAction;
+
     private JPanel choosePlayerPanelPanel;
     private JTextPane notificationPanelTextPane;
-    private JPanel centerPanelCenter;
-    private JPanel centerPanelSouth;
     private JLabel notificationLabel;
     private JButton nextButton;
-    private JScrollPane notificationPanelTextPaneScrollable;
-    private JPanel centerPanelCenterNotificationPanel;
     private JPanel centerPanelCenterChoicePanel;
     private JButton beginVoteButton;
     private JButton allowKillNotForDeparture;
     private JButton allowKillForDeparture;
-    private JPanel chooseWoodNbTriesPanel;
-    private JPanel choosePlayerTargetPanel;
     private JPanel choosePlayerTargetPanelPanelPlayers;
     private JPanel choosePlayerTargetPanelPanelAction;
     private JButton actionValidate;
@@ -95,15 +80,28 @@ public class MainBoardFront implements Serializable {
     private Map<Player, JCheckBox> targetMap;
     private Map<ActionType, JCheckBox> actionCheckBoxMap;
     private boolean allowedToPlayCard = true;
-    public Card cardCurrentlyUsed;
+    private Card cardCurrentlyUsed;
     private int nbActionRequired = 0;
     private String previousPanel = CHOOSE_VOID_PANEL;
     private String currentPanel = CHOOSE_VOID_PANEL;
     private JLabel chiefLabel;
     private JLabel stateLabel;
     private JTextPane cardDescription;
+    private transient ResourceBundle stringsBundle;
+    private String waterString = "water";
 
-    public MainBoardFront(int nbPlayers) {
+    /**
+     * Builds an interface for the game.
+     * 
+     * <p>
+     * The main panel is divided in different parts, following a
+     * {@code BorderLayout}.
+     * 
+     * @param nbPlayers the number of players, including one non computer player,
+     *                  the user
+     */
+    public MainBoardFront(int nbPlayers, ResourceBundle stringsBundle) {
+        this.stringsBundle = stringsBundle;
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         this.nbPlayers = nbPlayers;
@@ -116,32 +114,38 @@ public class MainBoardFront implements Serializable {
 
     }
 
-    public void buildWestPanel() {
+    /**
+     * Builds the western part of the main panel.
+     */
+    private void buildWestPanel() {
         westPanel = new JPanel(new GridLayout(nbPlayers / 2, 1));
         mainPanel.add(westPanel, BorderLayout.WEST);
 
     }
 
-    public void buildCenterPanel() {
-        centerPanel = new JPanel(new BorderLayout());
-        centerPanelCenter = new JPanel(new GridLayout(2, 1));
-        centerPanelCenterNotificationPanel = new JPanel();
+    /**
+     * Builds the center part of the main panel.
+     */
+    private void buildCenterPanel() {
+        var centerPanel = new JPanel(new BorderLayout());
+        var centerPanelCenter = new JPanel(new GridLayout(2, 1));
+        var centerPanelCenterNotificationPanel = new JPanel();
         centerPanelCenterChoicePanel = new JPanel();
         centerPanelCenter.add(centerPanelCenterNotificationPanel);
         centerPanelCenter.add(centerPanelCenterChoicePanel);
 
-        centerPanelSouth = new JPanel();
+        var centerPanelSouth = new JPanel();
         centerPanel.add(centerPanelCenter, BorderLayout.CENTER);
         centerPanel.add(centerPanelSouth, BorderLayout.SOUTH);
         centerPanelSouth.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         cardLayoutCentralPanel = new CardLayout();
         mainPanel.add(centerPanel, BorderLayout.CENTER);
         centerPanelCenterChoicePanel.setLayout(cardLayoutCentralPanel);
-        chooseActionPanel = new JPanel();
-        chooseWoodNbTriesPanel = new JPanel();
-        notificationPanel = new JPanel();
-        choosePlayerPanel = new JPanel();
-        choosePlayerTargetPanel = new JPanel();
+        var chooseActionPanel = new JPanel();
+        var chooseWoodNbTriesPanel = new JPanel();
+        var notificationPanel = new JPanel();
+        var choosePlayerPanel = new JPanel();
+        var choosePlayerTargetPanel = new JPanel();
         centerPanelCenterNotificationPanel.add(notificationPanel);
         var voidChoicePanel = new JPanel();
         centerPanelCenterChoicePanel.add(voidChoicePanel, CHOOSE_VOID_PANEL);
@@ -157,24 +161,24 @@ public class MainBoardFront implements Serializable {
         choosePlayerTargetPanel.setLayout(new BoxLayout(choosePlayerTargetPanel, BoxLayout.Y_AXIS));
 
         var chooseActionLabelPanel = new JPanel();
-        var chooseActionLabel = new JLabel("Choose your action");
-        changePolice(chooseActionLabel, 18);
+        var chooseActionLabel = new JLabel(stringsBundle.getString("chooseAction"));
+        changeFont(chooseActionLabel, 18);
         chooseActionLabelPanel.add(chooseActionLabel);
         var notificationLabelPanel = new JPanel();
-        notificationLabel = new JLabel("Notification !");
-        changePolice(notificationLabel, 18);
+        notificationLabel = new JLabel(stringsBundle.getString("notification"));
+        changeFont(notificationLabel, 18);
         notificationLabelPanel.add(notificationLabel);
         var choosePlayerLabelPanel = new JPanel();
-        var choosePlayerLabel = new JLabel("Choose a player");
-        changePolice(choosePlayerLabel, 18);
+        var choosePlayerLabel = new JLabel(stringsBundle.getString("choosePlayer"));
+        changeFont(choosePlayerLabel, 18);
         choosePlayerLabelPanel.add(choosePlayerLabel);
         var chooseWoodNbTriesLabelPanel = new JPanel();
-        var chooseWoodNbTriesLabel = new JLabel("Choose your number of tries");
-        changePolice(chooseWoodNbTriesLabel, 18);
+        var chooseWoodNbTriesLabel = new JLabel(stringsBundle.getString("chooseNbTries"));
+        changeFont(chooseWoodNbTriesLabel, 18);
         chooseWoodNbTriesLabelPanel.add(chooseWoodNbTriesLabel);
         var choosePlayerTargetLabelPanel = new JPanel();
-        var choosePlayerTargetLabel = new JLabel("Card Description");
-        changePolice(choosePlayerTargetLabel, 18);
+        var choosePlayerTargetLabel = new JLabel(stringsBundle.getString("cardDescription"));
+        changeFont(choosePlayerTargetLabel, 18);
         choosePlayerTargetLabelPanel.add(choosePlayerTargetLabel);
 
         chooseActionPanel.add(chooseActionLabelPanel);
@@ -200,13 +204,13 @@ public class MainBoardFront implements Serializable {
         chooseWoodNbTriesPanelPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         choosePlayerTargetPanelPanel.setLayout(new BorderLayout());
 
-        foodButtonAction = new JButton("Food");
+        var foodButtonAction = new JButton(stringsBundle.getString("food"));
         foodButtonAction.addActionListener(new FoodActionListener());
-        waterButtonAction = new JButton("Water");
+        var waterButtonAction = new JButton(stringsBundle.getString(waterString));
         waterButtonAction.addActionListener(new WaterActionListener());
-        woodButtonAction = new JButton("Wood");
+        var woodButtonAction = new JButton(stringsBundle.getString("wood"));
         woodButtonAction.addActionListener(new WoodActionListener());
-        cardButtonAction = new JButton("Card");
+        var cardButtonAction = new JButton(stringsBundle.getString("card"));
         cardButtonAction.addActionListener(new CardActionListener());
         chooseActionPanelPanel.add(foodButtonAction);
         chooseActionPanelPanel.add(waterButtonAction);
@@ -214,8 +218,8 @@ public class MainBoardFront implements Serializable {
         chooseActionPanelPanel.add(cardButtonAction);
 
         notificationPanelTextPane = new JTextPane();
-        changePolice(notificationPanelTextPane, 16);
-        notificationPanelTextPaneScrollable = new JScrollPane(notificationPanelTextPane);
+        changeFont(notificationPanelTextPane, 16);
+        var notificationPanelTextPaneScrollable = new JScrollPane(notificationPanelTextPane);
 
         notificationPanelTextPaneScrollable.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
         notificationPanelTextPaneScrollable.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_ALWAYS);
@@ -224,16 +228,16 @@ public class MainBoardFront implements Serializable {
         notificationPanelTextPaneScrollable.setPreferredSize(new Dimension(800, 300));
         notificationPanelPanel.add(notificationPanelTextPaneScrollable);
 
-        nextButton = new JButton("Next");
+        nextButton = new JButton(stringsBundle.getString("next"));
         nextButton.addActionListener(new NextActionListener());
         centerPanelSouth.add(nextButton);
-        beginVoteButton = new JButton("Begin vote");
+        beginVoteButton = new JButton(stringsBundle.getString("beginVote"));
         beginVoteButton.addActionListener(new BeginVoteListener());
         centerPanelSouth.add(beginVoteButton);
-        allowKillNotForDeparture = new JButton("Confirm designated player");
+        allowKillNotForDeparture = new JButton(stringsBundle.getString("confirmPlayer"));
         allowKillNotForDeparture.addActionListener(new AllowKillListener(false));
         centerPanelSouth.add(allowKillNotForDeparture);
-        allowKillForDeparture = new JButton("Confirm designated player");
+        allowKillForDeparture = new JButton(stringsBundle.getString("confirmPlayer"));
         allowKillForDeparture.addActionListener(new AllowKillListener(true));
         centerPanelSouth.add(allowKillForDeparture);
         beginVoteButton.setVisible(false);
@@ -255,7 +259,7 @@ public class MainBoardFront implements Serializable {
         cardDescription = new JTextPane();
         var cardDescriptionScrollPane = new JScrollPane(cardDescription);
         cardDescriptionScrollPane.setPreferredSize(new Dimension(800, 100));
-        changePolice(cardDescription, 16);
+        changeFont(cardDescription, 16);
         cardDescriptionScrollPane.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
         cardDescriptionScrollPane.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_ALWAYS);
         cardDescription.setEditable(false);
@@ -270,29 +274,32 @@ public class MainBoardFront implements Serializable {
         choosePlayerTargetPanelPanelCenterCardUse.add(choosePlayerTargetPanelPanelAction);
 
         actionCheckBoxMap = new EnumMap<>(ActionType.class);
-        var foodAction = new JCheckBox("Food");
+        var foodAction = new JCheckBox(stringsBundle.getString("food"));
         foodAction.addItemListener(new ActionChoiceItemListener());
         actionCheckBoxMap.put(ActionType.FOOD, foodAction);
         choosePlayerTargetPanelPanelAction.add(foodAction);
-        var waterAction = new JCheckBox("Water");
+        var waterAction = new JCheckBox(stringsBundle.getString(waterString));
         waterAction.addItemListener(new ActionChoiceItemListener());
         actionCheckBoxMap.put(ActionType.WATER, waterAction);
         choosePlayerTargetPanelPanelAction.add(waterAction);
-        var woodAction = new JCheckBox("Wood");
+        var woodAction = new JCheckBox(stringsBundle.getString("wood"));
         foodAction.addItemListener(new ActionChoiceItemListener());
         actionCheckBoxMap.put(ActionType.WOOD, woodAction);
         choosePlayerTargetPanelPanelAction.add(woodAction);
-        var cardAction = new JCheckBox("Card");
+        var cardAction = new JCheckBox(stringsBundle.getString("card"));
         cardAction.addItemListener(new ActionChoiceItemListener());
         actionCheckBoxMap.put(ActionType.CARD, cardAction);
         choosePlayerTargetPanelPanelAction.add(cardAction);
 
-        actionValidate = new JButton("Use the card");
+        actionValidate = new JButton(stringsBundle.getString("useCard"));
         actionValidate.addActionListener(new ValidateCardUseListener());
         choosePlayerTargetPanelPanelSouth.add(actionValidate);
 
     }
 
+    /**
+     * Builds the panel used to choose a target for a card.
+     */
     public void buildCardTargetPanel() {
         targetMap = new HashMap<>();
         for (Player player : board.getPlayerList()) {
@@ -303,12 +310,18 @@ public class MainBoardFront implements Serializable {
         }
     }
 
-    public void buildEastPanel() {
+    /**
+     * Builds the eastern part of the main panel.
+     */
+    private void buildEastPanel() {
         eastPanel = new JPanel(new GridLayout(nbPlayers / 2, 1));
         mainPanel.add(eastPanel, BorderLayout.EAST);
     }
 
-    public void buildSouthPanel() {
+    /**
+     * Builds the southern part of the main panel.
+     */
+    private void buildSouthPanel() {
         southPanel = new JPanel(new BorderLayout());
         mainPanel.add(southPanel, BorderLayout.SOUTH);
         var hiddenCardPanelContainer = new JPanel();
@@ -325,8 +338,8 @@ public class MainBoardFront implements Serializable {
         playerStatePanel.add(statePanel);
         playerStatePanel.add(chiefPanel);
 
-        hiddenCardPanel = new JPanel();
-        revealedCardPanel = new JPanel();
+        var hiddenCardPanel = new JPanel();
+        var revealedCardPanel = new JPanel();
         var hiddenCardPanelScrollable = new JScrollPane(hiddenCardPanel, VERTICAL_SCROLLBAR_NEVER,
                 HORIZONTAL_SCROLLBAR_AS_NEEDED);
         var revealedCardPanelScrollable = new JScrollPane(revealedCardPanel, VERTICAL_SCROLLBAR_NEVER,
@@ -351,15 +364,15 @@ public class MainBoardFront implements Serializable {
         revealedCardPanelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         revealedCardPanel.add(revealedCardPanelPanel);
 
-        var hiddenCardLabel = new JLabel("Hidden Cards");
-        var revealedCardLabel = new JLabel("Revealed Cards");
+        var hiddenCardLabel = new JLabel(stringsBundle.getString("hiddenCards"));
+        var revealedCardLabel = new JLabel(stringsBundle.getString("revealedCards"));
         hiddenCardLabelPanel.add(hiddenCardLabel);
         revealedCardLabelPanel.add(revealedCardLabel);
 
     }
 
-    public void buildNorthPanel() {
-        northPanel = new JPanel(new GridLayout(1, 2));
+    private JPanel buildNorthPanel() {
+        var northPanel = new JPanel(new GridLayout(1, 2));
         var northWestPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         var northEastPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         northPanel.add(northWestPanel);
@@ -379,19 +392,19 @@ public class MainBoardFront implements Serializable {
         resourcesPanel.add(woodFragmentsPanel);
         resourcesPanel.add(woodPlanksPanel);
 
-        var foodLabel = new JLabel("Food : ");
+        var foodLabel = new JLabel(stringsBundle.getString("food") + " : ");
         foodQuantityLabel = new JLabel("0");
         foodPanel.add(foodLabel);
         foodPanel.add(foodQuantityLabel);
-        var waterLabel = new JLabel("Water : ");
+        var waterLabel = new JLabel(stringsBundle.getString(waterString) + " : ");
         waterQuantityLabel = new JLabel("0");
         waterPanel.add(waterLabel);
         waterPanel.add(waterQuantityLabel);
-        var woodFragmentsLabel = new JLabel("Wood Plank Fragments : ");
+        var woodFragmentsLabel = new JLabel(stringsBundle.getString("woodPlankFragments") + " : ");
         woodFragmentsQuantityLabel = new JLabel("0");
         woodFragmentsPanel.add(woodFragmentsLabel);
         woodFragmentsPanel.add(woodFragmentsQuantityLabel);
-        var woodPlanksLabel = new JLabel("Wood Planks : ");
+        var woodPlanksLabel = new JLabel(stringsBundle.getString("woodPlanks") + " : ");
         woodPlanksQuantityLabel = new JLabel("0");
         woodPlanksPanel.add(woodPlanksLabel);
         woodPlanksPanel.add(woodPlanksQuantityLabel);
@@ -405,11 +418,11 @@ public class MainBoardFront implements Serializable {
         roundDataPanel.add(weatherPanel);
         roundDataPanel.add(nbAlivePanel);
         roundDataPanel.add(roundNumberPanel);
-        var weatherLabel = new JLabel("Weather : ");
+        var weatherLabel = new JLabel(stringsBundle.getString("Weather") + " : ");
         weatherLabelNumber = new JLabel("0");
-        var nbAliveLabel = new JLabel("Alive : ");
+        var nbAliveLabel = new JLabel(stringsBundle.getString("Alive") + " : ");
         nbAliveLabelNumber = new JLabel("0");
-        var roundLabel = new JLabel("Round : ");
+        var roundLabel = new JLabel(stringsBundle.getString("Round") + " : ");
         roundLabelNumber = new JLabel("0");
         weatherPanel.add(weatherLabel);
         weatherPanel.add(weatherLabelNumber);
@@ -418,11 +431,16 @@ public class MainBoardFront implements Serializable {
         roundNumberPanel.add(roundLabel);
         roundNumberPanel.add(roundLabelNumber);
 
+        return northPanel;
+
     }
 
+    /**
+     * Builds the displays of the computer players.
+     */
     public void buildPlayersDisplay(int indexOfThisPlayer) {
         this.indexOfThisPlayer = indexOfThisPlayer;
-        listPlayerDisplays = new ArrayList<>();
+        List<JPanel> listPlayerDisplays = new ArrayList<>();
         for (var index = 0; index < board.getPlayerList().size(); index++) {
             var player = board.getPlayerList().get(index);
             listPlayerDisplays.add(player.getPanelDisplay());
@@ -448,6 +466,12 @@ public class MainBoardFront implements Serializable {
 
     }
 
+    /**
+     * Builds a panel for a card.
+     * 
+     * @param card the card for which the panel is built
+     * @return the built panel
+     */
     private JPanel buildCard(Card card) {
         var cardPanel = new JPanel();
 
@@ -457,16 +481,30 @@ public class MainBoardFront implements Serializable {
         return cardPanel;
     }
 
-    public void addRevealedCard(Card card) {
+    /**
+     * Adds a revealed card to the revealedCardPanel.
+     * 
+     * @param card the card to add
+     */
+    private void addRevealedCard(Card card) {
         JPanel cardPanel = buildCard(card);
         revealedCardPanelPanel.add(cardPanel);
     }
 
-    public void addHiddenCard(Card card) {
+    /**
+     * Adds a hidden card to the hiddenCardPanel.
+     * 
+     * @param card the card to add
+     */
+    private void addHiddenCard(Card card) {
         JPanel cardPanel = buildCard(card);
         hiddenCardPanelPanel.add(cardPanel);
     }
 
+    /**
+     * Updates the display of the user, the non coputer player, which means their
+     * cards, and state.
+     */
     public void updateSouth() {
         hiddenCardPanelPanel.removeAll();
         revealedCardPanelPanel.removeAll();
@@ -486,17 +524,30 @@ public class MainBoardFront implements Serializable {
 
     }
 
+    /**
+     * Updates the name of the current player, in the main panel.
+     */
     public void updateCurrentPlayer() {
-        notificationLabel.setText("Current player : " + board.getPlayerList().get(board.getIndexCurrentPlayer()));
+        notificationLabel.setText(stringsBundle.getString("currentPlayer") + " : "
+                + board.getPlayerList().get(board.getIndexCurrentPlayer()));
         var isThisPlayerTurn = board.getPlayerList().get(board.getIndexCurrentPlayer()).equals(board.getThisPlayer());
         southPanel.setBorder(BorderFactory.createLineBorder(isThisPlayerTurn ? Color.RED : Color.BLACK));
     }
 
+    /**
+     * Makes the user choose an action for this round.
+     */
     public void makePlayerChooseAction() {
         nextButton.setEnabled(false);
         switchToPanel(CHOOSE_ACTION_PANEL);
     }
 
+    /**
+     * Asks the user to choose, as the chief, the player who will be sacrificed in a
+     * given list.
+     * 
+     * @param pickablePlayers the list of player who can be designated
+     */
     public void makePlayerChiefDesignates(List<Player> pickablePlayers) {
         choosePlayerPanelPanel.removeAll();
         switchToPanel(CHOOSE_PLAYER_PANEL);
@@ -508,6 +559,11 @@ public class MainBoardFront implements Serializable {
         }
     }
 
+    /**
+     * Asks the user to choose a player in a given list.
+     * 
+     * @param pickablePlayers the list of pickable players
+     */
     public void makePlayerVoteFor(List<Player> pickablePlayers) {
         choosePlayerPanelPanel.removeAll();
         switchToPanel(CHOOSE_PLAYER_PANEL);
@@ -519,11 +575,19 @@ public class MainBoardFront implements Serializable {
         }
     }
 
+    /**
+     * Starts the vote session.
+     */
     public void allowPlayerToBeginVoteSession() {
         nextButton.setEnabled(false);
         beginVoteButton.setVisible(true);
     }
 
+    /**
+     * Asks the player to validate a designated player, to be sacrificed.
+     * 
+     * @param forDeparture
+     */
     public void allowPlayerToKillPlayerAfterVote(boolean forDeparture) {
         nextButton.setEnabled(false);
         if (forDeparture) {
@@ -534,6 +598,11 @@ public class MainBoardFront implements Serializable {
 
     }
 
+    /**
+     * Displays a message on the interface.
+     * 
+     * @param text the message to be displayed
+     */
     public void displayMessage(String text) {
 
         String newText = notificationPanelTextPane.getText() + text + "\n";
@@ -541,10 +610,17 @@ public class MainBoardFront implements Serializable {
 
     }
 
-    public JPanel getMainPanel() {
-        return mainPanel;
-    }
-
+    /**
+     * Updates the resources display in the interface.
+     * 
+     * @param foodRations   the new number of food rations
+     * @param waterRations  the new number of water rations
+     * @param woodFragments the new number of plank plank fragments
+     * @param woodPlanks    the new number of planks
+     * @param weather       the current weather
+     * @param nbAlive       the number of players alive
+     * @param round         the current round
+     */
     public void updateNorth(int foodRations, int waterRations, int woodFragments, int woodPlanks, int weather,
             int nbAlive, int round) {
         setFoodRationDisplay(foodRations);
@@ -556,52 +632,30 @@ public class MainBoardFront implements Serializable {
         setRoundDisplay(round);
     }
 
+    /**
+     * Triggers the end of the game on the interface.
+     */
     public void endGame() {
         updateSouth();
         nextButton.setVisible(false);
         allowedToPlayCard = false;
     }
 
-    public void setNbAliveDisplay(int nbAlive) {
-        nbAliveLabelNumber.setText(nbAlive + "");
-    }
-
-    public void setFoodRationDisplay(int nbFoodRations) {
-        foodQuantityLabel.setText(nbFoodRations + "");
-    }
-
-    public void setWaterRationDisplay(int nbWaterRations) {
-        waterQuantityLabel.setText(nbWaterRations + "");
-    }
-
-    public void setFragmentsDisplay(int nbWoodFragments) {
-        woodFragmentsQuantityLabel.setText(nbWoodFragments + "");
-    }
-
-    public void setPlanksDisplay(int nbWoodPlanks) {
-        woodPlanksQuantityLabel.setText(nbWoodPlanks + "");
-    }
-
-    public void setWeatherDisplay(int weather) {
-        weatherLabelNumber.setText(weather + "");
-    }
-
-    public void setRoundDisplay(int round) {
-        roundLabelNumber.setText(round + "");
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-
-    public void setAllowedToPlayCard(boolean allowedToPlayCard) {
-        this.allowedToPlayCard = allowedToPlayCard;
-    }
-
-    private void changePolice(JComponent component, int size) {
+    /**
+     * Changes the font size of a given component.
+     * 
+     * @param component the component which will have its font changed
+     * @param size      the new size of the font
+     */
+    private void changeFont(JComponent component, int size) {
         component.setFont(new Font(component.getFont().getName(), component.getFont().getStyle(), size));
     }
 
+    /**
+     * Changes the central panel to another panel, with a cardLayout.
+     * 
+     * @param panelName the name of the new panel
+     */
     private void switchToPanel(String panelName) {
         if (!previousPanel.equals(currentPanel) && !currentPanel.equals(CHOOSE_PLAYER_TARGET)) {
             previousPanel = currentPanel;
@@ -611,6 +665,100 @@ public class MainBoardFront implements Serializable {
         currentPanel = panelName;
     }
 
+    /**
+     * The getter for the attribute {@link MainBoardFront#mainPanel}.
+     * 
+     * @return the main panel of the interface
+     */
+    public JPanel getMainPanel() {
+        return mainPanel;
+    }
+
+    /**
+     * Sets the display of the number of alive players to a new value.
+     * 
+     * @param nbAlive the number of alive players
+     */
+    public void setNbAliveDisplay(int nbAlive) {
+        nbAliveLabelNumber.setText(nbAlive + "");
+    }
+
+    /**
+     * Sets the display of the number of food rations to a new value.
+     * 
+     * @param nbAlive the number of food rations
+     */
+    public void setFoodRationDisplay(int nbFoodRations) {
+        foodQuantityLabel.setText(nbFoodRations + "");
+    }
+
+    /**
+     * Sets the display of the number of water rations to a new value.
+     * 
+     * @param nbAlive the number of water rations
+     */
+    public void setWaterRationDisplay(int nbWaterRations) {
+        waterQuantityLabel.setText(nbWaterRations + "");
+    }
+
+    /**
+     * Sets the display of the number of planks fragments to a new value.
+     * 
+     * @param nbAlive the number of plank fragments
+     */
+    public void setFragmentsDisplay(int nbWoodFragments) {
+        woodFragmentsQuantityLabel.setText(nbWoodFragments + "");
+    }
+
+    /**
+     * Sets the display of the number of planks to a new value.
+     * 
+     * @param nbAlive the number of planks
+     */
+    public void setPlanksDisplay(int nbWoodPlanks) {
+        woodPlanksQuantityLabel.setText(nbWoodPlanks + "");
+    }
+
+    /**
+     * Sets the display of the current weather to a new value.
+     * 
+     * @param nbAlive the current weather
+     */
+    public void setWeatherDisplay(int weather) {
+        weatherLabelNumber.setText(weather + "");
+    }
+
+    /**
+     * Sets the display of the round to a new value.
+     * 
+     * @param nbAlive the current round
+     */
+    public void setRoundDisplay(int round) {
+        roundLabelNumber.setText(round + "");
+    }
+
+    /**
+     * The setter for the attribute {@link MainBoardFront#board}.
+     * 
+     * @param board the board represented by this interface
+     */
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    /**
+     * The setter for the attribute {@link MainBoardFront#allowedToPlayCard}.
+     * 
+     * @param board the board represented by this interface
+     */
+    public void setAllowedToPlayCard(boolean allowedToPlayCard) {
+        this.allowedToPlayCard = allowedToPlayCard;
+    }
+
+    /**
+     * The action listener used to switch to the next action in the game, such as an
+     * action in a round or a vote.
+     */
     private class NextActionListener implements ActionListener {
 
         @Override
@@ -620,9 +768,20 @@ public class MainBoardFront implements Serializable {
         }
     }
 
+    /**
+     * The action listener called when the user validates a choice of a player for a
+     * sacrifice.
+     */
     private class AllowKillListener implements ActionListener {
         boolean forDeparture;
 
+        /**
+         * Builds an action listener called when the user validates a choice of a
+         * player.
+         * 
+         * @param forDeparture indicates whether the player is selected because of a
+         *                     lack of a departure or a round end
+         */
         private AllowKillListener(boolean forDeparture) {
             this.forDeparture = forDeparture;
         }
@@ -636,6 +795,9 @@ public class MainBoardFront implements Serializable {
         }
     }
 
+    /**
+     * An action listener called when the user starts a voting session.
+     */
     private class BeginVoteListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -644,6 +806,9 @@ public class MainBoardFront implements Serializable {
         }
     }
 
+    /**
+     * An action listener called when the user chooses the food action.
+     */
     private class FoodActionListener implements ActionListener {
 
         @Override
@@ -656,6 +821,9 @@ public class MainBoardFront implements Serializable {
 
     }
 
+    /**
+     * An action listener called when the user chooses the water action.
+     */
     private class WaterActionListener implements ActionListener {
 
         @Override
@@ -669,6 +837,9 @@ public class MainBoardFront implements Serializable {
 
     }
 
+    /**
+     * An action listener called when the user chooses the wood action.
+     */
     private class WoodActionListener implements ActionListener {
 
         @Override
@@ -678,9 +849,19 @@ public class MainBoardFront implements Serializable {
 
     }
 
+    /**
+     * An action listener called when the user chooses how many fragments they will
+     * pick in the wood action.
+     */
     private class WoodTryListener implements ActionListener {
         int nbTries;
 
+        /**
+         * Builds an action listener called when a player chooses how many fragments
+         * they are gathering for the wood action.
+         * 
+         * @param nbTries the number of fragments targetted
+         */
         private WoodTryListener(int nbTries) {
             this.nbTries = nbTries;
         }
@@ -695,6 +876,9 @@ public class MainBoardFront implements Serializable {
         }
     }
 
+    /**
+     * An action listener called when the user chooses the card action.
+     */
     private class CardActionListener implements ActionListener {
 
         @Override
@@ -709,10 +893,19 @@ public class MainBoardFront implements Serializable {
 
     }
 
+    /**
+     * An action listener called when the user chooses one player to be sacrificed.
+     */
     private class VoteListener implements ActionListener {
 
         Player target;
 
+        /**
+         * Builds an action listener called to save the vote of the user for the target
+         * player.
+         * 
+         * @param target the player targetted by the user
+         */
         public VoteListener(Player target) {
             this.target = target;
         }
@@ -733,7 +926,16 @@ public class MainBoardFront implements Serializable {
 
     }
 
+    /**
+     * An action listener called when the user, as the chief, designates a player
+     * for a sacrifice.
+     */
     private class ChiefVoteListener extends VoteListener {
+        /**
+         * Builds an action listener called when the user chief designates a player.
+         * 
+         * @param target the designated player
+         */
         public ChiefVoteListener(Player target) {
             super(target);
         }
@@ -747,9 +949,18 @@ public class MainBoardFront implements Serializable {
         }
     }
 
+    /**
+     * An action listener called when the user clicks on one of their cards.
+     */
     public class CardPlayerActionListener implements ActionListener {
         Card card;
 
+        /**
+         * Builds an action listener called when the user clicks on one of their cards,
+         * which uses no parameter.
+         * 
+         * @param card the card clicked
+         */
         public CardPlayerActionListener(Card card) {
             this.card = card;
         }
@@ -772,8 +983,18 @@ public class MainBoardFront implements Serializable {
         }
     }
 
+    /**
+     * An action listener called when the user clicks on one of their card, which
+     * uses one player as a parameter.
+     */
     public class CardPlayerActionListenerOneTarget extends CardPlayerActionListener {
 
+        /**
+         * Builds an action listener called when the user clicks on one of their card,
+         * which uses one player as a parameter.
+         * 
+         * @param card the card clicked
+         */
         public CardPlayerActionListenerOneTarget(Card card) {
             super(card);
         }
@@ -799,8 +1020,18 @@ public class MainBoardFront implements Serializable {
 
     }
 
+    /**
+     * An action listener called when the user clicks on one of their card, which
+     * uses one player and one action as parameters.
+     */
     public class CardPlayerActionListenerOneTargetOneAction extends CardPlayerActionListener {
 
+        /**
+         * Builds an action listener called when the user clicks on one of their card,
+         * which uses one player and one action as parameters.
+         * 
+         * @param card the card clicked
+         */
         public CardPlayerActionListenerOneTargetOneAction(Card card) {
             super(card);
         }
@@ -826,8 +1057,18 @@ public class MainBoardFront implements Serializable {
         }
     }
 
+    /**
+     * An action listener called when the user clicks on one of their card, which
+     * uses up to three players as parameters.
+     */
     public class CardPlayerActionListenerThreeTargets extends CardPlayerActionListener {
 
+        /**
+         * Builds an action listener called when the user clicks on one of their card,
+         * which uses up to three players as parameters.
+         * 
+         * @param card the card clicked
+         */
         public CardPlayerActionListenerThreeTargets(Card card) {
             super(card);
         }
@@ -852,8 +1093,17 @@ public class MainBoardFront implements Serializable {
         }
     }
 
+    /**
+     * An action listener called when the user validate the parameters of a card
+     * previously clicked.
+     */
     public class ValidateCardUseListener implements ActionListener {
 
+        /**
+         * Builds an array of players selected with checkboxes.
+         * 
+         * @return the array of selected players
+         */
         private Player[] fillTargetsArray() {
             var targetsArray = new Player[] { null, null, null };
             for (var index = 0; index < nbTargetsRequired; index++) {
@@ -895,6 +1145,10 @@ public class MainBoardFront implements Serializable {
         }
     }
 
+    /**
+     * An item listener called when the user chooses the parameters for a previously
+     * clicked card.
+     */
     private class ActionChoiceItemListener implements ItemListener {
 
         @Override

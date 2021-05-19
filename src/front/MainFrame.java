@@ -8,12 +8,15 @@ import javax.swing.JPanel;
 import back.Board;
 
 import java.awt.CardLayout;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class MainFrame {
     JFrame frame;
     JPanel mainPanel;
     CardLayout mainPanelLayout;
     Board board;
+    private ResourceBundle stringsBundle;
 
     public static final String WELCOME_SCREEN = "Welcome_Screen";
     public static final String MAIN_SCREEN = "Main_Screen";
@@ -24,11 +27,14 @@ public class MainFrame {
         frame.setSize(1280, 720);
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        var locale = new Locale("en", "US");
+        stringsBundle = ResourceBundle.getBundle("Strings", locale);
+
         mainPanelLayout = new CardLayout();
         mainPanel = new JPanel(mainPanelLayout);
         frame.add(mainPanel);
 
-        WelcomeScreen welcomeScreen = new WelcomeScreen(this);
+        var welcomeScreen = new WelcomeScreen(this, stringsBundle);
 
         mainPanel.add(welcomeScreen.getMainPanel(), WELCOME_SCREEN);
         mainPanelLayout.show(mainPanel, WELCOME_SCREEN);
@@ -37,17 +43,27 @@ public class MainFrame {
     }
 
     public void buildMainScreen(int nbPlayers) {
-        MainBoardFront mainBoardFront = new MainBoardFront(nbPlayers);
+        var mainBoardFront = new MainBoardFront(nbPlayers, stringsBundle);
         mainPanel.add(mainBoardFront.getMainPanel(), MAIN_SCREEN);
         mainPanelLayout.show(mainPanel, MainFrame.MAIN_SCREEN);
-        board = new Board(mainBoardFront, nbPlayers, "Raph");
+        board = new Board(mainBoardFront, nbPlayers, stringsBundle, "Raph");
 
     }
 
+    /**
+     * The getter for the attribute {@link MainFrame#mainPanel}.
+     * 
+     * @return the main panel
+     */
     public JPanel getMainPanel() {
         return mainPanel;
     }
 
+    /**
+     * The getter for the attribute {@link MainFrame#mainPanelLayout}.
+     * 
+     * @return the cardLayout of the main panel
+     */
     public CardLayout getMainPanelLayout() {
         return mainPanelLayout;
     }
