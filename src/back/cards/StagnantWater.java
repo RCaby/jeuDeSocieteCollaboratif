@@ -5,6 +5,8 @@ import java.util.ResourceBundle;
 import back.ActionType;
 import back.Board;
 import back.Player;
+import back.PlayerState;
+
 import java.awt.event.ActionListener;
 
 /**
@@ -52,7 +54,7 @@ public class StagnantWater extends Card {
             board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
             board.addWater(1);
             if (!board.getMatchesUsedThisRound()) {
-                board.sickPlayer(player1);
+                board.sickPlayer(player1, PlayerState.SICK_FROM_FOOD);
             } else {
                 board.setMatchesUsedThisRound(false);
             }

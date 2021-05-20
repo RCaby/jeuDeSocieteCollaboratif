@@ -208,7 +208,7 @@ public class Player implements Serializable {
         } else {
             board.getMainBoardFront().displayMessage(this + stringsBundle.getString("playerGotSick"));
 
-            board.sickPlayer(this);
+            board.sickPlayer(this, PlayerState.SICK_FROM_SNAKE);
             sickRound = board.getRound();
         }
         board.getMainBoardFront().displayMessage(stringsBundle.getString("gotWood") + Math.abs(wood));

@@ -2,10 +2,10 @@ package back;
 
 /**
  * The different states of a {@link Player}. A Player can be {@code HEALTHY},
- * {@code SICK} or {@code DEAD}.
+ * {@code SICK_FROM_SNAKE}, {@code SICK_FROM_FOOD} or {@code DEAD}.
  */
 public enum PlayerState {
-    HEALTHY("Healthy"), SICK("Sick"), DEAD("Dead");
+    HEALTHY("Healthy"), SICK_FROM_SNAKE("Sick"), SICK_FROM_FOOD("Sick"), DEAD("Dead");
 
     String name;
 

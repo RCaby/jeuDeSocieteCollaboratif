@@ -48,7 +48,7 @@ public class Antivenom extends Card {
      */
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
-        if (player1 != null && player1.getState() == PlayerState.SICK) {
+        if (player1 != null && player1.getState() == PlayerState.SICK_FROM_SNAKE) {
 
             board.curePlayer(player1);
             board.getMainBoardFront().displayMessage(owner + " uses the card " + this + " on " + player1 + ".");
@@ -63,7 +63,15 @@ public class Antivenom extends Card {
      */
     @Override
     public boolean canBeUsed() {
-        return !board.getSickPlayersList().isEmpty();
+        var usableCard = !board.getSickPlayersList().isEmpty();
+        if (usableCard) {
+            usableCard = false;
+            for (Player sickPlayer : board.getSickPlayersList()) {
+                usableCard = usableCard || sickPlayer.getState() == PlayerState.SICK_FROM_SNAKE;
+            }
+
+        }
+        return usableCard;
     }
 
     @Override

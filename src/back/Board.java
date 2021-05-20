@@ -196,7 +196,9 @@ public class Board implements Serializable {
     public void play(Player player) {
         if (gameOver) {
             endGame();
-        } else if (player != null && player.getState() == PlayerState.SICK && player.getSickRound() == round - 1) {
+        } else if (player != null
+                && (player.getState() == PlayerState.SICK_FROM_SNAKE || player.getState() == PlayerState.SICK_FROM_FOOD)
+                && player.getSickRound() == round - 1) {
             curePlayer(player);
             mainBoardFront.displayMessage(player + stringsBundle.getString("sickNowCuredPlayer"));
         } else if (player != null && player.getState() == PlayerState.HEALTHY && !player.equals(thisPlayer)) {
@@ -209,7 +211,8 @@ public class Board implements Serializable {
             switchToNextRound();
         } else if (player.getState() == PlayerState.DEAD) {
             mainBoardFront.displayMessage(player + stringsBundle.getString("isDeadPlayer"));
-        } else if (player.getState() == PlayerState.SICK) {
+        } else if (player.getState() == PlayerState.SICK_FROM_SNAKE
+                || player.getState() == PlayerState.SICK_FROM_FOOD) {
             mainBoardFront.displayMessage(player + stringsBundle.getString("isSickPlayer"));
         } else {
             mainBoardFront.displayMessage("Default Case ! Something is fishy ~");
@@ -648,7 +651,8 @@ public class Board implements Serializable {
     public List<Player> getSickPlayersList() {
         List<Player> sickPlayers = new ArrayList<>();
         for (Player player : playerList) {
-            if (player.getState() == PlayerState.SICK) {
+            PlayerState state = player.getState();
+            if (state == PlayerState.SICK_FROM_SNAKE || state == PlayerState.SICK_FROM_FOOD) {
                 sickPlayers.add(player);
             }
         }
@@ -816,8 +820,8 @@ public class Board implements Serializable {
      * 
      * @param player the player to make sick
      */
-    public void sickPlayer(Player player) {
-        player.setState(PlayerState.SICK);
+    public void sickPlayer(Player player, PlayerState stateOfSickness) {
+        player.setState(stateOfSickness);
         if (thisPlayer.equals(player)) {
             mainBoardFront.setAllowedToPlayCard(false);
             mainBoardFront.updateSouth();
