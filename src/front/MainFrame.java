@@ -36,17 +36,17 @@ public class MainFrame {
 
         var welcomeScreen = new WelcomeScreen(this, stringsBundle);
 
-        mainPanel.add(welcomeScreen.getMainPanel(), WELCOME_SCREEN);
+        mainPanel.add(welcomeScreen.getMainPanelContainer(), WELCOME_SCREEN);
         mainPanelLayout.show(mainPanel, WELCOME_SCREEN);
 
         frame.setVisible(true);
     }
 
-    public void buildMainScreen(int nbPlayers) {
+    public void buildMainScreen(int nbPlayers, String namePlayer) {
         var mainBoardFront = new MainBoardFront(nbPlayers, stringsBundle);
         mainPanel.add(mainBoardFront.getMainPanel(), MAIN_SCREEN);
         mainPanelLayout.show(mainPanel, MainFrame.MAIN_SCREEN);
-        board = new Board(mainBoardFront, nbPlayers, stringsBundle, "Raph");
+        board = new Board(mainBoardFront, nbPlayers, stringsBundle, namePlayer);
 
     }
 

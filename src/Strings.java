@@ -44,7 +44,7 @@ public class Strings extends ListResourceBundle {
                                         "Allows to get twice more water rations during the water action.\nPermanent use. Card discarded after the death of its owner." },
                         { "Gun_name", "Gun" },
                         { "Gun_description",
-                                        "Kills one other player if a cartridge is available\nPermanent use. Card not discarded after the death of its owner." },
+                                        "Kills one other player if a cartridge is available.\nPermanent use. Card not discarded after the death of its owner." },
                         { "KitBBQCannibal_name", "Kit BBQ Cannibal" },
                         { "KitBBQCannibal_description",
                                         "Provides two food rations for each player dead during this round." },
@@ -107,7 +107,7 @@ public class Strings extends ListResourceBundle {
                         { "distributionEnd", "Distribution ended !" }, { "allPlayersDead", "All players are dead !" },
                         { "hurricane", "Hurricane !" }, { "volontaryDeparture", "Volontary Departure !" },
                         { "newRoundInit", "It is a new day !" }, { "endGame", "End of the game!" },
-                        { "fooAction", " is getting food !" }, { "waterAction", " is getting water !" },
+                        { "foodAction", " is getting food !" }, { "waterAction", " is getting water !" },
                         { "woodAction", " is getting wood !" }, { "cardAction", " is getting a card !" },
                         { "playAgain", " will play again !" },
                         { "votingTwice", " will be voting twice, thanks to his club" },
@@ -121,7 +121,7 @@ public class Strings extends ListResourceBundle {
                         { "wood", "Wood" }, { "card", "Card" }, { "next", "Next" }, { "beginVote", "Begin Vote" },
                         { "confirmPlayer", "Confirm Designated Player" }, { "useCard", "Use the card" },
                         { "hiddenCards", "Hidden Cards" }, { "revealedCards", "Revealed Cards" },
-                        { "woodPlanksFragment", "Wood Plank Fragments" }, { "woodPlanks", "Wood Planks" },
+                        { "woodPlankFragments", "Wood Plank Fragments" }, { "woodPlanks", "Wood Planks" },
                         { "weather", "Weather" }, { "alive", "Alive" }, { "round", "Round" },
                         { "currentPlayer", "Current Player" } };
 }

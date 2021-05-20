@@ -615,7 +615,7 @@ public class Board implements Serializable {
         }
         if (nbOfMax == 1) {
             var player = maxPlayers.get(0);
-            mainBoardFront.displayMessage(stringsBundle.getString(player + "designatedPlayer"));
+            mainBoardFront.displayMessage(player + stringsBundle.getString("designatedPlayer"));
             return player;
         }
         mainBoardFront.displayMessage(stringsBundle.getString("chiefWillDecide"));

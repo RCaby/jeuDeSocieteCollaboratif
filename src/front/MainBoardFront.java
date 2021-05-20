@@ -418,11 +418,11 @@ public class MainBoardFront implements Serializable {
         roundDataPanel.add(weatherPanel);
         roundDataPanel.add(nbAlivePanel);
         roundDataPanel.add(roundNumberPanel);
-        var weatherLabel = new JLabel(stringsBundle.getString("Weather") + " : ");
+        var weatherLabel = new JLabel(stringsBundle.getString("weather") + " : ");
         weatherLabelNumber = new JLabel("0");
-        var nbAliveLabel = new JLabel(stringsBundle.getString("Alive") + " : ");
+        var nbAliveLabel = new JLabel(stringsBundle.getString("alive") + " : ");
         nbAliveLabelNumber = new JLabel("0");
-        var roundLabel = new JLabel(stringsBundle.getString("Round") + " : ");
+        var roundLabel = new JLabel(stringsBundle.getString("round") + " : ");
         roundLabelNumber = new JLabel("0");
         weatherPanel.add(weatherLabel);
         weatherPanel.add(weatherLabelNumber);
