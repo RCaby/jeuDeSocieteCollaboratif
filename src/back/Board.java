@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import back.cards.Card;
 import back.cards.Club;
 import back.cards.CrystalBall;
+import back.cards.WaterBottle;
 import front.MainBoardFront;
 
 /**
@@ -66,6 +67,9 @@ public class Board implements Serializable {
     private Player designated;
     private boolean killValidated;
     private boolean currentlyForDeparture;
+    private List<Player> designatedForFoodThisRound;
+    private List<Player> designatedForWaterThisRound;
+    private ActionType lackingResource;
 
     /**
      * Builds the game without launching it and without incorporating any
@@ -88,6 +92,9 @@ public class Board implements Serializable {
         nbWoodPlanksFragment = 0;
         deadThisRound = new ArrayList<>();
         cardsPlayedThisRound = new ArrayList<>();
+        designatedForFoodThisRound = new ArrayList<>();
+        designatedForWaterThisRound = new ArrayList<>();
+        lackingResource = ActionType.NONE;
         flashLightList = new ArrayList<>();
         barometerList = new ArrayList<>();
         matchesUsedThisRound = false;
@@ -241,6 +248,8 @@ public class Board implements Serializable {
         mainBoardFront.displayMessage(stringsBundle.getString("distributionEnd"));
         boolean departure = getNbPlayersAlive() > 0 && (weatherList[round] == -2 || isThereEnoughGoodsForAll(true));
         if (departure) {
+            designatedForFoodThisRound.clear();
+            designatedForWaterThisRound.clear();
             voluntaryDepartureStarted = true;
             roundEnd(true);
         }
@@ -264,6 +273,8 @@ public class Board implements Serializable {
             cardsPlayedThisRound.clear();
             flashLightList.clear();
             barometerList.clear();
+            designatedForFoodThisRound.clear();
+            designatedForWaterThisRound.clear();
             currentPhase = GamePhase.ROUND_BEGINNING;
             clearImposedDecisions();
             conchOwner = null;
@@ -310,6 +321,15 @@ public class Board implements Serializable {
             }
 
         } else if (!killValidated) {
+            if (lackingResource == ActionType.FOOD) {
+                designatedForFoodThisRound.add(designated);
+                System.out.println(designated + "is designated for food !");
+            } else if (lackingResource == ActionType.WATER) {
+                designatedForWaterThisRound.add(designated);
+                System.out.println(designated + "is designated for water !");
+            } else {
+                System.out.println("Something is fishy ~~~~~~~~~");
+            }
             cardUsedVoteSession = askPlayersForCards();
             if (cardUsedVoteSession) {
                 roundEnd(forDeparture);
@@ -380,20 +400,48 @@ public class Board implements Serializable {
         }
     }
 
+    /**
+     * TODO
+     * 
+     * @param resource
+     * @return
+     */
+    private boolean everyPlayerHasBeenDesignated(ActionType resource) {
+        List<Player> designatedList = resource == ActionType.FOOD ? designatedForFoodThisRound
+                : designatedForWaterThisRound;
+        for (Player player : playerList) {
+            if (player.getState() != PlayerState.DEAD && !player.equals(conchOwner)
+                    && !designatedList.contains(player)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     // Round end functions #####################################################
     /**
      * Initializes the voting session by checking who can vote, for who and if some
      * players vote after the others.
      */
     private void beginVotingSession() {
+        if (lackingResource != ActionType.NONE && everyPlayerHasBeenDesignated(lackingResource)) {
+            System.out.println("Every player have been designated for this resource. Clearing the list.");
+            (lackingResource == ActionType.WATER ? designatedForWaterThisRound : designatedForFoodThisRound).clear();
+        }
         for (Player player : playerList) {
             var playerState = player.getState();
             boolean isConchOwner = player.equals(conchOwner);
             var cardClub = player.getCardType(Club.class);
             var cardCrystalBall = player.getCardType(CrystalBall.class);
 
-            if (playerState != PlayerState.DEAD && (!isConchOwner || getNbPlayersAlive() == 1)) {
+            boolean alreadyDesignatedForFood = lackingResource == ActionType.FOOD
+                    && designatedForFoodThisRound.contains(player);
+            boolean alreadyDesignatedForWater = lackingResource == ActionType.WATER
+                    && designatedForWaterThisRound.contains(player);
+            if (playerState != PlayerState.DEAD && (!isConchOwner || getNbPlayersAlive() == 1)
+                    && !alreadyDesignatedForFood && !alreadyDesignatedForWater) {
                 pickablePlayers.add(player);
+
             }
             if (playerState == PlayerState.HEALTHY) {
                 detectCrystalBallOrClub(cardClub, cardCrystalBall, player);
@@ -796,8 +844,19 @@ public class Board implements Serializable {
      */
     public boolean isThereEnoughGoodsForAll(boolean departure) {
         int n = getNbPlayersAlive();
-        return departure ? nbWoodPlanks >= n && foodRations >= n && waterRations >= n
+        boolean enoughResources = departure ? nbWoodPlanks >= n && foodRations >= n && waterRations >= n
                 : waterRations >= n && foodRations >= n;
+        if (!enoughResources && waterRations <= foodRations) {
+            lackingResource = ActionType.WATER;
+            System.out.println("lackingResource is now water");
+        } else if (!enoughResources) {
+            lackingResource = ActionType.FOOD;
+            System.out.println("lackingResource is now food");
+        } else {
+            lackingResource = ActionType.NONE;
+            System.out.println("lackingResource is now none");
+        }
+        return enoughResources;
     }
 
     /**
