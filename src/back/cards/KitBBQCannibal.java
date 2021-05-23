@@ -46,7 +46,9 @@ public class KitBBQCannibal extends Card {
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
-        board.addFood(2 * board.getDeadThisRound().size());
+        int foodGot = 2 * board.getDeadThisRound().size();
+        board.addFood(foodGot);
+        board.getMainBoardFront().displayMessage(owner + " got " + foodGot + " food rations.");
         super.useCard(player1, player2, player3, action);
     }
 

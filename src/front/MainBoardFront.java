@@ -229,16 +229,24 @@ public class MainBoardFront implements Serializable {
         notificationPanelPanel.add(notificationPanelTextPaneScrollable);
 
         nextButton = new JButton(stringsBundle.getString("next"));
+        changeFont(nextButton, 14);
+        nextButton.setPreferredSize(new Dimension(100, 65));
         nextButton.addActionListener(new NextActionListener());
         centerPanelSouth.add(nextButton);
         beginVoteButton = new JButton(stringsBundle.getString("beginVote"));
         beginVoteButton.addActionListener(new BeginVoteListener());
+        changeFont(beginVoteButton, 14);
+        beginVoteButton.setPreferredSize(new Dimension(200, 65));
         centerPanelSouth.add(beginVoteButton);
         allowKillNotForDeparture = new JButton(stringsBundle.getString("confirmPlayer"));
         allowKillNotForDeparture.addActionListener(new AllowKillListener(false));
+        changeFont(allowKillNotForDeparture, 14);
+        allowKillNotForDeparture.setPreferredSize(new Dimension(250, 65));
         centerPanelSouth.add(allowKillNotForDeparture);
         allowKillForDeparture = new JButton(stringsBundle.getString("confirmPlayer"));
         allowKillForDeparture.addActionListener(new AllowKillListener(true));
+        changeFont(allowKillForDeparture, 14);
+        allowKillForDeparture.setPreferredSize(new Dimension(250, 65));
         centerPanelSouth.add(allowKillForDeparture);
         beginVoteButton.setVisible(false);
         allowKillNotForDeparture.setVisible(false);
@@ -528,10 +536,19 @@ public class MainBoardFront implements Serializable {
      * Updates the name of the current player, in the main panel.
      */
     public void updateCurrentPlayer() {
-        notificationLabel.setText(stringsBundle.getString("currentPlayer") + " : "
-                + board.getPlayerList().get(board.getIndexCurrentPlayer()));
-        var isThisPlayerTurn = board.getPlayerList().get(board.getIndexCurrentPlayer()).equals(board.getThisPlayer());
-        southPanel.setBorder(BorderFactory.createLineBorder(isThisPlayerTurn ? Color.RED : Color.BLACK));
+        boolean playerNameBool = board.getIndexCurrentPlayer() >= 0
+                && board.getIndexCurrentPlayer() < board.getPlayerList().size();
+        String playerName;
+        if (playerNameBool) {
+            playerName = board.getPlayerList().get(board.getIndexCurrentPlayer()).toString();
+
+            var isThisPlayerTurn = board.getPlayerList().get(board.getIndexCurrentPlayer())
+                    .equals(board.getThisPlayer());
+            southPanel.setBorder(BorderFactory.createLineBorder(isThisPlayerTurn ? Color.RED : Color.BLACK));
+        } else {
+            playerName = "";
+        }
+        notificationLabel.setText(stringsBundle.getString("currentPlayer") + " : " + playerName);
     }
 
     /**
@@ -817,6 +834,9 @@ public class MainBoardFront implements Serializable {
             player.playerSeeksFood(board);
             switchToPanel(CHOOSE_VOID_PANEL);
             nextButton.setEnabled(true);
+            if (player.equals(board.getTwicePlayingPlayer())) {
+                board.playerWillPlayTwice(player);
+            }
         }
 
     }
@@ -832,6 +852,9 @@ public class MainBoardFront implements Serializable {
             player.playerSeeksWater(board);
             nextButton.setEnabled(true);
             switchToPanel(CHOOSE_VOID_PANEL);
+            if (player.equals(board.getTwicePlayingPlayer())) {
+                board.playerWillPlayTwice(player);
+            }
 
         }
 
@@ -872,6 +895,9 @@ public class MainBoardFront implements Serializable {
             player.playerSeeksWood(board, nbTries);
             nextButton.setEnabled(true);
             switchToPanel(CHOOSE_VOID_PANEL);
+            if (player.equals(board.getTwicePlayingPlayer())) {
+                board.playerWillPlayTwice(player);
+            }
 
         }
     }
@@ -888,6 +914,9 @@ public class MainBoardFront implements Serializable {
             nextButton.setEnabled(true);
             updateSouth();
             switchToPanel(CHOOSE_VOID_PANEL);
+            if (player.equals(board.getTwicePlayingPlayer())) {
+                board.playerWillPlayTwice(player);
+            }
 
         }
 

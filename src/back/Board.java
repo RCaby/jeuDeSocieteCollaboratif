@@ -87,7 +87,7 @@ public class Board implements Serializable {
         Integer[] rations = data.getInitialRations(nbPlayers);
         foodRations = rations[0];
         waterRations = rations[1];
-        indexOfCurrentPlayer = -1;
+        indexOfCurrentPlayer = -2;
         nbWoodPlanks = 0;
         nbWoodPlanksFragment = 0;
         deadThisRound = new ArrayList<>();
@@ -133,6 +133,7 @@ public class Board implements Serializable {
         cardsDistribution();
 
         boardFront.displayMessage("End of initialisation. Good luck !");
+        currentPhase = GamePhase.ROUND_BEGINNING;
         mainBoardFront.setBoard(this);
         updateDisplayResources();
         mainBoardFront.buildPlayersDisplay(indexOfThisPlayer);
@@ -141,7 +142,7 @@ public class Board implements Serializable {
         mainBoardFront.buildCardTargetPanel();
 
         askPlayersForCards();
-        currentPhase = GamePhase.GATHERING_RESSOURCES;
+
         setChief(playerList.get(0));
 
     }
@@ -208,19 +209,30 @@ public class Board implements Serializable {
                 && player.getSickRound() == round - 1) {
             curePlayer(player);
             mainBoardFront.displayMessage(player + stringsBundle.getString("sickNowCuredPlayer"));
+            currentPhase = GamePhase.GATHERING_RESSOURCES;
         } else if (player != null && player.getState() == PlayerState.HEALTHY && !player.equals(thisPlayer)) {
             mainBoardFront.displayMessage(player + stringsBundle.getString("playerTurn"));
+            currentPhase = GamePhase.GATHERING_RESSOURCES;
             playAsCPU(player);
         } else if (player != null && player.getState() == PlayerState.HEALTHY && player.equals(thisPlayer)) {
             mainBoardFront.displayMessage(player + stringsBundle.getString("playerTurn"));
+            currentPhase = GamePhase.GATHERING_RESSOURCES;
             mainBoardFront.makePlayerChooseAction();
-        } else if (player == null) {
+        } else if (player == null && indexOfCurrentPlayer == playerList.size()) {
+            currentPhase = GamePhase.GOODS_DISTRIBUTION;
             switchToNextRound();
+        } else if (player == null && indexOfCurrentPlayer == playerList.size() + 1) {
+            currentPhase = GamePhase.GOODS_DISTRIBUTION;
+            postDistributionRoundEnd();
+        } else if (player == null) {
+            currentPhase = GamePhase.ROUND_BEGINNING;
         } else if (player.getState() == PlayerState.DEAD) {
             mainBoardFront.displayMessage(player + stringsBundle.getString("isDeadPlayer"));
+            currentPhase = GamePhase.GATHERING_RESSOURCES;
         } else if (player.getState() == PlayerState.SICK_FROM_SNAKE
                 || player.getState() == PlayerState.SICK_FROM_FOOD) {
             mainBoardFront.displayMessage(player + stringsBundle.getString("isSickPlayer"));
+            currentPhase = GamePhase.GATHERING_RESSOURCES;
         } else {
             mainBoardFront.displayMessage("Default Case ! Something is fishy ~");
         }
@@ -245,7 +257,7 @@ public class Board implements Serializable {
      * or a game over.
      */
     private void postDistributionRoundEnd() {
-        mainBoardFront.displayMessage(stringsBundle.getString("distributionEnd"));
+
         boolean departure = getNbPlayersAlive() > 0 && (weatherList[round] == -2 || isThereEnoughGoodsForAll(true));
         if (departure) {
             designatedForFoodThisRound.clear();
@@ -286,10 +298,9 @@ public class Board implements Serializable {
             twicePlayingPlayer = null;
             askPlayersForCards();
 
-            currentPhase = GamePhase.GATHERING_RESSOURCES;
             indexOfCurrentPlayer = -1;
-            var nextToPlay = nextPlayer();
-            play(nextToPlay);
+            // var nextToPlay = nextPlayer();
+            // play(nextToPlay);
 
         }
 
@@ -310,7 +321,8 @@ public class Board implements Serializable {
             goodsDistributionForAlive();
             designated = null;
             killValidated = false;
-            postDistributionRoundEnd();
+            mainBoardFront.displayMessage(stringsBundle.getString("distributionEnd"));
+            // postDistributionRoundEnd();
 
         } else if (designated == null) {
             cardUsedVoteSession = askPlayersForCards();
@@ -394,10 +406,14 @@ public class Board implements Serializable {
         }
         askPlayersForCards();
         if (twicePlayingPlayer != null && twicePlayingPlayer.equals(player)) {
-            twicePlayingPlayer = null;
-            mainBoardFront.displayMessage(player + "playAgain");
-            playAsCPU(player);
+            playerWillPlayTwice(player);
         }
+    }
+
+    public void playerWillPlayTwice(Player player) {
+        twicePlayingPlayer = null;
+        mainBoardFront.displayMessage(player + stringsBundle.getString("playAgain"));
+        indexOfCurrentPlayer--;
     }
 
     /**
@@ -424,6 +440,8 @@ public class Board implements Serializable {
      * players vote after the others.
      */
     private void beginVotingSession() {
+        crystalBallClubOwner = null;
+        crystalBallOwner = null;
         if (lackingResource != ActionType.NONE && everyPlayerHasBeenDesignated(lackingResource)) {
             System.out.println("Every player have been designated for this resource. Clearing the list.");
             (lackingResource == ActionType.WATER ? designatedForWaterThisRound : designatedForFoodThisRound).clear();
@@ -465,10 +483,10 @@ public class Board implements Serializable {
      */
     private void addVotingPlayer(List<Player> votingPlayers, Map<Player, List<Player>> votes, Player player,
             Card cardClub) {
-        if (crystalBallOwner == null) {
+        if (!player.equals(crystalBallOwner)) {
             votingPlayers.add(player);
             votes.put(player, new ArrayList<>());
-            if (crystalBallClubOwner == null && cardClub != null && cardClub.isCardRevealed()) {
+            if (!player.equals(crystalBallClubOwner) && cardClub != null && cardClub.isCardRevealed()) {
                 votingPlayers.add(player);
                 mainBoardFront.displayMessage(player + stringsBundle.getString("votingTwice"));
             }
@@ -484,12 +502,13 @@ public class Board implements Serializable {
      * @return
      */
     private void detectCrystalBallOrClub(Card cardClub, Card cardCrystalBall, Player player) {
-        crystalBallClubOwner = null;
-        crystalBallOwner = null;
+
         if (cardClub != null && cardClub.isCardRevealed() && cardCrystalBall != null
                 && cardCrystalBall.isCardRevealed()) {
+            System.out.println("crystal ball club owner detected : " + player);
             crystalBallClubOwner = player;
         } else if (cardCrystalBall != null && cardCrystalBall.isCardRevealed()) {
+            System.out.println("crystal ball owner detected ! : " + player);
             crystalBallOwner = player;
         }
 
@@ -500,10 +519,13 @@ public class Board implements Serializable {
      * crystal ball.
      */
     private void checkForCrystalBallOrClub() {
+        System.out.println("Adding owners to voting list... " + crystalBallOwner + " " + crystalBallClubOwner);
         if (crystalBallOwner != null) {
+            System.out.println("Crystal ball owner added to voting list");
             votingPlayers.add(crystalBallOwner);
             votes.put(crystalBallOwner, new ArrayList<>());
         } else if (crystalBallClubOwner != null) {
+            System.out.println("Crystal ball club owner added to voting list");
             votes.put(crystalBallClubOwner, new ArrayList<>());
             votingPlayers.add(crystalBallClubOwner);
             votingPlayers.add(crystalBallClubOwner);
@@ -521,7 +543,7 @@ public class Board implements Serializable {
         crystalBallOwner = null;
         crystalBallClubOwner = null;
         mainBoardFront.displayMessage("Vote session ------------------");
-
+        mainBoardFront.displayMessage(stringsBundle.getString("decideWhoVote"));
         beginVotingSession();
 
         voteTimeForNonOwners();
@@ -549,14 +571,16 @@ public class Board implements Serializable {
      * to.
      */
     public void voteTimeForNonOwners() {
-        System.out.println("Vote Time for non owners");
+        System.out.println("Vote Time for non owners " + votingPlayers);
         for (Player player : votingPlayers) {
-            if (!player.equals(crystalBallOwner) && !player.equals(crystalBallClubOwner)
-                    && votes.get(player).isEmpty()) {
+            var club = player.getCardType(Club.class);
+            if (!player.equals(crystalBallOwner) && !player.equals(crystalBallClubOwner) && votes.get(player).isEmpty()
+                    || (club != null && votes.get(player).size() != 2)) {
                 makePlayerVote(player);
             }
         }
         if (checkVoteNonOwnersOver()) {
+            System.out.println("vote non owners over, time for owners");
             voteTimeForOwners();
         }
     }
@@ -568,14 +592,16 @@ public class Board implements Serializable {
         System.out.println("Vote Time for owners");
         for (Player player : votingPlayers) {
             if (player.equals(crystalBallOwner)) {
+                displayVoteResult();
                 makePlayerVote(player);
             } else if (player.equals(crystalBallClubOwner)) {
+                displayVoteResult();
                 makePlayerVote(player);
                 makePlayerVote(player);
             }
         }
         if (checkVoteOwnersOver()) {
-
+            System.out.println("vote owners over, end of vote");
             endOfVote();
         }
 
@@ -605,8 +631,9 @@ public class Board implements Serializable {
     public boolean checkVoteNonOwnersOver() {
         System.out.println("Check Vote Non Owners");
         for (Player player : votingPlayers) {
-            if (!player.equals(crystalBallOwner) && !player.equals(crystalBallClubOwner)
-                    && votes.get(player).isEmpty()) {
+            var club = player.getCardType(Club.class);
+            if ((!player.equals(crystalBallOwner) && !player.equals(crystalBallClubOwner)
+                    && votes.get(player).isEmpty()) || (club != null && votes.get(player).size() != 2)) {
                 return false;
             }
         }
@@ -635,6 +662,7 @@ public class Board implements Serializable {
      * @return the {@code Player} designated by the votes
      */
     private Player voteResults() {
+        mainBoardFront.displayMessage("~~~~~~~~~~~~~~~~ Final results : ");
         displayVoteResult();
         Map<Player, Integer> results = new HashMap<>();
         for (Player player : playerList) {
@@ -759,15 +787,20 @@ public class Board implements Serializable {
      */
     public Player nextPlayer() {
         Player player;
-        if (indexOfCurrentPlayer != playerList.size() - 1) {
+        if (indexOfCurrentPlayer < playerList.size() - 1 && indexOfCurrentPlayer >= -1) {
             indexOfCurrentPlayer++;
             player = playerList.get(indexOfCurrentPlayer);
-            for (Player oldCurrentPlayer : playerList) {
-                oldCurrentPlayer.setCurrentPlayer(false);
-            }
-            player.setCurrentPlayer(true);
+
         } else {
+            indexOfCurrentPlayer++;
             player = null;
+        }
+
+        for (Player oldCurrentPlayer : playerList) {
+            oldCurrentPlayer.setCurrentPlayer(false);
+        }
+        if (player != null) {
+            player.setCurrentPlayer(true);
         }
         mainBoardFront.updateCurrentPlayer();
         return player;
@@ -1041,7 +1074,7 @@ public class Board implements Serializable {
     public void showSpyglassMap(Player player) {
         mainBoardFront.displayMessage(stringsBundle.getString("cardsOfPlayersSpyglass"));
         for (Entry<Player, List<Card>> entry : spyglassMap.entrySet()) {
-            mainBoardFront.displayMessage(entry.getKey() + stringsBundle.getString("hasCard") + entry.getKey());
+            mainBoardFront.displayMessage(entry.getKey() + stringsBundle.getString("hasCard") + entry.getValue());
         }
     }
 
@@ -1262,6 +1295,15 @@ public class Board implements Serializable {
      */
     public int getIndexCurrentPlayer() {
         return indexOfCurrentPlayer;
+    }
+
+    /**
+     * The setter for the attribute {@link Board#indexOfCurrentPlayer}.
+     * 
+     * @param indexOfCurrentPlayer the index of the player who is playing
+     */
+    public void setIndexOfCurrentPlayer(int indexOfCurrentPlayer) {
+        this.indexOfCurrentPlayer = indexOfCurrentPlayer;
     }
 
     public boolean getCurrentlyForDeparture() {

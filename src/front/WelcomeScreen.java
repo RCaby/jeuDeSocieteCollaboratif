@@ -34,7 +34,7 @@ public class WelcomeScreen {
         var mainPanel = new JPanel();
         mainPanelContainer.add(mainPanel, BorderLayout.CENTER);
 
-        var validateButton = new JButton("Validate");
+        var validateButton = new JButton("Start");
         changeFont(validateButton, 20);
         var validateButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         validateButtonPanel.add(validateButton);

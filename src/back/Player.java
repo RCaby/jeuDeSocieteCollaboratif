@@ -13,6 +13,7 @@ import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.io.Serializable;
@@ -100,6 +101,7 @@ public class Player implements Serializable {
         displayCenter.setLayout(new GridLayout(1, 0, 10, 10));
 
         var nameLabel = new JLabel(name);
+        nameLabel.setFont(new Font(nameLabel.getFont().getName(), nameLabel.getFont().getStyle(), 14));
         displayNorth.add(nameLabel);
 
         var statePanelContainer = new JPanel(new GridLayout(1, 1));
@@ -509,7 +511,6 @@ public class Player implements Serializable {
      * @return the selected player designated by this player
      */
     public void vote(Board board, List<Player> pickablePlayers) {
-        board.getMainBoardFront().displayMessage(stringsBundle.getString("decideWhoVote"));
         board.getMainBoardFront().makePlayerVoteFor(pickablePlayers);
 
     }

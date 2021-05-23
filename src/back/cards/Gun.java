@@ -5,7 +5,6 @@ import java.util.ResourceBundle;
 import back.ActionType;
 import back.Board;
 import back.Player;
-import back.PlayerState;
 import java.awt.event.ActionListener;
 
 /**
@@ -52,16 +51,15 @@ public class Gun extends Card {
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         if (player1 != null && owner != null) {
-            Card cardCartridge = owner.getCardType(Cartridge.class);
+            var cardCartridge = owner.getCardType(Cartridge.class);
             if (cardCartridge != null) {
                 board.getMainBoardFront().displayMessage(owner + " uses the card " + this + " on " + player1 + ".");
                 cardCartridge.useCard(player1, player2, player3, action);
-                Card metalSheet = player1.getCardType(MetalSheet.class);
+                var metalSheet = player1.getCardType(MetalSheet.class);
                 if (metalSheet != null) {
                     metalSheet.useCard(player1, player2, player3, action);
                 } else {
-                    board.getDeadThisRound().add(player1);
-                    player1.setState(PlayerState.DEAD);
+                    board.killPlayer(player1);
                 }
                 super.useCard(player1, player2, player3, action);
             }
