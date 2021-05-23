@@ -10,7 +10,7 @@ Different steps are envisaged, based on the progress of the project :
 - [x] modelling of the game and its elements (class diagram, UML).
 - [x] realisation of a console version of the game, without any user interaction (the game plays by itself with random behaviours)
 - [x] interactive console version with randomly acting computer players
-- [ ] design of a HMI with Swing
+- [x] design of a HMI with Swing
 - [ ] better behaviours for the computer players (no more random behaviours)
 - [ ] integration of the "Tribus et personnages" expansion which adds new features
 
@@ -18,5 +18,4 @@ Different steps are envisaged, based on the progress of the project :
 ## How to use
 * Download the projet : [Link](https://github.com/RCaby/jeuDeSocieteCollaboratif.git)
 * Execute the main file in the src folder
-* You can personalize the game by editing the number of players or the name of one of the player
-* When the game asks you to choose something in a list, write down the index of your choice, starting from 0
+* You still need to know the rules to play, as the game only reminds you the card descriptions.
