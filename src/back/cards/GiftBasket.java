@@ -48,7 +48,9 @@ public class GiftBasket extends Card {
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
 
-        board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
+        board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
+        board.getMainBoardFront()
+                .displayMessage(String.format(stringsBundle.getString("GiftBasket_smallDescription"), owner));
         if (board.getWaterRations() < board.getNbPlayersAlive()) {
             int waterToAdd = board.getNbPlayersAlive() - board.getWaterRations();
             board.addWater(waterToAdd);

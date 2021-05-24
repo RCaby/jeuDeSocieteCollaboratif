@@ -50,8 +50,10 @@ public class Pendulum extends Card {
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
 
         if (player1 != null) {
-            board.getMainBoardFront().displayMessage(owner + " uses the card " + this + " on " + player1 + ".");
-            board.getMainBoardFront().displayMessage(player1 + " will have to choose the action " + action + ".");
+            board.getMainBoardFront()
+                    .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
+            board.getMainBoardFront().displayMessage(
+                    String.format(stringsBundle.getString("Pendulum_smallDescription"), owner, action, this));
             player1.setImposedActionThisRound(action);
             super.useCard(player1, player2, player3, action);
         }

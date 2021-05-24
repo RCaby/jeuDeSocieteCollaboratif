@@ -60,7 +60,9 @@ public class Flashlight extends Card {
         }
         board.setFlashLightList(toBeDisplayed);
         board.showFlashLightList(owner);
-        board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
+        board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
+        board.getMainBoardFront()
+                .displayMessage(String.format(stringsBundle.getString("Flashlight_smallDescription"), owner));
         super.useCard(player1, player2, player3, action);
     }
 }

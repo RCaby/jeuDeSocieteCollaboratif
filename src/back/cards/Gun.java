@@ -53,7 +53,10 @@ public class Gun extends Card {
         if (player1 != null && owner != null) {
             var cardCartridge = owner.getCardType(Cartridge.class);
             if (cardCartridge != null) {
-                board.getMainBoardFront().displayMessage(owner + " uses the card " + this + " on " + player1 + ".");
+                board.getMainBoardFront()
+                        .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
+                board.getMainBoardFront()
+                        .displayMessage(String.format(stringsBundle.getString("Gun_smallDescription"), owner, player1));
                 cardCartridge.useCard(player1, player2, player3, action);
                 var metalSheet = player1.getCardType(MetalSheet.class);
                 if (metalSheet != null) {

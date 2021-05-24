@@ -51,7 +51,10 @@ public class StagnantWater extends Card {
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         if (player1 != null) {
 
-            board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
+            board.getMainBoardFront()
+                    .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
+            board.getMainBoardFront().displayMessage(
+                    String.format(stringsBundle.getString("StagnantWater_smallDescription"), owner, player1));
             board.addWater(1);
             if (!board.getMatchesUsedThisRound()) {
                 board.sickPlayer(player1, PlayerState.SICK_FROM_FOOD);

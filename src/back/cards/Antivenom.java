@@ -51,8 +51,12 @@ public class Antivenom extends Card {
         if (player1 != null && player1.getState() == PlayerState.SICK_FROM_SNAKE) {
 
             board.curePlayer(player1);
-            board.getMainBoardFront().displayMessage(owner + " uses the card " + this + " on " + player1 + ".");
-            board.getMainBoardFront().displayMessage(player1 + " is now cured !");
+
+            board.getMainBoardFront()
+                    .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
+            board.getMainBoardFront()
+                    .displayMessage(String.format(stringsBundle.getString("Antivenom_smallDescription"), player1));
+
             super.useCard(player1, player2, player3, action);
         }
     }

@@ -64,7 +64,9 @@ public class Spyglass extends Card {
         }
         board.setSpyglassMap(cardsMap);
         board.showSpyglassMap(owner);
-        board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
+        board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
+        board.getMainBoardFront()
+                .displayMessage(String.format(stringsBundle.getString("Spyglass_smallDescription"), owner));
         super.useCard(player1, player2, player3, action);
     }
 

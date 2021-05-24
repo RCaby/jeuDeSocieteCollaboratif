@@ -902,7 +902,10 @@ public class Board implements Serializable {
         player.setState(PlayerState.DEAD);
         distributeCardsFromDeadPlayer(player);
         deadThisRound.add(player);
-        mainBoardFront.displayMessage(player + stringsBundle.getString("sacrificedForCrew"));
+        if (designated != null && player.equals(designated)) {
+            mainBoardFront.displayMessage(player + stringsBundle.getString("sacrificedForCrew"));
+        }
+
         mainBoardFront.updateSouth();
     }
 

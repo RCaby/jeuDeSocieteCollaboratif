@@ -47,7 +47,9 @@ public class Coffee extends Card {
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         if (owner != null) {
             board.setTwicePlayingPlayer(owner);
-            board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
+            board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
+            board.getMainBoardFront()
+                    .displayMessage(String.format(stringsBundle.getString("Coffee_smallDescription"), owner));
             super.useCard(player1, player2, player3, action);
         }
 

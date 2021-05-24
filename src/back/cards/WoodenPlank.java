@@ -46,7 +46,9 @@ public class WoodenPlank extends Card {
      */
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
-        board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
+        board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
+        board.getMainBoardFront()
+                .displayMessage(String.format(stringsBundle.getString("WoodenPlank_smallDescription"), owner));
         board.addPlank();
         super.useCard(player1, player2, player3, action);
     }
