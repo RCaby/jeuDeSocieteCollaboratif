@@ -5,16 +5,18 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
 public enum PersonalitiesEnum {
-    AGGRESSIVE_PERSONALITIES(PersonalityAggressive.class), COOPERATIVE_PERSONALITIES(PersonalityCooperative.class),
-    MAD_PERSONALITIES(PersonalityMad.class);
+    AGGRESSIVE_PERSONALITIES(PersonalityAggressive.class, 0.45),
+    COOPERATIVE_PERSONALITIES(PersonalityCooperative.class, 0.45), MAD_PERSONALITIES(PersonalityMad.class, 0.1);
 
     Class<?> linkedClass;
+    double probabilityPersonality;
     static final Random random = new Random();
     static final PersonalitiesEnum[] personalitiesArray = new PersonalitiesEnum[] { AGGRESSIVE_PERSONALITIES,
             COOPERATIVE_PERSONALITIES, MAD_PERSONALITIES };
 
-    PersonalitiesEnum(Class<?> linkedClass) {
+    PersonalitiesEnum(Class<?> linkedClass, double probabilityPersonality) {
         this.linkedClass = linkedClass;
+        this.probabilityPersonality = probabilityPersonality;
     }
 
     public BasicPersonality getInstance() {
@@ -32,8 +34,35 @@ public enum PersonalitiesEnum {
 
     }
 
+    private double getProbability() {
+        return this.probabilityPersonality;
+    }
+
+    private static int whichIndex(double pickedValue) {
+        var probabilityArrays = new double[personalitiesArray.length];
+        for (var index = 0; index < personalitiesArray.length; index++) {
+            probabilityArrays[index] = personalitiesArray[index].getProbability();
+        }
+        var previousIndex = 0;
+        double previousStep = 0;
+        double nextStep = probabilityArrays[0];
+        while (nextStep < 1.0 && (pickedValue > nextStep || pickedValue < previousStep)) {
+            previousIndex++;
+            previousStep = nextStep;
+            if (previousIndex < probabilityArrays.length - 1) {
+                nextStep += probabilityArrays[previousIndex + 1];
+            } else {
+                nextStep = 1.0;
+            }
+        }
+        assert previousStep <= pickedValue && nextStep >= pickedValue;
+        return previousIndex;
+
+    }
+
     public static BasicPersonality getRandomPersonality() {
-        var pickedInt = PersonalitiesEnum.random.nextInt(personalitiesArray.length);
-        return personalitiesArray[pickedInt].getInstance();
+        var randomDouble = Math.random();
+        int index = whichIndex(randomDouble);
+        return personalitiesArray[index].getInstance();
     }
 }
