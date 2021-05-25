@@ -12,7 +12,7 @@ public enum ActionType {
     private static final ActionType[] L_ACTION_TYPES = new ActionType[] { FOOD, WATER, WOOD, CARD };
 
     public static final ActionType getRandomActionType() {
-        int pickedAction = RANDOM.nextInt(4);
+        var pickedAction = RANDOM.nextInt(4);
         return L_ACTION_TYPES[pickedAction];
     }
 

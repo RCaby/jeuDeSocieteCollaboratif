@@ -28,6 +28,7 @@ import back.cards.Axe;
 import back.cards.Card;
 import back.cards.FishingRod;
 import back.cards.Gourd;
+import back.personalities.BasicPersonality;
 
 /**
  * The {@code Player} class represents a Player.
@@ -58,6 +59,7 @@ public class Player implements Serializable {
     private Random random = new Random();
     private int sickRound;
     private transient ResourceBundle stringsBundle;
+    private BasicPersonality personality;
 
     /**
      * Generates a Player.
@@ -539,6 +541,12 @@ public class Player implements Serializable {
         return isChief;
     }
 
+    /**
+     * The setter for the attribute {@link Player#currentPlayer}.
+     * 
+     * @param currentPlayer a boolean indicating whether this player is the current
+     *                      chief
+     */
     public void setCurrentPlayer(boolean currentPlayer) {
         this.currentPlayer = currentPlayer;
         Color color = currentPlayer ? Color.RED : Color.BLACK;
@@ -546,6 +554,11 @@ public class Player implements Serializable {
 
     }
 
+    /**
+     * The getter for the attribute {@link Player#currentPlayer}.
+     * 
+     * @return a boolean indicating whether this player is the current player.
+     */
     public boolean isCurrentPlayer() {
         return currentPlayer;
     }
@@ -560,6 +573,14 @@ public class Player implements Serializable {
         String text = playerChief ? stringsBundle.getString("chief_label") : stringsBundle.getString("not_chief_label");
         chiefLabel.setText(text);
 
+    }
+
+    public BasicPersonality getPersonality() {
+        return this.personality;
+    }
+
+    public void setPersonality(BasicPersonality personality) {
+        this.personality = personality;
     }
 
     /**

@@ -68,7 +68,7 @@ public class Data implements Serializable {
 
         try {
             for (CardType typeOfCard : CardType.values()) {
-                for (int index = 0; index < typeOfCard.getNumberOfCard(); index++) {
+                for (var index = 0; index < typeOfCard.getNumberOfCard(); index++) {
                     Class<?> clazz = Class.forName(typeOfCard.getClassName());
                     Constructor<?> constructor = clazz.getConstructor(Board.class, ResourceBundle.class);
                     Object instance = constructor.newInstance(board, stringsBundle);

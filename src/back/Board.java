@@ -13,6 +13,8 @@ import back.cards.Card;
 import back.cards.Club;
 import back.cards.CrystalBall;
 import back.cards.WaterBottle;
+import back.personalities.BasicPersonality;
+import back.personalities.PersonalitiesEnum;
 import front.MainBoardFront;
 
 /**
@@ -130,9 +132,11 @@ public class Board implements Serializable {
         playerList.remove(indexOfThisPlayer);
         playerList.add(indexOfThisPlayer, thisPlayer);
 
+        associatePersonalities();
         cardsDistribution();
 
         boardFront.displayMessage("End of initialisation. Good luck !");
+        sayHello();
         currentPhase = GamePhase.ROUND_BEGINNING;
         mainBoardFront.setBoard(this);
         updateDisplayResources();
@@ -158,6 +162,23 @@ public class Board implements Serializable {
             for (var nbCard = 0; nbCard < nbCardToGive; nbCard++) {
                 var card = deck.remove(0);
                 giveCardToPlayer(player, card);
+            }
+        }
+    }
+
+    private void associatePersonalities() {
+        for (Player player : playerList) {
+            if (!player.equals(thisPlayer)) {
+                BasicPersonality personality = PersonalitiesEnum.getRandomPersonality();
+                player.setPersonality(personality);
+            }
+        }
+    }
+
+    private void sayHello() {
+        for (Player player : playerList) {
+            if (!player.equals(thisPlayer)) {
+                mainBoardFront.displayMessage(player.getPersonality().sayHello());
             }
         }
     }
