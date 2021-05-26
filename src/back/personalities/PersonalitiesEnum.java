@@ -5,7 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-import back.Board;
 import back.Player;
 
 public enum PersonalitiesEnum {
@@ -23,12 +22,12 @@ public enum PersonalitiesEnum {
         this.probabilityPersonality = probabilityPersonality;
     }
 
-    public BasicPersonality getInstance(ResourceBundle stringBundle, Board board, Player player) {
+    public BasicPersonality getInstance(ResourceBundle stringBundle, Player player) {
         BasicPersonality newInstanceBasicPersonality = null;
         try {
 
-            Constructor<?> constructor = linkedClass.getConstructor(ResourceBundle.class, Board.class, Player.class);
-            Object instance = constructor.newInstance(stringBundle, board, player);
+            Constructor<?> constructor = linkedClass.getConstructor(ResourceBundle.class, Player.class);
+            Object instance = constructor.newInstance(stringBundle, player);
             newInstanceBasicPersonality = (BasicPersonality) instance;
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
                 | IllegalArgumentException | InvocationTargetException e) {
@@ -64,9 +63,9 @@ public enum PersonalitiesEnum {
 
     }
 
-    public static BasicPersonality getRandomPersonality(ResourceBundle stringBundle, Board board, Player player) {
+    public static BasicPersonality getRandomPersonality(ResourceBundle stringBundle, Player player) {
         var randomDouble = Math.random();
         int index = whichIndex(randomDouble);
-        return personalitiesArray[index].getInstance(stringBundle, board, player);
+        return personalitiesArray[index].getInstance(stringBundle, player);
     }
 }

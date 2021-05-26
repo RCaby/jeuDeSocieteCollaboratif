@@ -17,10 +17,10 @@ public interface IPersonality {
 
     public ActionType chooseAction();
 
-    public Player chooseTarget();
+    public Player chooseTarget(Card card, List<Player> playerList);
+
+    public Player[] chooseThreeTargets(List<Player> playerList);
 
     public ActionType chooseActionForPendulum();
 
-    // In a next release : a "chooseTarget" method for each card that needs it such
-    // as "chooseTargetForVoodooDoll" for instance.
 }

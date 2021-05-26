@@ -353,32 +353,23 @@ public class Player implements Serializable {
         var cardWasPlayed = false;
         if (cardUsed != null) {
             cardWasPlayed = true;
-            cardUsed.useCard(null, null, null, ActionType.NONE);
+            boolean[] neededParameters = cardUsed.getNeededParameters();
+
+            if (Arrays.equals(neededParameters, new boolean[] { true, true, true, false })) {
+                Player[] targets = personality.chooseThreeTargets(board.getPlayerList());
+                cardUsed.useCard(targets[0], targets[1], targets[2], ActionType.NONE);
+            } else if (Arrays.equals(neededParameters, new boolean[] { true, false, false, true })) {
+                var pickedPlayer = personality.chooseTarget(cardUsed, board.getPlayerList());
+                ActionType pickedAction = personality.chooseActionForPendulum();
+                cardUsed.useCard(pickedPlayer, null, null, pickedAction);
+            } else if (Arrays.equals(neededParameters, new boolean[] { true, false, false, false })) {
+                var pickedPlayer = personality.chooseTarget(cardUsed, board.getPlayerList());
+                cardUsed.useCard(pickedPlayer, null, null, ActionType.NONE);
+            } else {
+                cardUsed.useCard(null, null, null, ActionType.NONE);
+            }
         }
-        /*
-         * var cardUsed = false; if (canUseCard()) { var odds = random.nextInt(10); var
-         * index = random.nextInt(inventory.size()); var card = inventory.get(index); if
-         * (inventory.get(index).canBeUsed() && odds == 0) { boolean[] neededParameters
-         * = card.getNeededParameters(); if (Arrays.equals(neededParameters, new
-         * boolean[] { true, true, true, false })) { List<Integer> pickedPlayers = new
-         * ArrayList<>(); int pickedIndex = -1; for (var anotherIndex = 0; anotherIndex
-         * < 3; anotherIndex++) { pickedIndex =
-         * random.nextInt(board.getPlayerList().size()); pickedPlayers.add(pickedIndex);
-         * } var player0 = board.getPlayerList().get(pickedPlayers.get(0)); var player1
-         * = board.getPlayerList().get(pickedPlayers.get(1)); var player2 =
-         * board.getPlayerList().get(pickedPlayers.get(2)); card.useCard(player0,
-         * player1, player2, ActionType.NONE); } else if
-         * (Arrays.equals(neededParameters, new boolean[] { true, false, false, true }))
-         * { var pickedPlayer =
-         * board.getPlayerList().get(random.nextInt(board.getPlayerList().size())); var
-         * pickedActionIndex = random.nextInt(4); ActionType pickedAction =
-         * ActionType.getLActionTypes()[pickedActionIndex]; card.useCard(pickedPlayer,
-         * null, null, pickedAction); } else if (Arrays.equals(neededParameters, new
-         * boolean[] { true, false, false, false })) { var pickedPlayer =
-         * board.getPlayerList().get(random.nextInt(board.getPlayerList().size()));
-         * card.useCard(pickedPlayer, null, null, ActionType.NONE); } else {
-         * card.useCard(null, null, null, ActionType.NONE); } cardUsed = true; } }
-         */
+
         return cardWasPlayed;
     }
 

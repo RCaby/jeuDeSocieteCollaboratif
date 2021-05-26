@@ -1,6 +1,7 @@
 package back.personalities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -15,12 +16,10 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
     protected transient ResourceBundle stringsBundle;
     protected Random random;
     protected Player linkedPlayer;
-    protected Board board;
 
-    protected BasicPersonality(ResourceBundle stringBundle, Board board, Player linkedPlayer) {
+    protected BasicPersonality(ResourceBundle stringBundle, Player linkedPlayer) {
         this.stringsBundle = stringBundle;
         this.linkedPlayer = linkedPlayer;
-        this.board = board;
         this.random = new Random();
     }
 
@@ -69,15 +68,63 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
     }
 
     @Override
-    public Player chooseTarget() {
-        return board.getPlayerList().get(random.nextInt(board.getPlayerList().size()));
+    public Player[] chooseThreeTargets(List<Player> playerList) {
+        return chooseTargetForSleepingPills(playerList);
+    }
+
+    @Override
+    public Player chooseTarget(Card card, List<Player> playerList) {
+        var cardName = card.getCardName();
+        switch (cardName) {
+            case "Gun":
+                return chooseTargetForGun(playerList);
+            case "Pendulum":
+                return chooseTargetForPendulum(playerList);
+            case "Voodoo Doll":
+                return chooseTargetForVoodooDoll(playerList);
+            case "Anti-venom":
+                return chooseTargetForAntivenom(playerList);
+            case "Alarm Clock":
+                return chooseTargetForAlarmClock(playerList);
+            default:
+                System.out.println("fishy " + cardName);
+                return null;
+        }
     }
 
     @Override
     public ActionType chooseActionForPendulum() {
-        // But different
-        var pickedInt = random.nextInt(4);
-        return ActionType.getLActionTypes()[pickedInt];
+        return ActionType.getRandomActionType();
+    }
+
+    protected Player chooseTargetForGun(List<Player> playerList) {
+        return playerList.get(random.nextInt(playerList.size()));
+    }
+
+    protected Player chooseTargetForVoodooDoll(List<Player> playerList) {
+        return playerList.get(random.nextInt(playerList.size()));
+    }
+
+    protected Player chooseTargetForAntivenom(List<Player> playerList) {
+        return playerList.get(random.nextInt(playerList.size()));
+    }
+
+    protected Player[] chooseTargetForSleepingPills(List<Player> playerList) {
+        var pickedPlayers = new Player[3];
+
+        for (var index = 0; index < 3; index++) {
+            var pickedIndex = random.nextInt(playerList.size());
+            pickedPlayers[index] = playerList.get(pickedIndex);
+        }
+        return pickedPlayers;
+    }
+
+    protected Player chooseTargetForAlarmClock(List<Player> playerList) {
+        return playerList.get(random.nextInt(playerList.size()));
+    }
+
+    protected Player chooseTargetForPendulum(List<Player> playerList) {
+        return playerList.get(random.nextInt(playerList.size()));
     }
 
     @Override

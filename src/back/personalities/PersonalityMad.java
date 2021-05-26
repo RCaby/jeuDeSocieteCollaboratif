@@ -2,13 +2,12 @@ package back.personalities;
 
 import java.util.ResourceBundle;
 
-import back.Board;
 import back.Player;
 
 public class PersonalityMad extends BasicPersonality {
 
-    public PersonalityMad(ResourceBundle stringBundle, Board board, Player player) {
-        super(stringBundle, board, player);
+    public PersonalityMad(ResourceBundle stringBundle, Player player) {
+        super(stringBundle, player);
     }
 
     @Override

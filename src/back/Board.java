@@ -169,7 +169,7 @@ public class Board implements Serializable {
     private void associatePersonalities() {
         for (Player player : playerList) {
             if (!player.equals(thisPlayer)) {
-                BasicPersonality personality = PersonalitiesEnum.getRandomPersonality(stringsBundle, this, player);
+                BasicPersonality personality = PersonalitiesEnum.getRandomPersonality(stringsBundle, player);
                 player.setPersonality(personality);
             }
         }
@@ -926,7 +926,7 @@ public class Board implements Serializable {
         if (designated != null && player.equals(designated)) {
             mainBoardFront.displayMessage(player + stringsBundle.getString("sacrificedForCrew"));
         }
-        if (chief.equals(player) && getNbPlayersAlive() > 0) {
+        if (player.equals(chief) && getNbPlayersAlive() > 0) {
             Player newChief = getPlayerAliveAfterBefore(playerList.indexOf(player), false);
             setChief(newChief);
             mainBoardFront.displayMessage(newChief + stringsBundle.getString("newChief"));
