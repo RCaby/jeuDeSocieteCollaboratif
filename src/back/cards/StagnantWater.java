@@ -7,8 +7,6 @@ import back.Board;
 import back.Player;
 import back.PlayerState;
 
-import java.awt.event.ActionListener;
-
 /**
  * The {@code StagnantWater} class represents the Stagnant Water Card.
  * 
@@ -39,25 +37,24 @@ public class StagnantWater extends Card {
     }
 
     /**
-     * Simulates the utilisation of the card, herited from {@link Card}. Needs one
-     * player as a target for the sickness.
+     * Simulates the utilisation of the card, herited from {@link Card}. Does not
+     * need any parameter.
      * 
-     * @param player1 target of the sickness, not null, player has to be alive
+     * @param player1 not needed for this card
      * @param player2 not needed for this card
      * @param player3 not needed for this card
      * @param action  not needed for this card
      */
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
-        if (player1 != null) {
+        if (owner != null) {
 
+            board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
             board.getMainBoardFront()
-                    .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
-            board.getMainBoardFront().displayMessage(
-                    String.format(stringsBundle.getString("StagnantWater_smallDescription"), owner, player1));
+                    .displayMessage(String.format(stringsBundle.getString("StagnantWater_smallDescription"), owner));
             board.addWater(1);
             if (!board.getMatchesUsedThisRound()) {
-                board.sickPlayer(player1, PlayerState.SICK_FROM_FOOD);
+                board.sickPlayer(owner, PlayerState.SICK_FROM_FOOD);
             } else {
                 board.setMatchesUsedThisRound(false);
             }
@@ -65,13 +62,4 @@ public class StagnantWater extends Card {
         }
     }
 
-    @Override
-    public boolean[] getNeededParameters() {
-        return new boolean[] { true, false, false, false };
-    }
-
-    @Override
-    public ActionListener getActionListener() {
-        return board.getMainBoardFront().new CardPlayerActionListenerOneTarget(this);
-    }
 }

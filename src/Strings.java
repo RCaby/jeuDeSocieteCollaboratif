@@ -113,8 +113,9 @@ public class Strings extends ListResourceBundle {
                         { "Pendulum_smallDescription", "%s imposes the action %s to %s." },
 
                         { "RottenFish_name", "Rotten Fish" },
-                        { "RottenFish_description", "Is equivalent to one food ration but makes one player sick." },
-                        { "RottenFish_smallDescription", "%s gets one food ration but makes %s sick." },
+                        { "RottenFish_description",
+                                        "Is equivalent to one food ration but makes the player sick for one round." },
+                        { "RottenFish_smallDescription", "%s gets one food ration but makes is now sick." },
 
                         { "Sandwich_name", "Sandwich" },
                         { "Sandwich_description", "Is equivalent to one food ration." },
@@ -134,8 +135,8 @@ public class Strings extends ListResourceBundle {
 
                         { "StagnantWater_name", "Stagnant Water" },
                         { "StagnantWater_description",
-                                        "Is equivalent to one water ration but makes one player sick for one round." },
-                        { "StagnantWater_smallDescription", "%s gets one water ration but makes %s sick." },
+                                        "Is equivalent to one water ration but makes the player sick for one round." },
+                        { "StagnantWater_smallDescription", "%s gets one water ration but is now sick." },
 
                         { "ToiletBrush_name", "Toilet Brush" },
                         { "ToiletBrush_description", "This object is useless, at least on this island." },

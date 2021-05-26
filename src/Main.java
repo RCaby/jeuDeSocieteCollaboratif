@@ -6,6 +6,7 @@ public class Main {
     public static void main(String[] args) {
 
         MainFrame mainFrame = new MainFrame();
-        // TODO kill the chief with gun -> no chief anymore
+        // TODO renommer les joueurs pour avoir PlayerMad1 par exemple ou ne rien dire
+        // ou savoir le nombre de chaque type mais sans savoir qui a quoi.
     }
 }

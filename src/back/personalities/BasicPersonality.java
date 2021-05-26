@@ -1,5 +1,6 @@
 package back.personalities;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -9,9 +10,9 @@ import back.Board;
 import back.Player;
 import back.cards.Card;
 
-public abstract class BasicPersonality implements IPersonality {
+public abstract class BasicPersonality implements IPersonality, Serializable {
 
-    protected ResourceBundle stringsBundle;
+    protected transient ResourceBundle stringsBundle;
     protected Random random;
     protected Player linkedPlayer;
     protected Board board;

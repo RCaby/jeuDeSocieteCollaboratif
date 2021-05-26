@@ -7,8 +7,6 @@ import back.Board;
 import back.Player;
 import back.PlayerState;
 
-import java.awt.event.ActionListener;
-
 /**
  * The {@code RottenFish} class represents the Rotten Fish Card.
  * 
@@ -50,14 +48,13 @@ public class RottenFish extends Card {
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
 
-        if (player1 != null) {
+        if (owner != null) {
+            board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
             board.getMainBoardFront()
-                    .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
-            board.getMainBoardFront().displayMessage(
-                    String.format(stringsBundle.getString("RottenFish_smallDescription"), owner, player1));
+                    .displayMessage(String.format(stringsBundle.getString("RottenFish_smallDescription"), owner));
             board.addFood(1);
             if (!board.getMatchesUsedThisRound()) {
-                board.sickPlayer(player1, PlayerState.SICK_FROM_FOOD);
+                board.sickPlayer(owner, PlayerState.SICK_FROM_FOOD);
             } else {
                 board.setMatchesUsedThisRound(false);
             }
@@ -65,13 +62,4 @@ public class RottenFish extends Card {
         }
     }
 
-    @Override
-    public boolean[] getNeededParameters() {
-        return new boolean[] { true, false, false, false };
-    }
-
-    @Override
-    public ActionListener getActionListener() {
-        return board.getMainBoardFront().new CardPlayerActionListenerOneTarget(this);
-    }
 }
