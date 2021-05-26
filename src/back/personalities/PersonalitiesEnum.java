@@ -3,6 +3,10 @@ package back.personalities;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
+import java.util.ResourceBundle;
+
+import back.Board;
+import back.Player;
 
 public enum PersonalitiesEnum {
     AGGRESSIVE_PERSONALITIES(PersonalityAggressive.class, 0.45),
@@ -19,12 +23,12 @@ public enum PersonalitiesEnum {
         this.probabilityPersonality = probabilityPersonality;
     }
 
-    public BasicPersonality getInstance() {
+    public BasicPersonality getInstance(ResourceBundle stringBundle, Board board, Player player) {
         BasicPersonality newInstanceBasicPersonality = null;
         try {
 
-            Constructor<?> constructor = linkedClass.getConstructor();
-            Object instance = constructor.newInstance();
+            Constructor<?> constructor = linkedClass.getConstructor(ResourceBundle.class, Board.class, Player.class);
+            Object instance = constructor.newInstance(stringBundle, board, player);
             newInstanceBasicPersonality = (BasicPersonality) instance;
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
                 | IllegalArgumentException | InvocationTargetException e) {
@@ -60,9 +64,9 @@ public enum PersonalitiesEnum {
 
     }
 
-    public static BasicPersonality getRandomPersonality() {
+    public static BasicPersonality getRandomPersonality(ResourceBundle stringBundle, Board board, Player player) {
         var randomDouble = Math.random();
         int index = whichIndex(randomDouble);
-        return personalitiesArray[index].getInstance();
+        return personalitiesArray[index].getInstance(stringBundle, board, player);
     }
 }

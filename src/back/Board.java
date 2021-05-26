@@ -169,7 +169,7 @@ public class Board implements Serializable {
     private void associatePersonalities() {
         for (Player player : playerList) {
             if (!player.equals(thisPlayer)) {
-                BasicPersonality personality = PersonalitiesEnum.getRandomPersonality();
+                BasicPersonality personality = PersonalitiesEnum.getRandomPersonality(stringsBundle, this, player);
                 player.setPersonality(personality);
             }
         }
@@ -401,7 +401,7 @@ public class Board implements Serializable {
     private void playAsCPU(Player player) {
         ActionType imposedAction = player.getImposedActionThisRound();
         if (imposedAction == ActionType.NONE) {
-            imposedAction = ActionType.getRandomActionType();
+            imposedAction = player.getPersonality().chooseAction();
         }
 
         switch (imposedAction) {

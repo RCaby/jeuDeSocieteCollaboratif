@@ -349,39 +349,37 @@ public class Player implements Serializable {
      * @return a boolean indicating if one card has been used.
      */
     public boolean wouldLikePlayCardAsCpu(Board board) {
-        var cardUsed = false;
-        if (canUseCard()) {
-            var odds = random.nextInt(10);
-            var index = random.nextInt(inventory.size());
-            var card = inventory.get(index);
-            if (inventory.get(index).canBeUsed() && odds == 0) {
-                boolean[] neededParameters = card.getNeededParameters();
-                if (Arrays.equals(neededParameters, new boolean[] { true, true, true, false })) {
-                    List<Integer> pickedPlayers = new ArrayList<>();
-                    int pickedIndex = -1;
-                    for (var anotherIndex = 0; anotherIndex < 3; anotherIndex++) {
-                        pickedIndex = random.nextInt(board.getPlayerList().size());
-                        pickedPlayers.add(pickedIndex);
-                    }
-                    var player0 = board.getPlayerList().get(pickedPlayers.get(0));
-                    var player1 = board.getPlayerList().get(pickedPlayers.get(1));
-                    var player2 = board.getPlayerList().get(pickedPlayers.get(2));
-                    card.useCard(player0, player1, player2, ActionType.NONE);
-                } else if (Arrays.equals(neededParameters, new boolean[] { true, false, false, true })) {
-                    var pickedPlayer = board.getPlayerList().get(random.nextInt(board.getPlayerList().size()));
-                    var pickedActionIndex = random.nextInt(4);
-                    ActionType pickedAction = ActionType.getLActionTypes()[pickedActionIndex];
-                    card.useCard(pickedPlayer, null, null, pickedAction);
-                } else if (Arrays.equals(neededParameters, new boolean[] { true, false, false, false })) {
-                    var pickedPlayer = board.getPlayerList().get(random.nextInt(board.getPlayerList().size()));
-                    card.useCard(pickedPlayer, null, null, ActionType.NONE);
-                } else {
-                    card.useCard(null, null, null, ActionType.NONE);
-                }
-                cardUsed = true;
-            }
+        var cardUsed = personality.wouldLikePlayACard();
+        var cardWasPlayed = false;
+        if (cardUsed != null) {
+            cardWasPlayed = true;
+            cardUsed.useCard(null, null, null, ActionType.NONE);
         }
-        return cardUsed;
+        /*
+         * var cardUsed = false; if (canUseCard()) { var odds = random.nextInt(10); var
+         * index = random.nextInt(inventory.size()); var card = inventory.get(index); if
+         * (inventory.get(index).canBeUsed() && odds == 0) { boolean[] neededParameters
+         * = card.getNeededParameters(); if (Arrays.equals(neededParameters, new
+         * boolean[] { true, true, true, false })) { List<Integer> pickedPlayers = new
+         * ArrayList<>(); int pickedIndex = -1; for (var anotherIndex = 0; anotherIndex
+         * < 3; anotherIndex++) { pickedIndex =
+         * random.nextInt(board.getPlayerList().size()); pickedPlayers.add(pickedIndex);
+         * } var player0 = board.getPlayerList().get(pickedPlayers.get(0)); var player1
+         * = board.getPlayerList().get(pickedPlayers.get(1)); var player2 =
+         * board.getPlayerList().get(pickedPlayers.get(2)); card.useCard(player0,
+         * player1, player2, ActionType.NONE); } else if
+         * (Arrays.equals(neededParameters, new boolean[] { true, false, false, true }))
+         * { var pickedPlayer =
+         * board.getPlayerList().get(random.nextInt(board.getPlayerList().size())); var
+         * pickedActionIndex = random.nextInt(4); ActionType pickedAction =
+         * ActionType.getLActionTypes()[pickedActionIndex]; card.useCard(pickedPlayer,
+         * null, null, pickedAction); } else if (Arrays.equals(neededParameters, new
+         * boolean[] { true, false, false, false })) { var pickedPlayer =
+         * board.getPlayerList().get(random.nextInt(board.getPlayerList().size()));
+         * card.useCard(pickedPlayer, null, null, ActionType.NONE); } else {
+         * card.useCard(null, null, null, ActionType.NONE); } cardUsed = true; } }
+         */
+        return cardWasPlayed;
     }
 
     /**
@@ -498,8 +496,7 @@ public class Player implements Serializable {
      * @return the selected player designated by this player
      */
     public Player voteAsCPU(List<Player> pickablePlayers) {
-        var pickedIndex = random.nextInt(pickablePlayers.size());
-        return pickablePlayers.get(pickedIndex);
+        return personality.choosePlayerToVoteFor(pickablePlayers);
 
     }
 
@@ -525,11 +522,7 @@ public class Player implements Serializable {
      * @return the player selected to be sacrificed
      */
     public Player decideWhoDieAsCPU(List<Player> playerList) {
-        var player = playerList.get(random.nextInt(playerList.size()));
-        while (player.getState() == PlayerState.DEAD) {
-            player = playerList.get(random.nextInt(playerList.size()));
-        }
-        return player;
+        return personality.chooseAsChief(playerList);
     }
 
     /**
