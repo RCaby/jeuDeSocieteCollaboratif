@@ -902,13 +902,10 @@ public class Board implements Serializable {
                 : waterRations >= n && foodRations >= n;
         if (!enoughResources && waterRations <= foodRations) {
             lackingResource = ActionType.WATER;
-            System.out.println("lackingResource is now water");
         } else if (!enoughResources) {
             lackingResource = ActionType.FOOD;
-            System.out.println("lackingResource is now food");
         } else {
             lackingResource = ActionType.NONE;
-            System.out.println("lackingResource is now none");
         }
         return enoughResources;
     }
@@ -1101,9 +1098,11 @@ public class Board implements Serializable {
      * @param player the player who owns the card
      */
     public void showSpyglassMap(Player player) {
-        mainBoardFront.displayMessage(stringsBundle.getString("cardsOfPlayersSpyglass"));
-        for (Entry<Player, List<Card>> entry : spyglassMap.entrySet()) {
-            mainBoardFront.displayMessage(entry.getKey() + stringsBundle.getString("hasCard") + entry.getValue());
+        if (player.equals(thisPlayer)) {
+            mainBoardFront.displayMessage(stringsBundle.getString("cardsOfPlayersSpyglass"));
+            for (Entry<Player, List<Card>> entry : spyglassMap.entrySet()) {
+                mainBoardFront.displayMessage(entry.getKey() + stringsBundle.getString("hasCard") + entry.getValue());
+            }
         }
     }
 

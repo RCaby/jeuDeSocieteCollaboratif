@@ -1,13 +1,11 @@
 package back.personalities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
 
 import back.ActionType;
-import back.Board;
 import back.Player;
 import back.cards.Card;
 
