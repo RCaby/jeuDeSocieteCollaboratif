@@ -200,5 +200,5 @@ public class Strings extends ListResourceBundle {
                         { "hiddenCards", "Hidden Cards" }, { "revealedCards", "Revealed Cards" },
                         { "woodPlankFragments", "Wood Plank Fragments" }, { "woodPlanks", "Wood Planks" },
                         { "weather", "Weather" }, { "alive", "Alive" }, { "round", "Round" },
-                        { "currentPlayer", "Current Player" } };
+                        { "currentPlayer", "Current Player" }, { "newChief", " is the new chief !" } };
 }
