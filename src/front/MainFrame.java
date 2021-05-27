@@ -4,12 +4,15 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import back.Board;
 
 import java.awt.CardLayout;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import javax.swing.UIManager.*;
 
 public class MainFrame {
     JFrame frame;
@@ -22,6 +25,16 @@ public class MainFrame {
     public static final String MAIN_SCREEN = "Main_Screen";
 
     public MainFrame() {
+        try {
+            for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            // If Nimbus is not available, you can set the GUI to another look and feel.
+        }
 
         frame = new JFrame("Game");
         frame.setSize(1280, 720);

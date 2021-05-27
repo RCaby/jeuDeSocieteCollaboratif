@@ -53,11 +53,12 @@ public enum PersonalitiesEnum {
             previousIndex++;
             previousStep = nextStep;
             if (previousIndex < probabilityArrays.length - 1) {
-                nextStep += probabilityArrays[previousIndex + 1];
+                nextStep += probabilityArrays[previousIndex];
             } else {
                 nextStep = 1.0;
             }
         }
+
         assert previousStep <= pickedValue && nextStep >= pickedValue;
         return previousIndex;
 
