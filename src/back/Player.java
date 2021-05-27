@@ -3,7 +3,9 @@ package back;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -61,6 +63,7 @@ public class Player implements Serializable {
     private transient ResourceBundle stringsBundle;
     private BasicPersonality personality;
     private JLabel nameLabel;
+    private Map<Player, Integer> opinionMap;
 
     /**
      * Generates a Player.
@@ -146,6 +149,18 @@ public class Player implements Serializable {
         scrollPaneHidden.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneHidden.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_NEVER);
         scrollPaneHidden.setPreferredSize(new Dimension(170, 100));
+    }
+
+    public void generateOpinionMap(List<Player> playerList) {
+        opinionMap = new HashMap<>();
+        for (Player player : playerList)
+            opinionMap.put(player, 0);
+        if (personality.isPersonalityPublic()) {
+            for (Player player : playerList) {
+                opinionMap.put(player, player.getPersonality().getLinkedStartingBonus());
+            }
+        }
+
     }
 
     /**
@@ -706,6 +721,14 @@ public class Player implements Serializable {
      */
     public void setSickRound(int roundSick) {
         this.sickRound = roundSick;
+    }
+
+    public void addOpinionOn(Player player, int opinion) {
+        opinionMap.put(player, opinionMap.get(player) + opinion);
+    }
+
+    public int getOpinionOn(Player player) {
+        return opinionMap.get(player);
     }
 
 }

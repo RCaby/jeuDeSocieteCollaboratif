@@ -174,16 +174,25 @@ public class Board implements Serializable {
     private void associatePersonalities() {
         for (Player player : playerList) {
             if (!player.equals(thisPlayer)) {
-                BasicPersonality personality = PersonalitiesEnum.getRandomPersonality(stringsBundle, player);
+                BasicPersonality personality = PersonalitiesEnum.getRandomPersonality(stringsBundle, player,
+                        difficulty == 0);
                 player.setPersonality(personality);
                 if (difficulty == 0) {
                     player.setName(personality + player.getName());
                 }
+            } else {
+                BasicPersonality personality = PersonalitiesEnum.getNeutralPersonality(stringsBundle, player,
+                        difficulty == 0);
+                player.setPersonality(personality);
             }
+
         }
+        for (Player player : playerList)
+            player.generateOpinionMap(playerList);
         if (difficulty == 1) {
             displayPersonalities();
         }
+
     }
 
     private void displayPersonalities() {

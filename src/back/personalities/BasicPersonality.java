@@ -14,11 +14,13 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
     protected transient ResourceBundle stringsBundle;
     protected Random random;
     protected Player linkedPlayer;
+    protected boolean personalityIsPublic;
 
-    protected BasicPersonality(ResourceBundle stringBundle, Player linkedPlayer) {
+    protected BasicPersonality(ResourceBundle stringBundle, Player linkedPlayer, boolean publicPersonality) {
         this.stringsBundle = stringBundle;
         this.linkedPlayer = linkedPlayer;
         this.random = new Random();
+        this.personalityIsPublic = publicPersonality;
     }
 
     @Override
@@ -71,6 +73,15 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
     }
 
     @Override
+    public boolean isPersonalityPublic() {
+        return personalityIsPublic;
+    }
+
+    public void setPersonalityIsPublic(boolean personalityIsPublic) {
+        this.personalityIsPublic = personalityIsPublic;
+    }
+
+    @Override
     public Player chooseTarget(Card card, List<Player> playerList) {
         var cardName = card.getCardName();
         switch (cardName) {
@@ -87,6 +98,12 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
             default:
                 return null;
         }
+    }
+
+    @Override
+    public int getLinkedStartingBonus() {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
     @Override

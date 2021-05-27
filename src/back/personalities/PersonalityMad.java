@@ -6,8 +6,8 @@ import back.Player;
 
 public class PersonalityMad extends BasicPersonality {
 
-    public PersonalityMad(ResourceBundle stringBundle, Player player) {
-        super(stringBundle, player);
+    public PersonalityMad(ResourceBundle stringBundle, Player player, boolean publicPersonality) {
+        super(stringBundle, player, publicPersonality);
     }
 
     @Override
@@ -23,5 +23,10 @@ public class PersonalityMad extends BasicPersonality {
     @Override
     public String toString() {
         return "Mad";
+    }
+
+    @Override
+    public int getLinkedStartingBonus() {
+        return IPersonality.MAD_STARTING_BONUS;
     }
 }

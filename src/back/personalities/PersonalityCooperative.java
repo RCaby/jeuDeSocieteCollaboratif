@@ -6,8 +6,8 @@ import back.Player;
 
 public class PersonalityCooperative extends BasicPersonality {
 
-    public PersonalityCooperative(ResourceBundle stringBundle, Player player) {
-        super(stringBundle, player);
+    public PersonalityCooperative(ResourceBundle stringBundle, Player player, boolean publicPersonality) {
+        super(stringBundle, player, publicPersonality);
     }
 
     @Override
@@ -23,5 +23,10 @@ public class PersonalityCooperative extends BasicPersonality {
     @Override
     public String toString() {
         return "Cooperative";
+    }
+
+    @Override
+    public int getLinkedStartingBonus() {
+        return IPersonality.COOPERATIVE_STARTING_BONUS;
     }
 }

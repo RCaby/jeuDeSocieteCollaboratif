@@ -14,6 +14,8 @@ public class Main {
 
         // TODO Typer les différentes cartes food -> +, gun -> --
 
+        // TODO quid de l'auto opinion qui devient extremement basse ou haute ?
+
         // FIXME utilisation de conch ne change pas le display de qui est le chef.
 
     }

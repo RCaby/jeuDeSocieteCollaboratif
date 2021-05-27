@@ -7,6 +7,12 @@ import back.Player;
 import back.cards.Card;
 
 public interface IPersonality {
+
+    public static final int COOPERATIVE_STARTING_BONUS = 10;
+    public static final int AGGRESIVE_STARTING_BONUS = -10;
+    public static final int MAD_STARTING_BONUS = -50;
+    public static final int NEUTRAL_STARTING_BONUS = 0;
+
     public String sayHello();
 
     public Card wouldLikePlayACard();
@@ -24,5 +30,9 @@ public interface IPersonality {
     public ActionType chooseActionForPendulum();
 
     public PersonalitiesEnum getLinkedPersonality();
+
+    public int getLinkedStartingBonus();
+
+    public boolean isPersonalityPublic();
 
 }
