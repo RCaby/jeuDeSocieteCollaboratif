@@ -47,6 +47,7 @@ public class Conch extends Card {
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         if (owner != null) {
             board.setConchOwner(owner);
+            board.setChief(owner);
             board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
             board.getMainBoardFront()
                     .displayMessage(String.format(stringsBundle.getString("Conch_smallDescription"), owner));
