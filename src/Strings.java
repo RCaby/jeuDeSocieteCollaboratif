@@ -205,5 +205,5 @@ public class Strings extends ListResourceBundle {
                         { "startButton", "Start" }, { "defaultName", "Player" }, { "yourNameLabel", "Your name : " },
                         { "nbPlayerLabel", "Number of player : " }, { "difficulty", "Difficulty : " },
                         { "difficultyEasy", "Easy" }, { "difficultyMedium", "Medium" }, { "difficultyHard", "Hard" },
-                        { "typesPersonalities", "There are %d %s player%s !" } };
+                        { "typesPersonalities", "There %s %d %s player%s !" } };
 }

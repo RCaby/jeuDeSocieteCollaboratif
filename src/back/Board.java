@@ -199,8 +199,18 @@ public class Board implements Serializable {
         }
         for (Entry<PersonalitiesEnum, Integer> entry : personalitiesMap.entrySet()) {
             if (entry.getValue() > 0) {
-                mainBoardFront.displayMessage(String.format(stringsBundle.getString("typesPersonalities"),
-                        entry.getValue(), entry.getKey(), entry.getValue() > 1 ? "s" : ""));
+                String verb;
+                String plural;
+                if (entry.getValue() > 1) {
+                    verb = "are";
+                    plural = "s";
+                } else {
+                    verb = "is";
+                    plural = "";
+                }
+
+                mainBoardFront.displayMessage(String.format(stringsBundle.getString("typesPersonalities"), verb,
+                        entry.getValue(), entry.getKey(), plural));
             }
         }
     }
