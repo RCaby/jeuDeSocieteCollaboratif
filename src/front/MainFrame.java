@@ -55,11 +55,11 @@ public class MainFrame {
         frame.setVisible(true);
     }
 
-    public void buildMainScreen(int nbPlayers, String namePlayer) {
+    public void buildMainScreen(int nbPlayers, String namePlayer, int difficulty) {
         var mainBoardFront = new MainBoardFront(nbPlayers, stringsBundle);
         mainPanel.add(mainBoardFront.getMainPanel(), MAIN_SCREEN);
         mainPanelLayout.show(mainPanel, MainFrame.MAIN_SCREEN);
-        board = new Board(mainBoardFront, nbPlayers, stringsBundle, namePlayer);
+        board = new Board(mainBoardFront, nbPlayers, stringsBundle, namePlayer, difficulty);
 
     }
 

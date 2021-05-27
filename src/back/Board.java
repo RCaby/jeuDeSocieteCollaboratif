@@ -2,6 +2,7 @@ package back;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,12 +73,15 @@ public class Board implements Serializable {
     private List<Player> designatedForFoodThisRound;
     private List<Player> designatedForWaterThisRound;
     private ActionType lackingResource;
+    private int difficulty;
 
     /**
      * Builds the game without launching it and without incorporating any
      * non-computer user.
      * 
-     * @param nbPlayer the number of players in this game
+     * @param boardFront    the displayer used to interact with the user
+     * @param nbPlayers     the number of players in this game
+     * @param stringsBundle the container for the strings used by the game
      */
     public Board(MainBoardFront boardFront, int nbPlayers, ResourceBundle stringsBundle) {
         this.stringsBundle = stringsBundle;
@@ -120,13 +124,16 @@ public class Board implements Serializable {
     /**
      * Builds the game and incorporates a non-computer user
      * 
-     * @param boardFront the instance of the application interface
-     * @param nbPlayers  the number of players in this game
-     * @param namePlayer the name of the only non-computer user
+     * @param boardFront    the instance of the application interface
+     * @param nbPlayers     the number of players in this game
+     * @param stringsBundle the container of the strings used by the game
+     * @param namePlayer    the name of the only non-computer user
+     * @param difficulty    the difficulty of the game
      */
-    public Board(MainBoardFront boardFront, int nbPlayers, ResourceBundle stringsBundle, String namePlayer) {
+    public Board(MainBoardFront boardFront, int nbPlayers, ResourceBundle stringsBundle, String namePlayer,
+            int difficulty) {
         this(boardFront, nbPlayers, stringsBundle);
-
+        this.difficulty = difficulty;
         indexOfThisPlayer = random.nextInt(nbPlayers);
         thisPlayer = new Player(namePlayer, stringsBundle);
         playerList.remove(indexOfThisPlayer);
@@ -135,8 +142,6 @@ public class Board implements Serializable {
         associatePersonalities();
         cardsDistribution();
 
-        boardFront.displayMessage("End of initialisation. Good luck !");
-        sayHello();
         currentPhase = GamePhase.ROUND_BEGINNING;
         mainBoardFront.setBoard(this);
         updateDisplayResources();
@@ -171,14 +176,31 @@ public class Board implements Serializable {
             if (!player.equals(thisPlayer)) {
                 BasicPersonality personality = PersonalitiesEnum.getRandomPersonality(stringsBundle, player);
                 player.setPersonality(personality);
+                if (difficulty == 0) {
+                    player.setName(personality + player.getName());
+                }
             }
+        }
+        if (difficulty == 1) {
+            displayPersonalities();
         }
     }
 
-    private void sayHello() {
+    private void displayPersonalities() {
+        Map<PersonalitiesEnum, Integer> personalitiesMap = new EnumMap<>(PersonalitiesEnum.class);
+        for (PersonalitiesEnum personality : PersonalitiesEnum.getPersonalitiesarray()) {
+            personalitiesMap.put(personality, 0);
+        }
         for (Player player : playerList) {
             if (!player.equals(thisPlayer)) {
-                mainBoardFront.displayMessage(player.getPersonality().sayHello());
+                PersonalitiesEnum personalityOfPlayer = player.getPersonality().getLinkedPersonality();
+                personalitiesMap.put(personalityOfPlayer, personalitiesMap.get(personalityOfPlayer) + 1);
+            }
+        }
+        for (Entry<PersonalitiesEnum, Integer> entry : personalitiesMap.entrySet()) {
+            if (entry.getValue() > 0) {
+                mainBoardFront.displayMessage(String.format(stringsBundle.getString("typesPersonalities"),
+                        entry.getValue(), entry.getKey(), entry.getValue() > 1 ? "s" : ""));
             }
         }
     }

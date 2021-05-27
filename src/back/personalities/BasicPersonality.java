@@ -85,9 +85,13 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
             case "Alarm Clock":
                 return chooseTargetForAlarmClock(playerList);
             default:
-                System.out.println("fishy " + cardName);
                 return null;
         }
+    }
+
+    @Override
+    public PersonalitiesEnum getLinkedPersonality() {
+        return null;
     }
 
     @Override

@@ -9,5 +9,12 @@ public class Main {
         // TODO renommer les joueurs pour avoir PlayerMad1 par exemple ou ne rien dire
         // ou savoir le nombre de chaque type mais sans savoir qui a quoi.
 
+        // TODO systeme d'opinion : ajouter une carte pour le groupe + opinion etc, -
+        // opinion si désigné par joueur
+
+        // TODO Typer les différentes cartes food -> +, gun -> --
+
+        // FIXME utilisation de conch ne change pas le display de qui est le chef.
+
     }
 }

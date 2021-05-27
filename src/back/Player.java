@@ -60,6 +60,7 @@ public class Player implements Serializable {
     private int sickRound;
     private transient ResourceBundle stringsBundle;
     private BasicPersonality personality;
+    private JLabel nameLabel;
 
     /**
      * Generates a Player.
@@ -102,7 +103,7 @@ public class Player implements Serializable {
         display.setMaximumSize(new Dimension(600, 200));
         displayCenter.setLayout(new GridLayout(1, 0, 10, 10));
 
-        var nameLabel = new JLabel(name);
+        nameLabel = new JLabel(name);
         nameLabel.setFont(new Font(nameLabel.getFont().getName(), nameLabel.getFont().getStyle(), 14));
         displayNorth.add(nameLabel);
 
@@ -593,6 +594,17 @@ public class Player implements Serializable {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * The setter for the attribute {@link Player#name}.
+     * 
+     * @param name the name of the player
+     */
+    public void setName(String name) {
+        this.name = name;
+        nameLabel.setText(name);
+
     }
 
     /**

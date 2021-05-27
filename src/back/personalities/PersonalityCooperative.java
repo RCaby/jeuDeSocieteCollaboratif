@@ -14,4 +14,14 @@ public class PersonalityCooperative extends BasicPersonality {
     public String sayHello() {
         return "Hello, I'm Cooperative";
     }
+
+    @Override
+    public PersonalitiesEnum getLinkedPersonality() {
+        return PersonalitiesEnum.COOPERATIVE_PERSONALITIES;
+    }
+
+    @Override
+    public String toString() {
+        return "Cooperative";
+    }
 }

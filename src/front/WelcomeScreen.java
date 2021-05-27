@@ -12,7 +12,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
@@ -24,6 +23,7 @@ public class WelcomeScreen {
     JComboBox<Integer> nbPlayerBox;
     ResourceBundle stringsBundle;
     private JTextField nameField;
+    private JComboBox<String> difficultyChoice;
 
     public WelcomeScreen(MainFrame mainFrame, ResourceBundle stringsBundle) {
         this.stringsBundle = stringsBundle;
@@ -34,22 +34,35 @@ public class WelcomeScreen {
         var mainPanel = new JPanel();
         mainPanelContainer.add(mainPanel, BorderLayout.CENTER);
 
-        var validateButton = new JButton("Start");
+        var validateButton = new JButton(stringsBundle.getString("startButton"));
+
         changeFont(validateButton, 20);
         var validateButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         validateButtonPanel.add(validateButton);
         validateButton.addActionListener(new ValidateListener());
         var namePanel = new JPanel();
-        nameField = new JTextField("Player");
+        nameField = new JTextField(stringsBundle.getString("defaultName"));
         nameField.setPreferredSize(new Dimension(100, 30));
         changeFont(nameField, 18);
-        var nameLabel = new JLabel("Your name : ");
+        var nameLabel = new JLabel(stringsBundle.getString("yourNameLabel"));
         changeFont(nameLabel, 18);
         namePanel.add(nameLabel);
         namePanel.add(nameField);
 
+        var difficultyPanel = new JPanel();
+        var difficultyLabel = new JLabel(stringsBundle.getString("difficulty"));
+        changeFont(difficultyLabel, 18);
+        difficultyChoice = new JComboBox<>();
+        changeFont(difficultyChoice, 16);
+        difficultyChoice.addItem(stringsBundle.getString("difficultyEasy"));
+        difficultyChoice.addItem(stringsBundle.getString("difficultyMedium"));
+        difficultyChoice.addItem(stringsBundle.getString("difficultyHard"));
+        difficultyChoice.setSelectedIndex(1);
+        difficultyPanel.add(difficultyLabel);
+        difficultyPanel.add(difficultyChoice);
+
         var nbPlayerPanel = new JPanel();
-        var nbPlayerLabel = new JLabel("Number of player : ");
+        var nbPlayerLabel = new JLabel(stringsBundle.getString("nbPlayerLabel"));
         changeFont(nbPlayerLabel, 18);
         nbPlayerBox = new JComboBox<>();
         for (var i = 3; i < 13; i++) {
@@ -62,6 +75,7 @@ public class WelcomeScreen {
         wrapPanel.setLayout(new BoxLayout(wrapPanel, BoxLayout.Y_AXIS));
         mainPanel.add(wrapPanel, BorderLayout.CENTER);
         wrapPanel.add(namePanel);
+        wrapPanel.add(difficultyPanel);
         wrapPanel.add(nbPlayerPanel);
         wrapPanel.add(validateButtonPanel);
 
@@ -87,7 +101,8 @@ public class WelcomeScreen {
         public void actionPerformed(ActionEvent e) {
             nbPlayers = (int) nbPlayerBox.getSelectedItem();
             var playerName = nameField.getText();
-            mainFrame.buildMainScreen(nbPlayers, playerName);
+            int difficulty = difficultyChoice.getSelectedIndex();
+            mainFrame.buildMainScreen(nbPlayers, playerName, difficulty);
         }
 
     }

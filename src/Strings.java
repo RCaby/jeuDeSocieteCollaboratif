@@ -201,5 +201,9 @@ public class Strings extends ListResourceBundle {
                         { "hiddenCards", "Hidden Cards" }, { "revealedCards", "Revealed Cards" },
                         { "woodPlankFragments", "Wood Plank Fragments" }, { "woodPlanks", "Wood Planks" },
                         { "weather", "Weather" }, { "alive", "Alive" }, { "round", "Round" },
-                        { "currentPlayer", "Current Player" }, { "newChief", " is the new chief !" } };
+                        { "currentPlayer", "Current Player" }, { "newChief", " is the new chief !" },
+                        { "startButton", "Start" }, { "defaultName", "Player" }, { "yourNameLabel", "Your name : " },
+                        { "nbPlayerLabel", "Number of player : " }, { "difficulty", "Difficulty : " },
+                        { "difficultyEasy", "Easy" }, { "difficultyMedium", "Medium" }, { "difficultyHard", "Hard" },
+                        { "typesPersonalities", "There are %d %s player%s !" } };
 }

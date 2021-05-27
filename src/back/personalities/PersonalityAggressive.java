@@ -15,4 +15,14 @@ public class PersonalityAggressive extends BasicPersonality {
         return "Hello, I'm Aggresive";
     }
 
+    @Override
+    public PersonalitiesEnum getLinkedPersonality() {
+        return PersonalitiesEnum.AGGRESSIVE_PERSONALITIES;
+    }
+
+    @Override
+    public String toString() {
+        return "Aggressive";
+    }
+
 }

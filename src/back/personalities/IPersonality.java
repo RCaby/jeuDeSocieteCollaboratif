@@ -23,4 +23,6 @@ public interface IPersonality {
 
     public ActionType chooseActionForPendulum();
 
+    public PersonalitiesEnum getLinkedPersonality();
+
 }
