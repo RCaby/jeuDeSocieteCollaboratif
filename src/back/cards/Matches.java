@@ -33,6 +33,7 @@ public class Matches extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Matches_name");
         cardDescription = stringsBundle.getString("Matches_description");
+        cardImpactOnOpinion = POSITIVE_IMPACT;
     }
 
     /**

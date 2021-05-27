@@ -32,6 +32,7 @@ public class BoardGameQuoridor extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("BoardGameQuoridor_name");
         cardDescription = stringsBundle.getString("BoardGameQuoridor_description");
+        cardImpactOnOpinion = NEUTRAL_IMPACT;
     }
 
     @Override

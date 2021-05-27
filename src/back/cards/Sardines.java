@@ -32,6 +32,7 @@ public class Sardines extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Sardines_name");
         cardDescription = stringsBundle.getString("Sardines_description");
+        cardImpactOnOpinion = POSITIVE_IMPACT;
     }
 
     /**

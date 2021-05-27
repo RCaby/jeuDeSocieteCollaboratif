@@ -32,6 +32,7 @@ public class Cartridge extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Cartridge_name");
         cardDescription = stringsBundle.getString("Cartridge_description");
+        cardImpactOnOpinion = NEGATIVE_IMPACT;
     }
 
     @Override

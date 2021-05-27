@@ -34,6 +34,7 @@ public class Gourd extends Card {
         discardOnDeath = true;
         cardName = stringsBundle.getString("Gourd_name");
         cardDescription = stringsBundle.getString("Gourd_description");
+        cardImpactOnOpinion = POSITIVE_IMPACT;
     }
 
     /**

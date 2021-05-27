@@ -34,6 +34,7 @@ public class WinningLotteryTicket extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("WinningLotteryTicket_name");
         cardDescription = stringsBundle.getString("WinningLotteryTicket_description");
+        cardImpactOnOpinion = NEUTRAL_IMPACT;
     }
 
     @Override

@@ -35,6 +35,7 @@ public class AlarmClock extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("AlarmClock_name");
         cardDescription = stringsBundle.getString("AlarmClock_description");
+        cardImpactOnOpinion = POSITIVE_IMPACT;
     }
 
     /**

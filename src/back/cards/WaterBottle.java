@@ -32,6 +32,7 @@ public class WaterBottle extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("WaterBottle_name");
         cardDescription = stringsBundle.getString("WaterBottle_description");
+        cardImpactOnOpinion = POSITIVE_IMPACT;
         ;
     }
 

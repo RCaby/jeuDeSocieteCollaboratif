@@ -32,6 +32,7 @@ public class KitBBQCannibal extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("KitBBQCannibal_name");
         cardDescription = stringsBundle.getString("KitBBQCannibal_description");
+        cardImpactOnOpinion = POSITIVE_IMPACT;
     }
 
     /**

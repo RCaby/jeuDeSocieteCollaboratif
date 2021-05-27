@@ -32,6 +32,7 @@ public class OldBrief extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("OldBrief_name");
         cardDescription = stringsBundle.getString("OldBrief_description");
+        cardImpactOnOpinion = NEUTRAL_IMPACT;
     }
 
     @Override

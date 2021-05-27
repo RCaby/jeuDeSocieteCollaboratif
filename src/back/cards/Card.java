@@ -35,6 +35,9 @@ public abstract class Card implements Serializable {
 
     private static final long serialVersionUID = -3585116799691315922L;
     public static final int NUMBER_THIS_IN_DECK = 0;
+    public static final int POSITIVE_IMPACT = 1;
+    public static final int NEGATIVE_IMPACT = -1;
+    public static final int NEUTRAL_IMPACT = 0;
     boolean isRevealed;
     Player owner;
     String cardName;
@@ -43,6 +46,7 @@ public abstract class Card implements Serializable {
     protected boolean discardOnDeath;
     protected Board board;
     protected transient ResourceBundle stringsBundle;
+    int cardImpactOnOpinion;
 
     /**
      * Generates a new card and initialize some attributes.
@@ -68,6 +72,7 @@ public abstract class Card implements Serializable {
         isSingleUse = true;
         discardOnDeath = false;
         this.board = board;
+        this.cardImpactOnOpinion = 0;
     }
 
     /**
@@ -92,6 +97,15 @@ public abstract class Card implements Serializable {
             owner.discardCard(this);
 
         }
+    }
+
+    /**
+     * The getter for the attribute {@link Card#cardImpactOnOpinion}.
+     * 
+     * @return the impact of this card on the opinion of the other players.
+     */
+    public int getCardImpactOnOpinion() {
+        return cardImpactOnOpinion;
     }
 
     /**

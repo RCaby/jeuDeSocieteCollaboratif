@@ -32,6 +32,7 @@ public class Coffee extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Coffee_name");
         cardDescription = stringsBundle.getString("Coffee_description");
+        cardImpactOnOpinion = NEUTRAL_IMPACT;
     }
 
     /**

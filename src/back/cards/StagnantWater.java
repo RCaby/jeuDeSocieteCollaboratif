@@ -34,6 +34,7 @@ public class StagnantWater extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("StagnantWater_name");
         cardDescription = stringsBundle.getString("StagnantWater_description");
+        cardImpactOnOpinion = POSITIVE_IMPACT;
     }
 
     /**

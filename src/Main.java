@@ -18,5 +18,7 @@ public class Main {
 
         // FIXME utilisation de conch ne change pas le display de qui est le chef.
 
+        // TODO j'ai fini les impacts des cartes sur l'opinion, il faut maintenant
+        // modifier les opinions des joueurs quand elles sont jouées.
     }
 }

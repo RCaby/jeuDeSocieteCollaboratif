@@ -35,6 +35,7 @@ public class Antivenom extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Antivenom_name");
         cardDescription = stringsBundle.getString("Antivenom_description");
+        cardImpactOnOpinion = POSITIVE_IMPACT;
     }
 
     /**

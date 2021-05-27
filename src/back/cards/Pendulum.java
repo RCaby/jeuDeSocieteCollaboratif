@@ -33,6 +33,7 @@ public class Pendulum extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Pendulum_name");
         cardDescription = stringsBundle.getString("Pendulum_description");
+        cardImpactOnOpinion = NEGATIVE_IMPACT;
     }
 
     /**
