@@ -52,8 +52,8 @@ public class VoodooDoll extends Card {
         if (player1 != null && player1.getState() == PlayerState.DEAD) {
             board.getMainBoardFront()
                     .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
-            board.getMainBoardFront()
-                    .displayMessage(String.format(stringsBundle.getString("VoodooDoll_smallDescription"), owner));
+            board.getMainBoardFront().displayMessage(
+                    String.format(stringsBundle.getString("VoodooDoll_smallDescription"), owner, player1));
             player1.setState(PlayerState.HEALTHY);
             board.getDeadThisRound().remove(player1);
             super.useCard(player1, player2, player3, action);

@@ -25,6 +25,7 @@ public class MainFrame {
     public static final String MAIN_SCREEN = "Main_Screen";
 
     public MainFrame() {
+
         try {
             for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -32,8 +33,7 @@ public class MainFrame {
                     break;
                 }
             }
-        } catch (Exception e) {
-            // If Nimbus is not available, you can set the GUI to another look and feel.
+        } catch (Exception e) { // If Nimbus is not available, you can set the GUI to another look and feel.
         }
 
         frame = new JFrame("Game");

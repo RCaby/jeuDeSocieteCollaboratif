@@ -14,7 +14,7 @@ public class Strings extends ListResourceBundle {
 
                         { "AlarmClock_name", "Alarm Clock" },
                         { "AlarmClock_description",
-                                        "Allows to choose the player who will play first during the next round" },
+                                        "Allows to choose the player who will play first during the next round." },
                         { "AlarmClock_smallDescription", "%s will be the next chief !" },
 
                         { "Antivenom_name", "Anti-venom" },
@@ -203,7 +203,7 @@ public class Strings extends ListResourceBundle {
                         { "weather", "Weather" }, { "alive", "Alive" }, { "round", "Round" },
                         { "currentPlayer", "Current Player" }, { "newChief", " is the new chief !" },
                         { "startButton", "Start" }, { "defaultName", "Player" }, { "yourNameLabel", "Your name : " },
-                        { "nbPlayerLabel", "Number of player : " }, { "difficulty", "Difficulty : " },
+                        { "nbPlayerLabel", "Number of players : " }, { "difficulty", "Difficulty : " },
                         { "difficultyEasy", "Easy" }, { "difficultyMedium", "Medium" }, { "difficultyHard", "Hard" },
                         { "typesPersonalities", "There %s %d %s player%s !" } };
 }
