@@ -553,6 +553,15 @@ public class Player implements Serializable {
     }
 
     /**
+     * The getter for the attribute {@link Player#opinionMap}.
+     * 
+     * @return a map of the opinion of the player
+     */
+    public Map<Player, Integer> getOpinionMap() {
+        return opinionMap;
+    }
+
+    /**
      * The setter for the attribute {@link Player#currentPlayer}.
      * 
      * @param currentPlayer a boolean indicating whether this player is the current

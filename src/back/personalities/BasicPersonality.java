@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.Map.Entry;
 
 import back.ActionType;
 import back.Player;
@@ -40,14 +41,7 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
 
     @Override
     public Player choosePlayerToVoteFor(List<Player> pickablePlayers) {
-        var pickedIndex = random.nextInt(pickablePlayers.size());
-        if (pickablePlayers.size() > 1) {
-            while (pickablePlayers.get(pickedIndex).equals(linkedPlayer)) {
-                pickedIndex = random.nextInt(pickablePlayers.size());
-            }
-        }
-
-        return pickablePlayers.get(pickedIndex);
+        return chooseAsChief(pickablePlayers);
     }
 
     @Override
@@ -63,14 +57,18 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
 
     @Override
     public Player chooseAsChief(List<Player> pickablePlayers) {
-        var pickedIndex = random.nextInt(pickablePlayers.size());
-        if (pickablePlayers.size() > 1) {
-            while (pickablePlayers.get(pickedIndex).equals(linkedPlayer)) {
-                pickedIndex = random.nextInt(pickablePlayers.size());
+        if (pickablePlayers.size() == 1) {
+            return pickablePlayers.get(0);
+        }
+        var maxPlayer = pickablePlayers.get(0);
+        var maxValue = linkedPlayer.getOpinionMap().get(maxPlayer);
+        for (Entry<Player, Integer> entry : linkedPlayer.getOpinionMap().entrySet()) {
+            if (pickablePlayers.contains(entry.getKey()) && maxValue < entry.getValue()) {
+                maxValue = entry.getValue();
+                maxPlayer = entry.getKey();
             }
         }
-
-        return pickablePlayers.get(pickedIndex);
+        return maxPlayer;
     }
 
     @Override
