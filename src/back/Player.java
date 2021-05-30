@@ -45,6 +45,8 @@ import back.personalities.BasicPersonality;
 public class Player implements Serializable {
 
     private static final long serialVersionUID = 2874539910717357461L;
+    public static final int IMPACT_VOTE_ON_OPINION = -1;
+    public static final int IMPACT_CHIEF_DESIGNATION_ON_OPINION = -1;
     private List<Card> inventory;
     private List<Card> inventoryRevealed;
     private List<Card> inventoryHidden;
@@ -529,7 +531,10 @@ public class Player implements Serializable {
      * @return the player selected to be sacrificed
      */
     public Player decideWhoDieAsCPU(List<Player> playerList) {
-        return personality.chooseAsChief(playerList);
+        Player target = personality.chooseAsChief(playerList);
+        target.addOpinionOn(this, Player.IMPACT_CHIEF_DESIGNATION_ON_OPINION);
+        System.out.println("Impact of chief designation on " + target + " : " + IMPACT_CHIEF_DESIGNATION_ON_OPINION);
+        return target;
     }
 
     /**

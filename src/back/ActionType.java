@@ -6,7 +6,13 @@ import java.util.Random;
  * The different actions a {@link Player} can do during a turn.
  */
 public enum ActionType {
-    FOOD, WATER, WOOD, CARD, NONE;
+    FOOD(1), WATER(1), WOOD(1), CARD(-1), NONE(0);
+
+    private int impactOnOpinion;
+
+    ActionType(int impactOnOpinion) {
+        this.impactOnOpinion = impactOnOpinion;
+    }
 
     private static final Random RANDOM = new Random();
     private static final ActionType[] L_ACTION_TYPES = new ActionType[] { FOOD, WATER, WOOD, CARD };
@@ -18,6 +24,10 @@ public enum ActionType {
 
     public static final ActionType[] getLActionTypes() {
         return L_ACTION_TYPES;
+    }
+
+    public int getImpactOnOpinion() {
+        return impactOnOpinion;
     }
 
 }

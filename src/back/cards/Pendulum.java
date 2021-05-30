@@ -34,6 +34,7 @@ public class Pendulum extends Card {
         cardName = stringsBundle.getString("Pendulum_name");
         cardDescription = stringsBundle.getString("Pendulum_description");
         cardImpactOnOpinion = NEGATIVE_IMPACT;
+        cardImpactOnOpinionForTarget = NEGATIVE_IMPACT;
     }
 
     /**
@@ -56,6 +57,7 @@ public class Pendulum extends Card {
             board.getMainBoardFront().displayMessage(
                     String.format(stringsBundle.getString("Pendulum_smallDescription"), owner, action, this));
             player1.setImposedActionThisRound(action);
+            player1.addOpinionOn(owner, cardImpactOnOpinionForTarget);
             super.useCard(player1, player2, player3, action);
         }
     }

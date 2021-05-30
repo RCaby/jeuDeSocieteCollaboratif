@@ -34,6 +34,7 @@ public class SleepingPills extends Card {
         cardName = stringsBundle.getString("SleepingPills_name");
         cardDescription = stringsBundle.getString("SleepingPills_description");
         cardImpactOnOpinion = NEGATIVE_IMPACT;
+        cardImpactOnOpinionForTarget = NEGATIVE_IMPACT;
     }
 
     /**
@@ -50,19 +51,25 @@ public class SleepingPills extends Card {
         if (owner != null) {
             if (player1 != null && player2 != null && player3 != null) {
                 board.giveCardToPlayer(owner, player1.robRandomCard());
+                player1.addOpinionOn(owner, cardImpactOnOpinionForTarget);
                 board.giveCardToPlayer(owner, player2.robRandomCard());
+                player2.addOpinionOn(owner, cardImpactOnOpinionForTarget);
                 board.giveCardToPlayer(owner, player3.robRandomCard());
+                player3.addOpinionOn(owner, cardImpactOnOpinionForTarget);
                 board.getMainBoardFront().displayMessage(
                         String.format(stringsBundle.getString("ThreeTargets"), owner, this, player1, player2, player3));
             } else if (player1 != null && player2 != null) {
                 board.giveCardToPlayer(owner, player1.robRandomCard());
+                player1.addOpinionOn(owner, cardImpactOnOpinionForTarget);
                 board.giveCardToPlayer(owner, player2.robRandomCard());
+                player2.addOpinionOn(owner, cardImpactOnOpinionForTarget);
 
                 board.getMainBoardFront().displayMessage(
                         String.format(stringsBundle.getString("TwoTargets"), owner, this, player1, player2));
 
             } else if (player1 != null) {
                 board.giveCardToPlayer(owner, player1.robRandomCard());
+                player1.addOpinionOn(owner, cardImpactOnOpinionForTarget);
                 board.getMainBoardFront()
                         .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
             }

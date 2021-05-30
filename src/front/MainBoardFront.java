@@ -833,6 +833,9 @@ public class MainBoardFront implements Serializable {
             var player = board.getThisPlayer();
             player.playerSeeksFood(board);
             switchToPanel(CHOOSE_VOID_PANEL);
+            for (Player watcher : board.getPlayerList()) {
+                watcher.addOpinionOn(player, ActionType.FOOD.getImpactOnOpinion());
+            }
             nextButton.setEnabled(true);
             if (player.equals(board.getTwicePlayingPlayer())) {
                 board.playerWillPlayTwice(player);
@@ -852,6 +855,9 @@ public class MainBoardFront implements Serializable {
             player.playerSeeksWater(board);
             nextButton.setEnabled(true);
             switchToPanel(CHOOSE_VOID_PANEL);
+            for (Player watcher : board.getPlayerList()) {
+                watcher.addOpinionOn(player, ActionType.WATER.getImpactOnOpinion());
+            }
             if (player.equals(board.getTwicePlayingPlayer())) {
                 board.playerWillPlayTwice(player);
             }
@@ -895,6 +901,9 @@ public class MainBoardFront implements Serializable {
             player.playerSeeksWood(board, nbTries);
             nextButton.setEnabled(true);
             switchToPanel(CHOOSE_VOID_PANEL);
+            for (Player watcher : board.getPlayerList()) {
+                watcher.addOpinionOn(player, ActionType.WOOD.getImpactOnOpinion());
+            }
             if (player.equals(board.getTwicePlayingPlayer())) {
                 board.playerWillPlayTwice(player);
             }
@@ -914,6 +923,9 @@ public class MainBoardFront implements Serializable {
             nextButton.setEnabled(true);
             updateSouth();
             switchToPanel(CHOOSE_VOID_PANEL);
+            for (Player watcher : board.getPlayerList()) {
+                watcher.addOpinionOn(player, ActionType.CARD.getImpactOnOpinion());
+            }
             if (player.equals(board.getTwicePlayingPlayer())) {
                 board.playerWillPlayTwice(player);
             }
@@ -944,6 +956,7 @@ public class MainBoardFront implements Serializable {
             switchToPanel(CHOOSE_VOID_PANEL);
 
             board.getVotes().get(board.getThisPlayer()).add(target);
+            target.addOpinionOn(board.getThisPlayer(), Player.IMPACT_VOTE_ON_OPINION);
             if (!board.checkVoteNonOwnersOver()) {
                 board.voteTimeForNonOwners();
             } else if (!board.checkVoteOwnersOver()) {
@@ -974,6 +987,7 @@ public class MainBoardFront implements Serializable {
             switchToPanel(CHOOSE_VOID_PANEL);
 
             board.setDesignated(target);
+            target.addOpinionOn(board.getThisPlayer(), Player.IMPACT_CHIEF_DESIGNATION_ON_OPINION);
             board.roundEnd(board.getCurrentlyForDeparture());
         }
     }

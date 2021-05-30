@@ -47,6 +47,7 @@ public abstract class Card implements Serializable {
     protected Board board;
     protected transient ResourceBundle stringsBundle;
     int cardImpactOnOpinion;
+    int cardImpactOnOpinionForTarget;
 
     /**
      * Generates a new card and initialize some attributes.
@@ -73,6 +74,7 @@ public abstract class Card implements Serializable {
         discardOnDeath = false;
         this.board = board;
         this.cardImpactOnOpinion = 0;
+        this.cardImpactOnOpinionForTarget = 0;
     }
 
     /**
@@ -90,6 +92,10 @@ public abstract class Card implements Serializable {
      */
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         board.getCardsPlayedThisRound().add(this);
+        for (Player player : board.getPlayerList()) {
+            System.out.println("Adding " + cardImpactOnOpinion + " on opinion map of " + player + " on " + owner);
+            player.addOpinionOn(owner, this.cardImpactOnOpinion);
+        }
         if (!isRevealed) {
             setCardRevealed(true);
         }

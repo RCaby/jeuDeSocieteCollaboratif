@@ -466,12 +466,20 @@ public class Board implements Serializable {
             default:
                 break;
         }
+        for (Player watcher : playerList) {
+            watcher.addOpinionOn(player, imposedAction.getImpactOnOpinion());
+        }
         askPlayersForCards();
         if (twicePlayingPlayer != null && twicePlayingPlayer.equals(player)) {
             playerWillPlayTwice(player);
         }
     }
 
+    /**
+     * Makes a given player to play again.
+     * 
+     * @param player the twice playing player
+     */
     public void playerWillPlayTwice(Player player) {
         twicePlayingPlayer = null;
         mainBoardFront.displayMessage(player + stringsBundle.getString("playAgain"));
@@ -479,10 +487,11 @@ public class Board implements Serializable {
     }
 
     /**
-     * TODO
+     * Checks if every player have been designated for a type of resource.
      * 
-     * @param resource
-     * @return
+     * @param resource the resource to check
+     * @return a boolean indicating whether every player has been designated for a
+     *         type of resource
      */
     private boolean everyPlayerHasBeenDesignated(ActionType resource) {
         List<Player> designatedList = resource == ActionType.FOOD ? designatedForFoodThisRound
@@ -581,13 +590,10 @@ public class Board implements Serializable {
      * crystal ball.
      */
     private void checkForCrystalBallOrClub() {
-        System.out.println("Adding owners to voting list... " + crystalBallOwner + " " + crystalBallClubOwner);
         if (crystalBallOwner != null) {
-            System.out.println("Crystal ball owner added to voting list");
             votingPlayers.add(crystalBallOwner);
             votes.put(crystalBallOwner, new ArrayList<>());
         } else if (crystalBallClubOwner != null) {
-            System.out.println("Crystal ball club owner added to voting list");
             votes.put(crystalBallClubOwner, new ArrayList<>());
             votingPlayers.add(crystalBallClubOwner);
             votingPlayers.add(crystalBallClubOwner);
@@ -612,12 +618,24 @@ public class Board implements Serializable {
 
     }
 
+    private void updateOpinion() {
+        for (Entry<Player, List<Player>> entry : votes.entrySet()) {
+            Player voter = entry.getKey();
+            for (Player target : entry.getValue()) {
+                target.addOpinionOn(voter, Player.IMPACT_VOTE_ON_OPINION);
+                System.out.println("Modification of the opinion of " + target + " on " + voter + " of a value : "
+                        + Player.IMPACT_VOTE_ON_OPINION);
+            }
+        }
+    }
+
     /**
      * Ends the vote session and if necessary asks the chief to designate one
      * player.
      */
     public void endOfVote() {
         designated = voteResults();
+        updateOpinion();
         if (designated == null && !chief.equals(thisPlayer)) {
             designated = chief.decideWhoDieAsCPU(pickablePlayers);
             roundEnd(currentlyForDeparture);

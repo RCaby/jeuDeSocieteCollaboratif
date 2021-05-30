@@ -36,6 +36,7 @@ public class VoodooDoll extends Card {
         cardName = stringsBundle.getString("VoodooDoll_name");
         cardDescription = stringsBundle.getString("VoodooDoll_description");
         cardImpactOnOpinion = POSITIVE_IMPACT;
+        cardImpactOnOpinionForTarget = POSITIVE_IMPACT;
     }
 
     /**
@@ -55,6 +56,7 @@ public class VoodooDoll extends Card {
             board.getMainBoardFront().displayMessage(
                     String.format(stringsBundle.getString("VoodooDoll_smallDescription"), owner, player1));
             player1.setState(PlayerState.HEALTHY);
+            player1.addOpinionOn(owner, cardImpactOnOpinionForTarget);
             board.getDeadThisRound().remove(player1);
             super.useCard(player1, player2, player3, action);
         }

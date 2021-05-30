@@ -38,6 +38,7 @@ public class Gun extends Card {
         cardName = stringsBundle.getString("Gun_name");
         cardDescription = stringsBundle.getString("Gun_description");
         cardImpactOnOpinion = NEGATIVE_IMPACT;
+        cardImpactOnOpinionForTarget = NEGATIVE_IMPACT;
     }
 
     /**
@@ -54,6 +55,7 @@ public class Gun extends Card {
         if (player1 != null && owner != null) {
             var cardCartridge = owner.getCardType(Cartridge.class);
             if (cardCartridge != null) {
+                player1.addOpinionOn(owner, cardImpactOnOpinionForTarget);
                 board.getMainBoardFront()
                         .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
                 board.getMainBoardFront()

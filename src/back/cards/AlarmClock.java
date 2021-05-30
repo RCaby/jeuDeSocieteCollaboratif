@@ -36,6 +36,7 @@ public class AlarmClock extends Card {
         cardName = stringsBundle.getString("AlarmClock_name");
         cardDescription = stringsBundle.getString("AlarmClock_description");
         cardImpactOnOpinion = POSITIVE_IMPACT;
+        cardImpactOnOpinionForTarget = POSITIVE_IMPACT;
     }
 
     /**
@@ -51,6 +52,7 @@ public class AlarmClock extends Card {
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         if (player1 != null && player1.getState() != PlayerState.DEAD) {
             board.setNextChief(player1);
+            player1.addOpinionOn(owner, cardImpactOnOpinionForTarget);
             board.getMainBoardFront()
                     .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
             board.getMainBoardFront()
