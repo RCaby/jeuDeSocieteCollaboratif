@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.Map.Entry;
 
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER;
@@ -559,6 +560,31 @@ public class Player implements Serializable {
      */
     public Map<Player, Integer> getOpinionMap() {
         return opinionMap;
+    }
+
+    private Player mapOpinionSearchForExtremum(List<Player> playerList, boolean mostLiked) {
+        Player maxPlayer = null;
+        var maxValue = mostLiked ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+        for (Entry<Player, Integer> entry : getOpinionMap().entrySet()) {
+            boolean compareValue = mostLiked ? maxValue < entry.getValue() : maxValue > entry.getValue();
+            if (playerList.contains(entry.getKey()) && compareValue) {
+                maxValue = entry.getValue();
+                maxPlayer = entry.getKey();
+            }
+        }
+        return maxPlayer;
+    }
+
+    public Player getMostLikedPlayerIn(List<Player> playerList) {
+        var theMost = mapOpinionSearchForExtremum(playerList, true);
+        System.out.println("The most liked of " + opinionMap + " is " + theMost);
+        return theMost;
+    }
+
+    public Player getLeastLikedPlayerIn(List<Player> playerList) {
+        var theLeast = mapOpinionSearchForExtremum(playerList, false);
+        System.out.println("The least liked of " + opinionMap + " is " + theLeast);
+        return theLeast;
     }
 
     /**

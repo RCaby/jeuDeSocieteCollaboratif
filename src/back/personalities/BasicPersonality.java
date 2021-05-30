@@ -60,15 +60,8 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
         if (pickablePlayers.size() == 1) {
             return pickablePlayers.get(0);
         }
-        var maxPlayer = pickablePlayers.get(0);
-        var maxValue = linkedPlayer.getOpinionMap().get(maxPlayer);
-        for (Entry<Player, Integer> entry : linkedPlayer.getOpinionMap().entrySet()) {
-            if (pickablePlayers.contains(entry.getKey()) && maxValue < entry.getValue()) {
-                maxValue = entry.getValue();
-                maxPlayer = entry.getKey();
-            }
-        }
-        return maxPlayer;
+        return linkedPlayer.getLeastLikedPlayerIn(pickablePlayers);
+
     }
 
     @Override
