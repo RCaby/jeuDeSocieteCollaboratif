@@ -2,12 +2,23 @@ package back.personalities;
 
 import java.util.ResourceBundle;
 
+import back.ActionType;
 import back.Player;
 
 public class PersonalityCooperative extends BasicPersonality {
 
     public PersonalityCooperative(ResourceBundle stringBundle, Player player, boolean publicPersonality) {
         super(stringBundle, player, publicPersonality);
+    }
+
+    @Override
+    public ActionType chooseAction(int food, int water, int wood, int weather, int nbAlive) {
+        var pickedInt = random.nextInt(4);
+        if (pickedInt == 0) {
+            return ActionType.CARD;
+        } else {
+            return getLackingResource(food, water, wood, weather, nbAlive);
+        }
     }
 
     @Override

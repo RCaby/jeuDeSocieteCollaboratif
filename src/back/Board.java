@@ -2,6 +2,7 @@ package back;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -434,7 +435,8 @@ public class Board implements Serializable {
     private void playAsCPU(Player player) {
         ActionType imposedAction = player.getImposedActionThisRound();
         if (imposedAction == ActionType.NONE) {
-            imposedAction = player.getPersonality().chooseAction();
+            imposedAction = player.getPersonality().chooseAction(foodRations, waterRations, nbWoodPlanks, getWeather(),
+                    getNbPlayersAlive());
         }
 
         switch (imposedAction) {
@@ -465,6 +467,15 @@ public class Board implements Serializable {
         if (twicePlayingPlayer != null && twicePlayingPlayer.equals(player)) {
             playerWillPlayTwice(player);
         }
+    }
+
+    /**
+     * Uses the deck of the discarded cards to make a new deck.
+     */
+    public void flipDiscardDeck() {
+        Collections.shuffle(discardDeck);
+        deck.addAll(discardDeck);
+        discardDeck.clear();
     }
 
     /**

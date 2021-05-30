@@ -249,7 +249,14 @@ public class Player implements Serializable {
         try {
             pickedCard = board.getDeck().remove(0);
         } catch (IndexOutOfBoundsException e) {
-            return null;
+            board.flipDiscardDeck();
+            try {
+                pickedCard = board.getDeck().remove(0);
+
+            } catch (IndexOutOfBoundsException e2) {
+                return null;
+            }
+
         }
         board.getMainBoardFront().displayMessage(this + stringsBundle.getString("gotCard"));
         addCardToInventory(pickedCard);
@@ -533,7 +540,6 @@ public class Player implements Serializable {
     public Player decideWhoDieAsCPU(List<Player> playerList) {
         Player target = personality.chooseAsChief(playerList);
         target.addOpinionOn(this, Player.IMPACT_CHIEF_DESIGNATION_ON_OPINION);
-        System.out.println("Impact of chief designation on " + target + " : " + IMPACT_CHIEF_DESIGNATION_ON_OPINION);
         return target;
     }
 

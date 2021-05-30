@@ -51,6 +51,17 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
     }
 
     @Override
+    public ActionType getLackingResource(int food, int water, int wood, int weather, int nbAlive) {
+        if (weather != 0 && water <= food && (water < nbAlive || wood >= nbAlive)) {
+            return ActionType.WATER;
+        } else if (food < nbAlive || wood >= nbAlive) {
+            return ActionType.FOOD;
+        } else {
+            return ActionType.WOOD;
+        }
+    }
+
+    @Override
     public Player chooseAsChief(List<Player> pickablePlayers) {
         var pickedIndex = random.nextInt(pickablePlayers.size());
         if (pickablePlayers.size() > 1) {
@@ -63,7 +74,7 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
     }
 
     @Override
-    public ActionType chooseAction() {
+    public ActionType chooseAction(int food, int water, int wood, int weather, int nbAlive) {
         return ActionType.getRandomActionType();
     }
 

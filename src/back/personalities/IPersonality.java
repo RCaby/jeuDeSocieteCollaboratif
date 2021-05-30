@@ -21,7 +21,9 @@ public interface IPersonality {
 
     public Player chooseAsChief(List<Player> pickablePlayers);
 
-    public ActionType chooseAction();
+    public ActionType chooseAction(int food, int water, int wood, int weather, int nbAlive);
+
+    public ActionType getLackingResource(int food, int water, int wood, int weather, int nbAlive);
 
     public Player chooseTarget(Card card, List<Player> playerList);
 
