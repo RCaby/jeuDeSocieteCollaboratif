@@ -93,7 +93,6 @@ public abstract class Card implements Serializable {
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         board.getCardsPlayedThisRound().add(this);
         for (Player player : board.getPlayerList()) {
-            System.out.println("Adding " + cardImpactOnOpinion + " on opinion map of " + player + " on " + owner);
             player.addOpinionOn(owner, this.cardImpactOnOpinion);
         }
         if (!isRevealed) {

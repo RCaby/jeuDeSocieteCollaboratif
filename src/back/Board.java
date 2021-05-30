@@ -13,7 +13,6 @@ import java.util.Map.Entry;
 import back.cards.Card;
 import back.cards.Club;
 import back.cards.CrystalBall;
-import back.cards.WaterBottle;
 import back.personalities.BasicPersonality;
 import back.personalities.PersonalitiesEnum;
 import front.MainBoardFront;
@@ -361,8 +360,6 @@ public class Board implements Serializable {
             askPlayersForCards();
 
             indexOfCurrentPlayer = -1;
-            // var nextToPlay = nextPlayer();
-            // play(nextToPlay);
 
         }
 
@@ -384,7 +381,6 @@ public class Board implements Serializable {
             designated = null;
             killValidated = false;
             mainBoardFront.displayMessage(stringsBundle.getString("distributionEnd"));
-            // postDistributionRoundEnd();
 
         } else if (designated == null) {
             cardUsedVoteSession = askPlayersForCards();
@@ -397,12 +393,8 @@ public class Board implements Serializable {
         } else if (!killValidated) {
             if (lackingResource == ActionType.FOOD) {
                 designatedForFoodThisRound.add(designated);
-                System.out.println(designated + "is designated for food !");
             } else if (lackingResource == ActionType.WATER) {
                 designatedForWaterThisRound.add(designated);
-                System.out.println(designated + "is designated for water !");
-            } else {
-                System.out.println("Something is fishy ~~~~~~~~~");
             }
             cardUsedVoteSession = askPlayersForCards();
             if (cardUsedVoteSession) {
@@ -514,7 +506,6 @@ public class Board implements Serializable {
         crystalBallClubOwner = null;
         crystalBallOwner = null;
         if (lackingResource != ActionType.NONE && everyPlayerHasBeenDesignated(lackingResource)) {
-            System.out.println("Every player have been designated for this resource. Clearing the list.");
             (lackingResource == ActionType.WATER ? designatedForWaterThisRound : designatedForFoodThisRound).clear();
         }
         for (Player player : playerList) {
@@ -576,10 +567,8 @@ public class Board implements Serializable {
 
         if (cardClub != null && cardClub.isCardRevealed() && cardCrystalBall != null
                 && cardCrystalBall.isCardRevealed()) {
-            System.out.println("crystal ball club owner detected : " + player);
             crystalBallClubOwner = player;
         } else if (cardCrystalBall != null && cardCrystalBall.isCardRevealed()) {
-            System.out.println("crystal ball owner detected ! : " + player);
             crystalBallOwner = player;
         }
 
@@ -623,8 +612,6 @@ public class Board implements Serializable {
             Player voter = entry.getKey();
             for (Player target : entry.getValue()) {
                 target.addOpinionOn(voter, Player.IMPACT_VOTE_ON_OPINION);
-                System.out.println("Modification of the opinion of " + target + " on " + voter + " of a value : "
-                        + Player.IMPACT_VOTE_ON_OPINION);
             }
         }
     }
@@ -651,7 +638,6 @@ public class Board implements Serializable {
      * to.
      */
     public void voteTimeForNonOwners() {
-        System.out.println("Vote Time for non owners " + votingPlayers);
         for (Player player : votingPlayers) {
             var club = player.getCardType(Club.class);
             if (!player.equals(crystalBallOwner) && !player.equals(crystalBallClubOwner) && votes.get(player).isEmpty()
@@ -660,7 +646,6 @@ public class Board implements Serializable {
             }
         }
         if (checkVoteNonOwnersOver()) {
-            System.out.println("vote non owners over, time for owners");
             voteTimeForOwners();
         }
     }
@@ -669,7 +654,6 @@ public class Board implements Serializable {
      * Aks the player owning a crystal ball to vote if they are allowed to.
      */
     public void voteTimeForOwners() {
-        System.out.println("Vote Time for owners");
         for (Player player : votingPlayers) {
             if (player.equals(crystalBallOwner)) {
                 displayVoteResult();
@@ -681,7 +665,6 @@ public class Board implements Serializable {
             }
         }
         if (checkVoteOwnersOver()) {
-            System.out.println("vote owners over, end of vote");
             endOfVote();
         }
 
@@ -693,7 +676,6 @@ public class Board implements Serializable {
      * @return a boolean indicating if the player has voted
      */
     public boolean checkVoteOwnersOver() {
-        System.out.println("Check Vote Owners");
         for (Player player : votingPlayers) {
             if ((player.equals(crystalBallOwner) && votes.get(player).isEmpty())
                     || (player.equals(crystalBallClubOwner) && votes.get(player).size() != 2)) {
@@ -709,7 +691,6 @@ public class Board implements Serializable {
      * @return a boolean indicating if the player has voted
      */
     public boolean checkVoteNonOwnersOver() {
-        System.out.println("Check Vote Non Owners");
         for (Player player : votingPlayers) {
             var club = player.getCardType(Club.class);
             if ((!player.equals(crystalBallOwner) && !player.equals(crystalBallClubOwner)
