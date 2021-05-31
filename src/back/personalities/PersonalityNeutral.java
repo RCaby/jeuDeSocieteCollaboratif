@@ -30,4 +30,9 @@ public class PersonalityNeutral extends BasicPersonality {
         return IPersonality.NEUTRAL_STARTING_BONUS;
     }
 
+    @Override
+    public boolean updatePersonality() {
+        return false;
+    }
+
 }

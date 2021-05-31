@@ -12,6 +12,7 @@ public interface IPersonality {
     public static final int AGGRESIVE_STARTING_BONUS = -10;
     public static final int MAD_STARTING_BONUS = -50;
     public static final int NEUTRAL_STARTING_BONUS = 0;
+    public static final int PERSONALITY_CHANGE_VALUE = 10;
 
     public String sayHello();
 
@@ -28,6 +29,8 @@ public interface IPersonality {
     public Player chooseTarget(Card card, List<Player> playerList);
 
     public int getNbWoodTries();
+
+    public boolean updatePersonality();
 
     public Player[] chooseThreeTargets(List<Player> playerList);
 

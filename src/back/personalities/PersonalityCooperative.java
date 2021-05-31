@@ -100,4 +100,23 @@ public class PersonalityCooperative extends BasicPersonality {
     protected Player chooseTargetForAlarmClock(List<Player> playerList) {
         return super.chooseTargetForAlarmClock(getAlivePlayersIn(playerList));
     }
+
+    @Override
+    public boolean updatePersonality() {
+        System.out.println("Personality change ? " + linkedPlayer.getOpinionOn(linkedPlayer) + "/"
+                + -PERSONALITY_CHANGE_VALUE + " " + linkedPlayer);
+        if (linkedPlayer.getOpinionOn(linkedPlayer) < -PERSONALITY_CHANGE_VALUE) {
+            System.out.println("Personnality update !!");
+            if (random.nextInt(4) != 0) {
+                linkedPlayer.setPersonality(
+                        PersonalitiesEnum.getAggressivePersonality(stringsBundle, linkedPlayer, isPersonalityPublic()));
+                return true;
+            } else {
+                linkedPlayer.setPersonality(
+                        PersonalitiesEnum.getMadPersonality(stringsBundle, linkedPlayer, isPersonalityPublic()));
+                return true;
+            }
+        }
+        return false;
+    }
 }

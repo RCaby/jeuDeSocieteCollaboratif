@@ -539,9 +539,9 @@ public class Player implements Serializable {
      * @param playerList the list of player who can be sacrificed
      * @return the player selected to be sacrificed
      */
-    public Player decideWhoDieAsCPU(List<Player> playerList) {
+    public Player decideWhoDieAsCPU(List<Player> playerList, int difficulty) {
         Player target = personality.chooseAsChief(playerList);
-        target.addOpinionOn(this, Player.IMPACT_CHIEF_DESIGNATION_ON_OPINION);
+        target.addOpinionOn(this, Player.IMPACT_CHIEF_DESIGNATION_ON_OPINION, difficulty);
         return target;
     }
 
@@ -768,8 +768,11 @@ public class Player implements Serializable {
         this.sickRound = roundSick;
     }
 
-    public void addOpinionOn(Player player, int opinion) {
+    public void addOpinionOn(Player player, int opinion, int difficulty) {
         opinionMap.put(player, opinionMap.get(player) + opinion);
+        if (personality.updatePersonality() && difficulty == 0) {
+            this.setName(getPersonality() + name);
+        }
     }
 
     public int getOpinionOn(Player player) {

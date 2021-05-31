@@ -57,7 +57,7 @@ public class Pendulum extends Card {
             board.getMainBoardFront().displayMessage(
                     String.format(stringsBundle.getString("Pendulum_smallDescription"), owner, action, player1));
             player1.setImposedActionThisRound(action);
-            player1.addOpinionOn(owner, cardImpactOnOpinionForTarget);
+            player1.addOpinionOn(owner, cardImpactOnOpinionForTarget, board.getDifficulty());
             super.useCard(player1, player2, player3, action);
         }
     }

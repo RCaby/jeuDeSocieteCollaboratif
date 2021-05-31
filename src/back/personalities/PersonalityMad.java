@@ -29,4 +29,9 @@ public class PersonalityMad extends BasicPersonality {
     public int getLinkedStartingBonus() {
         return IPersonality.MAD_STARTING_BONUS;
     }
+
+    @Override
+    public boolean updatePersonality() {
+        return false;
+    }
 }

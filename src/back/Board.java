@@ -347,6 +347,8 @@ public class Board implements Serializable {
             cardsPlayedThisRound.clear();
             flashLightList.clear();
             barometerList.clear();
+            designated = null;
+            mainBoardFront.getNextButton().setEnabled(true);
             designatedForFoodThisRound.clear();
             designatedForWaterThisRound.clear();
             currentPhase = GamePhase.ROUND_BEGINNING;
@@ -461,7 +463,7 @@ public class Board implements Serializable {
                 break;
         }
         for (Player watcher : playerList) {
-            watcher.addOpinionOn(player, imposedAction.getImpactOnOpinion());
+            watcher.addOpinionOn(player, imposedAction.getImpactOnOpinion(), difficulty);
         }
         askPlayersForCards();
         if (twicePlayingPlayer != null && twicePlayingPlayer.equals(player)) {
@@ -622,7 +624,7 @@ public class Board implements Serializable {
         for (Entry<Player, List<Player>> entry : votes.entrySet()) {
             Player voter = entry.getKey();
             for (Player target : entry.getValue()) {
-                target.addOpinionOn(voter, Player.IMPACT_VOTE_ON_OPINION);
+                target.addOpinionOn(voter, Player.IMPACT_VOTE_ON_OPINION, difficulty);
             }
         }
     }
@@ -635,7 +637,7 @@ public class Board implements Serializable {
         designated = voteResults();
         updateOpinion();
         if (designated == null && !chief.equals(thisPlayer)) {
-            designated = chief.decideWhoDieAsCPU(pickablePlayers);
+            designated = chief.decideWhoDieAsCPU(pickablePlayers, difficulty);
             roundEnd(currentlyForDeparture);
         } else if (designated == null) {
             mainBoardFront.makePlayerChiefDesignates(pickablePlayers);
@@ -1478,6 +1480,15 @@ public class Board implements Serializable {
      */
     public void setBarometerList(List<Integer> barometerList) {
         this.barometerList = barometerList;
+    }
+
+    /**
+     * The getter for the attribute {@link Board#difficulty}.
+     * 
+     * @return the difficulty of the game
+     */
+    public int getDifficulty() {
+        return difficulty;
     }
 
     /**

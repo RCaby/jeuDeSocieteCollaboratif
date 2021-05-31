@@ -6,8 +6,6 @@ public class Main {
     public static void main(String[] args) {
 
         MainFrame mainFrame = new MainFrame();
-
-        // TODO quid de l'auto opinion qui devient extremement basse ou haute ?
-
+        // stuck when someone use giftbasket end round
     }
 }

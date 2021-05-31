@@ -27,9 +27,9 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
 
     @Override
     public Card wouldLikePlayACard() {
-        var pickedInt = random.nextInt(2);
+        var pickedInt = random.nextInt(5);
         Card pickedCard = null;
-        if (pickedInt % 2 == 0 && linkedPlayer.canUseCard()) {
+        if (pickedInt == 0 && linkedPlayer.canUseCard()) {
             var pickedIndexCard = random.nextInt(linkedPlayer.getInventory().size());
 
             while (!linkedPlayer.getInventory().get(pickedIndexCard).canBeUsed()) {

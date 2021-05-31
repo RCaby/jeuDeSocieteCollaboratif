@@ -2,11 +2,8 @@ package back.personalities;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
-
-import javax.naming.spi.ResolveResult;
 
 import back.Player;
 
@@ -83,6 +80,21 @@ public enum PersonalitiesEnum {
     public static BasicPersonality getNeutralPersonality(ResourceBundle stringsBundle, Player player,
             boolean isPersonalityPublic) {
         return personalitiesArray[0].getInstance(stringsBundle, player, isPersonalityPublic);
+    }
+
+    public static BasicPersonality getAggressivePersonality(ResourceBundle stringsBundle, Player player,
+            boolean isPersonalityPublic) {
+        return personalitiesArray[1].getInstance(stringsBundle, player, isPersonalityPublic);
+    }
+
+    public static BasicPersonality getCooperativePersonality(ResourceBundle stringsBundle, Player player,
+            boolean isPersonalityPublic) {
+        return personalitiesArray[2].getInstance(stringsBundle, player, isPersonalityPublic);
+    }
+
+    public static BasicPersonality getMadPersonality(ResourceBundle stringsBundle, Player player,
+            boolean isPersonalityPublic) {
+        return personalitiesArray[3].getInstance(stringsBundle, player, isPersonalityPublic);
     }
 
     public static BasicPersonality getRandomPersonality(ResourceBundle stringsBundle, Player player,
