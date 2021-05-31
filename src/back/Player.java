@@ -32,6 +32,7 @@ import back.cards.Card;
 import back.cards.FishingRod;
 import back.cards.Gourd;
 import back.personalities.BasicPersonality;
+import front.MainBoardFront;
 
 /**
  * The {@code Player} class represents a Player.
@@ -67,6 +68,7 @@ public class Player implements Serializable {
     private BasicPersonality personality;
     private JLabel nameLabel;
     private Map<Player, Integer> opinionMap;
+    private final String originalName;
 
     /**
      * Generates a Player.
@@ -77,6 +79,7 @@ public class Player implements Serializable {
      */
     public Player(String name, ResourceBundle stringsBundle) {
         this.name = name;
+        originalName = name;
         inventory = new ArrayList<>();
         inventoryHidden = new ArrayList<>();
         inventoryRevealed = new ArrayList<>();
@@ -539,9 +542,9 @@ public class Player implements Serializable {
      * @param playerList the list of player who can be sacrificed
      * @return the player selected to be sacrificed
      */
-    public Player decideWhoDieAsCPU(List<Player> playerList, int difficulty) {
+    public Player decideWhoDieAsCPU(List<Player> playerList, int difficulty, MainBoardFront mainBoardFront) {
         Player target = personality.chooseAsChief(playerList);
-        target.addOpinionOn(this, Player.IMPACT_CHIEF_DESIGNATION_ON_OPINION, difficulty);
+        target.addOpinionOn(this, Player.IMPACT_CHIEF_DESIGNATION_ON_OPINION, difficulty, mainBoardFront);
         return target;
     }
 
@@ -768,10 +771,14 @@ public class Player implements Serializable {
         this.sickRound = roundSick;
     }
 
-    public void addOpinionOn(Player player, int opinion, int difficulty) {
+    public void addOpinionOn(Player player, int opinion, int difficulty, MainBoardFront mainBoardFront) {
         opinionMap.put(player, opinionMap.get(player) + opinion);
-        if (personality.updatePersonality() && difficulty == 0) {
-            this.setName(getPersonality() + name);
+        if (personality.updatePersonality()) {
+            mainBoardFront.displayMessage(String.format(stringsBundle.getString("personalityUpdate"), this));
+            if (difficulty == 0) {
+                this.setName(getPersonality() + originalName);
+            }
+
         }
     }
 

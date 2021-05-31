@@ -55,7 +55,8 @@ public class Gun extends Card {
         if (player1 != null && owner != null) {
             var cardCartridge = owner.getCardType(Cartridge.class);
             if (cardCartridge != null) {
-                player1.addOpinionOn(owner, cardImpactOnOpinionForTarget, board.getDifficulty());
+                player1.addOpinionOn(owner, cardImpactOnOpinionForTarget, board.getDifficulty(),
+                        board.getMainBoardFront());
                 board.getMainBoardFront()
                         .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
                 board.getMainBoardFront()

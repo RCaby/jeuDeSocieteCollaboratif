@@ -103,10 +103,7 @@ public class PersonalityAggressive extends BasicPersonality {
 
     @Override
     public boolean updatePersonality() {
-        System.out.println("Personality change ? " + linkedPlayer.getOpinionOn(linkedPlayer) + "/"
-                + PERSONALITY_CHANGE_VALUE + " " + linkedPlayer);
         if (linkedPlayer.getOpinionOn(linkedPlayer) > PERSONALITY_CHANGE_VALUE) {
-            System.out.println("Personnality update !!");
             linkedPlayer.setPersonality(
                     PersonalitiesEnum.getCooperativePersonality(stringsBundle, linkedPlayer, isPersonalityPublic()));
             return true;

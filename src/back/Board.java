@@ -463,7 +463,7 @@ public class Board implements Serializable {
                 break;
         }
         for (Player watcher : playerList) {
-            watcher.addOpinionOn(player, imposedAction.getImpactOnOpinion(), difficulty);
+            watcher.addOpinionOn(player, imposedAction.getImpactOnOpinion(), difficulty, mainBoardFront);
         }
         askPlayersForCards();
         if (twicePlayingPlayer != null && twicePlayingPlayer.equals(player)) {
@@ -624,7 +624,7 @@ public class Board implements Serializable {
         for (Entry<Player, List<Player>> entry : votes.entrySet()) {
             Player voter = entry.getKey();
             for (Player target : entry.getValue()) {
-                target.addOpinionOn(voter, Player.IMPACT_VOTE_ON_OPINION, difficulty);
+                target.addOpinionOn(voter, Player.IMPACT_VOTE_ON_OPINION, difficulty, mainBoardFront);
             }
         }
     }
@@ -637,7 +637,7 @@ public class Board implements Serializable {
         designated = voteResults();
         updateOpinion();
         if (designated == null && !chief.equals(thisPlayer)) {
-            designated = chief.decideWhoDieAsCPU(pickablePlayers, difficulty);
+            designated = chief.decideWhoDieAsCPU(pickablePlayers, difficulty, mainBoardFront);
             roundEnd(currentlyForDeparture);
         } else if (designated == null) {
             mainBoardFront.makePlayerChiefDesignates(pickablePlayers);
