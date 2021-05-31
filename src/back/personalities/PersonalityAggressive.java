@@ -27,6 +27,16 @@ public class PersonalityAggressive extends BasicPersonality {
     }
 
     @Override
+    public int getNbWoodTries() {
+        var pickedInt = random.nextInt(8) + 1;
+        if (pickedInt <= 4) {
+            return pickedInt;
+        } else {
+            return random.nextInt(5) + 1;
+        }
+    }
+
+    @Override
     public PersonalitiesEnum getLinkedPersonality() {
         return PersonalitiesEnum.AGGRESSIVE_PERSONALITIES;
     }

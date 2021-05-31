@@ -576,15 +576,13 @@ public class Player implements Serializable {
     }
 
     public Player getMostLikedPlayerIn(List<Player> playerList) {
-        var theMost = mapOpinionSearchForExtremum(playerList, true);
-        System.out.println("The most liked of " + opinionMap + " is " + theMost);
-        return theMost;
+        return mapOpinionSearchForExtremum(playerList, true);
+
     }
 
     public Player getLeastLikedPlayerIn(List<Player> playerList) {
-        var theLeast = mapOpinionSearchForExtremum(playerList, false);
-        System.out.println("The least liked of " + opinionMap + " is " + theLeast);
-        return theLeast;
+        return mapOpinionSearchForExtremum(playerList, false);
+
     }
 
     /**

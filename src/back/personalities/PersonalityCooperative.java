@@ -22,6 +22,16 @@ public class PersonalityCooperative extends BasicPersonality {
     }
 
     @Override
+    public int getNbWoodTries() {
+        var pickedInt = random.nextInt(8) + 1;
+        if (pickedInt <= 3) {
+            return pickedInt;
+        } else {
+            return random.nextInt(5) + 1;
+        }
+    }
+
+    @Override
     public String sayHello() {
         return "Hello, I'm Cooperative";
     }

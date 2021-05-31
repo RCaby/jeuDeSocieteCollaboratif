@@ -27,6 +27,8 @@ public interface IPersonality {
 
     public Player chooseTarget(Card card, List<Player> playerList);
 
+    public int getNbWoodTries();
+
     public Player[] chooseThreeTargets(List<Player> playerList);
 
     public ActionType chooseActionForPendulum();

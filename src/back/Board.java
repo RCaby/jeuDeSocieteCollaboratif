@@ -450,7 +450,7 @@ public class Board implements Serializable {
                 break;
             case WOOD:
                 mainBoardFront.displayMessage(player + stringsBundle.getString("woodAction"));
-                int nbTries = random.nextInt(6) + 1;
+                var nbTries = player.getPersonality().getNbWoodTries();
                 player.playerSeeksWood(this, nbTries);
                 break;
             case CARD:

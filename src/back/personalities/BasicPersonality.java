@@ -65,6 +65,11 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
     }
 
     @Override
+    public int getNbWoodTries() {
+        return random.nextInt(6) + 1;
+    }
+
+    @Override
     public ActionType chooseAction(int food, int water, int wood, int weather, int nbAlive) {
         return ActionType.getRandomActionType();
     }
