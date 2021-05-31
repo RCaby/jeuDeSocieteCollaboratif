@@ -394,6 +394,7 @@ public class Player implements Serializable {
             } else {
                 cardUsed.useCard(null, null, null, ActionType.NONE);
             }
+            board.getMainBoardFront().displayMessage("\n");
         }
 
         return cardWasPlayed;

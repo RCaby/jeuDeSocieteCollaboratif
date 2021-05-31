@@ -1,5 +1,6 @@
 package back.personalities;
 
+import java.util.List;
 import java.util.ResourceBundle;
 
 import back.ActionType;
@@ -49,6 +50,55 @@ public class PersonalityAggressive extends BasicPersonality {
     @Override
     public int getLinkedStartingBonus() {
         return IPersonality.AGGRESIVE_STARTING_BONUS;
+    }
+
+    @Override
+    protected Player[] chooseTargetForSleepingPills(List<Player> playerList) {
+        Player player1 = null;
+        Player player2 = null;
+        Player player3 = null;
+        List<Player> alivePlayers = getAlivePlayersIn(playerList);
+        var nbAlive = alivePlayers.size();
+        if (nbAlive >= 1) {
+            player1 = linkedPlayer.getLeastLikedPlayerIn(alivePlayers);
+            alivePlayers.remove(player1);
+        }
+        if (nbAlive >= 2) {
+            player2 = linkedPlayer.getLeastLikedPlayerIn(alivePlayers);
+            alivePlayers.remove(player2);
+        }
+        if (nbAlive >= 3) {
+            player3 = linkedPlayer.getLeastLikedPlayerIn(alivePlayers);
+            alivePlayers.remove(player3);
+        }
+        return new Player[] { player1, player2, player3 };
+
+    }
+
+    @Override
+    protected Player chooseTargetForGun(List<Player> playerList) {
+        return linkedPlayer.getLeastLikedPlayerIn(getAlivePlayersIn(playerList));
+
+    }
+
+    @Override
+    protected Player chooseTargetForPendulum(List<Player> playerList) {
+        return super.chooseTargetForPendulum(getAlivePlayersIn(playerList));
+    }
+
+    @Override
+    protected Player chooseTargetForVoodooDoll(List<Player> playerList) {
+        return super.chooseTargetForVoodooDoll(getDeadPlayersIn(playerList));
+    }
+
+    @Override
+    protected Player chooseTargetForAntivenom(List<Player> playerList) {
+        return super.chooseTargetForAntivenom(getSickPlayersIn(playerList));
+    }
+
+    @Override
+    protected Player chooseTargetForAlarmClock(List<Player> playerList) {
+        return super.chooseTargetForAlarmClock(getAlivePlayersIn(playerList));
     }
 
 }

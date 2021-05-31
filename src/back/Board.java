@@ -975,11 +975,11 @@ public class Board implements Serializable {
             mainBoardFront.displayMessage(player + stringsBundle.getString("sacrificedForCrew"));
         }
         if (player.equals(chief) && getNbPlayersAlive() > 0) {
-            Player newChief = getPlayerAliveAfterBefore(playerList.indexOf(player), false);
+            var newChief = getPlayerAliveAfterBefore(playerList.indexOf(player), false);
             setChief(newChief);
             mainBoardFront.displayMessage(newChief + stringsBundle.getString("newChief"));
         }
-
+        updateDisplayResources();
         mainBoardFront.updateSouth();
     }
 

@@ -115,7 +115,7 @@ public class Strings extends ListResourceBundle {
                         { "RottenFish_name", "Rotten Fish" },
                         { "RottenFish_description",
                                         "Is equivalent to one food ration but makes the player sick for one round." },
-                        { "RottenFish_smallDescription", "%s gets one food ration but makes is now sick." },
+                        { "RottenFish_smallDescription", "%s gets one food ration but is now sick." },
 
                         { "Sandwich_name", "Sandwich" },
                         { "Sandwich_description", "Is equivalent to one food ration." },

@@ -1,13 +1,14 @@
 package back.personalities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
-import java.util.Map.Entry;
 
 import back.ActionType;
 import back.Player;
+import back.PlayerState;
 import back.cards.Card;
 
 public abstract class BasicPersonality implements IPersonality, Serializable {
@@ -109,7 +110,6 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
 
     @Override
     public int getLinkedStartingBonus() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
@@ -157,4 +157,35 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
     public String sayHello() {
         return "Hello, I'm Basic";
     }
+
+    protected List<Player> getDeadPlayersIn(List<Player> playerList) {
+        List<Player> deadPlayers = new ArrayList<>();
+        for (Player player : playerList) {
+            if (player.getState() == PlayerState.DEAD) {
+                deadPlayers.add(player);
+            }
+        }
+        return deadPlayers;
+    }
+
+    protected List<Player> getAlivePlayersIn(List<Player> playerList) {
+        List<Player> alivePlayers = new ArrayList<>();
+        for (Player player : playerList) {
+            if (player.getState() != PlayerState.DEAD) {
+                alivePlayers.add(player);
+            }
+        }
+        return alivePlayers;
+    }
+
+    protected List<Player> getSickPlayersIn(List<Player> playerList) {
+        List<Player> sickPlayers = new ArrayList<>();
+        for (Player player : playerList) {
+            if (player.getState() == PlayerState.SICK_FROM_SNAKE) {
+                sickPlayers.add(player);
+            }
+        }
+        return sickPlayers;
+    }
+
 }

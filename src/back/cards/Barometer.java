@@ -63,7 +63,6 @@ public class Barometer extends Card {
         board.getMainBoardFront()
                 .displayMessage(String.format(stringsBundle.getString("Barometer_smallDescription"), owner));
 
-        board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
         super.useCard(player1, player2, player3, action);
     }
 }
