@@ -32,12 +32,16 @@ public class OldBrief extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("OldBrief_name");
         cardDescription = stringsBundle.getString("OldBrief_description");
-        cardImpactOnOpinion = NEUTRAL_IMPACT;
     }
 
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("UselessCard"), owner, this));
         super.useCard(player1, player2, player3, action);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_OLD_BRIEF;
     }
 }

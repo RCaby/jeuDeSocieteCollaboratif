@@ -32,7 +32,6 @@ public class KitBBQCannibal extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("KitBBQCannibal_name");
         cardDescription = stringsBundle.getString("KitBBQCannibal_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
     }
 
     /**
@@ -62,5 +61,10 @@ public class KitBBQCannibal extends Card {
     @Override
     public boolean canBeUsed() {
         return !board.getDeadThisRound().isEmpty();
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_KIT_BBQ_CANNIBAL;
     }
 }

@@ -34,7 +34,6 @@ public class StagnantWater extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("StagnantWater_name");
         cardDescription = stringsBundle.getString("StagnantWater_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
     }
 
     /**
@@ -61,6 +60,11 @@ public class StagnantWater extends Card {
             }
             super.useCard(player1, player2, player3, action);
         }
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_STAGNANT_WATER;
     }
 
 }

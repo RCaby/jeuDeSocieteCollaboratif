@@ -33,7 +33,6 @@ public class Matches extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Matches_name");
         cardDescription = stringsBundle.getString("Matches_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
     }
 
     /**
@@ -52,6 +51,11 @@ public class Matches extends Card {
                 .displayMessage(String.format(stringsBundle.getString("Matches_smallDescription"), owner));
         board.setMatchesUsedThisRound(true);
         super.useCard(player1, player2, player3, action);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_MATCHES;
     }
 
 }

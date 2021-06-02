@@ -32,7 +32,6 @@ public class WaterBottle extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("WaterBottle_name");
         cardDescription = stringsBundle.getString("WaterBottle_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
         ;
     }
 
@@ -52,5 +51,10 @@ public class WaterBottle extends Card {
                 .displayMessage(String.format(stringsBundle.getString("WaterBottle_smallDescription"), owner));
         board.addWater(1);
         super.useCard(player1, player2, player3, action);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_WATER_BOTTLE;
     }
 }

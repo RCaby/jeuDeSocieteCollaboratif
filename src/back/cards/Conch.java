@@ -32,7 +32,7 @@ public class Conch extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Conch_name");
         cardDescription = stringsBundle.getString("Conch_description");
-        cardImpactOnOpinion = NEGATIVE_IMPACT;
+
     }
 
     /**
@@ -55,6 +55,11 @@ public class Conch extends Card {
             super.useCard(player1, player2, player3, action);
         }
 
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_CONCH;
     }
 
 }

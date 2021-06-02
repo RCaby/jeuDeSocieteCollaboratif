@@ -34,7 +34,6 @@ public class Axe extends Card {
         discardOnDeath = true;
         cardName = stringsBundle.getString("Axe_name");
         cardDescription = stringsBundle.getString("Axe_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
     }
 
     @Override
@@ -52,5 +51,10 @@ public class Axe extends Card {
     @Override
     public boolean canBeUsed() {
         return !isRevealed;
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_AXE;
     }
 }

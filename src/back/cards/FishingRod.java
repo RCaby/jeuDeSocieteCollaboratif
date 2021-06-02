@@ -34,7 +34,6 @@ public class FishingRod extends Card {
         discardOnDeath = true;
         cardName = stringsBundle.getString("FishingRod_name");
         cardDescription = stringsBundle.getString("FishingRod_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
     }
 
     /**
@@ -52,6 +51,11 @@ public class FishingRod extends Card {
         board.getMainBoardFront()
                 .displayMessage(String.format(stringsBundle.getString("FishingRod_smallDescription"), owner));
         super.useCard(player1, player2, player3, action);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_FISHINGROD;
     }
 
 }

@@ -32,7 +32,6 @@ public class MetalSheet extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("MetalSheet_name");
         cardDescription = stringsBundle.getString("MetalSheet_description");
-        cardImpactOnOpinion = NEUTRAL_IMPACT;
     }
 
     /**
@@ -50,6 +49,11 @@ public class MetalSheet extends Card {
         board.getMainBoardFront()
                 .displayMessage(String.format(stringsBundle.getString("MetalSheet_smallDescription"), owner));
         super.useCard(player1, player2, player3, action);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_METAL_SHEET;
     }
 
 }

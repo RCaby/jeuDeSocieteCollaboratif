@@ -32,7 +32,6 @@ public class VegetableMill extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("VegetableMill_name");
         cardDescription = stringsBundle.getString("VegetableMill_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
     }
 
     /**
@@ -61,5 +60,10 @@ public class VegetableMill extends Card {
     @Override
     public boolean canBeUsed() {
         return board.getFoodRations() >= 2;
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_VEGETABLE_MILL;
     }
 }

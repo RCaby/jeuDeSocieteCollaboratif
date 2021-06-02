@@ -35,8 +35,6 @@ public class AlarmClock extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("AlarmClock_name");
         cardDescription = stringsBundle.getString("AlarmClock_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
-        cardImpactOnOpinionForTarget = POSITIVE_IMPACT;
     }
 
     /**
@@ -69,6 +67,15 @@ public class AlarmClock extends Card {
     @Override
     public ActionListener getActionListener() {
         return board.getMainBoardFront().new CardPlayerActionListenerOneTarget(this);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_ALARM_CLOCK;
+    }
+
+    public int getCardImpactOnOpinionTarget() {
+        return IMPACT_ALARM_CLOCK_ON_TARGET;
     }
 
 }

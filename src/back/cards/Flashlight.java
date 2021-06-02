@@ -34,7 +34,6 @@ public class Flashlight extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Flashlight_name");
         cardDescription = stringsBundle.getString("Flashlight_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
     }
 
     /**
@@ -65,5 +64,10 @@ public class Flashlight extends Card {
         board.getMainBoardFront()
                 .displayMessage(String.format(stringsBundle.getString("Flashlight_smallDescription"), owner));
         super.useCard(player1, player2, player3, action);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_FLASHLIGHT;
     }
 }

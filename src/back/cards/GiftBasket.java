@@ -34,7 +34,6 @@ public class GiftBasket extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("GiftBasket_name");
         cardDescription = stringsBundle.getString("GiftBasket_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
     }
 
     /**
@@ -70,8 +69,12 @@ public class GiftBasket extends Card {
      */
     @Override
     public boolean canBeUsed() {
-        return board.getCurrentPhase() == GamePhase.GOODS_DISTRIBUTION && (!board.isThereEnoughGoodsForAll(false));// To
-                                                                                                                   // be
-        // ended
+        return board.getCurrentPhase() == GamePhase.GOODS_DISTRIBUTION && (!board.isThereEnoughGoodsForAll(false));
     }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_GIFTBASKET;
+    }
+
 }

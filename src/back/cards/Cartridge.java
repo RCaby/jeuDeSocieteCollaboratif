@@ -32,7 +32,7 @@ public class Cartridge extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Cartridge_name");
         cardDescription = stringsBundle.getString("Cartridge_description");
-        cardImpactOnOpinion = NEGATIVE_IMPACT;
+
     }
 
     @Override
@@ -50,5 +50,10 @@ public class Cartridge extends Card {
     @Override
     public boolean canBeUsed() {
         return false;
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_CARTRIDGE;
     }
 }

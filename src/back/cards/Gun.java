@@ -37,8 +37,6 @@ public class Gun extends Card {
         isSingleUse = false;
         cardName = stringsBundle.getString("Gun_name");
         cardDescription = stringsBundle.getString("Gun_description");
-        cardImpactOnOpinion = NEGATIVE_IMPACT;
-        cardImpactOnOpinionForTarget = NEGATIVE_IMPACT;
     }
 
     /**
@@ -90,5 +88,15 @@ public class Gun extends Card {
     @Override
     public ActionListener getActionListener() {
         return board.getMainBoardFront().new CardPlayerActionListenerOneTarget(this);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_GUN;
+    }
+
+    @Override
+    public int getCardImpactOnOpinionOnTarget() {
+        return IMPACT_GUN_ON_TARGET;
     }
 }

@@ -35,9 +35,47 @@ public abstract class Card implements Serializable {
 
     private static final long serialVersionUID = -3585116799691315922L;
     public static final int NUMBER_THIS_IN_DECK = 0;
-    public static final int POSITIVE_IMPACT = 1;
-    public static final int NEGATIVE_IMPACT = -1;
-    public static final int NEUTRAL_IMPACT = 0;
+    public static final int IMPACT_ALARM_CLOCK = 0;
+    public static final int IMPACT_ALARM_CLOCK_ON_TARGET = 1;
+    public static final int IMPACT_ANTIVENOM = 1;
+    public static final int IMPACT_ANTIVENOM_ON_TARGET = 2;
+    public static final int IMPACT_AXE = 5;
+    public static final int IMPACT_BAROMETER = 0;
+    public static final int IMPACT_BOARD_GAME_QUORIDOR = 0;
+    public static final int IMPACT_CARTRIDGE = -1;
+    public static final int IMPACT_CLUB = -5;
+    public static final int IMPACT_COCONUT = 3;
+    public static final int IMPACT_COFFEE = 0;
+    public static final int IMPACT_CONCH = -1;
+    public static final int IMPACT_CRYSTAL_BALL = -3;
+    public static final int IMPACT_FISHINGROD = 5;
+    public static final int IMPACT_FLASHLIGHT = 0;
+    public static final int IMPACT_GIFTBASKET = 3;
+    public static final int IMPACT_GOURD = 5;
+    public static final int IMPACT_GUN = -5;
+    public static final int IMPACT_GUN_ON_TARGET = -3;
+    public static final int IMPACT_KIT_BBQ_CANNIBAL = 3;
+    public static final int IMPACT_LUXURY_CAR_KEY = 0;
+    public static final int IMPACT_MATCHES = 1;
+    public static final int IMPACT_METAL_SHEET = 1;
+    public static final int IMPACT_OLD_BRIEF = 0;
+    public static final int IMPACT_PENDULUM = -1;
+    public static final int IMPACT_PENDULUM_ON_TARGET = -3;
+    public static final int IMPACT_ROTTEN_FISH = 3;
+    public static final int IMPACT_SANDWICH = 1;
+    public static final int IMPACT_SARDINES = 3;
+    public static final int IMPACT_SLEEPING_PILLS = -3;
+    public static final int IMPACT_SLEEPING_PILLS_ON_TARGET = -3;
+    public static final int IMPACT_SPYGLASS = 0;
+    public static final int IMPACT_STAGNANT_WATER = 3;
+    public static final int IMPACT_TOILET_BRUSH = 0;
+    public static final int IMPACT_VEGETABLE_MILL = 3;
+    public static final int IMPACT_VOODOO_DOLL = 3;
+    public static final int IMPACT_VOODOO_DOLL_ON_TARGET = 5;
+    public static final int IMPACT_WATER_BOTTLE = 1;
+    public static final int IMPACT_WINNING_LOTTERY_TICKET = 0;
+    public static final int IMPACT_WOODEN_PLANK = 3;
+
     boolean isRevealed;
     Player owner;
     String cardName;
@@ -48,6 +86,7 @@ public abstract class Card implements Serializable {
     protected transient ResourceBundle stringsBundle;
     int cardImpactOnOpinion;
     int cardImpactOnOpinionForTarget;
+    private int cardImpactOnOpinionOnTarget;
 
     /**
      * Generates a new card and initialize some attributes.
@@ -111,6 +150,16 @@ public abstract class Card implements Serializable {
      */
     public int getCardImpactOnOpinion() {
         return cardImpactOnOpinion;
+    }
+
+    /**
+     * The getter for the attribute {@link Card#cardImpactOnOpinionOnTarget}.
+     * 
+     * @return the impact of this card on the opinion of the other players if they
+     *         are targeted .
+     */
+    public int getCardImpactOnOpinionOnTarget() {
+        return cardImpactOnOpinionOnTarget;
     }
 
     /**

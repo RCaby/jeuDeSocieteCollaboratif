@@ -35,8 +35,6 @@ public class Antivenom extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Antivenom_name");
         cardDescription = stringsBundle.getString("Antivenom_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
-        cardImpactOnOpinionForTarget = NEGATIVE_IMPACT;
     }
 
     /**
@@ -88,5 +86,15 @@ public class Antivenom extends Card {
     @Override
     public ActionListener getActionListener() {
         return board.getMainBoardFront().new CardPlayerActionListenerOneTarget(this);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_ANTIVENOM;
+    }
+
+    @Override
+    public int getCardImpactOnOpinionOnTarget() {
+        return IMPACT_ANTIVENOM_ON_TARGET;
     }
 }

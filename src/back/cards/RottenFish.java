@@ -34,7 +34,6 @@ public class RottenFish extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("RottenFish_name");
         cardDescription = stringsBundle.getString("RottenFish_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
     }
 
     /**
@@ -61,6 +60,11 @@ public class RottenFish extends Card {
             }
             super.useCard(player1, player2, player3, action);
         }
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_ROTTEN_FISH;
     }
 
 }

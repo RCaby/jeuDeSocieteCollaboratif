@@ -36,7 +36,6 @@ public class Spyglass extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Spyglass_name");
         cardDescription = stringsBundle.getString("Spyglass_description");
-        cardImpactOnOpinion = NEGATIVE_IMPACT;
     }
 
     /**
@@ -69,6 +68,11 @@ public class Spyglass extends Card {
         board.getMainBoardFront()
                 .displayMessage(String.format(stringsBundle.getString("Spyglass_smallDescription"), owner));
         super.useCard(player1, player2, player3, action);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_SPYGLASS;
     }
 
 }

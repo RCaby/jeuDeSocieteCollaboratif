@@ -34,7 +34,6 @@ public class Gourd extends Card {
         discardOnDeath = true;
         cardName = stringsBundle.getString("Gourd_name");
         cardDescription = stringsBundle.getString("Gourd_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
     }
 
     /**
@@ -52,6 +51,11 @@ public class Gourd extends Card {
         board.getMainBoardFront()
                 .displayMessage(String.format(stringsBundle.getString("Gourd_smallDescription"), owner));
         super.useCard(player1, player2, player3, action);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_GOURD;
     }
 
 }

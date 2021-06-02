@@ -32,7 +32,6 @@ public class ToiletBrush extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("ToiletBrush_name");
         cardDescription = stringsBundle.getString("ToiletBrush_description");
-        cardImpactOnOpinion = NEUTRAL_IMPACT;
     }
 
     @Override
@@ -41,4 +40,8 @@ public class ToiletBrush extends Card {
         super.useCard(player1, player2, player3, action);
     }
 
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_TOILET_BRUSH;
+    }
 }

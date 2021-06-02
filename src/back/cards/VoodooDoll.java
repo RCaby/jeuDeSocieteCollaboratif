@@ -35,8 +35,6 @@ public class VoodooDoll extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("VoodooDoll_name");
         cardDescription = stringsBundle.getString("VoodooDoll_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
-        cardImpactOnOpinionForTarget = POSITIVE_IMPACT;
     }
 
     /**
@@ -80,5 +78,15 @@ public class VoodooDoll extends Card {
     @Override
     public ActionListener getActionListener() {
         return board.getMainBoardFront().new CardPlayerActionListenerOneTarget(this);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_VOODOO_DOLL;
+    }
+
+    @Override
+    public int getCardImpactOnOpinionOnTarget() {
+        return IMPACT_VOODOO_DOLL_ON_TARGET;
     }
 }

@@ -34,7 +34,6 @@ public class CrystalBall extends Card {
         discardOnDeath = true;
         cardName = stringsBundle.getString("CrystalBall_name");
         cardDescription = stringsBundle.getString("CrystalBall_description");
-        cardImpactOnOpinion = NEGATIVE_IMPACT;
     }
 
     /**
@@ -52,5 +51,10 @@ public class CrystalBall extends Card {
         board.getMainBoardFront()
                 .displayMessage(String.format(stringsBundle.getString("CrystalBall_smallDescription"), owner));
         super.useCard(player1, player2, player3, action);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_CRYSTAL_BALL;
     }
 }

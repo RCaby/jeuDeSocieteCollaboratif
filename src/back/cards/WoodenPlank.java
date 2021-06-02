@@ -32,7 +32,6 @@ public class WoodenPlank extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("WoodenPlank_name");
         cardDescription = stringsBundle.getString("WoodenPlank_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
     }
 
     /**
@@ -51,6 +50,11 @@ public class WoodenPlank extends Card {
                 .displayMessage(String.format(stringsBundle.getString("WoodenPlank_smallDescription"), owner));
         board.addPlank();
         super.useCard(player1, player2, player3, action);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_WOODEN_PLANK;
     }
 
 }

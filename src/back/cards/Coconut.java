@@ -32,7 +32,6 @@ public class Coconut extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Coconut_name");
         cardDescription = stringsBundle.getString("Coconut_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
     }
 
     /**
@@ -52,6 +51,11 @@ public class Coconut extends Card {
 
         board.addWater(3);
         super.useCard(player1, player2, player3, action);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_COCONUT;
     }
 
 }

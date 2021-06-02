@@ -32,7 +32,6 @@ public class Sardines extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Sardines_name");
         cardDescription = stringsBundle.getString("Sardines_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
     }
 
     /**
@@ -51,5 +50,10 @@ public class Sardines extends Card {
                 .displayMessage(String.format(stringsBundle.getString("Sardines_smallDescription"), owner));
         board.addFood(3);
         super.useCard(player1, player2, player3, action);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_SARDINES;
     }
 }
