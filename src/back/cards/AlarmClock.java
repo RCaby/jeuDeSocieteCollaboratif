@@ -50,7 +50,8 @@ public class AlarmClock extends Card {
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         if (player1 != null && player1.getState() != PlayerState.DEAD) {
             board.setNextChief(player1);
-            player1.addOpinionOn(owner, cardImpactOnOpinionForTarget, board.getDifficulty(), board.getMainBoardFront());
+            player1.addOpinionOn(owner, getCardImpactOnOpinionOnTarget(), board.getDifficulty(),
+                    board.getMainBoardFront());
             board.getMainBoardFront()
                     .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
             board.getMainBoardFront()
