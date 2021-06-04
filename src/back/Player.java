@@ -69,6 +69,7 @@ public class Player implements Serializable {
     private JLabel nameLabel;
     private Map<Player, Integer> opinionMap;
     private final String originalName;
+    private ThreatLevel threatLevel;
 
     /**
      * Generates a Player.
@@ -836,6 +837,24 @@ public class Player implements Serializable {
      */
     public int getOpinionOn(Player player) {
         return opinionMap.get(player);
+    }
+
+    /**
+     * The getter for the attribute {@link Player#threatLevel}.
+     * 
+     * @return the current threat level felt by this player
+     */
+    public ThreatLevel getThreatLevel() {
+        return threatLevel;
+    }
+
+    /**
+     * The setter for the attribute {@link Player#threatLevel}.
+     * 
+     * @param threatLevel the new threat level felt by this player
+     */
+    public void setThreatLevel(ThreatLevel threatLevel) {
+        this.threatLevel = threatLevel;
     }
 
 }
