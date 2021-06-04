@@ -84,6 +84,7 @@ public class Player implements Serializable {
         inventory = new ArrayList<>();
         inventoryHidden = new ArrayList<>();
         inventoryRevealed = new ArrayList<>();
+        threatLevel = ThreatLevel.NONE;
         imposedActionThisRound = ActionType.NONE;
         state = PlayerState.HEALTHY;
         this.stringsBundle = stringsBundle;
@@ -855,6 +856,7 @@ public class Player implements Serializable {
      */
     public void setThreatLevel(ThreatLevel threatLevel) {
         this.threatLevel = threatLevel;
+        System.out.println("New threat level " + threatLevel + " for player " + this);
     }
 
 }

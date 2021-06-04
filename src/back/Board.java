@@ -388,7 +388,10 @@ public class Board implements Serializable {
         boolean cardUsedVoteSession;
         if (end) {
             goodsDistributionForAlive();
-            designated = null;
+            if (designated != null) {
+                designated.setThreatLevel(ThreatLevel.NONE);
+                designated = null;
+            }
             killValidated = false;
             mainBoardFront.displayMessage(stringsBundle.getString("distributionEnd"));
             mainBoardFront.getNextButton().setEnabled(true);
@@ -402,6 +405,7 @@ public class Board implements Serializable {
             }
 
         } else if (!killValidated) {
+            designated.setThreatLevel(ThreatLevel.IMMINENT_DEATH);
             if (lackingResource == ActionType.FOOD) {
                 designatedForFoodThisRound.add(designated);
             } else if (lackingResource == ActionType.WATER) {
@@ -413,6 +417,7 @@ public class Board implements Serializable {
             } else {
                 mainBoardFront.allowPlayerToKillPlayerAfterVote(forDeparture);
             }
+
         } else {
             killPlayer(designated);
             designated = null;
@@ -542,6 +547,12 @@ public class Board implements Serializable {
             if (playerState != PlayerState.DEAD && (!isConchOwner || getNbPlayersAlive() == 1)
                     && !alreadyDesignatedForFood && !alreadyDesignatedForWater) {
                 pickablePlayers.add(player);
+                if (player.getState() == PlayerState.SICK_FROM_FOOD
+                        || player.getState() == PlayerState.SICK_FROM_SNAKE) {
+                    player.setThreatLevel(ThreatLevel.IN_DANGER);
+                } else {
+                    player.setThreatLevel(ThreatLevel.THREATENED);
+                }
 
             }
             if (playerState == PlayerState.HEALTHY) {
@@ -568,6 +579,7 @@ public class Board implements Serializable {
             Card cardClub) {
         if (!player.equals(crystalBallOwner)) {
             votingPlayers.add(player);
+
             votes.put(player, new ArrayList<>());
             if (!player.equals(crystalBallClubOwner) && cardClub != null && cardClub.isCardRevealed()) {
                 votingPlayers.add(player);
@@ -984,6 +996,7 @@ public class Board implements Serializable {
      */
     public void killPlayer(Player player) {
         player.setState(PlayerState.DEAD);
+        player.setThreatLevel(ThreatLevel.NONE);
         distributeCardsFromDeadPlayer(player);
         deadThisRound.add(player);
         if (designated != null && player.equals(designated)) {
@@ -1006,6 +1019,7 @@ public class Board implements Serializable {
      */
     public void sickPlayer(Player player, PlayerState stateOfSickness) {
         player.setState(stateOfSickness);
+        player.setThreatLevel(ThreatLevel.THREATENED);
         if (thisPlayer.equals(player)) {
             mainBoardFront.setAllowedToPlayCard(false);
             mainBoardFront.updateSouth();
@@ -1020,6 +1034,7 @@ public class Board implements Serializable {
      */
     public void curePlayer(Player player) {
         player.setState(PlayerState.HEALTHY);
+        player.setThreatLevel(ThreatLevel.NONE);
         if (thisPlayer.equals(player)) {
             mainBoardFront.setAllowedToPlayCard(true);
             mainBoardFront.updateSouth();

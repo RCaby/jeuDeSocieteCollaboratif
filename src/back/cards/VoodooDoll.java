@@ -53,7 +53,7 @@ public class VoodooDoll extends Card {
                     .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
             board.getMainBoardFront().displayMessage(
                     String.format(stringsBundle.getString("VoodooDoll_smallDescription"), owner, player1));
-            player1.setState(PlayerState.HEALTHY);
+            board.curePlayer(player1);
             player1.addOpinionOn(owner, getCardImpactOnOpinionOnTarget(), board.getDifficulty(),
                     board.getMainBoardFront());
             board.getDeadThisRound().remove(player1);
