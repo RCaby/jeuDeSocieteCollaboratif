@@ -4,15 +4,22 @@ import java.util.ResourceBundle;
 
 import back.Player;
 
+/**
+ * A mad personality is unpredictable. Every choice is made randomly.
+ */
 public class PersonalityMad extends BasicPersonality {
 
+    /**
+     * Builds a mad personality.
+     * 
+     * @param stringBundle      the resource bundle used to store strings used by
+     *                          the class
+     * @param player            the player linked to this personality
+     * @param publicPersonality a boolean indicating whether this personality should
+     *                          be known by other players
+     */
     public PersonalityMad(ResourceBundle stringBundle, Player player, boolean publicPersonality) {
         super(stringBundle, player, publicPersonality);
-    }
-
-    @Override
-    public String sayHello() {
-        return "Hello, I'm Mad :o";
     }
 
     @Override

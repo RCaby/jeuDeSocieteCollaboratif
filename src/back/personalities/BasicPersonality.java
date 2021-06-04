@@ -11,6 +11,9 @@ import back.Player;
 import back.PlayerState;
 import back.cards.Card;
 
+/**
+ * The basic personality which makes every choice randomly.
+ */
 public abstract class BasicPersonality implements IPersonality, Serializable {
 
     protected transient ResourceBundle stringsBundle;
@@ -18,6 +21,14 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
     protected Player linkedPlayer;
     protected boolean personalityIsPublic;
 
+    /**
+     * Builds a personality linked to a determined player.
+     * 
+     * @param stringBundle      the resource bundle which contains the strings used
+     *                          by the personality
+     * @param linkedPlayer      the player linked to this personality
+     * @param publicPersonality a boolean indicating if the personality is public
+     */
     protected BasicPersonality(ResourceBundle stringBundle, Player linkedPlayer, boolean publicPersonality) {
         this.stringsBundle = stringBundle;
         this.linkedPlayer = linkedPlayer;
@@ -45,6 +56,12 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
         return chooseAsChief(pickablePlayers);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * The most important resource is water, then food, then wooden planks. Water
+     * cannot be found when the weather is 0.
+     */
     @Override
     public ActionType getLackingResource(int food, int water, int wood, int weather, int nbAlive) {
         if (weather != 0 && water <= food && (water < nbAlive || wood >= nbAlive)) {
@@ -123,18 +140,42 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
         return ActionType.getRandomActionType();
     }
 
+    /**
+     * Asks the player to choose a target for the gun.
+     * 
+     * @param playerList the list of players who can be designated.
+     * @return the designated player
+     */
     protected Player chooseTargetForGun(List<Player> playerList) {
         return playerList.get(random.nextInt(playerList.size()));
     }
 
+    /**
+     * Asks the player to choose a target for the voodoo doll.
+     * 
+     * @param playerList the list of players who can be designated.
+     * @return the designated player
+     */
     protected Player chooseTargetForVoodooDoll(List<Player> playerList) {
         return playerList.get(random.nextInt(playerList.size()));
     }
 
+    /**
+     * Asks the player to choose a target for the anti-venom.
+     * 
+     * @param playerList the list of players who can be designated.
+     * @return the designated player
+     */
     protected Player chooseTargetForAntivenom(List<Player> playerList) {
         return playerList.get(random.nextInt(playerList.size()));
     }
 
+    /**
+     * Asks the player to choose targets for the sleeping pills.
+     * 
+     * @param playerList the list of players who can be designated.
+     * @return the designated players
+     */
     protected Player[] chooseTargetForSleepingPills(List<Player> playerList) {
         var pickedPlayers = new Player[3];
 
@@ -145,19 +186,32 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
         return pickedPlayers;
     }
 
+    /**
+     * Asks the player to choose a target for the alarm clock.
+     * 
+     * @param playerList the list of players who can be designated.
+     * @return the designated player
+     */
     protected Player chooseTargetForAlarmClock(List<Player> playerList) {
         return playerList.get(random.nextInt(playerList.size()));
     }
 
+    /**
+     * Asks the player to choose a target for the pendulum.
+     * 
+     * @param playerList the list of players who can be designated.
+     * @return the designated player
+     */
     protected Player chooseTargetForPendulum(List<Player> playerList) {
         return playerList.get(random.nextInt(playerList.size()));
     }
 
-    @Override
-    public String sayHello() {
-        return "Hello, I'm Basic";
-    }
-
+    /**
+     * Extracts the dead players in a given list.
+     * 
+     * @param playerList the list from which dead player are extracted
+     * @return a new list of dead players
+     */
     protected List<Player> getDeadPlayersIn(List<Player> playerList) {
         List<Player> deadPlayers = new ArrayList<>();
         for (Player player : playerList) {
@@ -168,6 +222,12 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
         return deadPlayers;
     }
 
+    /**
+     * Extracts the alive players in a given list.
+     * 
+     * @param playerList the list from which alive players are extracted
+     * @return a new list of alive players
+     */
     protected List<Player> getAlivePlayersIn(List<Player> playerList) {
         List<Player> alivePlayers = new ArrayList<>();
         for (Player player : playerList) {
@@ -178,6 +238,12 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
         return alivePlayers;
     }
 
+    /**
+     * Extracts the sick players in a given list.
+     * 
+     * @param playerList the list from which sick players are extracted
+     * @return a new list of sick players
+     */
     protected List<Player> getSickPlayersIn(List<Player> playerList) {
         List<Player> sickPlayers = new ArrayList<>();
         for (Player player : playerList) {

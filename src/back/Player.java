@@ -157,6 +157,11 @@ public class Player implements Serializable {
         scrollPaneHidden.setPreferredSize(new Dimension(170, 100));
     }
 
+    /**
+     * Builds the opinion map of this player.
+     * 
+     * @param playerList the player which will be added to the opinion map
+     */
     public void generateOpinionMap(List<Player> playerList) {
         opinionMap = new HashMap<>();
         for (Player player : playerList)
@@ -566,6 +571,15 @@ public class Player implements Serializable {
         return opinionMap;
     }
 
+    /**
+     * Determines who is the most or least liked player by this player in a given
+     * list.
+     * 
+     * @param playerList the list in which players can be choosed
+     * @param mostLiked  a boolean indicating whether it is the most or the least
+     *                   liked player
+     * @return the target player
+     */
     private Player mapOpinionSearchForExtremum(List<Player> playerList, boolean mostLiked) {
         Player maxPlayer = null;
         var maxValue = mostLiked ? Integer.MIN_VALUE : Integer.MAX_VALUE;
@@ -579,11 +593,25 @@ public class Player implements Serializable {
         return maxPlayer;
     }
 
+    /**
+     * Determines who is the most liked player in a given list, according to this
+     * player.
+     * 
+     * @param playerList the list of players who can be chosen
+     * @return the most liked player
+     */
     public Player getMostLikedPlayerIn(List<Player> playerList) {
         return mapOpinionSearchForExtremum(playerList, true);
 
     }
 
+    /**
+     * Determines who is the least liked player in a given list, according to this
+     * player.
+     * 
+     * @param playerList the list of players who can be chosen
+     * @return the least liked player
+     */
     public Player getLeastLikedPlayerIn(List<Player> playerList) {
         return mapOpinionSearchForExtremum(playerList, false);
 
@@ -623,10 +651,20 @@ public class Player implements Serializable {
 
     }
 
+    /**
+     * The getter for the attribute {@link Player#personality}.
+     * 
+     * @return the personality of this player
+     */
     public BasicPersonality getPersonality() {
         return this.personality;
     }
 
+    /**
+     * The setter for the attribute {@link Player#personality}.
+     * 
+     * @param personality the new personality of this player
+     */
     public void setPersonality(BasicPersonality personality) {
         this.personality = personality;
     }
@@ -771,6 +809,14 @@ public class Player implements Serializable {
         this.sickRound = roundSick;
     }
 
+    /**
+     * Changes the opinion of this player on a given player.
+     * 
+     * @param player         the target player
+     * @param opinion        the opinion points to add
+     * @param difficulty     the difficulty of the game
+     * @param mainBoardFront the interface of the game
+     */
     public void addOpinionOn(Player player, int opinion, int difficulty, MainBoardFront mainBoardFront) {
         opinionMap.put(player, opinionMap.get(player) + opinion);
         if (personality.updatePersonality()) {
@@ -782,6 +828,12 @@ public class Player implements Serializable {
         }
     }
 
+    /**
+     * Gets the opinion of this player on a given player.
+     * 
+     * @param player the target player
+     * @return the opinion value
+     */
     public int getOpinionOn(Player player) {
         return opinionMap.get(player);
     }

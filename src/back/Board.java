@@ -171,6 +171,10 @@ public class Board implements Serializable {
         }
     }
 
+    /**
+     * Gives to each CPU player a random personality and a neutral personality for
+     * the player.
+     */
     private void associatePersonalities() {
         for (Player player : playerList) {
             if (!player.equals(thisPlayer)) {
@@ -195,6 +199,9 @@ public class Board implements Serializable {
 
     }
 
+    /**
+     * Displays the AIs' personalities for the user.
+     */
     private void displayPersonalities() {
         Map<PersonalitiesEnum, Integer> personalitiesMap = new EnumMap<>(PersonalitiesEnum.class);
         for (PersonalitiesEnum personality : PersonalitiesEnum.getPersonalitiesarray()) {
@@ -384,6 +391,7 @@ public class Board implements Serializable {
             designated = null;
             killValidated = false;
             mainBoardFront.displayMessage(stringsBundle.getString("distributionEnd"));
+            mainBoardFront.getNextButton().setEnabled(true);
 
         } else if (designated == null) {
             cardUsedVoteSession = askPlayersForCards();
@@ -620,7 +628,11 @@ public class Board implements Serializable {
 
     }
 
-    private void updateOpinion() {
+    /**
+     * Updates the opinion of each player after a vote. If a player X votes for a
+     * player Y, the opinion of Y on X should be degraded.
+     */
+    private void updateOpinionOnVote() {
         for (Entry<Player, List<Player>> entry : votes.entrySet()) {
             Player voter = entry.getKey();
             for (Player target : entry.getValue()) {
@@ -635,7 +647,7 @@ public class Board implements Serializable {
      */
     public void endOfVote() {
         designated = voteResults();
-        updateOpinion();
+        updateOpinionOnVote();
         if (designated == null && !chief.equals(thisPlayer)) {
             designated = chief.decideWhoDieAsCPU(pickablePlayers, difficulty, mainBoardFront);
             roundEnd(currentlyForDeparture);
@@ -654,7 +666,7 @@ public class Board implements Serializable {
         for (Player player : votingPlayers) {
             var club = player.getCardType(Club.class);
             if (!player.equals(crystalBallOwner) && !player.equals(crystalBallClubOwner) && votes.get(player).isEmpty()
-                    || (club != null && votes.get(player).size() != 2)) {
+                    || (club != null && club.isCardRevealed() && votes.get(player).size() != 2)) {
                 makePlayerVote(player);
             }
         }
@@ -707,7 +719,8 @@ public class Board implements Serializable {
         for (Player player : votingPlayers) {
             var club = player.getCardType(Club.class);
             if ((!player.equals(crystalBallOwner) && !player.equals(crystalBallClubOwner)
-                    && votes.get(player).isEmpty()) || (club != null && votes.get(player).size() != 2)) {
+                    && votes.get(player).isEmpty())
+                    || (club != null && club.isCardRevealed() && votes.get(player).size() != 2)) {
                 return false;
             }
         }
@@ -1387,6 +1400,11 @@ public class Board implements Serializable {
         this.indexOfCurrentPlayer = indexOfCurrentPlayer;
     }
 
+    /**
+     * The getter for the attribute {@link Board#currentlyForDeparture}.
+     * 
+     * @return a boolean indicating whether players are trying to leave the island.
+     */
     public boolean getCurrentlyForDeparture() {
         return this.currentlyForDeparture;
     }

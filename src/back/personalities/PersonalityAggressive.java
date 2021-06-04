@@ -6,27 +6,47 @@ import java.util.ResourceBundle;
 import back.ActionType;
 import back.Player;
 
+/**
+ * The aggressive personality is supposed to be more independent than the other.
+ * Aggressive players tend to pick more cards, to use their cards in a more
+ * individual way.
+ */
 public class PersonalityAggressive extends BasicPersonality {
 
+    /**
+     * Builds an aggressive personality.
+     * 
+     * @param stringBundle      the resource bundle used to store strings used by
+     *                          the class
+     * @param player            the player linked to this personality
+     * @param publicPersonality a boolean indicating whether this personality should
+     *                          be known by other players
+     */
     public PersonalityAggressive(ResourceBundle stringBundle, Player player, boolean publicPersonality) {
         super(stringBundle, player, publicPersonality);
     }
 
-    @Override
-    public String sayHello() {
-        return "Hello, I'm Aggresive";
-    }
-
+    /**
+     * {@inheritDoc}
+     * <p>
+     * An aggressive player will more likely get a card than other type of
+     * personality.
+     */
     @Override
     public ActionType chooseAction(int food, int water, int wood, int weather, int nbAlive) {
         if (random.nextInt(2) % 2 == 0) {
             return ActionType.CARD;
         }
-
         return getLackingResource(food, water, wood, weather, nbAlive);
 
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * The aggressive player will more likely to try to get between 0 and 4
+     * (included) wooden plank fragments.
+     */
     @Override
     public int getNbWoodTries() {
         var pickedInt = random.nextInt(8) + 1;
@@ -52,6 +72,11 @@ public class PersonalityAggressive extends BasicPersonality {
         return IPersonality.AGGRESIVE_STARTING_BONUS;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * The least appreciated players are targeted.
+     */
     @Override
     protected Player[] chooseTargetForSleepingPills(List<Player> playerList) {
         Player player1 = null;
@@ -75,32 +100,62 @@ public class PersonalityAggressive extends BasicPersonality {
 
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * The least liked player is chosen.
+     */
     @Override
     protected Player chooseTargetForGun(List<Player> playerList) {
         return linkedPlayer.getLeastLikedPlayerIn(getAlivePlayersIn(playerList));
 
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * The least liked player is chosen.
+     */
     @Override
     protected Player chooseTargetForPendulum(List<Player> playerList) {
         return super.chooseTargetForPendulum(getAlivePlayersIn(playerList));
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * The most liked player is chosen.
+     */
     @Override
     protected Player chooseTargetForVoodooDoll(List<Player> playerList) {
         return super.chooseTargetForVoodooDoll(getDeadPlayersIn(playerList));
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * The most liked player is chosen.
+     */
     @Override
     protected Player chooseTargetForAntivenom(List<Player> playerList) {
         return super.chooseTargetForAntivenom(getSickPlayersIn(playerList));
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * The most liked player is chosen.
+     */
     @Override
     protected Player chooseTargetForAlarmClock(List<Player> playerList) {
         return super.chooseTargetForAlarmClock(getAlivePlayersIn(playerList));
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This personality can only become a cooperative personality.
+     */
     @Override
     public boolean updatePersonality() {
         if (linkedPlayer.getOpinionOn(linkedPlayer) > PERSONALITY_CHANGE_VALUE) {
