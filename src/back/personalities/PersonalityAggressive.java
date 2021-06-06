@@ -1,10 +1,14 @@
 package back.personalities;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import back.ActionType;
 import back.Player;
+import back.cards.Card;
 
 /**
  * The aggressive personality is supposed to be more independent than the other.
@@ -39,6 +43,27 @@ public class PersonalityAggressive extends BasicPersonality {
         }
         return getLackingResource(food, water, wood, weather, nbAlive);
 
+    }
+
+    @Override
+    public Card wouldLikePlayACard() {
+        List<Card> playerInventory = new ArrayList<>();
+        for (Card card : linkedPlayer.getInventory()) {
+            playerInventory.add(card);
+        }
+
+        Collections.sort(playerInventory, new CompareCardType());
+        for (Card card : playerInventory) {
+            if (card.canBeUsed()) {
+                var probability = card.getCardType().getProbability(this, linkedPlayer.getThreatLevel());
+                var pickedInt = random.nextInt(100);
+                if (pickedInt < probability) {
+                    return card;
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -166,4 +191,14 @@ public class PersonalityAggressive extends BasicPersonality {
         return false;
     }
 
+    protected class CompareCardType implements Comparator<Card> {
+
+        @Override
+        public int compare(Card o1, Card o2) {
+            return o1.getCardType().getAggressiveValuePriorityOrder()
+                    - o2.getCardType().getAggressiveValuePriorityOrder();
+
+        }
+
+    }
 }
