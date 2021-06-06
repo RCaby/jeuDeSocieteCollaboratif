@@ -856,7 +856,6 @@ public class Player implements Serializable {
      */
     public void setThreatLevel(ThreatLevel threatLevel) {
         this.threatLevel = threatLevel;
-        System.out.println("New threat level " + threatLevel + " for player " + this);
     }
 
 }
