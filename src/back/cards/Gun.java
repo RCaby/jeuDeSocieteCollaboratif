@@ -37,6 +37,7 @@ public class Gun extends Card {
         isSingleUse = false;
         cardName = stringsBundle.getString("Gun_name");
         cardDescription = stringsBundle.getString("Gun_description");
+        cardType = CardType.WEAPON;
     }
 
     /**

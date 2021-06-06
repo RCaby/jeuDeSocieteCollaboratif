@@ -32,6 +32,7 @@ public class Sandwich extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Sandwich_name");
         cardDescription = stringsBundle.getString("Sandwich_description");
+        cardType = CardType.FOOD;
     }
 
     /**

@@ -34,6 +34,7 @@ public class FishingRod extends Card {
         discardOnDeath = true;
         cardName = stringsBundle.getString("FishingRod_name");
         cardDescription = stringsBundle.getString("FishingRod_description");
+        cardType = CardType.TOOL;
     }
 
     /**

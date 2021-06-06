@@ -34,6 +34,7 @@ public class Flashlight extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Flashlight_name");
         cardDescription = stringsBundle.getString("Flashlight_description");
+        cardType = CardType.SPY;
     }
 
     /**

@@ -34,6 +34,7 @@ public class CrystalBall extends Card {
         discardOnDeath = true;
         cardName = stringsBundle.getString("CrystalBall_name");
         cardDescription = stringsBundle.getString("CrystalBall_description");
+        cardType = CardType.TOOL;
     }
 
     /**

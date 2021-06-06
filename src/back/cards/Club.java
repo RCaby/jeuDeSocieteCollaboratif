@@ -34,7 +34,7 @@ public class Club extends Card {
         discardOnDeath = true;
         cardName = stringsBundle.getString("Club_name");
         cardDescription = stringsBundle.getString("Club_description");
-
+        cardType = CardType.TOOL;
     }
 
     /**

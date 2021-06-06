@@ -34,6 +34,7 @@ public class Barometer extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Barometer_name");
         cardDescription = stringsBundle.getString("Barometer_description");
+        cardType = CardType.SPY;
     }
 
     /**

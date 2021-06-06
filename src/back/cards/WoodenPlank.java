@@ -32,6 +32,7 @@ public class WoodenPlank extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("WoodenPlank_name");
         cardDescription = stringsBundle.getString("WoodenPlank_description");
+        cardType = CardType.WOOD;
     }
 
     /**

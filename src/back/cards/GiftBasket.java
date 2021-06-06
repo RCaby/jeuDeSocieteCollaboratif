@@ -34,6 +34,7 @@ public class GiftBasket extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("GiftBasket_name");
         cardDescription = stringsBundle.getString("GiftBasket_description");
+        cardType = CardType.PROTECTION;
     }
 
     /**

@@ -36,6 +36,7 @@ public class Spyglass extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Spyglass_name");
         cardDescription = stringsBundle.getString("Spyglass_description");
+        cardType = CardType.SPY;
     }
 
     /**

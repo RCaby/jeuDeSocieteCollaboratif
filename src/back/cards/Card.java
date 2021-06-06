@@ -84,6 +84,7 @@ public abstract class Card implements Serializable {
     protected boolean discardOnDeath;
     protected Board board;
     protected transient ResourceBundle stringsBundle;
+    protected CardType cardType;
 
     /**
      * Generates a new card and initialize some attributes.
@@ -263,6 +264,15 @@ public abstract class Card implements Serializable {
      */
     public String getCardDescription() {
         return cardDescription;
+    }
+
+    /**
+     * The getter for the attribute {@link Card#cardType}.
+     * 
+     * @return the type of the card
+     */
+    public CardType getCardType() {
+        return cardType;
     }
 
     /**

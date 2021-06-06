@@ -32,6 +32,7 @@ public class LuxuryCarKey extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("LuxuryCarKey_name");
         cardDescription = stringsBundle.getString("LuxuryCarKey_description");
+        cardType = CardType.USELESS;
     }
 
     @Override

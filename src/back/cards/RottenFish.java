@@ -34,6 +34,7 @@ public class RottenFish extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("RottenFish_name");
         cardDescription = stringsBundle.getString("RottenFish_description");
+        cardType = CardType.FOOD;
     }
 
     /**

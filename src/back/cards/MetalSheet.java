@@ -32,6 +32,7 @@ public class MetalSheet extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("MetalSheet_name");
         cardDescription = stringsBundle.getString("MetalSheet_description");
+        cardType = CardType.WEAPON;
     }
 
     /**

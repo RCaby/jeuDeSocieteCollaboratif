@@ -33,6 +33,7 @@ public class SleepingPills extends Card {
                 super(board, stringsBundle);
                 cardName = stringsBundle.getString("SleepingPills_name");
                 cardDescription = stringsBundle.getString("SleepingPills_description");
+                cardType = CardType.THREAT;
         }
 
         /**

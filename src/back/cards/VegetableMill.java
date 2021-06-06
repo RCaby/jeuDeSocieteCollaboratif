@@ -32,6 +32,7 @@ public class VegetableMill extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("VegetableMill_name");
         cardDescription = stringsBundle.getString("VegetableMill_description");
+        cardType = CardType.WATER;
     }
 
     /**

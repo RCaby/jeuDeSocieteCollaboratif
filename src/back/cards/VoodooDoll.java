@@ -35,6 +35,7 @@ public class VoodooDoll extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("VoodooDoll_name");
         cardDescription = stringsBundle.getString("VoodooDoll_description");
+        cardType = CardType.HELP;
     }
 
     /**

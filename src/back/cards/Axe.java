@@ -34,6 +34,7 @@ public class Axe extends Card {
         discardOnDeath = true;
         cardName = stringsBundle.getString("Axe_name");
         cardDescription = stringsBundle.getString("Axe_description");
+        cardType = CardType.TOOL;
     }
 
     @Override
