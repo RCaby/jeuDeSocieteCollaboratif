@@ -109,6 +109,7 @@ public class PersonalityCooperative extends BasicPersonality {
         Player player2 = null;
         Player player3 = null;
         List<Player> alivePlayers = getAlivePlayersIn(playerList);
+        alivePlayers.remove(linkedPlayer);
         var nbAlive = alivePlayers.size();
         if (nbAlive >= 1) {
             player1 = linkedPlayer.getLeastLikedPlayerIn(alivePlayers);
@@ -133,7 +134,12 @@ public class PersonalityCooperative extends BasicPersonality {
      */
     @Override
     protected Player chooseTargetForGun(List<Player> playerList) {
-        return linkedPlayer.getLeastLikedPlayerIn(getAlivePlayersIn(playerList));
+        List<Player> alivePlayers = getAlivePlayersIn(playerList);
+        if (alivePlayers.size() == 1) {
+            return linkedPlayer;
+        } else {
+            return linkedPlayer.getLeastLikedPlayerIn(alivePlayers);
+        }
 
     }
 

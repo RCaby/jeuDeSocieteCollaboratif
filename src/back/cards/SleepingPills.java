@@ -89,6 +89,11 @@ public class SleepingPills extends Card {
         }
 
         @Override
+        public boolean canBeUsed() {
+                return board.getNbPlayersAlive() > 1;
+        }
+
+        @Override
         public boolean[] getNeededParameters() {
                 return new boolean[] { true, true, true, false };
         }
