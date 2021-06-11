@@ -137,6 +137,7 @@ public class PersonalityAggressive extends BasicPersonality {
         if (alivePlayers.size() == 1) {
             return linkedPlayer;
         } else {
+            alivePlayers.remove(linkedPlayer);
             return linkedPlayer.getLeastLikedPlayerIn(alivePlayers);
         }
 
@@ -149,7 +150,7 @@ public class PersonalityAggressive extends BasicPersonality {
      */
     @Override
     protected Player chooseTargetForPendulum(List<Player> playerList) {
-        return super.chooseTargetForPendulum(getAlivePlayersIn(playerList));
+        return linkedPlayer.getLeastLikedPlayerIn(getAlivePlayersIn(playerList));
     }
 
     /**
@@ -159,7 +160,7 @@ public class PersonalityAggressive extends BasicPersonality {
      */
     @Override
     protected Player chooseTargetForVoodooDoll(List<Player> playerList) {
-        return super.chooseTargetForVoodooDoll(getDeadPlayersIn(playerList));
+        return linkedPlayer.getMostLikedPlayerIn(getDeadPlayersIn(playerList));
     }
 
     /**
@@ -169,7 +170,7 @@ public class PersonalityAggressive extends BasicPersonality {
      */
     @Override
     protected Player chooseTargetForAntivenom(List<Player> playerList) {
-        return super.chooseTargetForAntivenom(getSickPlayersIn(playerList));
+        return linkedPlayer.getMostLikedPlayerIn(getSickPlayersIn(playerList));
     }
 
     /**
@@ -179,7 +180,7 @@ public class PersonalityAggressive extends BasicPersonality {
      */
     @Override
     protected Player chooseTargetForAlarmClock(List<Player> playerList) {
-        return super.chooseTargetForAlarmClock(getAlivePlayersIn(playerList));
+        return linkedPlayer.getMostLikedPlayerIn(getAlivePlayersIn(playerList));
     }
 
     /**
