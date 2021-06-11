@@ -3,6 +3,8 @@ package front;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER;
+import static javax.swing.SwingConstants.CENTER;
+import static javax.swing.SwingConstants.TOP;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -26,6 +28,7 @@ import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -46,6 +49,8 @@ public class MainBoardFront implements Serializable {
     private static final String CHOOSE_VOID_PANEL = "CHOOSE_VOID_PANEL";
     private static final String CHOOSE_WOOD_TRIES_PANEL = "CHOOSE_WOOD_TRIES_PANEL";
     private static final String CHOOSE_PLAYER_TARGET = "CHOOSE_PLAYER_TARGET";
+    private static final int SOUTH_BUTTON_WIDTH = 100;
+    private static final int SOUTH_BUTTON_HEIGHT = 50;
 
     JPanel mainPanel;
     Board board;
@@ -89,6 +94,7 @@ public class MainBoardFront implements Serializable {
     private JTextPane cardDescription;
     private transient ResourceBundle stringsBundle;
     private String waterString = "water";
+    private ImageIcon iconHiddenCard;
 
     /**
      * Builds an interface for the game.
@@ -105,6 +111,7 @@ public class MainBoardFront implements Serializable {
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         this.nbPlayers = nbPlayers;
+        iconHiddenCard = new ImageIcon("src/front/images/image_unie.jpg");
 
         buildEastPanel();
         buildWestPanel();
@@ -483,7 +490,14 @@ public class MainBoardFront implements Serializable {
     private JPanel buildCard(Card card) {
         var cardPanel = new JPanel();
 
-        var cardButton = new JButton(card + "");
+        var img = iconHiddenCard.getImage();
+        var newImg = img.getScaledInstance(SOUTH_BUTTON_WIDTH, SOUTH_BUTTON_HEIGHT, java.awt.Image.SCALE_SMOOTH);
+        var icon = new ImageIcon(newImg);
+        var cardButton = new JButton(card + "", icon);
+        cardButton.setVerticalTextPosition(CENTER);
+        cardButton.setHorizontalTextPosition(CENTER);
+        cardButton.setPreferredSize(new Dimension(SOUTH_BUTTON_WIDTH, SOUTH_BUTTON_HEIGHT));
+        cardButton.setForeground(Color.WHITE);
         cardButton.addActionListener(card.getActionListener());
         cardPanel.add(cardButton);
         return cardPanel;
@@ -510,7 +524,7 @@ public class MainBoardFront implements Serializable {
     }
 
     /**
-     * Updates the display of the user, the non coputer player, which means their
+     * Updates the display of the user, the non computer player, which means their
      * cards, and state.
      */
     public void updateSouth() {
@@ -900,7 +914,7 @@ public class MainBoardFront implements Serializable {
          * Builds an action listener called when a player chooses how many fragments
          * they are gathering for the wood action.
          * 
-         * @param nbTries the number of fragments targetted
+         * @param nbTries the number of fragments targeted
          */
         private WoodTryListener(int nbTries) {
             this.nbTries = nbTries;
@@ -958,7 +972,7 @@ public class MainBoardFront implements Serializable {
          * Builds an action listener called to save the vote of the user for the target
          * player.
          * 
-         * @param target the player targetted by the user
+         * @param target the player targeted by the user
          */
         public VoteListener(Player target) {
             this.target = target;

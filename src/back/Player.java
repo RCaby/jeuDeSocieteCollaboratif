@@ -22,7 +22,7 @@ import java.awt.GridLayout;
 import java.io.Serializable;
 
 import javax.swing.BorderFactory;
-
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -47,8 +47,10 @@ import front.MainBoardFront;
 public class Player implements Serializable {
 
     private static final long serialVersionUID = 2874539910717357461L;
-    public static final int IMPACT_VOTE_ON_OPINION = -1;
-    public static final int IMPACT_CHIEF_DESIGNATION_ON_OPINION = -1;
+    public static final int IMPACT_VOTE_ON_OPINION = -3;
+    public static final int IMPACT_CHIEF_DESIGNATION_ON_OPINION = -5;
+    private static final int CARD_WIDTH = 2;
+    private static final int CARD_HEIGHT = 7;
     private List<Card> inventory;
     private List<Card> inventoryRevealed;
     private List<Card> inventoryHidden;
@@ -70,12 +72,13 @@ public class Player implements Serializable {
     private Map<Player, Integer> opinionMap;
     private final String originalName;
     private ThreatLevel threatLevel;
+    private ImageIcon iconHiddenCard;
 
     /**
      * Generates a Player.
      * 
      * @param name          The name of the player
-     * @param stringsBundle The bundle which contains the strings of the projet, in
+     * @param stringsBundle The bundle which contains the strings of the project, in
      *                      the current language of the application.
      */
     public Player(String name, ResourceBundle stringsBundle) {
@@ -88,6 +91,7 @@ public class Player implements Serializable {
         imposedActionThisRound = ActionType.NONE;
         state = PlayerState.HEALTHY;
         this.stringsBundle = stringsBundle;
+        iconHiddenCard = new ImageIcon("src/front/images/image_unie.jpg");
         buildDisplay();
 
     }
@@ -98,7 +102,7 @@ public class Player implements Serializable {
     }
 
     /**
-     * The data displayer of the Player.
+     * The data display of the Player.
      */
     private void buildDisplay() {
         display = new JPanel(new BorderLayout());
@@ -138,22 +142,22 @@ public class Player implements Serializable {
 
         cardRevealedPanel = new JPanel(new GridLayout(1, 0, 10, 10));
 
-        var cardRevealedScrollableContener = new JPanel(new GridLayout(1, 1));
+        var cardRevealedScrollableContainer = new JPanel(new GridLayout(1, 1));
 
-        displayCenter.add(cardRevealedScrollableContener);
+        displayCenter.add(cardRevealedScrollableContainer);
 
         var scrollPaneRevealed = new JScrollPane(cardRevealedPanel);
-        cardRevealedScrollableContener.add(scrollPaneRevealed);
+        cardRevealedScrollableContainer.add(scrollPaneRevealed);
         scrollPaneRevealed.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneRevealed.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_NEVER);
         scrollPaneRevealed.setPreferredSize(new Dimension(170, 100));
 
         cardHiddenPanel = new JPanel(new GridLayout(1, 0, 10, 10));
-        var cardHiddenScrollableContener = new JPanel(new GridLayout(1, 1));
+        var cardHiddenScrollableContainer = new JPanel(new GridLayout(1, 1));
 
-        displayCenter.add(cardHiddenScrollableContener);
+        displayCenter.add(cardHiddenScrollableContainer);
         var scrollPaneHidden = new JScrollPane(cardHiddenPanel);
-        cardHiddenScrollableContener.add(scrollPaneHidden);
+        cardHiddenScrollableContainer.add(scrollPaneHidden);
         scrollPaneHidden.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneHidden.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_NEVER);
         scrollPaneHidden.setPreferredSize(new Dimension(170, 100));
@@ -275,8 +279,7 @@ public class Player implements Serializable {
     }
 
     /**
-     * Adds a card to the inventory and places it in the data displayer of the
-     * player.
+     * Adds a card to the inventory and places it in the data display of the player.
      * 
      * @param card The card to add
      */
@@ -293,7 +296,7 @@ public class Player implements Serializable {
     }
 
     /**
-     * Removes a card from the inventory and from the data displayer.
+     * Removes a card from the inventory and from the data display.
      * 
      * @param card the card to remove
      * @return the card removed
@@ -308,7 +311,7 @@ public class Player implements Serializable {
     }
 
     /**
-     * Removes a card from the inventory and from the data displayer.
+     * Removes a card from the inventory and from the data display.
      * 
      * @param index the index of the card to remove
      * @return the card removed
@@ -318,7 +321,8 @@ public class Player implements Serializable {
         inventory.remove(index);
         if (card.isCardRevealed()) {
             for (var indexInPanel = 0; indexInPanel < cardRevealedPanel.getComponentCount(); indexInPanel++) {
-                var label = (JLabel) cardRevealedPanel.getComponent(indexInPanel);
+                var panel = (JPanel) cardRevealedPanel.getComponent(indexInPanel);
+                var label = (JLabel) panel.getComponent(0);
                 if (label.getText().equals(card.getCardName())) {
                     cardRevealedPanel.remove(indexInPanel);
                     inventoryRevealed.remove(card);
@@ -336,8 +340,8 @@ public class Player implements Serializable {
      * Trades two cards between this player and an other one.
      * 
      * @param target     the other player concerned by this trade
-     * @param cardToGive the card gived by this player to the other player
-     * @param cardToGet  the card gived by the other player to this player
+     * @param cardToGive the card given by this player to the other player
+     * @param cardToGet  the card given by the other player to this player
      */
     public void trade(Player target, Card cardToGive, Card cardToGet) {
         if (hasCard(cardToGive) && target != null && target.hasCard(cardToGet)) {
@@ -463,23 +467,29 @@ public class Player implements Serializable {
     }
 
     /**
-     * Adds a card to the hidden panel in the data displayer, to show to the other
+     * Adds a card to the hidden panel in the data display, to show to the other
      * players that this player has a card but has not revealed it yet.
      */
     private void addCardHiddenPanel() {
-        var cardLabel = new JLabel(stringsBundle.getString("hidden_card_label"));
-        cardHiddenPanel.add(cardLabel);
+        var cardPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        var cardLabel = new JLabel(iconHiddenCard);
+        cardPanel.add(cardLabel);
+        cardLabel.setPreferredSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
+        cardHiddenPanel.add(cardPanel);
     }
 
     /**
-     * Adds a card to the revealed panel in the data displayer, to show to the other
+     * Adds a card to the revealed panel in the data display, to show to the other
      * players that this player has a visible card.
      *
      * @param card the card revealed to add to the panel
      */
     private void addCardToRevealedPanel(Card card) {
+        var cardPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         var cardLabel = new JLabel(card.toString());
-        cardRevealedPanel.add(cardLabel);
+        cardPanel.add(cardLabel);
+        cardLabel.setPreferredSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
+        cardRevealedPanel.add(cardPanel);
     }
 
     /**
@@ -577,7 +587,7 @@ public class Player implements Serializable {
      * Determines who is the most or least liked player by this player in a given
      * list.
      * 
-     * @param playerList the list in which players can be choosed
+     * @param playerList the list in which players can be chosen
      * @param mostLiked  a boolean indicating whether it is the most or the least
      *                   liked player
      * @return the target player
