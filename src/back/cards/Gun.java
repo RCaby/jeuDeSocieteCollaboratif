@@ -40,7 +40,7 @@ public class Gun extends Card {
         cardName = stringsBundle.getString("Gun_name");
         cardDescription = stringsBundle.getString("Gun_description");
         cardType = CardType.WEAPON;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/Gun.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/GunRevealed.png");
     }
 
     /**

@@ -37,7 +37,7 @@ public class WinningLotteryTicket extends Card {
         cardName = stringsBundle.getString("WinningLotteryTicket_name");
         cardDescription = stringsBundle.getString("WinningLotteryTicket_description");
         cardType = CardType.USELESS;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/WinningLotteryTicket.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/WinningLotteryTicketRevealed.png");
     }
 
     @Override

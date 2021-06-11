@@ -35,7 +35,7 @@ public class Sardines extends Card {
         cardName = stringsBundle.getString("Sardines_name");
         cardDescription = stringsBundle.getString("Sardines_description");
         cardType = CardType.FOOD;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/Sardines.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/SardinesRevealed.png");
     }
 
     /**

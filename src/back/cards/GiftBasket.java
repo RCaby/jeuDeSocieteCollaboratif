@@ -37,7 +37,7 @@ public class GiftBasket extends Card {
         cardName = stringsBundle.getString("GiftBasket_name");
         cardDescription = stringsBundle.getString("GiftBasket_description");
         cardType = CardType.PROTECTION;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/GiftBasket.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/GiftBasketRevealed.png");
     }
 
     /**

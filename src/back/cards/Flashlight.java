@@ -37,7 +37,7 @@ public class Flashlight extends Card {
         cardName = stringsBundle.getString("Flashlight_name");
         cardDescription = stringsBundle.getString("Flashlight_description");
         cardType = CardType.SPY;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/Flashlight.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/FlashlightRevealed.png");
     }
 
     /**

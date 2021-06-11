@@ -35,7 +35,7 @@ public class Sandwich extends Card {
         cardName = stringsBundle.getString("Sandwich_name");
         cardDescription = stringsBundle.getString("Sandwich_description");
         cardType = CardType.FOOD;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/Sandwich.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/SandwichRevealed.png");
     }
 
     /**

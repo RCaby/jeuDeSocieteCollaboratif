@@ -35,7 +35,7 @@ public class OldBrief extends Card {
         cardName = stringsBundle.getString("OldBrief_name");
         cardDescription = stringsBundle.getString("OldBrief_description");
         cardType = CardType.USELESS;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/OldBrief.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/OldBriefRevealed.png");
     }
 
     @Override

@@ -35,7 +35,7 @@ public class WoodenPlank extends Card {
         cardName = stringsBundle.getString("WoodenPlank_name");
         cardDescription = stringsBundle.getString("WoodenPlank_description");
         cardType = CardType.WOOD;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/WoodenPlank.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/WoodenPlankRevealed.png");
     }
 
     /**

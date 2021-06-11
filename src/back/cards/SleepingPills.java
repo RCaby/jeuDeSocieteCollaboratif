@@ -36,7 +36,7 @@ public class SleepingPills extends Card {
                 cardName = stringsBundle.getString("SleepingPills_name");
                 cardDescription = stringsBundle.getString("SleepingPills_description");
                 cardType = CardType.THREAT;
-                revealedCardIcon = new ImageIcon("src/front/images/cards/SleepingPills.png");
+                revealedCardIcon = new ImageIcon("src/front/images/cards/SleepingPillsRevealed.png");
         }
 
         /**

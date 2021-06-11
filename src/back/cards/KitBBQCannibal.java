@@ -35,7 +35,7 @@ public class KitBBQCannibal extends Card {
         cardName = stringsBundle.getString("KitBBQCannibal_name");
         cardDescription = stringsBundle.getString("KitBBQCannibal_description");
         cardType = CardType.FOOD;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/KitBBQCannibal.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/KitBBQCannibalRevealed.png");
     }
 
     /**

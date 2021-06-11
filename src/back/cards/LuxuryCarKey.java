@@ -35,7 +35,7 @@ public class LuxuryCarKey extends Card {
         cardName = stringsBundle.getString("LuxuryCarKey_name");
         cardDescription = stringsBundle.getString("LuxuryCarKey_description");
         cardType = CardType.USELESS;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/LuxuryCarKey.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/LuxuryCarKeyRevealed.png");
     }
 
     @Override

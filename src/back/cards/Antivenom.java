@@ -38,7 +38,7 @@ public class Antivenom extends Card {
         cardName = stringsBundle.getString("Antivenom_name");
         cardDescription = stringsBundle.getString("Antivenom_description");
         cardType = CardType.HELP;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/Antivenom.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/AntivenomRevealed.png");
     }
 
     /**

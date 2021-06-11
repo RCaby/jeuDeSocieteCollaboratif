@@ -37,7 +37,7 @@ public class Barometer extends Card {
         cardName = stringsBundle.getString("Barometer_name");
         cardDescription = stringsBundle.getString("Barometer_description");
         cardType = CardType.SPY;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/Barometer.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/BarometerRevealed.png");
     }
 
     /**

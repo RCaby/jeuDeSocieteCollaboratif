@@ -37,7 +37,7 @@ public class RottenFish extends Card {
         cardName = stringsBundle.getString("RottenFish_name");
         cardDescription = stringsBundle.getString("RottenFish_description");
         cardType = CardType.FOOD;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/RottenFish.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/RottenFishRevealed.png");
     }
 
     /**

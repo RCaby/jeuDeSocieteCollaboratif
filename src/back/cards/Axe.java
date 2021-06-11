@@ -37,7 +37,7 @@ public class Axe extends Card {
         cardName = stringsBundle.getString("Axe_name");
         cardDescription = stringsBundle.getString("Axe_description");
         cardType = CardType.TOOL;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/Axe.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/AxeRevealed.png");
     }
 
     @Override

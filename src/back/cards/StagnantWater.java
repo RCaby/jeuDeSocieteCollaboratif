@@ -37,7 +37,7 @@ public class StagnantWater extends Card {
         cardName = stringsBundle.getString("StagnantWater_name");
         cardDescription = stringsBundle.getString("StagnantWater_description");
         cardType = CardType.WATER;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/StagnantWater.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/StagnantWaterRevealed.png");
     }
 
     /**

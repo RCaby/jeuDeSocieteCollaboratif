@@ -35,7 +35,7 @@ public class Conch extends Card {
         cardName = stringsBundle.getString("Conch_name");
         cardDescription = stringsBundle.getString("Conch_description");
         cardType = CardType.PROTECTION;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/Conch.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/ConchRevealed.png");
     }
 
     /**

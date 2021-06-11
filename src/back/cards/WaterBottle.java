@@ -35,7 +35,7 @@ public class WaterBottle extends Card {
         cardName = stringsBundle.getString("WaterBottle_name");
         cardDescription = stringsBundle.getString("WaterBottle_description");
         cardType = CardType.WATER;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/WaterBottle.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/WaterBottleRevealed.png");
     }
 
     /**

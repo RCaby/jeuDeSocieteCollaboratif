@@ -35,7 +35,7 @@ public class BoardGameQuoridor extends Card {
         cardName = stringsBundle.getString("BoardGameQuoridor_name");
         cardDescription = stringsBundle.getString("BoardGameQuoridor_description");
         cardType = CardType.USELESS;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/BoardGameQuoridor.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/BoardGameQuoridorRevealed.png");
 
     }
 

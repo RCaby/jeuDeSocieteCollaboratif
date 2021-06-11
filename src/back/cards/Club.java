@@ -37,7 +37,7 @@ public class Club extends Card {
         cardName = stringsBundle.getString("Club_name");
         cardDescription = stringsBundle.getString("Club_description");
         cardType = CardType.TOOL;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/Club.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/ClubRevealed.png");
     }
 
     /**

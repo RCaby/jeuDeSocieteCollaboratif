@@ -37,7 +37,7 @@ public class FishingRod extends Card {
         cardName = stringsBundle.getString("FishingRod_name");
         cardDescription = stringsBundle.getString("FishingRod_description");
         cardType = CardType.TOOL;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/FishingRod.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/FishingRodRevealed.png");
     }
 
     /**

@@ -37,7 +37,7 @@ public class Gourd extends Card {
         cardName = stringsBundle.getString("Gourd_name");
         cardDescription = stringsBundle.getString("Gourd_description");
         cardType = CardType.TOOL;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/Gourd.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/GourdRevealed.png");
     }
 
     /**

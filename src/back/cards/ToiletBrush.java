@@ -35,7 +35,7 @@ public class ToiletBrush extends Card {
         cardName = stringsBundle.getString("ToiletBrush_name");
         cardDescription = stringsBundle.getString("ToiletBrush_description");
         cardType = CardType.USELESS;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/ToiletBrush.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/ToiletBrushRevealed.png");
     }
 
     @Override

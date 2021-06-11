@@ -36,7 +36,7 @@ public class Pendulum extends Card {
         cardName = stringsBundle.getString("Pendulum_name");
         cardDescription = stringsBundle.getString("Pendulum_description");
         cardType = CardType.THREAT;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/Pendulum.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/PendulumRevealed.png");
     }
 
     /**

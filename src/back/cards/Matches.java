@@ -36,7 +36,7 @@ public class Matches extends Card {
         cardName = stringsBundle.getString("Matches_name");
         cardDescription = stringsBundle.getString("Matches_description");
         cardType = CardType.HELP;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/Matches.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/MatchesRevealed.png");
     }
 
     /**

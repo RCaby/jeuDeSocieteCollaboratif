@@ -35,7 +35,7 @@ public class VegetableMill extends Card {
         cardName = stringsBundle.getString("VegetableMill_name");
         cardDescription = stringsBundle.getString("VegetableMill_description");
         cardType = CardType.WATER;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/VegetableMill.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/VegetableMillRevealed.png");
     }
 
     /**

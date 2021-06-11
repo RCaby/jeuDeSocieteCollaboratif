@@ -35,7 +35,7 @@ public class Cartridge extends Card {
         cardName = stringsBundle.getString("Cartridge_name");
         cardDescription = stringsBundle.getString("Cartridge_description");
         cardType = CardType.WEAPON;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/Cartridge.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/CartridgeRevealed.png");
     }
 
     @Override

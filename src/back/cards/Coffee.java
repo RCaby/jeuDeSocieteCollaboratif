@@ -35,7 +35,7 @@ public class Coffee extends Card {
         cardName = stringsBundle.getString("Coffee_name");
         cardDescription = stringsBundle.getString("Coffee_description");
         cardType = CardType.THREAT;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/Coffee.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/CoffeeRevealed.png");
     }
 
     /**

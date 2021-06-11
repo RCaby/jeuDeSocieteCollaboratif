@@ -39,7 +39,7 @@ public class Spyglass extends Card {
         cardName = stringsBundle.getString("Spyglass_name");
         cardDescription = stringsBundle.getString("Spyglass_description");
         cardType = CardType.SPY;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/Spyglass.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/SpyglassRevealed.png");
     }
 
     /**

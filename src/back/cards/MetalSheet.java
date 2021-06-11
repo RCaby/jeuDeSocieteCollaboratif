@@ -35,7 +35,7 @@ public class MetalSheet extends Card {
         cardName = stringsBundle.getString("MetalSheet_name");
         cardDescription = stringsBundle.getString("MetalSheet_description");
         cardType = CardType.WEAPON;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/MetalSheet.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/MetalSheetRevealed.png");
     }
 
     /**

@@ -35,7 +35,7 @@ public class Coconut extends Card {
         cardName = stringsBundle.getString("Coconut_name");
         cardDescription = stringsBundle.getString("Coconut_description");
         cardType = CardType.WATER;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/Coconut.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/CoconutRevealed.png");
     }
 
     /**

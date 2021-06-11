@@ -38,7 +38,7 @@ public class VoodooDoll extends Card {
         cardName = stringsBundle.getString("VoodooDoll_name");
         cardDescription = stringsBundle.getString("VoodooDoll_description");
         cardType = CardType.HELP;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/VoodooDoll.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/VoodooDollRevealed.png");
     }
 
     /**

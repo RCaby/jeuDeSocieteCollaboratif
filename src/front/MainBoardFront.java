@@ -1,10 +1,10 @@
 package front;
 
+import static back.cards.ICard.hiddenCardIcon;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER;
 import static javax.swing.SwingConstants.CENTER;
-import static javax.swing.SwingConstants.TOP;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -28,6 +28,7 @@ import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -94,7 +95,6 @@ public class MainBoardFront implements Serializable {
     private JTextPane cardDescription;
     private transient ResourceBundle stringsBundle;
     private String waterString = "water";
-    private ImageIcon iconHiddenCard;
     private JLabel choosePlayerTargetLabel;
 
     /**
@@ -112,7 +112,6 @@ public class MainBoardFront implements Serializable {
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         this.nbPlayers = nbPlayers;
-        iconHiddenCard = new ImageIcon("src/front/images/image_unie.jpg");
 
         buildEastPanel();
         buildWestPanel();
@@ -488,10 +487,15 @@ public class MainBoardFront implements Serializable {
      * @param card the card for which the panel is built
      * @return the built panel
      */
-    private JPanel buildCard(Card card) {
+    private JPanel buildCard(Card card, boolean revealed) {
         var cardPanel = new JPanel();
+        Image img;
+        if (revealed) {
+            img = ((ImageIcon) card.getRevealedCardIcon()).getImage();
+        } else {
+            img = ((ImageIcon) hiddenCardIcon).getImage();
+        }
 
-        var img = iconHiddenCard.getImage();
         var newImg = img.getScaledInstance(SOUTH_BUTTON_WIDTH, SOUTH_BUTTON_HEIGHT, java.awt.Image.SCALE_SMOOTH);
         var icon = new ImageIcon(newImg);
         var cardButton = new JButton(card + "", icon);
@@ -510,7 +514,7 @@ public class MainBoardFront implements Serializable {
      * @param card the card to add
      */
     private void addRevealedCard(Card card) {
-        JPanel cardPanel = buildCard(card);
+        JPanel cardPanel = buildCard(card, true);
         revealedCardPanelPanel.add(cardPanel);
     }
 
@@ -520,7 +524,7 @@ public class MainBoardFront implements Serializable {
      * @param card the card to add
      */
     private void addHiddenCard(Card card) {
-        JPanel cardPanel = buildCard(card);
+        JPanel cardPanel = buildCard(card, false);
         hiddenCardPanelPanel.add(cardPanel);
     }
 

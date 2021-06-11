@@ -37,7 +37,7 @@ public class CrystalBall extends Card {
         cardName = stringsBundle.getString("CrystalBall_name");
         cardDescription = stringsBundle.getString("CrystalBall_description");
         cardType = CardType.TOOL;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/CrystalBall.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/CrystalBallRevealed.png");
     }
 
     /**

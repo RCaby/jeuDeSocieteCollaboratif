@@ -38,7 +38,7 @@ public class AlarmClock extends Card {
         cardName = stringsBundle.getString("AlarmClock_name");
         cardDescription = stringsBundle.getString("AlarmClock_description");
         cardType = CardType.HELP;
-        revealedCardIcon = new ImageIcon("src/front/images/cards/AlarmClock.png");
+        revealedCardIcon = new ImageIcon("src/front/images/cards/AlarmClockRevealed.png");
 
     }
 
