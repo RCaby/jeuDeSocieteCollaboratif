@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -12,7 +14,7 @@ import back.Player;
  * 
  * <p>
  * The Winning Lottery Ticket is useless. It is a single-use card, discarded
- * after utilisation.
+ * after utilization.
  * 
  * <p>
  * The class {@code WinningLotteryTicket} extends the abstract class
@@ -35,6 +37,7 @@ public class WinningLotteryTicket extends Card {
         cardName = stringsBundle.getString("WinningLotteryTicket_name");
         cardDescription = stringsBundle.getString("WinningLotteryTicket_description");
         cardType = CardType.USELESS;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/WinningLotteryTicket.png");
     }
 
     @Override

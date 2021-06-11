@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.GamePhase;
@@ -14,7 +16,7 @@ import java.awt.event.ActionListener;
  * 
  * <p>
  * The card Voodoo Doll resurrects one dead player. It is a single-use card,
- * discarded after utilisation.
+ * discarded after utilization.
  * 
  * <p>
  * The class {@code VoodooDoll} extends the abstract class {@link Card}.
@@ -36,10 +38,11 @@ public class VoodooDoll extends Card {
         cardName = stringsBundle.getString("VoodooDoll_name");
         cardDescription = stringsBundle.getString("VoodooDoll_description");
         cardType = CardType.HELP;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/VoodooDoll.png");
     }
 
     /**
-     * Simulates the utilisation of the card, herited from {@link Card}. Needs one
+     * Simulates the utilization of the card, inherited from {@link Card}. Needs one
      * player as a target for the resurrection.
      * 
      * @param player1 target of the resurrection, not null, player has to be dead

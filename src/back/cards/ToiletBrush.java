@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -11,7 +13,7 @@ import back.Player;
  * 
  * <p>
  * The card ToiletBrush is useless. It is a single-use card, discarded after
- * utilisation.
+ * utilization.
  * 
  * <p>
  * The class {@code ToiletBrush} extends the abstract class {@link Card}.
@@ -33,6 +35,7 @@ public class ToiletBrush extends Card {
         cardName = stringsBundle.getString("ToiletBrush_name");
         cardDescription = stringsBundle.getString("ToiletBrush_description");
         cardType = CardType.USELESS;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/ToiletBrush.png");
     }
 
     @Override

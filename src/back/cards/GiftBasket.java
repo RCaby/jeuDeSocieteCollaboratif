@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.GamePhase;
@@ -13,7 +15,7 @@ import back.Player;
  * <p>
  * The card Gift Basket allows all player to survive even if there are not
  * enough rations for everyone. It is a single-use card, discarded after
- * utilisation.
+ * utilization.
  * 
  * <p>
  * The class {@code GiftBasket} extends the abstract class {@link Card}.
@@ -35,10 +37,11 @@ public class GiftBasket extends Card {
         cardName = stringsBundle.getString("GiftBasket_name");
         cardDescription = stringsBundle.getString("GiftBasket_description");
         cardType = CardType.PROTECTION;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/GiftBasket.png");
     }
 
     /**
-     * Simulates the utilisation of the card, herited from {@link Card}. Does not
+     * Simulates the utilization of the card, inherited from {@link Card}. Does not
      * need any parameter.
      * 
      * @param player1 not needed for this card

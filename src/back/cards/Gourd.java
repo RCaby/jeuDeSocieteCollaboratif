@@ -2,12 +2,14 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
 
 /**
- * The {@code Gourd} class represents the Groud Card.
+ * The {@code Gourd} class represents the Gourd Card.
  * 
  * <p>
  * The card Gourd allows its owner to get twice as many water rations. It is not
@@ -35,6 +37,7 @@ public class Gourd extends Card {
         cardName = stringsBundle.getString("Gourd_name");
         cardDescription = stringsBundle.getString("Gourd_description");
         cardType = CardType.TOOL;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/Gourd.png");
     }
 
     /**

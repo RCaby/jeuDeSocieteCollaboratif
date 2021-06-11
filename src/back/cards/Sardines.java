@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -11,7 +13,7 @@ import back.Player;
  * 
  * <p>
  * The card Sardines adds three food rations. It is a single-use card, discarded
- * after utilisation.
+ * after utilization.
  * 
  * <p>
  * The class {@code Sardines} extends the abstract class {@link Card}.
@@ -33,10 +35,11 @@ public class Sardines extends Card {
         cardName = stringsBundle.getString("Sardines_name");
         cardDescription = stringsBundle.getString("Sardines_description");
         cardType = CardType.FOOD;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/Sardines.png");
     }
 
     /**
-     * Simulates the utilisation of the card, herited from {@link Card}. Does not
+     * Simulates the utilization of the card, inherited from {@link Card}. Does not
      * need any parameter.
      * 
      * @param player1 not needed for this card

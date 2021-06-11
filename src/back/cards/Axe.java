@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -35,6 +37,7 @@ public class Axe extends Card {
         cardName = stringsBundle.getString("Axe_name");
         cardDescription = stringsBundle.getString("Axe_description");
         cardType = CardType.TOOL;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/Axe.png");
     }
 
     @Override

@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import java.awt.event.ActionListener;
 import back.Board;
@@ -12,11 +14,11 @@ import back.PlayerState;
  * The {@code AlarmClock} class represents the Alarm Clock Card.
  * 
  * <p>
- * The card AlarmClock cures a sick player. It is a single-use card, discarded
- * after utilisation.
+ * The card AlarmClock makes the target player to player first in the next
+ * round. It is a single-use card, discarded after utilization.
  * 
  * <p>
- * The class {@code Antivenom} extends the abstract class {@link Card}.
+ * The class {@code AlarmClock} extends the abstract class {@link Card}.
  * 
  */
 public class AlarmClock extends Card {
@@ -36,10 +38,12 @@ public class AlarmClock extends Card {
         cardName = stringsBundle.getString("AlarmClock_name");
         cardDescription = stringsBundle.getString("AlarmClock_description");
         cardType = CardType.HELP;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/AlarmClock.png");
+
     }
 
     /**
-     * Simulates the utilisation of the card, herited from {@link Card}. Needs one
+     * Simulates the utilization of the card, inherited from {@link Card}. Needs one
      * player as a target for the action.
      * 
      * @param player1 target of the action, not null, player has to be alive

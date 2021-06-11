@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -13,7 +15,7 @@ import java.awt.event.ActionListener;
  * 
  * <p>
  * The card Antivenom cures a sick player. It is a single-use card, discarded
- * after utilisation.
+ * after utilization.
  * 
  * <p>
  * The class {@code Antivenom} extends the abstract class {@link Card}.
@@ -36,10 +38,11 @@ public class Antivenom extends Card {
         cardName = stringsBundle.getString("Antivenom_name");
         cardDescription = stringsBundle.getString("Antivenom_description");
         cardType = CardType.HELP;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/Antivenom.png");
     }
 
     /**
-     * Simulates the utilisation of the card, herited from {@link Card}. Needs one
+     * Simulates the utilization of the card, inherited from {@link Card}. Needs one
      * player as a target for the cure action.
      * 
      * @param player1 target of the cure action, not null, player has to be sick

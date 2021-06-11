@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -12,7 +14,7 @@ import java.awt.event.ActionListener;
  * 
  * <p>
  * The card Pendulum imposes the next action of the target player. It is a
- * single-use card, discarded after utilisation.
+ * single-use card, discarded after utilization.
  * 
  * <p>
  * The class {@code Pendulum} extends the abstract class {@link Card}.
@@ -34,10 +36,11 @@ public class Pendulum extends Card {
         cardName = stringsBundle.getString("Pendulum_name");
         cardDescription = stringsBundle.getString("Pendulum_description");
         cardType = CardType.THREAT;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/Pendulum.png");
     }
 
     /**
-     * Simulates the utilisation of the card, herited from {@link Card}. Needs one
+     * Simulates the utilization of the card, inherited from {@link Card}. Needs one
      * player as a target for the action imposition and the type of the imposed
      * action.
      * 

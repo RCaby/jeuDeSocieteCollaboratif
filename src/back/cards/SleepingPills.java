@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -12,7 +14,7 @@ import java.awt.event.ActionListener;
  * 
  * <p>
  * The card Sleeping Pills allows its owner to rob three random cards to other
- * players. It is a single-use card, discarded after utilisation.
+ * players. It is a single-use card, discarded after utilization.
  * 
  * <p>
  * The class {@code SleepingPills} extends the abstract class {@link Card}.
@@ -34,11 +36,12 @@ public class SleepingPills extends Card {
                 cardName = stringsBundle.getString("SleepingPills_name");
                 cardDescription = stringsBundle.getString("SleepingPills_description");
                 cardType = CardType.THREAT;
+                revealedCardIcon = new ImageIcon("src/front/images/cards/SleepingPills.png");
         }
 
         /**
-         * Simulates the utilisation of the card, herited from {@link Card}. Needs three
-         * players as target for the robbery.
+         * Simulates the utilization of the card, inherited from {@link Card}. Needs
+         * three players as target for the robbery.
          * 
          * @param player1 target of the robbery, not null, player has to be alive
          * @param player2 target of the robbery, not null, player has to be alive

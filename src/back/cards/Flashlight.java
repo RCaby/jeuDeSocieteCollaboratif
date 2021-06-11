@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -13,7 +15,7 @@ import back.Player;
  * 
  * <p>
  * The card Flashlight allows its owner to see the next three cards in the deck.
- * It is a single-use card, discarded after utilisation.
+ * It is a single-use card, discarded after utilization.
  * 
  * <p>
  * The class {@code Flashlight} extends the abstract class {@link Card}.
@@ -35,10 +37,11 @@ public class Flashlight extends Card {
         cardName = stringsBundle.getString("Flashlight_name");
         cardDescription = stringsBundle.getString("Flashlight_description");
         cardType = CardType.SPY;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/Flashlight.png");
     }
 
     /**
-     * Simulates the utilisation of the card, herited from {@link Card}. Does not
+     * Simulates the utilization of the card, inherited from {@link Card}. Does not
      * need any parameter.
      * 
      * @param player1 not needed for this card

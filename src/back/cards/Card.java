@@ -87,8 +87,8 @@ public abstract class Card implements ICard, Serializable {
     protected Board board;
     protected transient ResourceBundle stringsBundle;
     protected CardType cardType;
-    private boolean isFromExpansion;
-    private transient Icon revealedCardIcon;
+    protected boolean isFromExpansion;
+    protected transient Icon revealedCardIcon;
 
     /**
      * Generates a new card and initialize some attributes.
