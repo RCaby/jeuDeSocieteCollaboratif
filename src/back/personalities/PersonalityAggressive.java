@@ -94,7 +94,7 @@ public class PersonalityAggressive extends BasicPersonality {
 
     @Override
     public int getLinkedStartingBonus() {
-        return IPersonality.AGGRESIVE_STARTING_BONUS;
+        return IPersonality.AGGRESSIVE_STARTING_BONUS;
     }
 
     /**

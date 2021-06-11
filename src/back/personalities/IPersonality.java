@@ -12,7 +12,7 @@ import back.cards.Card;
 public interface IPersonality {
 
     public static final int COOPERATIVE_STARTING_BONUS = 10;
-    public static final int AGGRESIVE_STARTING_BONUS = -10;
+    public static final int AGGRESSIVE_STARTING_BONUS = -10;
     public static final int MAD_STARTING_BONUS = -50;
     public static final int NEUTRAL_STARTING_BONUS = 0;
     public static final int PERSONALITY_CHANGE_VALUE = 10;
@@ -28,7 +28,7 @@ public interface IPersonality {
     /**
      * Asks the player to vote for a player, based on the opinion.
      * 
-     * @param pickablePlayers the electible players
+     * @param pickablePlayers the electable players
      * @return the chosen player
      */
     public Player choosePlayerToVoteFor(List<Player> pickablePlayers);
@@ -36,7 +36,7 @@ public interface IPersonality {
     /**
      * Chooses a player to be designated, based on the player's opinion.
      * 
-     * @param pickablePlayers the electible players
+     * @param pickablePlayers the electable players
      * @return the chosen player
      */
     public Player chooseAsChief(List<Player> pickablePlayers);
@@ -50,7 +50,7 @@ public interface IPersonality {
      * @param wood    the number of planks on the raft
      * @param weather the weather on the island
      * @param nbAlive the number of players alive
-     * @return the action choosed
+     * @return the action chosen
      */
     public ActionType chooseAction(int food, int water, int wood, int weather, int nbAlive);
 
