@@ -93,7 +93,7 @@ public abstract class Card implements Serializable {
      * <li>isRevealed indicates whether the card is revealed
      * <li>owner is the {@link Player} that has the card, in most cases the owner
      * decides when the card is played and who is the target
-     * <li>isSingleUse indicates whether the card is discarded after its utilisation
+     * <li>isSingleUse indicates whether the card is discarded after its utilization
      * <li>discardOnDeath indicates if the card is discarded after the death of its
      * owner
      * </ul>
@@ -113,7 +113,7 @@ public abstract class Card implements Serializable {
     }
 
     /**
-     * Simulates the utilisation of the card.
+     * Simulates the utilization of the card.
      * 
      * <p>
      * In most cases, cards are revealed, then discarded. As only some cards need
@@ -145,7 +145,7 @@ public abstract class Card implements Serializable {
      * @return the impact of this card on the opinion of the other players.
      */
     public int getCardImpactOnOpinion() {
-        return 0;
+        return IMPACT_LUXURY_CAR_KEY;
     }
 
     /**
@@ -155,7 +155,7 @@ public abstract class Card implements Serializable {
      *         are targeted .
      */
     public int getCardImpactOnOpinionOnTarget() {
-        return 0;
+        return IMPACT_LUXURY_CAR_KEY;
     }
 
     /**
