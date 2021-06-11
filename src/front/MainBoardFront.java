@@ -1,6 +1,5 @@
 package front;
 
-import static back.cards.ICard.hiddenCardIcon;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER;
@@ -28,7 +27,6 @@ import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -487,15 +485,9 @@ public class MainBoardFront implements Serializable {
      * @param card the card for which the panel is built
      * @return the built panel
      */
-    private JPanel buildCard(Card card, boolean revealed) {
+    private JPanel buildCard(Card card) {
         var cardPanel = new JPanel();
-        Image img;
-        if (revealed) {
-            img = ((ImageIcon) card.getRevealedCardIcon()).getImage();
-        } else {
-            img = ((ImageIcon) hiddenCardIcon).getImage();
-        }
-
+        var img = ((ImageIcon) card.getRevealedCardIcon()).getImage();
         var newImg = img.getScaledInstance(SOUTH_BUTTON_WIDTH, SOUTH_BUTTON_HEIGHT, java.awt.Image.SCALE_SMOOTH);
         var icon = new ImageIcon(newImg);
         var cardButton = new JButton(card + "", icon);
@@ -514,7 +506,7 @@ public class MainBoardFront implements Serializable {
      * @param card the card to add
      */
     private void addRevealedCard(Card card) {
-        JPanel cardPanel = buildCard(card, true);
+        JPanel cardPanel = buildCard(card);
         revealedCardPanelPanel.add(cardPanel);
     }
 
@@ -524,7 +516,7 @@ public class MainBoardFront implements Serializable {
      * @param card the card to add
      */
     private void addHiddenCard(Card card) {
-        JPanel cardPanel = buildCard(card, false);
+        JPanel cardPanel = buildCard(card);
         hiddenCardPanelPanel.add(cardPanel);
     }
 

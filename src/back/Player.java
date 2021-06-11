@@ -23,6 +23,7 @@ import java.awt.GridLayout;
 import java.io.Serializable;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -485,7 +486,10 @@ public class Player implements Serializable {
     private void addCardToRevealedPanel(Card card) {
         var cardPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         var cardLabel = new JLabel(card.toString());
-        cardLabel.setIcon(card.getRevealedCardIcon());
+        var img = ((ImageIcon) card.getRevealedCardIcon()).getImage();
+        var newImg = img.getScaledInstance(CARD_WIDTH, CARD_HEIGHT, java.awt.Image.SCALE_SMOOTH);
+        var icon = new ImageIcon(newImg);
+        cardLabel.setIcon(icon);
         cardPanel.add(cardLabel);
         cardLabel.setPreferredSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
         cardRevealedPanel.add(cardPanel);
