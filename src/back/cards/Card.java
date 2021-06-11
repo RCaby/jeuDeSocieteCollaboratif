@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ResourceBundle;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 
 import back.ActionType;
 import back.Board;
@@ -90,7 +89,6 @@ public abstract class Card implements ICard, Serializable {
     protected CardType cardType;
     private boolean isFromExpansion;
     private transient Icon revealedCardIcon;
-    private transient Icon hiddenCardIcon;
 
     /**
      * Generates a new card and initialize some attributes.
@@ -118,7 +116,6 @@ public abstract class Card implements ICard, Serializable {
         isFromExpansion = false;
         this.board = board;
         revealedCardIcon = null;
-        hiddenCardIcon = new ImageIcon("src/front/images/image_unie.jpg");
 
     }
 
@@ -153,10 +150,6 @@ public abstract class Card implements ICard, Serializable {
 
     public Icon getRevealedCardIcon() {
         return revealedCardIcon;
-    }
-
-    public Icon getHiddenCardIcon() {
-        return hiddenCardIcon;
     }
 
     public void discard() {

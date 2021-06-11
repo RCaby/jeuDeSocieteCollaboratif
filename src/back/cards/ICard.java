@@ -6,8 +6,11 @@ import back.Player;
 import java.awt.event.ActionListener;
 
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 public interface ICard {
+
+    public static final Icon hiddenCardIcon = new ImageIcon("src/front/images/image_unie.jpg");
 
     /**
      * Simulates the utilization of the card.
@@ -87,13 +90,6 @@ public interface ICard {
      * @return the icon of the revealed card
      */
     public Icon getRevealedCardIcon();
-
-    /**
-     * The getter for the attribute {@link Card#hiddenCardIcon}.
-     * 
-     * @return the icon of the hidden card
-     */
-    public Icon getHiddenCardIcon();
 
     /**
      * The getter for the attribute {@link Card#isFromExpansion}.

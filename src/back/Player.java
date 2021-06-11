@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Map.Entry;
 
+import static back.cards.ICard.hiddenCardIcon;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER;
 
@@ -22,7 +23,6 @@ import java.awt.GridLayout;
 import java.io.Serializable;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -50,7 +50,7 @@ public class Player implements Serializable {
     public static final int IMPACT_VOTE_ON_OPINION = -3;
     public static final int IMPACT_CHIEF_DESIGNATION_ON_OPINION = -5;
     private static final int CARD_WIDTH = 65;
-    private static final int CARD_HEIGHT = 65; // 1 ratio needed.
+    private static final int CARD_HEIGHT = 65; // ratio of 1needed.
     private List<Card> inventory;
     private List<Card> inventoryRevealed;
     private List<Card> inventoryHidden;
@@ -72,7 +72,6 @@ public class Player implements Serializable {
     private Map<Player, Integer> opinionMap;
     private final String originalName;
     private ThreatLevel threatLevel;
-    private ImageIcon iconHiddenCard;
 
     /**
      * Generates a Player.
@@ -91,7 +90,6 @@ public class Player implements Serializable {
         imposedActionThisRound = ActionType.NONE;
         state = PlayerState.HEALTHY;
         this.stringsBundle = stringsBundle;
-        iconHiddenCard = new ImageIcon("src/front/images/image_unie.jpg");
         buildDisplay();
 
     }
@@ -472,7 +470,7 @@ public class Player implements Serializable {
      */
     private void addCardHiddenPanel() {
         var cardPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        var cardLabel = new JLabel(iconHiddenCard);
+        var cardLabel = new JLabel(hiddenCardIcon);
         cardPanel.add(cardLabel);
         cardLabel.setPreferredSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
         cardHiddenPanel.add(cardPanel);
@@ -487,7 +485,7 @@ public class Player implements Serializable {
     private void addCardToRevealedPanel(Card card) {
         var cardPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         var cardLabel = new JLabel(card.toString());
-        cardLabel.setIcon(iconHiddenCard);
+        cardLabel.setIcon(card.getRevealedCardIcon());
         cardPanel.add(cardLabel);
         cardLabel.setPreferredSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
         cardRevealedPanel.add(cardPanel);
