@@ -49,8 +49,8 @@ public class Player implements Serializable {
     private static final long serialVersionUID = 2874539910717357461L;
     public static final int IMPACT_VOTE_ON_OPINION = -3;
     public static final int IMPACT_CHIEF_DESIGNATION_ON_OPINION = -5;
-    private static final int CARD_WIDTH = 2;
-    private static final int CARD_HEIGHT = 7;
+    private static final int CARD_WIDTH = 65;
+    private static final int CARD_HEIGHT = 65; // 1 ratio needed.
     private List<Card> inventory;
     private List<Card> inventoryRevealed;
     private List<Card> inventoryHidden;
@@ -115,8 +115,8 @@ public class Player implements Serializable {
         display.add(voidPanelSouth, BorderLayout.SOUTH);
 
         display.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        display.setMaximumSize(new Dimension(600, 200));
-        displayCenter.setLayout(new GridLayout(1, 0, 10, 10));
+        display.setPreferredSize(new Dimension(525, 132));
+        displayCenter.setLayout(new GridLayout(1, 0, 10, 0));
 
         nameLabel = new JLabel(name);
         nameLabel.setFont(new Font(nameLabel.getFont().getName(), nameLabel.getFont().getStyle(), 14));
@@ -140,7 +140,7 @@ public class Player implements Serializable {
 
         statePanelCenter.add(chiefLabel);
 
-        cardRevealedPanel = new JPanel(new GridLayout(1, 0, 10, 10));
+        cardRevealedPanel = new JPanel(new GridLayout(1, 0, 4, 4));
 
         var cardRevealedScrollableContainer = new JPanel(new GridLayout(1, 1));
 
@@ -152,7 +152,7 @@ public class Player implements Serializable {
         scrollPaneRevealed.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_NEVER);
         scrollPaneRevealed.setPreferredSize(new Dimension(170, 100));
 
-        cardHiddenPanel = new JPanel(new GridLayout(1, 0, 10, 10));
+        cardHiddenPanel = new JPanel(new GridLayout(1, 0, 4, 4));
         var cardHiddenScrollableContainer = new JPanel(new GridLayout(1, 1));
 
         displayCenter.add(cardHiddenScrollableContainer);
@@ -487,6 +487,7 @@ public class Player implements Serializable {
     private void addCardToRevealedPanel(Card card) {
         var cardPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         var cardLabel = new JLabel(card.toString());
+        cardLabel.setIcon(iconHiddenCard);
         cardPanel.add(cardLabel);
         cardLabel.setPreferredSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
         cardRevealedPanel.add(cardPanel);

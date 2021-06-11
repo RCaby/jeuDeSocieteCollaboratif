@@ -49,8 +49,8 @@ public class MainBoardFront implements Serializable {
     private static final String CHOOSE_VOID_PANEL = "CHOOSE_VOID_PANEL";
     private static final String CHOOSE_WOOD_TRIES_PANEL = "CHOOSE_WOOD_TRIES_PANEL";
     private static final String CHOOSE_PLAYER_TARGET = "CHOOSE_PLAYER_TARGET";
-    private static final int SOUTH_BUTTON_WIDTH = 100;
-    private static final int SOUTH_BUTTON_HEIGHT = 50;
+    private static final int SOUTH_BUTTON_WIDTH = 65;
+    private static final int SOUTH_BUTTON_HEIGHT = 65;
 
     JPanel mainPanel;
     Board board;
@@ -95,6 +95,7 @@ public class MainBoardFront implements Serializable {
     private transient ResourceBundle stringsBundle;
     private String waterString = "water";
     private ImageIcon iconHiddenCard;
+    private JLabel choosePlayerTargetLabel;
 
     /**
      * Builds an interface for the game.
@@ -184,7 +185,7 @@ public class MainBoardFront implements Serializable {
         changeFont(chooseWoodNbTriesLabel, 18);
         chooseWoodNbTriesLabelPanel.add(chooseWoodNbTriesLabel);
         var choosePlayerTargetLabelPanel = new JPanel();
-        var choosePlayerTargetLabel = new JLabel(stringsBundle.getString("cardDescription"));
+        choosePlayerTargetLabel = new JLabel(stringsBundle.getString("cardDescription"));
         changeFont(choosePlayerTargetLabel, 18);
         choosePlayerTargetLabelPanel.add(choosePlayerTargetLabel);
 
@@ -342,7 +343,7 @@ public class MainBoardFront implements Serializable {
         var hiddenCardPanelContainer = new JPanel();
         var revealedCardPanelContainer = new JPanel();
 
-        var playerStatePanel = new JPanel(new GridLayout(2, 1, 10, 10));
+        var playerStatePanel = new JPanel(new GridLayout(2, 1, 10, 0));
         var chiefPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         var statePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         chiefLabel = new JLabel("");
@@ -360,8 +361,8 @@ public class MainBoardFront implements Serializable {
         var revealedCardPanelScrollable = new JScrollPane(revealedCardPanel, VERTICAL_SCROLLBAR_NEVER,
                 HORIZONTAL_SCROLLBAR_AS_NEEDED);
         playerStatePanel.setPreferredSize(new Dimension(20, 20));
-        hiddenCardPanelScrollable.setPreferredSize(new Dimension(900, 100));
-        revealedCardPanelScrollable.setPreferredSize(new Dimension(900, 100));
+        hiddenCardPanelScrollable.setPreferredSize(new Dimension(900, 110));
+        revealedCardPanelScrollable.setPreferredSize(new Dimension(900, 110));
         hiddenCardPanelContainer.add(hiddenCardPanelScrollable);
         revealedCardPanelContainer.add(revealedCardPanelScrollable);
         southPanel.add(hiddenCardPanelContainer, BorderLayout.WEST);
@@ -374,9 +375,9 @@ public class MainBoardFront implements Serializable {
         hiddenCardPanel.add(hiddenCardLabelPanel);
         var revealedCardLabelPanel = new JPanel();
         revealedCardPanel.add(revealedCardLabelPanel);
-        hiddenCardPanelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        hiddenCardPanelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         hiddenCardPanel.add(hiddenCardPanelPanel);
-        revealedCardPanelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        revealedCardPanelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         revealedCardPanel.add(revealedCardPanelPanel);
 
         var hiddenCardLabel = new JLabel(stringsBundle.getString("hiddenCards"));
@@ -394,7 +395,7 @@ public class MainBoardFront implements Serializable {
         northPanel.add(northEastPanel);
         mainPanel.add(northPanel, BorderLayout.NORTH);
 
-        var resourcesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
+        var resourcesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 0));
         northWestPanel.add(resourcesPanel);
 
         var foodPanel = new JPanel();
@@ -424,7 +425,7 @@ public class MainBoardFront implements Serializable {
         woodPlanksPanel.add(woodPlanksLabel);
         woodPlanksPanel.add(woodPlanksQuantityLabel);
 
-        var roundDataPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 20));
+        var roundDataPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 0));
         northEastPanel.add(roundDataPanel);
         var weatherPanel = new JPanel();
         var nbAlivePanel = new JPanel();
@@ -1048,6 +1049,7 @@ public class MainBoardFront implements Serializable {
                 nbTargetsRequired = 0;
                 nbActionRequired = 0;
                 switchToPanel(CHOOSE_PLAYER_TARGET);
+                choosePlayerTargetLabel.setText(stringsBundle.getString("cardDescription") + " : " + card.toString());
                 choosePlayerTargetPanelPanelAction.setVisible(false);
                 choosePlayerTargetPanelPanelPlayers.setVisible(false);
                 cardDescription.setText(card.getCardDescription());
