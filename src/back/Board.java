@@ -246,6 +246,11 @@ public class Board implements Serializable {
         var allSaidNo = false;
         var index = 0;
         while (!allSaidNo) {
+            if (currentPhase == GamePhase.GOODS_DISTRIBUTION && isThereEnoughGoodsForAll(false)) {
+                for (Player player : playerList) {
+                    player.setThreatLevel(ThreatLevel.NONE);
+                }
+            }
 
             var player = playerList.get(index);
             if (player.getState() != PlayerState.HEALTHY || player.equals(thisPlayer)) {
