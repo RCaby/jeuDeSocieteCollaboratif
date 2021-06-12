@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -12,7 +14,7 @@ import java.awt.event.ActionListener;
  * 
  * <p>
  * The card Pendulum imposes the next action of the target player. It is a
- * single-use card, discarded after utilisation.
+ * single-use card, discarded after utilization.
  * 
  * <p>
  * The class {@code Pendulum} extends the abstract class {@link Card}.
@@ -33,12 +35,12 @@ public class Pendulum extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Pendulum_name");
         cardDescription = stringsBundle.getString("Pendulum_description");
-        cardImpactOnOpinion = NEGATIVE_IMPACT;
-        cardImpactOnOpinionForTarget = NEGATIVE_IMPACT;
+        cardType = CardType.THREAT;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/PendulumRevealed.png");
     }
 
     /**
-     * Simulates the utilisation of the card, herited from {@link Card}. Needs one
+     * Simulates the utilization of the card, inherited from {@link Card}. Needs one
      * player as a target for the action imposition and the type of the imposed
      * action.
      * 
@@ -57,7 +59,8 @@ public class Pendulum extends Card {
             board.getMainBoardFront().displayMessage(
                     String.format(stringsBundle.getString("Pendulum_smallDescription"), owner, action, player1));
             player1.setImposedActionThisRound(action);
-            player1.addOpinionOn(owner, cardImpactOnOpinionForTarget);
+            player1.addOpinionOn(owner, getCardImpactOnOpinionOnTarget(), board.getDifficulty(),
+                    board.getMainBoardFront());
             super.useCard(player1, player2, player3, action);
         }
     }
@@ -79,5 +82,15 @@ public class Pendulum extends Card {
     @Override
     public ActionListener getActionListener() {
         return board.getMainBoardFront().new CardPlayerActionListenerOneTargetOneAction(this);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_PENDULUM;
+    }
+
+    @Override
+    public int getCardImpactOnOpinionOnTarget() {
+        return IMPACT_PENDULUM_ON_TARGET;
     }
 }

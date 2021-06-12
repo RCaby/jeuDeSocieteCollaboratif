@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -13,7 +15,7 @@ import java.awt.event.ActionListener;
  * <p>
  * The card Gun allows to kill one player. To use this card, the owner has to
  * have at least one {@link Cartridge} which will be discarded after one
- * utilisation. The target player can survive the shot if they have one
+ * utilization. The target player can survive the shot if they have one
  * {@link MetalSheet}, which is discarded after one use. It is not a single-use
  * card, and it is not discarded after death.
  * 
@@ -37,12 +39,12 @@ public class Gun extends Card {
         isSingleUse = false;
         cardName = stringsBundle.getString("Gun_name");
         cardDescription = stringsBundle.getString("Gun_description");
-        cardImpactOnOpinion = NEGATIVE_IMPACT;
-        cardImpactOnOpinionForTarget = NEGATIVE_IMPACT;
+        cardType = CardType.WEAPON;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/GunRevealed.png");
     }
 
     /**
-     * Simulates the utilisation of the card, herited from {@link Card}. Needs one
+     * Simulates the utilization of the card, inherited from {@link Card}. Needs one
      * player as a target for the kill attempt.
      * 
      * @param player1 target of the kill attempt, not null, player has to be alive
@@ -55,7 +57,8 @@ public class Gun extends Card {
         if (player1 != null && owner != null) {
             var cardCartridge = owner.getCardType(Cartridge.class);
             if (cardCartridge != null) {
-                player1.addOpinionOn(owner, cardImpactOnOpinionForTarget);
+                player1.addOpinionOn(owner, getCardImpactOnOpinionOnTarget(), board.getDifficulty(),
+                        board.getMainBoardFront());
                 board.getMainBoardFront()
                         .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
                 board.getMainBoardFront()
@@ -89,5 +92,15 @@ public class Gun extends Card {
     @Override
     public ActionListener getActionListener() {
         return board.getMainBoardFront().new CardPlayerActionListenerOneTarget(this);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_GUN;
+    }
+
+    @Override
+    public int getCardImpactOnOpinionOnTarget() {
+        return IMPACT_GUN_ON_TARGET;
     }
 }

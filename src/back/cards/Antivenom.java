@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -13,7 +15,7 @@ import java.awt.event.ActionListener;
  * 
  * <p>
  * The card Antivenom cures a sick player. It is a single-use card, discarded
- * after utilisation.
+ * after utilization.
  * 
  * <p>
  * The class {@code Antivenom} extends the abstract class {@link Card}.
@@ -35,12 +37,12 @@ public class Antivenom extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Antivenom_name");
         cardDescription = stringsBundle.getString("Antivenom_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
-        cardImpactOnOpinionForTarget = NEGATIVE_IMPACT;
+        cardType = CardType.HELP;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/AntivenomRevealed.png");
     }
 
     /**
-     * Simulates the utilisation of the card, herited from {@link Card}. Needs one
+     * Simulates the utilization of the card, inherited from {@link Card}. Needs one
      * player as a target for the cure action.
      * 
      * @param player1 target of the cure action, not null, player has to be sick
@@ -53,7 +55,8 @@ public class Antivenom extends Card {
         if (player1 != null && player1.getState() == PlayerState.SICK_FROM_SNAKE) {
 
             board.curePlayer(player1);
-            player1.addOpinionOn(owner, cardImpactOnOpinionForTarget);
+            player1.addOpinionOn(owner, getCardImpactOnOpinionOnTarget(), board.getDifficulty(),
+                    board.getMainBoardFront());
             board.getMainBoardFront()
                     .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
             board.getMainBoardFront()
@@ -88,5 +91,15 @@ public class Antivenom extends Card {
     @Override
     public ActionListener getActionListener() {
         return board.getMainBoardFront().new CardPlayerActionListenerOneTarget(this);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_ANTIVENOM;
+    }
+
+    @Override
+    public int getCardImpactOnOpinionOnTarget() {
+        return IMPACT_ANTIVENOM_ON_TARGET;
     }
 }

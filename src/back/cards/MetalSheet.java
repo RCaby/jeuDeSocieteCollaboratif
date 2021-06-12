@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -10,8 +12,8 @@ import back.Player;
  * The {@code MetalSheet} class represents the Metal Sheet Card.
  * 
  * <p>
- * The card Metal Sheet protects its owner from one utilisation of {@link Gun}.
- * It is a single-use card, discarded after utilisation.
+ * The card Metal Sheet protects its owner from one utilization of {@link Gun}.
+ * It is a single-use card, discarded after utilization.
  * 
  * <p>
  * The class {@code MetalSheet} extends the abstract class {@link Card}.
@@ -32,7 +34,8 @@ public class MetalSheet extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("MetalSheet_name");
         cardDescription = stringsBundle.getString("MetalSheet_description");
-        cardImpactOnOpinion = NEUTRAL_IMPACT;
+        cardType = CardType.WEAPON;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/MetalSheetRevealed.png");
     }
 
     /**
@@ -50,6 +53,11 @@ public class MetalSheet extends Card {
         board.getMainBoardFront()
                 .displayMessage(String.format(stringsBundle.getString("MetalSheet_smallDescription"), owner));
         super.useCard(player1, player2, player3, action);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_METAL_SHEET;
     }
 
 }

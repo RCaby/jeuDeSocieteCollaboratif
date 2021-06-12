@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -13,7 +15,7 @@ import back.PlayerState;
  * <p>
  * The card Rotten Fish adds one food ration but makes one of the player sick,
  * if no {@link Matches} were used this round. It is a single-use card,
- * discarded after utilisation.
+ * discarded after utilization.
  * 
  * <p>
  * The class {@code RottenFish} extends the abstract class {@link Card}.
@@ -34,11 +36,12 @@ public class RottenFish extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("RottenFish_name");
         cardDescription = stringsBundle.getString("RottenFish_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
+        cardType = CardType.FOOD;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/RottenFishRevealed.png");
     }
 
     /**
-     * Simulates the utilisation of the card, herited from {@link Card}. Needs one
+     * Simulates the utilization of the card, inherited from {@link Card}. Needs one
      * player as a target for the sickness.
      * 
      * @param player1 target of the sickness, not null, player has to be alive
@@ -61,6 +64,11 @@ public class RottenFish extends Card {
             }
             super.useCard(player1, player2, player3, action);
         }
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_ROTTEN_FISH;
     }
 
 }

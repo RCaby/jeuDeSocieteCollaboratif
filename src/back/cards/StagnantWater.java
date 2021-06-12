@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -13,7 +15,7 @@ import back.PlayerState;
  * <p>
  * The card Stagnant Water adds one water ration but makes one of the player
  * sick, if no {@link Matches} were used this round. It is a single-use card,
- * discarded after utilisation.
+ * discarded after utilization.
  * 
  * <p>
  * The class {@code StagnantWater} extends the abstract class {@link Card}.
@@ -34,11 +36,12 @@ public class StagnantWater extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("StagnantWater_name");
         cardDescription = stringsBundle.getString("StagnantWater_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
+        cardType = CardType.WATER;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/StagnantWaterRevealed.png");
     }
 
     /**
-     * Simulates the utilisation of the card, herited from {@link Card}. Does not
+     * Simulates the utilization of the card, inherited from {@link Card}. Does not
      * need any parameter.
      * 
      * @param player1 not needed for this card
@@ -61,6 +64,11 @@ public class StagnantWater extends Card {
             }
             super.useCard(player1, player2, player3, action);
         }
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_STAGNANT_WATER;
     }
 
 }

@@ -5,9 +5,9 @@ public class Main {
 
     public static void main(String[] args) {
 
-        MainFrame mainFrame = new MainFrame();
+        var mainFrame = new MainFrame();
 
-        // TODO quid de l'auto opinion qui devient extremement basse ou haute ?
+        // TODO discussion channel for players (not before V6 at least)
 
     }
 }

@@ -171,6 +171,10 @@ public class Board implements Serializable {
         }
     }
 
+    /**
+     * Gives to each CPU player a random personality and a neutral personality for
+     * the player.
+     */
     private void associatePersonalities() {
         for (Player player : playerList) {
             if (!player.equals(thisPlayer)) {
@@ -195,6 +199,9 @@ public class Board implements Serializable {
 
     }
 
+    /**
+     * Displays the AIs' personalities for the user.
+     */
     private void displayPersonalities() {
         Map<PersonalitiesEnum, Integer> personalitiesMap = new EnumMap<>(PersonalitiesEnum.class);
         for (PersonalitiesEnum personality : PersonalitiesEnum.getPersonalitiesarray()) {
@@ -239,6 +246,11 @@ public class Board implements Serializable {
         var allSaidNo = false;
         var index = 0;
         while (!allSaidNo) {
+            if (currentPhase == GamePhase.GOODS_DISTRIBUTION && isThereEnoughGoodsForAll(false)) {
+                for (Player player : playerList) {
+                    player.setThreatLevel(ThreatLevel.NONE);
+                }
+            }
 
             var player = playerList.get(index);
             if (player.getState() != PlayerState.HEALTHY || player.equals(thisPlayer)) {
@@ -347,6 +359,8 @@ public class Board implements Serializable {
             cardsPlayedThisRound.clear();
             flashLightList.clear();
             barometerList.clear();
+            designated = null;
+            mainBoardFront.getNextButton().setEnabled(true);
             designatedForFoodThisRound.clear();
             designatedForWaterThisRound.clear();
             currentPhase = GamePhase.ROUND_BEGINNING;
@@ -379,9 +393,13 @@ public class Board implements Serializable {
         boolean cardUsedVoteSession;
         if (end) {
             goodsDistributionForAlive();
-            designated = null;
+            if (designated != null) {
+                designated.setThreatLevel(ThreatLevel.NONE);
+                designated = null;
+            }
             killValidated = false;
             mainBoardFront.displayMessage(stringsBundle.getString("distributionEnd"));
+            mainBoardFront.getNextButton().setEnabled(true);
 
         } else if (designated == null) {
             cardUsedVoteSession = askPlayersForCards();
@@ -392,6 +410,7 @@ public class Board implements Serializable {
             }
 
         } else if (!killValidated) {
+            designated.setThreatLevel(ThreatLevel.IMMINENT_DEATH);
             if (lackingResource == ActionType.FOOD) {
                 designatedForFoodThisRound.add(designated);
             } else if (lackingResource == ActionType.WATER) {
@@ -403,6 +422,7 @@ public class Board implements Serializable {
             } else {
                 mainBoardFront.allowPlayerToKillPlayerAfterVote(forDeparture);
             }
+
         } else {
             killPlayer(designated);
             designated = null;
@@ -450,7 +470,7 @@ public class Board implements Serializable {
                 break;
             case WOOD:
                 mainBoardFront.displayMessage(player + stringsBundle.getString("woodAction"));
-                int nbTries = random.nextInt(6) + 1;
+                var nbTries = player.getPersonality().getNbWoodTries();
                 player.playerSeeksWood(this, nbTries);
                 break;
             case CARD:
@@ -461,7 +481,7 @@ public class Board implements Serializable {
                 break;
         }
         for (Player watcher : playerList) {
-            watcher.addOpinionOn(player, imposedAction.getImpactOnOpinion());
+            watcher.addOpinionOn(player, imposedAction.getImpactOnOpinion(), difficulty, mainBoardFront);
         }
         askPlayersForCards();
         if (twicePlayingPlayer != null && twicePlayingPlayer.equals(player)) {
@@ -532,6 +552,12 @@ public class Board implements Serializable {
             if (playerState != PlayerState.DEAD && (!isConchOwner || getNbPlayersAlive() == 1)
                     && !alreadyDesignatedForFood && !alreadyDesignatedForWater) {
                 pickablePlayers.add(player);
+                if (player.getState() == PlayerState.SICK_FROM_FOOD
+                        || player.getState() == PlayerState.SICK_FROM_SNAKE) {
+                    player.setThreatLevel(ThreatLevel.IN_DANGER);
+                } else {
+                    player.setThreatLevel(ThreatLevel.THREATENED);
+                }
 
             }
             if (playerState == PlayerState.HEALTHY) {
@@ -558,6 +584,7 @@ public class Board implements Serializable {
             Card cardClub) {
         if (!player.equals(crystalBallOwner)) {
             votingPlayers.add(player);
+
             votes.put(player, new ArrayList<>());
             if (!player.equals(crystalBallClubOwner) && cardClub != null && cardClub.isCardRevealed()) {
                 votingPlayers.add(player);
@@ -618,11 +645,15 @@ public class Board implements Serializable {
 
     }
 
-    private void updateOpinion() {
+    /**
+     * Updates the opinion of each player after a vote. If a player X votes for a
+     * player Y, the opinion of Y on X should be degraded.
+     */
+    private void updateOpinionOnVote() {
         for (Entry<Player, List<Player>> entry : votes.entrySet()) {
             Player voter = entry.getKey();
             for (Player target : entry.getValue()) {
-                target.addOpinionOn(voter, Player.IMPACT_VOTE_ON_OPINION);
+                target.addOpinionOn(voter, Player.IMPACT_VOTE_ON_OPINION, difficulty, mainBoardFront);
             }
         }
     }
@@ -633,9 +664,9 @@ public class Board implements Serializable {
      */
     public void endOfVote() {
         designated = voteResults();
-        updateOpinion();
+        updateOpinionOnVote();
         if (designated == null && !chief.equals(thisPlayer)) {
-            designated = chief.decideWhoDieAsCPU(pickablePlayers);
+            designated = chief.decideWhoDieAsCPU(pickablePlayers, difficulty, mainBoardFront);
             roundEnd(currentlyForDeparture);
         } else if (designated == null) {
             mainBoardFront.makePlayerChiefDesignates(pickablePlayers);
@@ -652,7 +683,7 @@ public class Board implements Serializable {
         for (Player player : votingPlayers) {
             var club = player.getCardType(Club.class);
             if (!player.equals(crystalBallOwner) && !player.equals(crystalBallClubOwner) && votes.get(player).isEmpty()
-                    || (club != null && votes.get(player).size() != 2)) {
+                    || (club != null && club.isCardRevealed() && votes.get(player).size() != 2)) {
                 makePlayerVote(player);
             }
         }
@@ -705,7 +736,8 @@ public class Board implements Serializable {
         for (Player player : votingPlayers) {
             var club = player.getCardType(Club.class);
             if ((!player.equals(crystalBallOwner) && !player.equals(crystalBallClubOwner)
-                    && votes.get(player).isEmpty()) || (club != null && votes.get(player).size() != 2)) {
+                    && votes.get(player).isEmpty())
+                    || (club != null && club.isCardRevealed() && votes.get(player).size() != 2)) {
                 return false;
             }
         }
@@ -969,17 +1001,18 @@ public class Board implements Serializable {
      */
     public void killPlayer(Player player) {
         player.setState(PlayerState.DEAD);
+        player.setThreatLevel(ThreatLevel.NONE);
         distributeCardsFromDeadPlayer(player);
         deadThisRound.add(player);
         if (designated != null && player.equals(designated)) {
             mainBoardFront.displayMessage(player + stringsBundle.getString("sacrificedForCrew"));
         }
         if (player.equals(chief) && getNbPlayersAlive() > 0) {
-            Player newChief = getPlayerAliveAfterBefore(playerList.indexOf(player), false);
+            var newChief = getPlayerAliveAfterBefore(playerList.indexOf(player), false);
             setChief(newChief);
             mainBoardFront.displayMessage(newChief + stringsBundle.getString("newChief"));
         }
-
+        updateDisplayResources();
         mainBoardFront.updateSouth();
     }
 
@@ -991,6 +1024,7 @@ public class Board implements Serializable {
      */
     public void sickPlayer(Player player, PlayerState stateOfSickness) {
         player.setState(stateOfSickness);
+        player.setThreatLevel(ThreatLevel.THREATENED);
         if (thisPlayer.equals(player)) {
             mainBoardFront.setAllowedToPlayCard(false);
             mainBoardFront.updateSouth();
@@ -1005,6 +1039,7 @@ public class Board implements Serializable {
      */
     public void curePlayer(Player player) {
         player.setState(PlayerState.HEALTHY);
+        player.setThreatLevel(ThreatLevel.NONE);
         if (thisPlayer.equals(player)) {
             mainBoardFront.setAllowedToPlayCard(true);
             mainBoardFront.updateSouth();
@@ -1385,6 +1420,11 @@ public class Board implements Serializable {
         this.indexOfCurrentPlayer = indexOfCurrentPlayer;
     }
 
+    /**
+     * The getter for the attribute {@link Board#currentlyForDeparture}.
+     * 
+     * @return a boolean indicating whether players are trying to leave the island.
+     */
     public boolean getCurrentlyForDeparture() {
         return this.currentlyForDeparture;
     }
@@ -1478,6 +1518,15 @@ public class Board implements Serializable {
      */
     public void setBarometerList(List<Integer> barometerList) {
         this.barometerList = barometerList;
+    }
+
+    /**
+     * The getter for the attribute {@link Board#difficulty}.
+     * 
+     * @return the difficulty of the game
+     */
+    public int getDifficulty() {
+        return difficulty;
     }
 
     /**

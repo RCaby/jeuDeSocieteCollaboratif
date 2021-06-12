@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -11,7 +13,7 @@ import back.Player;
  * 
  * <p>
  * The card Water Bottle adds one water ration. It is a single-use card,
- * discarded after utilisation.
+ * discarded after utilization.
  * 
  * <p>
  * The class {@code WaterBottle} extends the abstract class {@link Card}.
@@ -32,12 +34,12 @@ public class WaterBottle extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("WaterBottle_name");
         cardDescription = stringsBundle.getString("WaterBottle_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
-        ;
+        cardType = CardType.WATER;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/WaterBottleRevealed.png");
     }
 
     /**
-     * Simulates the utilisation of the card, herited from {@link Card}. Does not
+     * Simulates the utilization of the card, inherited from {@link Card}. Does not
      * need any parameter.
      * 
      * @param player1 not needed for this card
@@ -52,5 +54,10 @@ public class WaterBottle extends Card {
                 .displayMessage(String.format(stringsBundle.getString("WaterBottle_smallDescription"), owner));
         board.addWater(1);
         super.useCard(player1, player2, player3, action);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_WATER_BOTTLE;
     }
 }

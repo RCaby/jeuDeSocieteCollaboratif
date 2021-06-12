@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -10,9 +12,9 @@ import back.Player;
  * The {@code Matches} class represents the Matches Card.
  * 
  * <p>
- * The card Matches allows the utilisation of {@link RottenFish} or
+ * The card Matches allows the utilization of {@link RottenFish} or
  * {@link StagnantWater} without anyone getting sick. It is a single-use card,
- * discarded after utilisation.
+ * discarded after utilization.
  * 
  * <p>
  * The class {@code Matches} extends the abstract class {@link Card}.
@@ -33,11 +35,12 @@ public class Matches extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Matches_name");
         cardDescription = stringsBundle.getString("Matches_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
+        cardType = CardType.HELP;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/MatchesRevealed.png");
     }
 
     /**
-     * Simulates the utilisation of the card, herited from {@link Card}. Does not
+     * Simulates the utilization of the card, inherited from {@link Card}. Does not
      * need any parameter.
      * 
      * @param player1 not needed for this card
@@ -52,6 +55,11 @@ public class Matches extends Card {
                 .displayMessage(String.format(stringsBundle.getString("Matches_smallDescription"), owner));
         board.setMatchesUsedThisRound(true);
         super.useCard(player1, player2, player3, action);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_MATCHES;
     }
 
 }

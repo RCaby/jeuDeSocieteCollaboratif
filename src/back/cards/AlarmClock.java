@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import java.awt.event.ActionListener;
 import back.Board;
@@ -12,11 +14,11 @@ import back.PlayerState;
  * The {@code AlarmClock} class represents the Alarm Clock Card.
  * 
  * <p>
- * The card AlarmClock cures a sick player. It is a single-use card, discarded
- * after utilisation.
+ * The card AlarmClock makes the target player to player first in the next
+ * round. It is a single-use card, discarded after utilization.
  * 
  * <p>
- * The class {@code Antivenom} extends the abstract class {@link Card}.
+ * The class {@code AlarmClock} extends the abstract class {@link Card}.
  * 
  */
 public class AlarmClock extends Card {
@@ -35,12 +37,13 @@ public class AlarmClock extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("AlarmClock_name");
         cardDescription = stringsBundle.getString("AlarmClock_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
-        cardImpactOnOpinionForTarget = POSITIVE_IMPACT;
+        cardType = CardType.HELP;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/AlarmClockRevealed.png");
+
     }
 
     /**
-     * Simulates the utilisation of the card, herited from {@link Card}. Needs one
+     * Simulates the utilization of the card, inherited from {@link Card}. Needs one
      * player as a target for the action.
      * 
      * @param player1 target of the action, not null, player has to be alive
@@ -52,7 +55,8 @@ public class AlarmClock extends Card {
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         if (player1 != null && player1.getState() != PlayerState.DEAD) {
             board.setNextChief(player1);
-            player1.addOpinionOn(owner, cardImpactOnOpinionForTarget);
+            player1.addOpinionOn(owner, getCardImpactOnOpinionOnTarget(), board.getDifficulty(),
+                    board.getMainBoardFront());
             board.getMainBoardFront()
                     .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
             board.getMainBoardFront()
@@ -69,6 +73,15 @@ public class AlarmClock extends Card {
     @Override
     public ActionListener getActionListener() {
         return board.getMainBoardFront().new CardPlayerActionListenerOneTarget(this);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_ALARM_CLOCK;
+    }
+
+    public int getCardImpactOnOpinionTarget() {
+        return IMPACT_ALARM_CLOCK_ON_TARGET;
     }
 
 }

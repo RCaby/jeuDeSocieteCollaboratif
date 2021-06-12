@@ -2,12 +2,14 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
 
 /**
- * The {@code Gourd} class represents the Groud Card.
+ * The {@code Gourd} class represents the Gourd Card.
  * 
  * <p>
  * The card Gourd allows its owner to get twice as many water rations. It is not
@@ -34,7 +36,8 @@ public class Gourd extends Card {
         discardOnDeath = true;
         cardName = stringsBundle.getString("Gourd_name");
         cardDescription = stringsBundle.getString("Gourd_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
+        cardType = CardType.TOOL;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/GourdRevealed.png");
     }
 
     /**
@@ -52,6 +55,11 @@ public class Gourd extends Card {
         board.getMainBoardFront()
                 .displayMessage(String.format(stringsBundle.getString("Gourd_smallDescription"), owner));
         super.useCard(player1, player2, player3, action);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_GOURD;
     }
 
 }

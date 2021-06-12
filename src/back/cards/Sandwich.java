@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -11,7 +13,7 @@ import back.Player;
  * 
  * <p>
  * The card Sandwich adds one food ration. It is a single-use card, discarded
- * after utilisation.
+ * after utilization.
  * 
  * <p>
  * The class {@code Sandwich} extends the abstract class {@link Card}.
@@ -32,11 +34,12 @@ public class Sandwich extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Sandwich_name");
         cardDescription = stringsBundle.getString("Sandwich_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
+        cardType = CardType.FOOD;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/SandwichRevealed.png");
     }
 
     /**
-     * Simulates the utilisation of the card, herited from {@link Card}. Does not
+     * Simulates the utilization of the card, inherited from {@link Card}. Does not
      * need any parameter.
      * 
      * @param player1 not needed for this card
@@ -51,5 +54,10 @@ public class Sandwich extends Card {
                 .displayMessage(String.format(stringsBundle.getString("Sandwich_smallDescription"), owner, this));
         board.addFood(1);
         super.useCard(player1, player2, player3, action);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_SANDWICH;
     }
 }

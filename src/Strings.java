@@ -6,8 +6,8 @@ public class Strings extends ListResourceBundle {
         }
 
         private Object[][] contents = { { "hidden_card_label", "Card !" }, { "not_chief_label", "     " },
-                        { "chief_label", "Chief" }, { "NoTarget", "%s uses the card %s." },
-                        { "OneTarget", "%s uses the card %s on %s." },
+                        { "chief_label", "Chief" }, { "NoTarget", "%s uses the card %s." }, { "card", "Card" },
+                        { "hiddenCardDescription", "A hidden card." }, { "OneTarget", "%s uses the card %s on %s." },
                         { "TwoTargets", "%s uses the card %s on %s and on %s." },
                         { "ThreeTargets", "%s uses the card %s on %s, on %s and on %s." },
                         { "UselessCard", "%s has used an useless card." }, { "RevealsCard", "%s reveals his card %s." },
@@ -115,7 +115,7 @@ public class Strings extends ListResourceBundle {
                         { "RottenFish_name", "Rotten Fish" },
                         { "RottenFish_description",
                                         "Is equivalent to one food ration but makes the player sick for one round." },
-                        { "RottenFish_smallDescription", "%s gets one food ration but makes is now sick." },
+                        { "RottenFish_smallDescription", "%s gets one food ration but is now sick." },
 
                         { "Sandwich_name", "Sandwich" },
                         { "Sandwich_description", "Is equivalent to one food ration." },
@@ -205,5 +205,6 @@ public class Strings extends ListResourceBundle {
                         { "startButton", "Start" }, { "defaultName", "Player" }, { "yourNameLabel", "Your name : " },
                         { "nbPlayerLabel", "Number of players : " }, { "difficulty", "Difficulty : " },
                         { "difficultyEasy", "Easy" }, { "difficultyMedium", "Medium" }, { "difficultyHard", "Hard" },
-                        { "typesPersonalities", "There %s %d %s player%s !" } };
+                        { "typesPersonalities", "There %s %d %s player%s !" },
+                        { "personalityUpdate", "%s has updated their personality !" } };
 }

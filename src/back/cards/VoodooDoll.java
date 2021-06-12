@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.GamePhase;
@@ -14,7 +16,7 @@ import java.awt.event.ActionListener;
  * 
  * <p>
  * The card Voodoo Doll resurrects one dead player. It is a single-use card,
- * discarded after utilisation.
+ * discarded after utilization.
  * 
  * <p>
  * The class {@code VoodooDoll} extends the abstract class {@link Card}.
@@ -35,12 +37,12 @@ public class VoodooDoll extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("VoodooDoll_name");
         cardDescription = stringsBundle.getString("VoodooDoll_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
-        cardImpactOnOpinionForTarget = POSITIVE_IMPACT;
+        cardType = CardType.HELP;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/VoodooDollRevealed.png");
     }
 
     /**
-     * Simulates the utilisation of the card, herited from {@link Card}. Needs one
+     * Simulates the utilization of the card, inherited from {@link Card}. Needs one
      * player as a target for the resurrection.
      * 
      * @param player1 target of the resurrection, not null, player has to be dead
@@ -55,8 +57,9 @@ public class VoodooDoll extends Card {
                     .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
             board.getMainBoardFront().displayMessage(
                     String.format(stringsBundle.getString("VoodooDoll_smallDescription"), owner, player1));
-            player1.setState(PlayerState.HEALTHY);
-            player1.addOpinionOn(owner, cardImpactOnOpinionForTarget);
+            board.curePlayer(player1);
+            player1.addOpinionOn(owner, getCardImpactOnOpinionOnTarget(), board.getDifficulty(),
+                    board.getMainBoardFront());
             board.getDeadThisRound().remove(player1);
             super.useCard(player1, player2, player3, action);
         }
@@ -80,5 +83,15 @@ public class VoodooDoll extends Card {
     @Override
     public ActionListener getActionListener() {
         return board.getMainBoardFront().new CardPlayerActionListenerOneTarget(this);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_VOODOO_DOLL;
+    }
+
+    @Override
+    public int getCardImpactOnOpinionOnTarget() {
+        return IMPACT_VOODOO_DOLL_ON_TARGET;
     }
 }

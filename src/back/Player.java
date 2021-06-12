@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Map.Entry;
 
+import static back.cards.ICard.hiddenCardIcon;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER;
 
@@ -22,7 +23,7 @@ import java.awt.GridLayout;
 import java.io.Serializable;
 
 import javax.swing.BorderFactory;
-
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -32,6 +33,7 @@ import back.cards.Card;
 import back.cards.FishingRod;
 import back.cards.Gourd;
 import back.personalities.BasicPersonality;
+import front.MainBoardFront;
 
 /**
  * The {@code Player} class represents a Player.
@@ -46,8 +48,10 @@ import back.personalities.BasicPersonality;
 public class Player implements Serializable {
 
     private static final long serialVersionUID = 2874539910717357461L;
-    public static final int IMPACT_VOTE_ON_OPINION = -1;
-    public static final int IMPACT_CHIEF_DESIGNATION_ON_OPINION = -1;
+    public static final int IMPACT_VOTE_ON_OPINION = -3;
+    public static final int IMPACT_CHIEF_DESIGNATION_ON_OPINION = -5;
+    private static final int CARD_WIDTH = 65;
+    private static final int CARD_HEIGHT = 65; // ratio of 1needed.
     private List<Card> inventory;
     private List<Card> inventoryRevealed;
     private List<Card> inventoryHidden;
@@ -67,19 +71,23 @@ public class Player implements Serializable {
     private BasicPersonality personality;
     private JLabel nameLabel;
     private Map<Player, Integer> opinionMap;
+    private final String originalName;
+    private ThreatLevel threatLevel;
 
     /**
      * Generates a Player.
      * 
      * @param name          The name of the player
-     * @param stringsBundle The bundle which contains the strings of the projet, in
+     * @param stringsBundle The bundle which contains the strings of the project, in
      *                      the current language of the application.
      */
     public Player(String name, ResourceBundle stringsBundle) {
         this.name = name;
+        originalName = name;
         inventory = new ArrayList<>();
         inventoryHidden = new ArrayList<>();
         inventoryRevealed = new ArrayList<>();
+        threatLevel = ThreatLevel.NONE;
         imposedActionThisRound = ActionType.NONE;
         state = PlayerState.HEALTHY;
         this.stringsBundle = stringsBundle;
@@ -93,7 +101,7 @@ public class Player implements Serializable {
     }
 
     /**
-     * The data displayer of the Player.
+     * The data display of the Player.
      */
     private void buildDisplay() {
         display = new JPanel(new BorderLayout());
@@ -106,8 +114,8 @@ public class Player implements Serializable {
         display.add(voidPanelSouth, BorderLayout.SOUTH);
 
         display.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        display.setMaximumSize(new Dimension(600, 200));
-        displayCenter.setLayout(new GridLayout(1, 0, 10, 10));
+        display.setPreferredSize(new Dimension(525, 132));
+        displayCenter.setLayout(new GridLayout(1, 0, 10, 0));
 
         nameLabel = new JLabel(name);
         nameLabel.setFont(new Font(nameLabel.getFont().getName(), nameLabel.getFont().getStyle(), 14));
@@ -131,29 +139,34 @@ public class Player implements Serializable {
 
         statePanelCenter.add(chiefLabel);
 
-        cardRevealedPanel = new JPanel(new GridLayout(1, 0, 10, 10));
+        cardRevealedPanel = new JPanel(new GridLayout(1, 0, 4, 4));
 
-        var cardRevealedScrollableContener = new JPanel(new GridLayout(1, 1));
+        var cardRevealedScrollableContainer = new JPanel(new GridLayout(1, 1));
 
-        displayCenter.add(cardRevealedScrollableContener);
+        displayCenter.add(cardRevealedScrollableContainer);
 
         var scrollPaneRevealed = new JScrollPane(cardRevealedPanel);
-        cardRevealedScrollableContener.add(scrollPaneRevealed);
+        cardRevealedScrollableContainer.add(scrollPaneRevealed);
         scrollPaneRevealed.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneRevealed.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_NEVER);
         scrollPaneRevealed.setPreferredSize(new Dimension(170, 100));
 
-        cardHiddenPanel = new JPanel(new GridLayout(1, 0, 10, 10));
-        var cardHiddenScrollableContener = new JPanel(new GridLayout(1, 1));
+        cardHiddenPanel = new JPanel(new GridLayout(1, 0, 4, 4));
+        var cardHiddenScrollableContainer = new JPanel(new GridLayout(1, 1));
 
-        displayCenter.add(cardHiddenScrollableContener);
+        displayCenter.add(cardHiddenScrollableContainer);
         var scrollPaneHidden = new JScrollPane(cardHiddenPanel);
-        cardHiddenScrollableContener.add(scrollPaneHidden);
+        cardHiddenScrollableContainer.add(scrollPaneHidden);
         scrollPaneHidden.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneHidden.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_NEVER);
         scrollPaneHidden.setPreferredSize(new Dimension(170, 100));
     }
 
+    /**
+     * Builds the opinion map of this player.
+     * 
+     * @param playerList the player which will be added to the opinion map
+     */
     public void generateOpinionMap(List<Player> playerList) {
         opinionMap = new HashMap<>();
         for (Player player : playerList)
@@ -265,8 +278,7 @@ public class Player implements Serializable {
     }
 
     /**
-     * Adds a card to the inventory and places it in the data displayer of the
-     * player.
+     * Adds a card to the inventory and places it in the data display of the player.
      * 
      * @param card The card to add
      */
@@ -283,7 +295,7 @@ public class Player implements Serializable {
     }
 
     /**
-     * Removes a card from the inventory and from the data displayer.
+     * Removes a card from the inventory and from the data display.
      * 
      * @param card the card to remove
      * @return the card removed
@@ -298,7 +310,7 @@ public class Player implements Serializable {
     }
 
     /**
-     * Removes a card from the inventory and from the data displayer.
+     * Removes a card from the inventory and from the data display.
      * 
      * @param index the index of the card to remove
      * @return the card removed
@@ -308,7 +320,8 @@ public class Player implements Serializable {
         inventory.remove(index);
         if (card.isCardRevealed()) {
             for (var indexInPanel = 0; indexInPanel < cardRevealedPanel.getComponentCount(); indexInPanel++) {
-                var label = (JLabel) cardRevealedPanel.getComponent(indexInPanel);
+                var panel = (JPanel) cardRevealedPanel.getComponent(indexInPanel);
+                var label = (JLabel) panel.getComponent(0);
                 if (label.getText().equals(card.getCardName())) {
                     cardRevealedPanel.remove(indexInPanel);
                     inventoryRevealed.remove(card);
@@ -326,8 +339,8 @@ public class Player implements Serializable {
      * Trades two cards between this player and an other one.
      * 
      * @param target     the other player concerned by this trade
-     * @param cardToGive the card gived by this player to the other player
-     * @param cardToGet  the card gived by the other player to this player
+     * @param cardToGive the card given by this player to the other player
+     * @param cardToGet  the card given by the other player to this player
      */
     public void trade(Player target, Card cardToGive, Card cardToGet) {
         if (hasCard(cardToGive) && target != null && target.hasCard(cardToGet)) {
@@ -394,6 +407,7 @@ public class Player implements Serializable {
             } else {
                 cardUsed.useCard(null, null, null, ActionType.NONE);
             }
+            board.getMainBoardFront().displayMessage("\n");
         }
 
         return cardWasPlayed;
@@ -452,23 +466,40 @@ public class Player implements Serializable {
     }
 
     /**
-     * Adds a card to the hidden panel in the data displayer, to show to the other
+     * Adds a card to the hidden panel in the data display, to show to the other
      * players that this player has a card but has not revealed it yet.
      */
     private void addCardHiddenPanel() {
-        var cardLabel = new JLabel(stringsBundle.getString("hidden_card_label"));
-        cardHiddenPanel.add(cardLabel);
+        var cardPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        var img = ((ImageIcon) hiddenCardIcon).getImage();
+        var newImg = img.getScaledInstance(CARD_WIDTH, CARD_HEIGHT, java.awt.Image.SCALE_SMOOTH);
+        var icon = new ImageIcon(newImg);
+        var cardLabel = new JLabel(icon);
+        cardPanel.add(cardLabel);
+        cardLabel.setToolTipText(stringsBundle.getString("hiddenCardDescription"));
+        cardLabel.setPreferredSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
+        cardHiddenPanel.add(cardPanel);
     }
 
     /**
-     * Adds a card to the revealed panel in the data displayer, to show to the other
+     * Adds a card to the revealed panel in the data display, to show to the other
      * players that this player has a visible card.
      *
      * @param card the card revealed to add to the panel
      */
     private void addCardToRevealedPanel(Card card) {
+        var cardPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         var cardLabel = new JLabel(card.toString());
-        cardRevealedPanel.add(cardLabel);
+        var img = ((ImageIcon) card.getRevealedCardIcon()).getImage();
+        var newImg = img.getScaledInstance(CARD_WIDTH, CARD_HEIGHT, java.awt.Image.SCALE_SMOOTH);
+        var icon = new ImageIcon(newImg);
+        cardLabel.setIcon(icon);
+        String textToolTip = stringsBundle.getString("card") + " " + card.getCardName() + ". "
+                + card.getCardDescription();
+        cardLabel.setToolTipText(textToolTip);
+        cardPanel.add(cardLabel);
+        cardLabel.setPreferredSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
+        cardRevealedPanel.add(cardPanel);
     }
 
     /**
@@ -538,9 +569,9 @@ public class Player implements Serializable {
      * @param playerList the list of player who can be sacrificed
      * @return the player selected to be sacrificed
      */
-    public Player decideWhoDieAsCPU(List<Player> playerList) {
+    public Player decideWhoDieAsCPU(List<Player> playerList, int difficulty, MainBoardFront mainBoardFront) {
         Player target = personality.chooseAsChief(playerList);
-        target.addOpinionOn(this, Player.IMPACT_CHIEF_DESIGNATION_ON_OPINION);
+        target.addOpinionOn(this, Player.IMPACT_CHIEF_DESIGNATION_ON_OPINION, difficulty, mainBoardFront);
         return target;
     }
 
@@ -562,6 +593,15 @@ public class Player implements Serializable {
         return opinionMap;
     }
 
+    /**
+     * Determines who is the most or least liked player by this player in a given
+     * list.
+     * 
+     * @param playerList the list in which players can be chosen
+     * @param mostLiked  a boolean indicating whether it is the most or the least
+     *                   liked player
+     * @return the target player
+     */
     private Player mapOpinionSearchForExtremum(List<Player> playerList, boolean mostLiked) {
         Player maxPlayer = null;
         var maxValue = mostLiked ? Integer.MIN_VALUE : Integer.MAX_VALUE;
@@ -575,16 +615,28 @@ public class Player implements Serializable {
         return maxPlayer;
     }
 
+    /**
+     * Determines who is the most liked player in a given list, according to this
+     * player.
+     * 
+     * @param playerList the list of players who can be chosen
+     * @return the most liked player
+     */
     public Player getMostLikedPlayerIn(List<Player> playerList) {
-        var theMost = mapOpinionSearchForExtremum(playerList, true);
-        System.out.println("The most liked of " + opinionMap + " is " + theMost);
-        return theMost;
+        return mapOpinionSearchForExtremum(playerList, true);
+
     }
 
+    /**
+     * Determines who is the least liked player in a given list, according to this
+     * player.
+     * 
+     * @param playerList the list of players who can be chosen
+     * @return the least liked player
+     */
     public Player getLeastLikedPlayerIn(List<Player> playerList) {
-        var theLeast = mapOpinionSearchForExtremum(playerList, false);
-        System.out.println("The least liked of " + opinionMap + " is " + theLeast);
-        return theLeast;
+        return mapOpinionSearchForExtremum(playerList, false);
+
     }
 
     /**
@@ -621,10 +673,20 @@ public class Player implements Serializable {
 
     }
 
+    /**
+     * The getter for the attribute {@link Player#personality}.
+     * 
+     * @return the personality of this player
+     */
     public BasicPersonality getPersonality() {
         return this.personality;
     }
 
+    /**
+     * The setter for the attribute {@link Player#personality}.
+     * 
+     * @param personality the new personality of this player
+     */
     public void setPersonality(BasicPersonality personality) {
         this.personality = personality;
     }
@@ -769,12 +831,51 @@ public class Player implements Serializable {
         this.sickRound = roundSick;
     }
 
-    public void addOpinionOn(Player player, int opinion) {
+    /**
+     * Changes the opinion of this player on a given player.
+     * 
+     * @param player         the target player
+     * @param opinion        the opinion points to add
+     * @param difficulty     the difficulty of the game
+     * @param mainBoardFront the interface of the game
+     */
+    public void addOpinionOn(Player player, int opinion, int difficulty, MainBoardFront mainBoardFront) {
         opinionMap.put(player, opinionMap.get(player) + opinion);
+        if (personality.updatePersonality()) {
+            mainBoardFront.displayMessage(String.format(stringsBundle.getString("personalityUpdate"), this));
+            if (difficulty == 0) {
+                this.setName(getPersonality() + originalName);
+            }
+
+        }
     }
 
+    /**
+     * Gets the opinion of this player on a given player.
+     * 
+     * @param player the target player
+     * @return the opinion value
+     */
     public int getOpinionOn(Player player) {
         return opinionMap.get(player);
+    }
+
+    /**
+     * The getter for the attribute {@link Player#threatLevel}.
+     * 
+     * @return the current threat level felt by this player
+     */
+    public ThreatLevel getThreatLevel() {
+        return threatLevel;
+    }
+
+    /**
+     * The setter for the attribute {@link Player#threatLevel}.
+     * 
+     * @param threatLevel the new threat level felt by this player
+     */
+    public void setThreatLevel(ThreatLevel threatLevel) {
+        this.threatLevel = threatLevel;
     }
 
 }

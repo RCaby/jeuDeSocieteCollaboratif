@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -11,7 +13,7 @@ import back.Player;
  * 
  * <p>
  * The card Cartridge allows its owner to attempt a kill with the {@link Gun}.
- * It is a single-use card, discarded after utilisation.
+ * It is a single-use card, discarded after utilization.
  * 
  * <p>
  * The class {@code Cartridge} extends the abstract class {@link Card}.
@@ -32,7 +34,8 @@ public class Cartridge extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Cartridge_name");
         cardDescription = stringsBundle.getString("Cartridge_description");
-        cardImpactOnOpinion = NEGATIVE_IMPACT;
+        cardType = CardType.WEAPON;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/CartridgeRevealed.png");
     }
 
     @Override
@@ -50,5 +53,10 @@ public class Cartridge extends Card {
     @Override
     public boolean canBeUsed() {
         return false;
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_CARTRIDGE;
     }
 }

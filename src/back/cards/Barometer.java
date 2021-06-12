@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -13,7 +15,7 @@ import back.Player;
  * 
  * <p>
  * The card Barometer allows its owner to see the next two weather values. It is
- * a single-use card, discarded after utilisation.
+ * a single-use card, discarded after utilization.
  * 
  * <p>
  * The class {@code Barometer} extends the abstract class {@link Card}.
@@ -34,11 +36,12 @@ public class Barometer extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("Barometer_name");
         cardDescription = stringsBundle.getString("Barometer_description");
-        cardImpactOnOpinion = POSITIVE_IMPACT;
+        cardType = CardType.SPY;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/BarometerRevealed.png");
     }
 
     /**
-     * Simulates the utilisation of the card, herited from {@link Card}. Does not
+     * Simulates the utilization of the card, inherited from {@link Card}. Does not
      * need any parameter.
      * 
      * @param player1 not needed for this card
@@ -63,7 +66,11 @@ public class Barometer extends Card {
         board.getMainBoardFront()
                 .displayMessage(String.format(stringsBundle.getString("Barometer_smallDescription"), owner));
 
-        board.getMainBoardFront().displayMessage(owner + " uses the card " + this + ".");
         super.useCard(player1, player2, player3, action);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_BAROMETER;
     }
 }

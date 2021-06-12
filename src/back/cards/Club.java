@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -34,7 +36,8 @@ public class Club extends Card {
         discardOnDeath = true;
         cardName = stringsBundle.getString("Club_name");
         cardDescription = stringsBundle.getString("Club_description");
-        cardImpactOnOpinion = NEGATIVE_IMPACT;
+        cardType = CardType.TOOL;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/ClubRevealed.png");
     }
 
     /**
@@ -52,6 +55,11 @@ public class Club extends Card {
         board.getMainBoardFront()
                 .displayMessage(String.format(stringsBundle.getString("Club_smallDescription"), owner));
         super.useCard(player1, player2, player3, action);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_CLUB;
     }
 
 }

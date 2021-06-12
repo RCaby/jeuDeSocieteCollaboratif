@@ -2,6 +2,8 @@ package back.cards;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+
 import back.ActionType;
 import back.Board;
 import back.Player;
@@ -11,7 +13,7 @@ import back.Player;
  * 
  * <p>
  * The card Old Brief is useless. It is a single-use card, discarded after
- * utilisation.
+ * utilization.
  * 
  * <p>
  * The class {@code OldBrief} extends the abstract class {@link Card}.
@@ -32,12 +34,18 @@ public class OldBrief extends Card {
         super(board, stringsBundle);
         cardName = stringsBundle.getString("OldBrief_name");
         cardDescription = stringsBundle.getString("OldBrief_description");
-        cardImpactOnOpinion = NEUTRAL_IMPACT;
+        cardType = CardType.USELESS;
+        revealedCardIcon = new ImageIcon("src/front/images/cards/OldBriefRevealed.png");
     }
 
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("UselessCard"), owner, this));
         super.useCard(player1, player2, player3, action);
+    }
+
+    @Override
+    public int getCardImpactOnOpinion() {
+        return IMPACT_OLD_BRIEF;
     }
 }
