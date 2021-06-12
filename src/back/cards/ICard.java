@@ -10,7 +10,7 @@ import javax.swing.ImageIcon;
 
 public interface ICard {
 
-    public static final Icon hiddenCardIcon = new ImageIcon("src/front/images/image_unie.jpg");
+    public static final Icon hiddenCardIcon = new ImageIcon("src/front/images/cards/CardHidden.png");
 
     /**
      * Simulates the utilization of the card.
