@@ -11,7 +11,7 @@ Different steps are envisaged, based on the progress of the project :
 - [x] realisation of a console version of the game, without any user interaction (the game plays by itself with random behaviours)
 - [x] interactive console version with randomly acting computer players
 - [x] design of a HMI with Swing
-- [ ] better behaviours for the computer players (no more random behaviours)
+- [x] better behaviours for the computer players (no more random behaviours)
 - [ ] integration of the "Tribus et personnages" expansion which adds new features
 
 
