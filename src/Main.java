@@ -5,11 +5,9 @@ public class Main {
 
     public static void main(String[] args) {
 
-        MainFrame mainFrame = new MainFrame();
-        // TODO updateThreatLevel(Player) in board
+        var mainFrame = new MainFrame();
 
-        // TODO discussion channel for players
+        // TODO discussion channel for players (not before V6 at least)
 
-        // TODO prevent players from using gun on themselves
     }
 }
