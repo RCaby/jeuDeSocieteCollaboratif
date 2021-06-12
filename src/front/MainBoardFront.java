@@ -490,9 +490,8 @@ public class MainBoardFront implements Serializable {
         var img = ((ImageIcon) card.getRevealedCardIcon()).getImage();
         var newImg = img.getScaledInstance(SOUTH_BUTTON_WIDTH, SOUTH_BUTTON_HEIGHT, java.awt.Image.SCALE_SMOOTH);
         var icon = new ImageIcon(newImg);
-        var cardButton = new JButton(card + "", icon);
-        cardButton.setVerticalTextPosition(CENTER);
-        cardButton.setHorizontalTextPosition(CENTER);
+        var cardButton = new JButton(icon);
+        cardButton.setToolTipText(card.getCardName());
         cardButton.setPreferredSize(new Dimension(SOUTH_BUTTON_WIDTH, SOUTH_BUTTON_HEIGHT));
         cardButton.setForeground(Color.WHITE);
         cardButton.addActionListener(card.getActionListener());

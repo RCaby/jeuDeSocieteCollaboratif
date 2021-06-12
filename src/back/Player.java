@@ -471,8 +471,12 @@ public class Player implements Serializable {
      */
     private void addCardHiddenPanel() {
         var cardPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        var cardLabel = new JLabel(hiddenCardIcon);
+        var img = ((ImageIcon) hiddenCardIcon).getImage();
+        var newImg = img.getScaledInstance(CARD_WIDTH, CARD_HEIGHT, java.awt.Image.SCALE_SMOOTH);
+        var icon = new ImageIcon(newImg);
+        var cardLabel = new JLabel(icon);
         cardPanel.add(cardLabel);
+        cardLabel.setToolTipText(stringsBundle.getString("hiddenCardDescription"));
         cardLabel.setPreferredSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
         cardHiddenPanel.add(cardPanel);
     }
@@ -490,6 +494,9 @@ public class Player implements Serializable {
         var newImg = img.getScaledInstance(CARD_WIDTH, CARD_HEIGHT, java.awt.Image.SCALE_SMOOTH);
         var icon = new ImageIcon(newImg);
         cardLabel.setIcon(icon);
+        String textToolTip = stringsBundle.getString("card") + " " + card.getCardName() + ". "
+                + card.getCardDescription();
+        cardLabel.setToolTipText(textToolTip);
         cardPanel.add(cardLabel);
         cardLabel.setPreferredSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
         cardRevealedPanel.add(cardPanel);

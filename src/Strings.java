@@ -6,8 +6,8 @@ public class Strings extends ListResourceBundle {
         }
 
         private Object[][] contents = { { "hidden_card_label", "Card !" }, { "not_chief_label", "     " },
-                        { "chief_label", "Chief" }, { "NoTarget", "%s uses the card %s." },
-                        { "OneTarget", "%s uses the card %s on %s." },
+                        { "chief_label", "Chief" }, { "NoTarget", "%s uses the card %s." }, { "card", "Card" },
+                        { "hiddenCardDescription", "A hidden card." }, { "OneTarget", "%s uses the card %s on %s." },
                         { "TwoTargets", "%s uses the card %s on %s and on %s." },
                         { "ThreeTargets", "%s uses the card %s on %s, on %s and on %s." },
                         { "UselessCard", "%s has used an useless card." }, { "RevealsCard", "%s reveals his card %s." },
