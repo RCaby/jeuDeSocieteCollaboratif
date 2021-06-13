@@ -66,22 +66,24 @@ public class Data implements Serializable {
 
     public List<Card> getDeck(Board board) {
         List<Card> listOfCards = new ArrayList<>();
-
+        boolean isExpansionUsed = board.isExpansionUsed();
         try {
+
             for (CardEnum typeOfCard : CardEnum.values()) {
-                for (var index = 0; index < typeOfCard.getNumberOfCard(); index++) {
-                    Class<?> clazz = Class.forName(typeOfCard.getClassName());
-                    Constructor<?> constructor = clazz.getConstructor(Board.class, ResourceBundle.class);
-                    Object instance = constructor.newInstance(board, stringsBundle);
-                    listOfCards.add((Card) instance);
-                }
+                if (isExpansionUsed || !typeOfCard.isFromExpansion())
+                    for (var index = 0; index < typeOfCard.getNumberOfCard(); index++) {
+                        Class<?> clazz = Class.forName(typeOfCard.getClassName());
+                        Constructor<?> constructor = clazz.getConstructor(Board.class, ResourceBundle.class);
+                        Object instance = constructor.newInstance(board, stringsBundle);
+                        listOfCards.add((Card) instance);
+                    }
             }
 
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
                 | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             e.printStackTrace();
         }
-
+        System.out.println(listOfCards);
         java.util.Collections.shuffle(listOfCards);
         return listOfCards;
 

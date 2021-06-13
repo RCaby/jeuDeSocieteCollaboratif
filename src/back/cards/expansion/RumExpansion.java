@@ -1,7 +1,5 @@
 package back.cards.expansion;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
@@ -9,14 +7,13 @@ import javax.swing.ImageIcon;
 import back.ActionType;
 import back.Board;
 import back.Player;
-import back.PlayerState;
 import back.cards.Card;
 import back.cards.CardType;
 
 public class RumExpansion extends Card {
     public static final int NUMBER_THIS_IN_DECK = 1;
 
-    protected RumExpansion(Board board, ResourceBundle stringsBundle) {
+    public RumExpansion(Board board, ResourceBundle stringsBundle) {
         super(board, stringsBundle);
         isFromExpansion = true;
         revealedCardIcon = new ImageIcon("src/front/images/cards/expansion/RumRevealed.png");

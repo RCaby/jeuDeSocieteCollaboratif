@@ -17,7 +17,7 @@ import back.cards.MetalSheet;
 public class MetalDetectorExpansion extends Card {
     public static final int NUMBER_THIS_IN_DECK = 1;
 
-    protected MetalDetectorExpansion(Board board, ResourceBundle stringsBundle) {
+    public MetalDetectorExpansion(Board board, ResourceBundle stringsBundle) {
         super(board, stringsBundle);
         isFromExpansion = true;
         revealedCardIcon = new ImageIcon("src/front/images/cards/expansion/MetalDetectorRevealed.png");

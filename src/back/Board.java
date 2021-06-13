@@ -86,7 +86,7 @@ public class Board implements Serializable {
      * @param nbPlayers     the number of players in this game
      * @param stringsBundle the container for the strings used by the game
      */
-    public Board(MainBoardFront boardFront, int nbPlayers, ResourceBundle stringsBundle) {
+    public Board(MainBoardFront boardFront, int nbPlayers, ResourceBundle stringsBundle, boolean expansionUsed) {
         this.stringsBundle = stringsBundle;
         mainBoardFront = boardFront;
         currentPhase = GamePhase.INITIALISATION;
@@ -137,7 +137,7 @@ public class Board implements Serializable {
      */
     public Board(MainBoardFront boardFront, int nbPlayers, ResourceBundle stringsBundle, String namePlayer,
             int difficulty, boolean expansionUsed) {
-        this(boardFront, nbPlayers, stringsBundle);
+        this(boardFront, nbPlayers, stringsBundle, expansionUsed);
         this.difficulty = difficulty;
         indexOfThisPlayer = random.nextInt(nbPlayers);
         thisPlayer = new Player(namePlayer, stringsBundle);

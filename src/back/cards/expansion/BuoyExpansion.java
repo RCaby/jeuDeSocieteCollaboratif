@@ -13,7 +13,7 @@ import back.cards.CardType;
 public class BuoyExpansion extends Card {
     public static final int NUMBER_THIS_IN_DECK = 1;
 
-    protected BuoyExpansion(Board board, ResourceBundle stringsBundle) {
+    public BuoyExpansion(Board board, ResourceBundle stringsBundle) {
         super(board, stringsBundle);
         isFromExpansion = true;
         isSingleUse = false;

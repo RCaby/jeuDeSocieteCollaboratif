@@ -13,7 +13,7 @@ import back.cards.CardType;
 public class ChineseNoodlesExpansion extends Card {
     public static final int NUMBER_THIS_IN_DECK = 1;
 
-    protected ChineseNoodlesExpansion(Board board, ResourceBundle stringsBundle) {
+    public ChineseNoodlesExpansion(Board board, ResourceBundle stringsBundle) {
         super(board, stringsBundle);
         isFromExpansion = true;
         revealedCardIcon = new ImageIcon("src/front/images/cards/expansion/ChineseNoodlesRevealed.png");

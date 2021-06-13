@@ -14,7 +14,7 @@ import back.cards.CardType;
 public class TaserExpansion extends Card {
     public static final int NUMBER_THIS_IN_DECK = 1;
 
-    protected TaserExpansion(Board board, ResourceBundle stringsBundle) {
+    public TaserExpansion(Board board, ResourceBundle stringsBundle) {
         super(board, stringsBundle);
         isFromExpansion = true;
         revealedCardIcon = new ImageIcon("src/front/images/cards/expansion/TaserRevealed.png");

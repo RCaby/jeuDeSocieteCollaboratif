@@ -14,7 +14,7 @@ import back.cards.CardType;
 public class HoneExpansion extends Card {
     public static final int NUMBER_THIS_IN_DECK = 1;
 
-    protected HoneExpansion(Board board, ResourceBundle stringsBundle) {
+    public HoneExpansion(Board board, ResourceBundle stringsBundle) {
         super(board, stringsBundle);
         isFromExpansion = true;
         revealedCardIcon = new ImageIcon("src/front/images/cards/expansion/HoneRevealed.png");
