@@ -76,6 +76,7 @@ public class Board implements Serializable {
     private int difficulty;
     private List<Player> rumDistributionList;
     private HashMap<Player, Card> mapCardDonations;
+    private boolean expansionUsed;
 
     /**
      * Builds the game without launching it and without incorporating any
@@ -89,6 +90,7 @@ public class Board implements Serializable {
         this.stringsBundle = stringsBundle;
         mainBoardFront = boardFront;
         currentPhase = GamePhase.INITIALISATION;
+        this.expansionUsed = expansionUsed;
         data = new Data(stringsBundle);
         deck = data.getDeck(this);
         gameOver = false;
@@ -134,7 +136,7 @@ public class Board implements Serializable {
      * @param difficulty    the difficulty of the game
      */
     public Board(MainBoardFront boardFront, int nbPlayers, ResourceBundle stringsBundle, String namePlayer,
-            int difficulty) {
+            int difficulty, boolean expansionUsed) {
         this(boardFront, nbPlayers, stringsBundle);
         this.difficulty = difficulty;
         indexOfThisPlayer = random.nextInt(nbPlayers);
@@ -352,7 +354,7 @@ public class Board implements Serializable {
             gameOver = true;
             endGame();
         } else if (voluntaryDepartureStarted) {
-            mainBoardFront.displayMessage(stringsBundle.getString("volontaryDeparture"));
+            mainBoardFront.displayMessage(stringsBundle.getString("voluntaryDeparture"));
             gameOver = true;
             endGame();
         } else {
@@ -445,7 +447,7 @@ public class Board implements Serializable {
         mainBoardFront.endGame();
     }
 
-    // Ressources gathering function ##############################################
+    // Resources gathering function ##############################################
 
     /**
      * Asks a computer player to do an action (maybe imposed) for this round.
@@ -632,7 +634,7 @@ public class Board implements Serializable {
     }
 
     /**
-     * Handles the voting session and selects one player to be sacrificied.
+     * Handles the voting session and selects one player to be sacrificed.
      */
     public void choosePlayerToDie() {
         votes = new HashMap<>();
@@ -911,7 +913,7 @@ public class Board implements Serializable {
 
     public void rumDistribution() {
         if (mapCardDonations.size() != rumDistributionList.size()) {
-            var player = rumDistributionList.get(0);
+            // var player = rumDistributionList.get(0);
             // TODO
         }
 
@@ -1197,8 +1199,8 @@ public class Board implements Serializable {
     }
 
     /**
-     * Shows the next meteo cards to the player. Currently only working for the non
-     * computer player as the others are playing randomly.
+     * Shows the next weather cards to the player. Currently only working for the
+     * non computer player as the others are playing randomly.
      * 
      * @param player the player who owns the card
      */
@@ -1473,6 +1475,15 @@ public class Board implements Serializable {
     }
 
     /**
+     * The getter for the attribute {@link Board#expansionUsed}.
+     * 
+     * @return a boolean indicating whether the expansion is used
+     */
+    public boolean isExpansionUsed() {
+        return expansionUsed;
+    }
+
+    /**
      * The getter for the attribute {@link Board#currentlyForDeparture}.
      * 
      * @return a boolean indicating whether players are trying to leave the island.
@@ -1484,7 +1495,7 @@ public class Board implements Serializable {
     /**
      * The setter for the attribute {@link Board#thisPlayer}
      * 
-     * @param thisPlayer the player controled by the user
+     * @param thisPlayer the player controlled by the user
      */
     public void setThisPlayer(Player thisPlayer) {
         this.thisPlayer = thisPlayer;

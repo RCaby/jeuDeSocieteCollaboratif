@@ -33,7 +33,7 @@ public class MainFrame {
                     break;
                 }
             }
-        } catch (Exception e) {  // 
+        } catch (Exception e) { //
         }
 
         frame = new JFrame("Game");
@@ -55,11 +55,11 @@ public class MainFrame {
         frame.setVisible(true);
     }
 
-    public void buildMainScreen(int nbPlayers, String namePlayer, int difficulty) {
+    public void buildMainScreen(int nbPlayers, String namePlayer, int difficulty, boolean useExpansion) {
         var mainBoardFront = new MainBoardFront(nbPlayers, stringsBundle);
         mainPanel.add(mainBoardFront.getMainPanel(), MAIN_SCREEN);
         mainPanelLayout.show(mainPanel, MainFrame.MAIN_SCREEN);
-        board = new Board(mainBoardFront, nbPlayers, stringsBundle, namePlayer, difficulty);
+        board = new Board(mainBoardFront, nbPlayers, stringsBundle, namePlayer, difficulty, useExpansion);
 
     }
 

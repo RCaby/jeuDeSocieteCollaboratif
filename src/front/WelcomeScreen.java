@@ -2,6 +2,7 @@ package front;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -24,6 +25,7 @@ public class WelcomeScreen {
     ResourceBundle stringsBundle;
     private JTextField nameField;
     private JComboBox<String> difficultyChoice;
+    private JCheckBox useExpansionBox;
 
     public WelcomeScreen(MainFrame mainFrame, ResourceBundle stringsBundle) {
         this.stringsBundle = stringsBundle;
@@ -71,12 +73,18 @@ public class WelcomeScreen {
         nbPlayerPanel.add(nbPlayerLabel);
         nbPlayerPanel.add(nbPlayerBox);
 
+        var useExpansionPanel = new JPanel();
+        useExpansionBox = new JCheckBox(stringsBundle.getString("useExpansionBox"));
+        changeFont(useExpansionBox, 18);
+        useExpansionPanel.add(useExpansionBox);
+
         var wrapPanel = new JPanel();
         wrapPanel.setLayout(new BoxLayout(wrapPanel, BoxLayout.Y_AXIS));
         mainPanel.add(wrapPanel, BorderLayout.CENTER);
         wrapPanel.add(namePanel);
         wrapPanel.add(difficultyPanel);
         wrapPanel.add(nbPlayerPanel);
+        wrapPanel.add(useExpansionPanel);
         wrapPanel.add(validateButtonPanel);
 
     }
@@ -102,7 +110,8 @@ public class WelcomeScreen {
             nbPlayers = (int) nbPlayerBox.getSelectedItem();
             var playerName = nameField.getText();
             int difficulty = difficultyChoice.getSelectedIndex();
-            mainFrame.buildMainScreen(nbPlayers, playerName, difficulty);
+            boolean useExpansion = useExpansionBox.isSelected();
+            mainFrame.buildMainScreen(nbPlayers, playerName, difficulty, useExpansion);
         }
 
     }

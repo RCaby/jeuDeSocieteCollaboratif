@@ -34,7 +34,7 @@ public class Strings extends ListResourceBundle {
                                         "This object is useless, but at least you have a new, fun way to spend time." },
 
                         { "Cartridge_name", "Cartridge" },
-                        { "Cartridge_description", "To be associated with the gun. Discarded after utilisation." },
+                        { "Cartridge_description", "To be associated with the gun. Discarded after utilization." },
                         { "Cartridge_smallDescription", "%s has shot someone !" },
 
                         { "Club_name", "Club" },
@@ -105,7 +105,7 @@ public class Strings extends ListResourceBundle {
 
                         { "OldBrief_name", "Old Brief" },
                         { "OldBrief_description",
-                                        "This object is useless, altough it may possibly provide some confort." },
+                                        "This object is useless, although it may possibly provide some comfort." },
 
                         { "Pendulum_name", "Pendulum" },
                         { "Pendulum_description",
@@ -183,14 +183,14 @@ public class Strings extends ListResourceBundle {
                         { "isDeadPlayer", " is dead and cannot play !" },
                         { "distributionTime", "It is time to distribute the rations of the round !" },
                         { "distributionEnd", "Distribution ended !" }, { "allPlayersDead", "All players are dead !" },
-                        { "hurricane", "Hurricane !" }, { "volontaryDeparture", "Volontary Departure !" },
+                        { "hurricane", "Hurricane !" }, { "voluntaryDeparture", "Voluntary Departure !" },
                         { "newRoundInit", "It is a new day !" }, { "endGame", "End of the game!" },
                         { "foodAction", " is getting food !" }, { "waterAction", " is getting water !" },
                         { "woodAction", " is getting wood !" }, { "cardAction", " is getting a card !" },
                         { "playAgain", " will play again !" },
                         { "votingTwice", " will be voting twice, thanks to the club" },
                         { "designatedPlayer", " is designated by the crew" },
-                        { "chiefWillDecide", "The chief will decide who will be sacrificied" },
+                        { "chiefWillDecide", "The chief will decide who will be sacrificed" },
                         { "sacrificedForCrew", " has been sacrificed for the sake of the crew :(" },
                         { "cardsOfPlayersSpyglass", "The cards of the players : " }, { "hasCard", " has the cards " },
                         { "chooseAction", "Choose your action" }, { "notification", "Notification !" },
@@ -206,5 +206,6 @@ public class Strings extends ListResourceBundle {
                         { "nbPlayerLabel", "Number of players : " }, { "difficulty", "Difficulty : " },
                         { "difficultyEasy", "Easy" }, { "difficultyMedium", "Medium" }, { "difficultyHard", "Hard" },
                         { "typesPersonalities", "There %s %d %s player%s !" },
-                        { "personalityUpdate", "%s has updated their personality !" } };
+                        { "personalityUpdate", "%s has updated their personality !" },
+                        { "useExpansionBox", "Use the expansion" } };
 }
