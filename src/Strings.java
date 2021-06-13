@@ -162,6 +162,38 @@ public class Strings extends ListResourceBundle {
                         { "WoodenPlank_description", "Adds one plank on the raft." },
                         { "WoodenPlank_smallDescription", "%s earns one wooden plank." },
 
+                        { "Buoy_name", "" }, { "Buoy_description", "" }, { "Buoy_smallDescription", "" },
+
+                        { "Cat_name", "" }, { "Cat_description", "" }, { "Cat_smallDescription", "" },
+
+                        { "ChineseNoodles_name", "" }, { "ChineseNoodles_description", "" },
+                        { "ChineseNoodles_smallDescription", "" },
+
+                        { "ConcaveMetalSheet_name", "" }, { "ConcaveMetalSheet_description", "" },
+                        { "ConcaveMetalSheet_smallDescription", "" },
+
+                        { "Crate_name", "" }, { "Crate_description", "" }, { "Crate_smallDescription", "" },
+
+                        { "ExpandingBullet_name", "" }, { "ExpandingBullet_description", "" },
+                        { "ExpandingBullet_smallDescription", "" },
+
+                        { "FishBowl_name", "" }, { "FishBowl_description", "" }, { "FishBowl_smallDescription", "" },
+
+                        { "Hone_name", "" }, { "Hone_description", "" }, { "Hone_smallDescription", "" },
+
+                        { "KitShaman_name", "" }, { "KitShaman_description", "" }, { "KitShaman_smallDescription", "" },
+
+                        { "Magazine_name", "" }, { "Magazine_description", "" }, { "Magazine_smallDescription", "" },
+
+                        { "MetalDetector_name", "" }, { "MetalDetector_description", "" },
+                        { "MetalDetector_smallDescription", "" },
+
+                        { "Rum_name", "" }, { "Rum_description", "" }, { "Rum_smallDescription", "" },
+
+                        { "Taser_name", "" }, { "Taser_description", "" }, { "Taser_smallDescription", "" },
+
+                        { "Whip_name", "" }, { "Whip_description", "" }, { "Whip_smallDescription", "" },
+
                         { "player_name", "Player" }, { "yesNoQuestion", "(y/n)" },
                         { "wouldLikePlayCard?", "Would like to play a card ?" },
                         { "cardsDisplay", "Your cards are : " }, { "invalidChoice", "Invalid choice !" },
