@@ -1,8 +1,8 @@
-package back;
+package back.cards;
 
 import back.cards.*;
 
-public enum CardType {
+public enum CardEnum {
     ALARMCLOCK(AlarmClock.class.getName(), AlarmClock.NUMBER_THIS_IN_DECK),
     ANTIVENOM(Antivenom.class.getName(), Antivenom.NUMBER_THIS_IN_DECK),
     AXE(Axe.class.getName(), Axe.NUMBER_THIS_IN_DECK),
@@ -40,7 +40,7 @@ public enum CardType {
     private String className;
     private int numberOfCard;
 
-    private CardType(String className, int numberOfCard) {
+    private CardEnum(String className, int numberOfCard) {
         this.className = className;
         this.numberOfCard = numberOfCard;
     }

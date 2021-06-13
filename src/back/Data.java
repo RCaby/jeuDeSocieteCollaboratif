@@ -11,6 +11,7 @@ import java.util.Random;
 import java.util.ResourceBundle;
 
 import back.cards.Card;
+import back.cards.CardEnum;
 
 public class Data implements Serializable {
     private static final long serialVersionUID = 2040640105155032989L;
@@ -67,7 +68,7 @@ public class Data implements Serializable {
         List<Card> listOfCards = new ArrayList<>();
 
         try {
-            for (CardType typeOfCard : CardType.values()) {
+            for (CardEnum typeOfCard : CardEnum.values()) {
                 for (var index = 0; index < typeOfCard.getNumberOfCard(); index++) {
                     Class<?> clazz = Class.forName(typeOfCard.getClassName());
                     Constructor<?> constructor = clazz.getConstructor(Board.class, ResourceBundle.class);

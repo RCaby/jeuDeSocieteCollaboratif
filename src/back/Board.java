@@ -74,12 +74,14 @@ public class Board implements Serializable {
     private List<Player> designatedForWaterThisRound;
     private ActionType lackingResource;
     private int difficulty;
+    private List<Player> rumDistributionList;
+    private HashMap<Player, Card> mapCardDonations;
 
     /**
      * Builds the game without launching it and without incorporating any
      * non-computer user.
      * 
-     * @param boardFront    the displayer used to interact with the user
+     * @param boardFront    the display used to interact with the user
      * @param nbPlayers     the number of players in this game
      * @param stringsBundle the container for the strings used by the game
      */
@@ -105,6 +107,7 @@ public class Board implements Serializable {
         barometerList = new ArrayList<>();
         matchesUsedThisRound = false;
         random = new Random();
+        rumDistributionList = new ArrayList<>();
         weatherList = data.getWeatherList();
 
         voluntaryDepartureStarted = false;
@@ -883,6 +886,37 @@ public class Board implements Serializable {
         return foodGot;
     }
 
+    public void rumDistributionInitialization() {
+        List<Player> alivePlayers = new ArrayList<>();
+        for (Player player : alivePlayers) {
+            if (player.getState() != PlayerState.DEAD) {
+                alivePlayers.add(player);
+            }
+        }
+        var startingIndex = playerList.indexOf(chief);
+        var endList = alivePlayers.subList(0, startingIndex);
+        List<Player> middleList;
+        if (startingIndex == alivePlayers.size() - 1) {
+            middleList = new ArrayList<>();
+        } else {
+            middleList = alivePlayers.subList(startingIndex + 1, alivePlayers.size() - 1);
+        }
+        rumDistributionList = new ArrayList<>();
+        rumDistributionList.add(chief);
+        rumDistributionList.addAll(middleList);
+        rumDistributionList.addAll(endList);
+        mapCardDonations = new HashMap<>();
+        rumDistribution();
+    }
+
+    public void rumDistribution() {
+        if (mapCardDonations.size() != rumDistributionList.size()) {
+            var player = rumDistributionList.get(0);
+            // TODO
+        }
+
+    }
+
     /**
      * Determines who is the next player to do some action (such as gathering wood)
      * during this round.
@@ -1133,6 +1167,15 @@ public class Board implements Serializable {
         foodRations -= food;
     }
 
+    /**
+     * Removes water from the rations.
+     * 
+     * @param water the number of rations to remove
+     */
+    public void removeWater(int water) {
+        waterRations -= water;
+    }
+
     // Getters and setters ######################################################
 
     /**
@@ -1199,6 +1242,15 @@ public class Board implements Serializable {
      */
     public int getWeather() {
         return weatherList[round];
+    }
+
+    /**
+     * Changes the value of the current weather.
+     * 
+     * @param newCurrentWeatherValue the new weather value
+     */
+    public void setWeatherTo(int newCurrentWeatherValue) {
+        weatherList[round] = newCurrentWeatherValue;
     }
 
     /**

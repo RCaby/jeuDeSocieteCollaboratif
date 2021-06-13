@@ -78,10 +78,26 @@ public abstract class Card implements ICard, Serializable {
     public static final int IMPACT_WINNING_LOTTERY_TICKET = 0;
     public static final int IMPACT_WOODEN_PLANK = 3;
 
-    boolean isRevealed;
-    Player owner;
-    String cardName;
-    String cardDescription;
+    public static final int IMPACT_CAT = 0; // TODO
+    public static final int IMPACT_FISH_BOWL = 0;
+    public static final int IMPACT_WHIP = 0;
+    public static final int IMPACT_CHINESE_NOODLES = 0;
+    public static final int IMPACT_CRATE = 0;
+    public static final int IMPACT_CONCAVE_METAL_SHEET = 0;
+    public static final int IMPACT_EXPANDING_BULLET = 0;
+    public static final int IMPACT_HONE = 0;
+    public static final int IMPACT_HONE_ON_TARGET = 0;
+    public static final int IMPACT_TASER = 0;
+    public static final int IMPACT_TASER_ON_TARGET = 0;
+    public static final int IMPACT_BUOY = 0;
+    public static final int IMPACT_RUM = 0;
+    public static final int IMPACT_MAGAZINE = 0;
+    public static final int IMPACT_METAL_DETECTOR = 0;
+
+    protected boolean isRevealed;
+    protected Player owner;
+    protected String cardName;
+    protected String cardDescription;
     protected boolean isSingleUse;
     protected boolean discardOnDeath;
     protected Board board;
