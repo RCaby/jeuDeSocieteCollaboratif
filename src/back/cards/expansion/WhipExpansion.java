@@ -26,10 +26,12 @@ public class WhipExpansion extends Card {
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         // TODO
-        // board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"),
-        // owner, this));
-        // board.getMainBoardFront().displayMessage(stringsBundle.getString("FishBowl_smallDescription"));
-        super.useCard(player1, player2, player3, action);
+        if (player1 != null && player1.equals(owner)) {
+            board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
+            board.getMainBoardFront()
+                    .displayMessage(String.format(stringsBundle.getString("Whip_smallDescription"), owner, player1));
+            super.useCard(player1, player2, player3, action);
+        }
 
     }
 
@@ -40,8 +42,7 @@ public class WhipExpansion extends Card {
 
     @Override
     public boolean canBeUsed() {
-        // TODO
-        return true;
+        return board.getPlayerList().size() > 1;
     }
 
 }

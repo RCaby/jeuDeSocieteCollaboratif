@@ -8,6 +8,6 @@ public class Main {
         var mainFrame = new MainFrame();
 
         // TODO discussion channel for players (not before V6 at least)
-
+        // TODO trad des cartes
     }
 }

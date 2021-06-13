@@ -41,14 +41,17 @@ public class MetalDetectorExpansion extends Card {
                 }
             }
         }
+        var usefulCardsCount = 0;
         for (Card card : cardList) {
             if (card instanceof MetalSheet || card instanceof ConcaveMetalSheetExpansion || card instanceof Cartridge
                     || card instanceof ExpandingBulletExpansion) {
                 owner.addCardToInventory(card);
+                usefulCardsCount++;
             }
         }
         board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
-        board.getMainBoardFront().displayMessage(stringsBundle.getString("MetalDetector_smallDescription"));
+        board.getMainBoardFront().displayMessage(
+                String.format(stringsBundle.getString("MetalDetector_smallDescription"), owner, usefulCardsCount));
         super.useCard(player1, player2, player3, action);
 
     }

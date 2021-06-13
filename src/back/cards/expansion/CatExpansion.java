@@ -26,7 +26,7 @@ public class CatExpansion extends Card {
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         board.addFood(2);
         board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
-        board.getMainBoardFront().displayMessage(stringsBundle.getString("Cat_smallDescription"));
+        board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("Cat_smallDescription"), owner));
         super.useCard(player1, player2, player3, action);
 
     }

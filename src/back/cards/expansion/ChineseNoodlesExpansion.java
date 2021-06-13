@@ -27,7 +27,8 @@ public class ChineseNoodlesExpansion extends Card {
         board.removeWater(2);
         board.addFood(2);
         board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
-        board.getMainBoardFront().displayMessage(stringsBundle.getString("ChineseNoodles_smallDescription"));
+        board.getMainBoardFront()
+                .displayMessage(String.format(stringsBundle.getString("ChineseNoodles_smallDescription"), owner));
         super.useCard(player1, player2, player3, action);
 
     }

@@ -83,7 +83,7 @@ public class Data implements Serializable {
                 | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             e.printStackTrace();
         }
-        System.out.println(listOfCards);
+
         java.util.Collections.shuffle(listOfCards);
         return listOfCards;
 

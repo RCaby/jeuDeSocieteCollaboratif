@@ -25,7 +25,6 @@ public class MagazineExpansion extends Card {
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action) {
         board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("UselessCard"), owner, this));
-        board.getMainBoardFront().displayMessage(stringsBundle.getString("Magazine_smallDescription"));
         super.useCard(player1, player2, player3, action);
 
     }

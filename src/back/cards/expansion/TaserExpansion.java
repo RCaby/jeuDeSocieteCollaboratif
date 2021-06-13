@@ -28,7 +28,8 @@ public class TaserExpansion extends Card {
         if (player1 != null && true) { // TODO
             board.getMainBoardFront()
                     .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
-            board.getMainBoardFront().displayMessage(stringsBundle.getString("Taser_smallDescription"));
+            board.getMainBoardFront().displayMessage(
+                    String.format(stringsBundle.getString("Taser_smallDescription"), owner, null, player1));
             super.useCard(player1, player2, player3, action);
         }
 

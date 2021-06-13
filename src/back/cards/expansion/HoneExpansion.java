@@ -34,7 +34,8 @@ public class HoneExpansion extends Card {
             owner.discardCard(axe);
             board.getMainBoardFront()
                     .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
-            board.getMainBoardFront().displayMessage(stringsBundle.getString("Hone_smallDescription"));
+            board.getMainBoardFront()
+                    .displayMessage(String.format(stringsBundle.getString("Hone_smallDescription"), owner, player1));
             super.useCard(player1, player2, player3, action);
         }
 
