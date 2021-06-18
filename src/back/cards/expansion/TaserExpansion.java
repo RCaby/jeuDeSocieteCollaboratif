@@ -1,5 +1,6 @@
 package back.cards.expansion;
 
+import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
@@ -63,6 +64,11 @@ public class TaserExpansion extends Card {
             }
         }
         return false;
+    }
+
+    @Override
+    public ActionListener getActionListener() {
+        return board.getMainBoardFront().new CardPlayerActionListenerOneTargetOneCard(this);
     }
 
 }
