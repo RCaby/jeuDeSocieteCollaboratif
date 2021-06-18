@@ -3,7 +3,6 @@ package front;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER;
-import static javax.swing.SwingConstants.CENTER;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -83,9 +82,11 @@ public class MainBoardFront implements Serializable {
     private int nbTargetsRequired = 0;
     private Map<Player, JCheckBox> targetMap;
     private Map<ActionType, JCheckBox> actionCheckBoxMap;
+    private Map<Card, JCheckBox> cardCheckBoxMap;
     private boolean allowedToPlayCard = true;
     private Card cardCurrentlyUsed;
     private int nbActionRequired = 0;
+    private int nbCardRequired = 0;
     private String previousPanel = CHOOSE_VOID_PANEL;
     private String currentPanel = CHOOSE_VOID_PANEL;
     private JLabel chiefLabel;
@@ -94,6 +95,7 @@ public class MainBoardFront implements Serializable {
     private transient ResourceBundle stringsBundle;
     private String waterString = "water";
     private JLabel choosePlayerTargetLabel;
+    private JPanel choosePlayerTargetPanelPanelCard;
 
     /**
      * Builds an interface for the game.
@@ -267,6 +269,8 @@ public class MainBoardFront implements Serializable {
         choosePlayerTargetPanelPanel.add(choosePlayerTargetPanelPanelCenterContainer, BorderLayout.CENTER);
         choosePlayerTargetPanelPanelPlayers = new JPanel();
         choosePlayerTargetPanelPanelAction = new JPanel();
+        var choosePlayerTargetPanelPanelActionCard = new JPanel(new GridLayout(2, 1));
+        choosePlayerTargetPanelPanelCard = new JPanel();
 
         var choosePlayerTargetPanelPanelCenterCardDescription = new JPanel();
         cardDescription = new JTextPane();
@@ -284,7 +288,9 @@ public class MainBoardFront implements Serializable {
         choosePlayerTargetPanelPanelCenterContainer.add(choosePlayerTargetPanelPanelCenterCardDescription);
         choosePlayerTargetPanelPanelCenterContainer.add(choosePlayerTargetPanelPanelCenterCardUse);
         choosePlayerTargetPanelPanelCenterCardUse.add(choosePlayerTargetPanelPanelPlayers);
-        choosePlayerTargetPanelPanelCenterCardUse.add(choosePlayerTargetPanelPanelAction);
+        choosePlayerTargetPanelPanelCenterCardUse.add(choosePlayerTargetPanelPanelActionCard);
+        choosePlayerTargetPanelPanelActionCard.add(choosePlayerTargetPanelPanelAction);
+        choosePlayerTargetPanelPanelActionCard.add(choosePlayerTargetPanelPanelCard);
 
         actionCheckBoxMap = new EnumMap<>(ActionType.class);
         var foodAction = new JCheckBox(stringsBundle.getString("food"));
@@ -303,6 +309,8 @@ public class MainBoardFront implements Serializable {
         cardAction.addItemListener(new ActionChoiceItemListener());
         actionCheckBoxMap.put(ActionType.CARD, cardAction);
         choosePlayerTargetPanelPanelAction.add(cardAction);
+
+        cardCheckBoxMap = new HashMap<>();
 
         actionValidate = new JButton(stringsBundle.getString("useCard"));
         actionValidate.addActionListener(new ValidateCardUseListener());
@@ -1043,10 +1051,13 @@ public class MainBoardFront implements Serializable {
                 cardCurrentlyUsed = card;
                 nbTargetsRequired = 0;
                 nbActionRequired = 0;
+                nbCardRequired = 0;
                 switchToPanel(CHOOSE_PLAYER_TARGET);
                 choosePlayerTargetLabel.setText(stringsBundle.getString("cardDescription") + " : " + card.toString());
                 choosePlayerTargetPanelPanelAction.setVisible(false);
                 choosePlayerTargetPanelPanelPlayers.setVisible(false);
+
+                choosePlayerTargetPanelPanelCard.setVisible(false);
                 cardDescription.setText(card.getCardDescription());
             }
         }
@@ -1078,8 +1089,10 @@ public class MainBoardFront implements Serializable {
                 switchToPanel(CHOOSE_PLAYER_TARGET);
                 nbTargetsRequired = 1;
                 nbActionRequired = 0;
+                nbCardRequired = 0;
                 choosePlayerTargetPanelPanelAction.setVisible(false);
                 choosePlayerTargetPanelPanelPlayers.setVisible(true);
+                choosePlayerTargetPanelPanelCard.setVisible(false);
                 for (var box : targetMap.values()) {
                     box.setEnabled(true);
                     box.setSelected(false);
@@ -1115,9 +1128,10 @@ public class MainBoardFront implements Serializable {
                 switchToPanel(CHOOSE_PLAYER_TARGET);
                 nbTargetsRequired = 1;
                 nbActionRequired = 1;
+                nbCardRequired = 0;
                 choosePlayerTargetPanelPanelAction.setVisible(true);
                 choosePlayerTargetPanelPanelPlayers.setVisible(true);
-
+                choosePlayerTargetPanelPanelCard.setVisible(false);
                 for (var box : targetMap.values()) {
                     box.setEnabled(true);
                     box.setSelected(false);
@@ -1151,8 +1165,45 @@ public class MainBoardFront implements Serializable {
                 super.actionPerformed(e);
                 nbTargetsRequired = 3;
                 nbActionRequired = 0;
+                nbCardRequired = 0;
                 switchToPanel(CHOOSE_PLAYER_TARGET);
                 choosePlayerTargetPanelPanelAction.setVisible(false);
+                choosePlayerTargetPanelPanelPlayers.setVisible(true);
+                choosePlayerTargetPanelPanelCard.setVisible(false);
+                for (var box : targetMap.values()) {
+                    box.setEnabled(true);
+                    box.setSelected(false);
+                }
+            }
+        }
+    }
+
+    public class CardPlayerActionListenerOneTargetOneCard extends CardPlayerActionListener {
+
+        /**
+         * Builds an action listener called when the user clicks on one of their card,
+         * which uses up to three players as parameters.
+         * 
+         * @param card the card clicked
+         */
+        public CardPlayerActionListenerOneTargetOneCard(Card card) {
+            super(card);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (card.equals(cardCurrentlyUsed)) {
+                cardCurrentlyUsed = null;
+                switchToPanel(previousPanel);
+            } else {
+                super.actionPerformed(e);
+
+                nbTargetsRequired = 1;
+                nbActionRequired = 0;
+                nbCardRequired = 1;
+                switchToPanel(CHOOSE_PLAYER_TARGET);
+                choosePlayerTargetPanelPanelAction.setVisible(false);
+                choosePlayerTargetPanelPanelCard.setVisible(true);
                 choosePlayerTargetPanelPanelPlayers.setVisible(true);
                 for (var box : targetMap.values()) {
                     box.setEnabled(true);
@@ -1198,13 +1249,19 @@ public class MainBoardFront implements Serializable {
             if (allowedToPlayCard) {
                 var targetsArray = fillTargetsArray();
                 ActionType action = ActionType.NONE;
+                Card card = null;
 
                 for (Entry<ActionType, JCheckBox> entry : actionCheckBoxMap.entrySet()) {
                     if (entry.getValue().isSelected()) {
                         action = entry.getKey();
                     }
-                } // TODO same for cards
-                Card card = null;
+                }
+                for (Entry<Card, JCheckBox> entry : cardCheckBoxMap.entrySet()) {
+                    if (entry.getValue().isSelected()) {
+                        card = entry.getKey();
+                    }
+                }
+
                 cardCurrentlyUsed.useCard(targetsArray[0], targetsArray[1], targetsArray[2], action, card);
                 cardCurrentlyUsed = null;
                 nbTargetsRequired = 0;
@@ -1221,10 +1278,36 @@ public class MainBoardFront implements Serializable {
      */
     private class ActionChoiceItemListener implements ItemListener {
 
+        /**
+         * Displays cards card which are available to be robbed.
+         * 
+         * @param nbTargetsSelected the number of selected target players
+         * @param nbCardSelected    the number of selected cards
+         */
+        private void buildCardChoiceTaser(int nbTargetsSelected, int nbCardSelected) {
+            if (nbTargetsSelected == 1 && nbCardSelected == 0 && nbCardRequired == 1) {
+                Player selectedPlayer = null;
+                for (Entry<Player, JCheckBox> entry : targetMap.entrySet()) {
+                    if (entry.getValue().isSelected()) {
+                        selectedPlayer = entry.getKey();
+                        choosePlayerTargetPanelPanelCard.removeAll();
+                        cardCheckBoxMap.clear();
+                        for (Card card : selectedPlayer.getInventoryRevealed()) {
+                            var box = new JCheckBox(card.getCardName());
+                            cardCheckBoxMap.put(card, box);
+                            choosePlayerTargetPanelPanelCard.add(box);
+                        }
+                    }
+                }
+            }
+
+        }
+
         @Override
         public void itemStateChanged(ItemEvent e) {
             var nbTargetsSelected = 0;
             var nbActionSelected = 0;
+            var nbCardSelected = 0;
             for (Entry<Player, JCheckBox> entry : targetMap.entrySet()) {
                 if (entry.getValue().isSelected()) {
                     nbTargetsSelected++;
@@ -1235,6 +1318,13 @@ public class MainBoardFront implements Serializable {
                     nbActionSelected++;
                 }
             }
+            for (Entry<Card, JCheckBox> entry : cardCheckBoxMap.entrySet()) {
+                if (entry.getValue().isSelected()) {
+                    nbCardSelected++;
+                }
+            }
+
+            buildCardChoiceTaser(nbTargetsSelected, nbCardSelected);
 
             for (Entry<Player, JCheckBox> entry : targetMap.entrySet()) {
                 if (!entry.getValue().isSelected()) {
@@ -1246,9 +1336,14 @@ public class MainBoardFront implements Serializable {
                     entry.getValue().setEnabled(nbActionSelected != 1);
                 }
             }
+            for (Entry<Card, JCheckBox> entry : cardCheckBoxMap.entrySet()) {
+                if (!entry.getValue().isSelected()) {
+                    entry.getValue().setEnabled(nbCardSelected != 1);
+                }
+            }
             actionValidate.setEnabled(cardCurrentlyUsed.canBeUsed() && nbTargetsRequired > 0 && allowedToPlayCard
                     && nbTargetsSelected >= 1 && nbTargetsSelected <= nbTargetsRequired
-                    && nbActionSelected == nbActionRequired);
+                    && nbActionSelected == nbActionRequired && nbCardSelected == nbCardRequired);
 
         }
     }
