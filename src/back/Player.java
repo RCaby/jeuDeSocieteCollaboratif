@@ -393,19 +393,22 @@ public class Player implements Serializable {
         if (cardUsed != null) {
             cardWasPlayed = true;
             boolean[] neededParameters = cardUsed.getNeededParameters();
-
-            if (Arrays.equals(neededParameters, new boolean[] { true, true, true, false })) {
+            if (Arrays.equals(neededParameters, new boolean[] { true, false, false, false, true })) {
+                var pickedPlayer = personality.chooseTarget(cardUsed, board.getPlayerList());
+                var cardPicked = personality.chooseRevealedCardToRob(pickedPlayer);
+                cardUsed.useCard(pickedPlayer, null, null, ActionType.NONE, cardPicked);
+            } else if (Arrays.equals(neededParameters, new boolean[] { true, true, true, false, false })) {
                 Player[] targets = personality.chooseThreeTargets(board.getPlayerList());
-                cardUsed.useCard(targets[0], targets[1], targets[2], ActionType.NONE);
-            } else if (Arrays.equals(neededParameters, new boolean[] { true, false, false, true })) {
+                cardUsed.useCard(targets[0], targets[1], targets[2], ActionType.NONE, null);
+            } else if (Arrays.equals(neededParameters, new boolean[] { true, false, false, true, false })) {
                 var pickedPlayer = personality.chooseTarget(cardUsed, board.getPlayerList());
                 ActionType pickedAction = personality.chooseActionForPendulum();
-                cardUsed.useCard(pickedPlayer, null, null, pickedAction);
-            } else if (Arrays.equals(neededParameters, new boolean[] { true, false, false, false })) {
+                cardUsed.useCard(pickedPlayer, null, null, pickedAction, null);
+            } else if (Arrays.equals(neededParameters, new boolean[] { true, false, false, false, false })) {
                 var pickedPlayer = personality.chooseTarget(cardUsed, board.getPlayerList());
-                cardUsed.useCard(pickedPlayer, null, null, ActionType.NONE);
+                cardUsed.useCard(pickedPlayer, null, null, ActionType.NONE, null);
             } else {
-                cardUsed.useCard(null, null, null, ActionType.NONE);
+                cardUsed.useCard(null, null, null, ActionType.NONE, null);
             }
             board.getMainBoardFront().displayMessage("\n");
         }

@@ -1203,8 +1203,9 @@ public class MainBoardFront implements Serializable {
                     if (entry.getValue().isSelected()) {
                         action = entry.getKey();
                     }
-                }
-                cardCurrentlyUsed.useCard(targetsArray[0], targetsArray[1], targetsArray[2], action);
+                } // TODO same for cards
+                Card card = null;
+                cardCurrentlyUsed.useCard(targetsArray[0], targetsArray[1], targetsArray[2], action, card);
                 cardCurrentlyUsed = null;
                 nbTargetsRequired = 0;
                 updateSouth();

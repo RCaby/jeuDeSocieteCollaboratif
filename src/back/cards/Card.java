@@ -135,7 +135,7 @@ public abstract class Card implements ICard, Serializable {
 
     }
 
-    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
+    public void useCard(Player player1, Player player2, Player player3, ActionType action, Card card) {
         board.getCardsPlayedThisRound().add(this);
         for (Player player : board.getPlayerList()) {
             player.addOpinionOn(owner, getCardImpactOnOpinion(), board.getDifficulty(), board.getMainBoardFront());
@@ -183,7 +183,7 @@ public abstract class Card implements ICard, Serializable {
     }
 
     public boolean[] getNeededParameters() {
-        return new boolean[] { false, false, false, false };
+        return new boolean[] { false, false, false, false, false };
     }
 
     public void setOwner(Player player) {

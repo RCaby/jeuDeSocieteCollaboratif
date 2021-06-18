@@ -27,7 +27,7 @@ public class MetalDetectorExpansion extends Card {
     }
 
     @Override
-    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
+    public void useCard(Player player1, Player player2, Player player3, ActionType action, Card cardTarget) {
         List<Card> cardList = new ArrayList<>();
         if (!board.getDeck().isEmpty()) {
             cardList.add(board.getDeck().remove(0));
@@ -52,7 +52,7 @@ public class MetalDetectorExpansion extends Card {
         board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
         board.getMainBoardFront().displayMessage(
                 String.format(stringsBundle.getString("MetalDetector_smallDescription"), owner, usefulCardsCount));
-        super.useCard(player1, player2, player3, action);
+        super.useCard(player1, player2, player3, action, cardTarget);
 
     }
 

@@ -52,7 +52,7 @@ public class AlarmClock extends Card {
      * @param action  not needed for this card
      */
     @Override
-    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
+    public void useCard(Player player1, Player player2, Player player3, ActionType action, Card card) {
         if (player1 != null && player1.getState() != PlayerState.DEAD) {
             board.setNextChief(player1);
             player1.addOpinionOn(owner, getCardImpactOnOpinionOnTarget(), board.getDifficulty(),
@@ -61,13 +61,13 @@ public class AlarmClock extends Card {
                     .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
             board.getMainBoardFront()
                     .displayMessage(String.format(stringsBundle.getString("AlarmClock_smallDescription"), player1));
-            super.useCard(player1, player2, player3, action);
+            super.useCard(player1, player2, player3, action, card);
         }
     }
 
     @Override
     public boolean[] getNeededParameters() {
-        return new boolean[] { true, false, false, false };
+        return new boolean[] { true, false, false, false, false };
     }
 
     @Override

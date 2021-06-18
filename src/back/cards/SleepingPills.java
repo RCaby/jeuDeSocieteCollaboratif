@@ -49,7 +49,7 @@ public class SleepingPills extends Card {
          * @param action  not needed for this card
          */
         @Override
-        public void useCard(Player player1, Player player2, Player player3, ActionType action) {
+        public void useCard(Player player1, Player player2, Player player3, ActionType action, Card card) {
                 if (owner != null) {
                         if (player1 != null && player2 != null && player3 != null) {
                                 board.giveCardToPlayer(owner, player1.robRandomCard());
@@ -87,7 +87,7 @@ public class SleepingPills extends Card {
 
                 }
                 board.getMainBoardFront().updateSouth();
-                super.useCard(player1, player2, player3, action);
+                super.useCard(player1, player2, player3, action, card);
 
         }
 
@@ -98,7 +98,7 @@ public class SleepingPills extends Card {
 
         @Override
         public boolean[] getNeededParameters() {
-                return new boolean[] { true, true, true, false };
+                return new boolean[] { true, true, true, false, false };
         }
 
         @Override

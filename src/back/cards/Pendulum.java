@@ -51,7 +51,7 @@ public class Pendulum extends Card {
      *                {@link ActionType}
      */
     @Override
-    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
+    public void useCard(Player player1, Player player2, Player player3, ActionType action, Card card) {
 
         if (player1 != null) {
             board.getMainBoardFront()
@@ -61,7 +61,7 @@ public class Pendulum extends Card {
             player1.setImposedActionThisRound(action);
             player1.addOpinionOn(owner, getCardImpactOnOpinionOnTarget(), board.getDifficulty(),
                     board.getMainBoardFront());
-            super.useCard(player1, player2, player3, action);
+            super.useCard(player1, player2, player3, action, card);
         }
     }
 
@@ -76,7 +76,7 @@ public class Pendulum extends Card {
 
     @Override
     public boolean[] getNeededParameters() {
-        return new boolean[] { true, false, false, true };
+        return new boolean[] { true, false, false, true, false };
     }
 
     @Override

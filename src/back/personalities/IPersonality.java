@@ -128,4 +128,7 @@ public interface IPersonality {
      */
     public boolean isPersonalityPublic();
 
+    // TODO doc
+    public Card chooseRevealedCardToRob(Player player);
+
 }

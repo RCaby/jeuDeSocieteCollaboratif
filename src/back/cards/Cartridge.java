@@ -39,11 +39,11 @@ public class Cartridge extends Card {
     }
 
     @Override
-    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
+    public void useCard(Player player1, Player player2, Player player3, ActionType action, Card card) {
         board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
         board.getMainBoardFront()
                 .displayMessage(String.format(stringsBundle.getString("Cartridge_smallDescription"), owner));
-        super.useCard(player1, player2, player3, action);
+        super.useCard(player1, player2, player3, action, card);
     }
 
     /**

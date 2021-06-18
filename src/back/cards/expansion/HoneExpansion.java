@@ -24,7 +24,7 @@ public class HoneExpansion extends Card {
     }
 
     @Override
-    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
+    public void useCard(Player player1, Player player2, Player player3, ActionType action, Card card) {
         var axe = owner.getCardType(Axe.class);
         var indexOfOwner = board.getPlayerList().indexOf(owner);
         var neighborAfter = board.getPlayerAliveAfterBefore(indexOfOwner, true);
@@ -36,14 +36,14 @@ public class HoneExpansion extends Card {
                     .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
             board.getMainBoardFront()
                     .displayMessage(String.format(stringsBundle.getString("Hone_smallDescription"), owner, player1));
-            super.useCard(player1, player2, player3, action);
+            super.useCard(player1, player2, player3, action, card);
         }
 
     }
 
     @Override
     public boolean[] getNeededParameters() {
-        return new boolean[] { true, false, false, false };
+        return new boolean[] { true, false, false, false, false };
     }
 
     @Override

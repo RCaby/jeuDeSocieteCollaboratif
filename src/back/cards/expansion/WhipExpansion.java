@@ -24,13 +24,13 @@ public class WhipExpansion extends Card {
     }
 
     @Override
-    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
+    public void useCard(Player player1, Player player2, Player player3, ActionType action, Card card) {
         // TODO
         if (player1 != null && player1.equals(owner)) {
             board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
             board.getMainBoardFront()
                     .displayMessage(String.format(stringsBundle.getString("Whip_smallDescription"), owner, player1));
-            super.useCard(player1, player2, player3, action);
+            super.useCard(player1, player2, player3, action, card);
         }
 
     }

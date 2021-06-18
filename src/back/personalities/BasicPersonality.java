@@ -120,9 +120,23 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
                 return chooseTargetForAntivenom(playerList);
             case "Alarm Clock":
                 return chooseTargetForAlarmClock(playerList);
+            case "Taser":
+                return chooseTargetForTaser(playerList);
             default:
                 return null;
         }
+    }
+
+    @Override
+    public Card chooseRevealedCardToRob(Player player) {
+        // var minPriorityOrder = 10;
+
+        // for (Card potentialCard : player.getInventoryRevealed()) {
+        // if (potentialCard.getCardType().getAggressiveValuePriorityOrder() < )
+        // }
+        // TODO use this aggressive & cooperative
+        return player.getInventoryRevealed().get(random.nextInt(player.getInventoryRevealed().size()));
+
     }
 
     @Override
@@ -133,6 +147,17 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
     @Override
     public PersonalitiesEnum getLinkedPersonality() {
         return null;
+    }
+
+    protected Player chooseTargetForTaser(List<Player> playerList) {
+        // TODO aggressive & cooperative should modify this
+        List<Player> potentialTargets = new ArrayList<>();
+        for (Player player : playerList) {
+            if (!player.getInventoryRevealed().isEmpty()) {
+                potentialTargets.add(player);
+            }
+        }
+        return potentialTargets.get(random.nextInt(potentialTargets.size()));
     }
 
     @Override

@@ -53,7 +53,7 @@ public class Gun extends Card {
      * @param action  not needed for this card
      */
     @Override
-    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
+    public void useCard(Player player1, Player player2, Player player3, ActionType action, Card card) {
         if (player1 != null && owner != null) {
             var cardCartridge = owner.getCardType(Cartridge.class);
             if (cardCartridge != null) {
@@ -63,14 +63,14 @@ public class Gun extends Card {
                         .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
                 board.getMainBoardFront()
                         .displayMessage(String.format(stringsBundle.getString("Gun_smallDescription"), owner, player1));
-                cardCartridge.useCard(player1, player2, player3, action);
+                cardCartridge.useCard(player1, player2, player3, action, card);
                 var metalSheet = player1.getCardType(MetalSheet.class);
                 if (metalSheet != null) {
-                    metalSheet.useCard(player1, player2, player3, action);
+                    metalSheet.useCard(player1, player2, player3, action, card);
                 } else {
                     board.killPlayer(player1);
                 }
-                super.useCard(player1, player2, player3, action);
+                super.useCard(player1, player2, player3, action, card);
             }
         }
     }
@@ -86,7 +86,7 @@ public class Gun extends Card {
 
     @Override
     public boolean[] getNeededParameters() {
-        return new boolean[] { true, false, false, false };
+        return new boolean[] { true, false, false, false, false };
     }
 
     @Override

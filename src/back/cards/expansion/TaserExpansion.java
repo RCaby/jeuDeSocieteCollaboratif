@@ -24,13 +24,16 @@ public class TaserExpansion extends Card {
     }
 
     @Override
-    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
-        if (player1 != null && true) { // TODO
+    public void useCard(Player player1, Player player2, Player player3, ActionType action, Card card) {
+        if (player1 != null && card != null) {
+            card.setOwner(owner);
+            player1.removeCard(card);
+            owner.addCardToInventory(card);
             board.getMainBoardFront()
                     .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
             board.getMainBoardFront().displayMessage(
-                    String.format(stringsBundle.getString("Taser_smallDescription"), owner, null, player1));
-            super.useCard(player1, player2, player3, action);
+                    String.format(stringsBundle.getString("Taser_smallDescription"), owner, card, player1));
+            super.useCard(player1, player2, player3, action, card);
         }
 
     }
@@ -43,6 +46,11 @@ public class TaserExpansion extends Card {
     @Override
     public int getCardImpactOnOpinionOnTarget() {
         return IMPACT_TASER_ON_TARGET;
+    }
+
+    @Override
+    public boolean[] getNeededParameters() {
+        return new boolean[] { true, false, false, false, true };
     }
 
     @Override

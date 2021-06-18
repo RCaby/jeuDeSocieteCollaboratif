@@ -50,7 +50,7 @@ public class Barometer extends Card {
      * @param action  not needed for this card
      */
     @Override
-    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
+    public void useCard(Player player1, Player player2, Player player3, ActionType action, Card card) {
 
         List<Integer> toBeDisplayed = new ArrayList<>();
         int n = board.getRound();
@@ -66,7 +66,7 @@ public class Barometer extends Card {
         board.getMainBoardFront()
                 .displayMessage(String.format(stringsBundle.getString("Barometer_smallDescription"), owner));
 
-        super.useCard(player1, player2, player3, action);
+        super.useCard(player1, player2, player3, action, card);
     }
 
     @Override

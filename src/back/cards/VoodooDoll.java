@@ -51,7 +51,7 @@ public class VoodooDoll extends Card {
      * @param action  not needed for this card
      */
     @Override
-    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
+    public void useCard(Player player1, Player player2, Player player3, ActionType action, Card card) {
         if (player1 != null && player1.getState() == PlayerState.DEAD) {
             board.getMainBoardFront()
                     .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
@@ -61,7 +61,7 @@ public class VoodooDoll extends Card {
             player1.addOpinionOn(owner, getCardImpactOnOpinionOnTarget(), board.getDifficulty(),
                     board.getMainBoardFront());
             board.getDeadThisRound().remove(player1);
-            super.useCard(player1, player2, player3, action);
+            super.useCard(player1, player2, player3, action, card);
         }
     }
 
@@ -77,7 +77,7 @@ public class VoodooDoll extends Card {
 
     @Override
     public boolean[] getNeededParameters() {
-        return new boolean[] { true, false, false, false };
+        return new boolean[] { true, false, false, false, false };
     }
 
     @Override

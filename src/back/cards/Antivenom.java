@@ -51,7 +51,7 @@ public class Antivenom extends Card {
      * @param action  not needed for this card
      */
     @Override
-    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
+    public void useCard(Player player1, Player player2, Player player3, ActionType action, Card card) {
         if (player1 != null && player1.getState() == PlayerState.SICK_FROM_SNAKE) {
 
             board.curePlayer(player1);
@@ -62,7 +62,7 @@ public class Antivenom extends Card {
             board.getMainBoardFront()
                     .displayMessage(String.format(stringsBundle.getString("Antivenom_smallDescription"), player1));
 
-            super.useCard(player1, player2, player3, action);
+            super.useCard(player1, player2, player3, action, card);
         }
     }
 
@@ -85,7 +85,7 @@ public class Antivenom extends Card {
 
     @Override
     public boolean[] getNeededParameters() {
-        return new boolean[] { true, false, false, false };
+        return new boolean[] { true, false, false, false, false };
     }
 
     @Override

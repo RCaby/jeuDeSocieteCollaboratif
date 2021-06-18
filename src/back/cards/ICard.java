@@ -25,7 +25,7 @@ public interface ICard {
      * @param player3 the third target, a {@code Player}
      * @param action  a {@code ActionType}
      */
-    public void useCard(Player player1, Player player2, Player player3, ActionType action);
+    public void useCard(Player player1, Player player2, Player player3, ActionType action, Card card);
 
     /**
      * The getter for the attribute {@link Card#cardImpactOnOpinion}.
@@ -104,9 +104,9 @@ public interface ICard {
      * <p>
      * If the boolean of index {@code i} is {@code true} then it is needed. For
      * instance the {@link Antivenom#getNeededParameters} method would return
-     * {@code (true, false, false, false)} while the
+     * {@code (true, false, false, false, false)} while the
      * {@link Pendulum#getNeededParameters} method would return {@code (true, false,
-     * false, true)}.
+     * false, true, false)}.
      * 
      * @return an array of booleans which indicates the needed parameters of the
      *         useCard method

@@ -50,11 +50,11 @@ public class Club extends Card {
     }
 
     @Override
-    public void useCard(Player player1, Player player2, Player player3, ActionType action) {
+    public void useCard(Player player1, Player player2, Player player3, ActionType action, Card card) {
         board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("RevealsCard"), owner, this));
         board.getMainBoardFront()
                 .displayMessage(String.format(stringsBundle.getString("Club_smallDescription"), owner));
-        super.useCard(player1, player2, player3, action);
+        super.useCard(player1, player2, player3, action, card);
     }
 
     @Override
