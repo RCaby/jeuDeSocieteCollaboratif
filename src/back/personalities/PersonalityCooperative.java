@@ -187,6 +187,51 @@ public class PersonalityCooperative extends BasicPersonality {
     /**
      * {@inheritDoc}
      * <p>
+     * Cards are ordered following the priority order of their type.
+     */
+    @Override
+    public Card chooseRevealedCardToRob(Player player) {
+        var minPriorityOrder = 10;
+        Card selectedCard = null;
+        for (Card potentialCard : player.getInventoryRevealed()) {
+            if (potentialCard.getCardType().getCooperativeValuePriorityOrder() < minPriorityOrder) {
+                selectedCard = potentialCard;
+                minPriorityOrder = potentialCard.getCardType().getCooperativeValuePriorityOrder();
+            }
+
+        }
+        return selectedCard;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * If the player has to choose between two player, the least liked is chosen.
+     */
+    @Override
+    protected Player chooseTargetForTaser(List<Player> playerList) {
+        List<Player> potentialTargets = getPotentialListTargetTaser(playerList);
+        var minPriorityValue = 10;
+        Player target = null;
+        for (Player player : potentialTargets) {
+            for (Card card : player.getInventoryRevealed()) {
+                var priorityValue = card.getCardType().getCooperativeValuePriorityOrder();
+                if (priorityValue < minPriorityValue) {
+                    target = player;
+                    minPriorityValue = priorityValue;
+                } else if (priorityValue == minPriorityValue) {
+                    List<Player> targets = new ArrayList<>();
+                    target = linkedPlayer.getLeastLikedPlayerIn(targets);
+                }
+            }
+        }
+        return target;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
      * This personality can become an aggressive or a mad personality.
      */
     @Override

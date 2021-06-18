@@ -129,12 +129,6 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
 
     @Override
     public Card chooseRevealedCardToRob(Player player) {
-        // var minPriorityOrder = 10;
-
-        // for (Card potentialCard : player.getInventoryRevealed()) {
-        // if (potentialCard.getCardType().getAggressiveValuePriorityOrder() < )
-        // }
-        // TODO use this aggressive & cooperative
         return player.getInventoryRevealed().get(random.nextInt(player.getInventoryRevealed().size()));
 
     }
@@ -149,14 +143,18 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
         return null;
     }
 
-    protected Player chooseTargetForTaser(List<Player> playerList) {
-        // TODO aggressive & cooperative should modify this
+    protected List<Player> getPotentialListTargetTaser(List<Player> playerList) {
         List<Player> potentialTargets = new ArrayList<>();
         for (Player player : playerList) {
             if (!player.getInventoryRevealed().isEmpty()) {
                 potentialTargets.add(player);
             }
         }
+        return potentialTargets;
+    }
+
+    protected Player chooseTargetForTaser(List<Player> playerList) {
+        List<Player> potentialTargets = getPotentialListTargetTaser(playerList);
         return potentialTargets.get(random.nextInt(potentialTargets.size()));
     }
 
