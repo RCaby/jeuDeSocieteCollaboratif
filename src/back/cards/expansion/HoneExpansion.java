@@ -2,6 +2,8 @@ package back.cards.expansion;
 
 import java.util.ResourceBundle;
 
+import java.awt.event.ActionListener;
+
 import javax.swing.ImageIcon;
 
 import back.ActionType;
@@ -61,4 +63,8 @@ public class HoneExpansion extends Card {
         return owner.getCardType(Axe.class) != null && board.getNbPlayersAlive() > 1;
     }
 
+    @Override
+    public ActionListener getActionListener() {
+        return board.getMainBoardFront().new CardPlayerActionListenerOneTarget(this);
+    }
 }

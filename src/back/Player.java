@@ -258,7 +258,7 @@ public class Player implements Serializable {
         board.updateDisplayResources();
     }
 
-    private Card pickCard(Board board) {
+    public Card pickCard(Board board) {
         Card pickedCard;
         try {
             pickedCard = board.getDeck().remove(0);
@@ -283,7 +283,7 @@ public class Player implements Serializable {
     public Card playerSeeksCard(Board board) {
         var pickedCard = pickCard(board);
         var buoy = getCardType(BuoyExpansion.class);
-        if (buoy != null && buoy.isCardRevealed()) {
+        if (buoy != null && buoy.isCardRevealed() && !this.equals(board.getThisPlayer())) {
             var pickedOtherCard = pickCard(board);
             pickedCard = personality.chooseBestCardIn(new Card[] { pickedCard, pickedOtherCard });
         }

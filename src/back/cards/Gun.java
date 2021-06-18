@@ -7,6 +7,9 @@ import javax.swing.ImageIcon;
 import back.ActionType;
 import back.Board;
 import back.Player;
+import back.cards.expansion.ConcaveMetalSheetExpansion;
+import back.cards.expansion.ExpandingBulletExpansion;
+
 import java.awt.event.ActionListener;
 
 /**
@@ -56,7 +59,19 @@ public class Gun extends Card {
     public void useCard(Player player1, Player player2, Player player3, ActionType action, Card card) {
         if (player1 != null && owner != null) {
             var cardCartridge = owner.getCardType(Cartridge.class);
-            if (cardCartridge != null) {
+            var cardExpandingCartridge = owner.getCardType(ExpandingBulletExpansion.class);
+            if (cardExpandingCartridge != null) {
+                player1.addOpinionOn(owner, getCardImpactOnOpinionOnTarget(), board.getDifficulty(),
+                        board.getMainBoardFront());
+                board.getMainBoardFront()
+                        .displayMessage(String.format(stringsBundle.getString("OneTarget"), owner, this, player1));
+                board.getMainBoardFront()
+                        .displayMessage(String.format(stringsBundle.getString("Gun_smallDescription"), owner, player1));
+                cardCartridge.useCard(player1, player2, player3, action, card);
+                board.killPlayer(player1);
+                super.useCard(player1, player2, player3, action, card);
+
+            } else if (cardCartridge != null) {
                 player1.addOpinionOn(owner, getCardImpactOnOpinionOnTarget(), board.getDifficulty(),
                         board.getMainBoardFront());
                 board.getMainBoardFront()
@@ -65,8 +80,20 @@ public class Gun extends Card {
                         .displayMessage(String.format(stringsBundle.getString("Gun_smallDescription"), owner, player1));
                 cardCartridge.useCard(player1, player2, player3, action, card);
                 var metalSheet = player1.getCardType(MetalSheet.class);
+                var concaveMetalSheet = player1.getCardType(ConcaveMetalSheetExpansion.class);
                 if (metalSheet != null) {
                     metalSheet.useCard(player1, player2, player3, action, card);
+                } else if (concaveMetalSheet != null) {
+                    concaveMetalSheet.useCard(player1, player2, player3, action, card);
+                    var newTarget = board
+                            .getPlayerAliveAfterBefore(board.getPlayerList().indexOf(board.getThisPlayer()), true);
+                    var cardMetalSheetBis = newTarget.getCardType(MetalSheet.class);
+                    if (cardMetalSheetBis != null) {
+                        cardMetalSheetBis.useCard(player1, player2, player3, action, card);
+                    } else {
+                        board.killPlayer(newTarget);
+                    }
+
                 } else {
                     board.killPlayer(player1);
                 }

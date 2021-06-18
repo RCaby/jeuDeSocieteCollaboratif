@@ -2,6 +2,7 @@ package back.cards.expansion;
 
 import java.util.ResourceBundle;
 
+import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 
 import back.ActionType;
@@ -25,7 +26,7 @@ public class WhipExpansion extends Card {
 
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action, Card card) {
-        if (player1 != null && player1.equals(owner)) {
+        if (player1 != null && !player1.equals(owner)) {
             board.setWhippedPlayer(player1);
             board.setWhipperPlayer(owner);
             board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
@@ -44,6 +45,16 @@ public class WhipExpansion extends Card {
     @Override
     public boolean canBeUsed() {
         return board.getPlayerList().size() > 1;
+    }
+
+    @Override
+    public boolean[] getNeededParameters() {
+        return new boolean[] { true, false, false, false, false };
+    }
+
+    @Override
+    public ActionListener getActionListener() {
+        return board.getMainBoardFront().new CardPlayerActionListenerOneTarget(this);
     }
 
 }

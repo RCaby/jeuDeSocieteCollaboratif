@@ -40,6 +40,7 @@ import back.Board;
 import back.Player;
 import back.PlayerState;
 import back.cards.Card;
+import back.cards.expansion.BuoyExpansion;
 
 public class MainBoardFront implements Serializable {
     private static final String CHOOSE_ACTION_PANEL = "CHOOSE_ACTION_PANEL";
@@ -47,6 +48,7 @@ public class MainBoardFront implements Serializable {
     private static final String CHOOSE_VOID_PANEL = "CHOOSE_VOID_PANEL";
     private static final String CHOOSE_WOOD_TRIES_PANEL = "CHOOSE_WOOD_TRIES_PANEL";
     private static final String CHOOSE_PLAYER_TARGET = "CHOOSE_PLAYER_TARGET";
+    private static final String CHOOSE_CARD_PANEL = "CHOOSE_CARD_PANEL";
     private static final int SOUTH_BUTTON_WIDTH = 65;
     private static final int SOUTH_BUTTON_HEIGHT = 65;
 
@@ -96,6 +98,7 @@ public class MainBoardFront implements Serializable {
     private String waterString = "water";
     private JLabel choosePlayerTargetLabel;
     private JPanel choosePlayerTargetPanelPanelCard;
+    private JPanel cardChoicePanel;
 
     /**
      * Builds an interface for the game.
@@ -155,17 +158,20 @@ public class MainBoardFront implements Serializable {
         var choosePlayerTargetPanel = new JPanel();
         centerPanelCenterNotificationPanel.add(notificationPanel);
         var voidChoicePanel = new JPanel();
+        cardChoicePanel = new JPanel();
         centerPanelCenterChoicePanel.add(voidChoicePanel, CHOOSE_VOID_PANEL);
         centerPanelCenterChoicePanel.add(chooseActionPanel, CHOOSE_ACTION_PANEL);
         centerPanelCenterChoicePanel.add(choosePlayerPanel, CHOOSE_PLAYER_PANEL);
         centerPanelCenterChoicePanel.add(chooseWoodNbTriesPanel, CHOOSE_WOOD_TRIES_PANEL);
         centerPanelCenterChoicePanel.add(choosePlayerTargetPanel, CHOOSE_PLAYER_TARGET);
+        centerPanelCenterChoicePanel.add(cardChoicePanel, CHOOSE_CARD_PANEL);
 
         chooseActionPanel.setLayout(new BoxLayout(chooseActionPanel, BoxLayout.Y_AXIS));
         notificationPanel.setLayout(new BoxLayout(notificationPanel, BoxLayout.Y_AXIS));
         choosePlayerPanel.setLayout(new BoxLayout(choosePlayerPanel, BoxLayout.Y_AXIS));
         chooseWoodNbTriesPanel.setLayout(new BoxLayout(chooseWoodNbTriesPanel, BoxLayout.Y_AXIS));
         choosePlayerTargetPanel.setLayout(new BoxLayout(choosePlayerTargetPanel, BoxLayout.Y_AXIS));
+        cardChoicePanel.setLayout(new GridLayout(1, 2, 10, 10));
 
         var chooseActionLabelPanel = new JPanel();
         var chooseActionLabel = new JLabel(stringsBundle.getString("chooseAction"));
@@ -315,6 +321,24 @@ public class MainBoardFront implements Serializable {
         actionValidate = new JButton(stringsBundle.getString("useCard"));
         actionValidate.addActionListener(new ValidateCardUseListener());
         choosePlayerTargetPanelPanelSouth.add(actionValidate);
+
+    }
+
+    public void buildCardChoicePanel(Card card1, Card card2) {
+        cardChoicePanel.removeAll();
+        var panelCard1 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        var panelCard2 = new JPanel(new FlowLayout(FlowLayout.CENTER)); // TODO améliorer affichage parce que là beurk
+        var buttonCard1 = new JButton(card1.toString());
+        buttonCard1.setToolTipText(card1.getCardDescription());
+        var buttonCard2 = new JButton(card2.toString());
+        buttonCard2.setToolTipText(card2.getCardDescription());
+        buttonCard1.addActionListener(new ChooseCardListener(card1));
+        buttonCard2.addActionListener(new ChooseCardListener(card2));
+        panelCard1.add(buttonCard1);
+        panelCard2.add(buttonCard2);
+        cardChoicePanel.add(panelCard1);
+        cardChoicePanel.add(panelCard2);
+        switchToPanel(CHOOSE_CARD_PANEL);
 
     }
 
@@ -949,7 +973,41 @@ public class MainBoardFront implements Serializable {
         @Override
         public void actionPerformed(ActionEvent e) {
             var player = board.getThisPlayer();
-            player.playerSeeksCard(board);
+
+            var buoy = board.getThisPlayer().getCardType(BuoyExpansion.class);
+            if (buoy != null && buoy.isCardRevealed()) {
+                var card1 = board.getThisPlayer().pickCard(board);
+                var card2 = board.getThisPlayer().pickCard(board);
+                buildCardChoicePanel(card1, card2);
+            } else {
+                player.playerSeeksCard(board);
+                nextButton.setEnabled(true);
+                updateSouth();
+                switchToPanel(CHOOSE_VOID_PANEL);
+                for (Player watcher : board.getPlayerList()) {
+                    watcher.addOpinionOn(player, ActionType.CARD.getImpactOnOpinion(), board.getDifficulty(),
+                            MainBoardFront.this);
+                }
+            }
+            if (player.equals(board.getTwicePlayingPlayer())) {
+                board.playerWillPlayTwice(player);
+            }
+        }
+    }
+
+    private class ChooseCardListener implements ActionListener {
+
+        Card target;
+
+        public ChooseCardListener(Card target) {
+            this.target = target;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            var player = board.getThisPlayer();
+            board.getMainBoardFront().displayMessage(player + stringsBundle.getString("gotCard"));
+            player.addCardToInventory(target);
             nextButton.setEnabled(true);
             updateSouth();
             switchToPanel(CHOOSE_VOID_PANEL);
@@ -957,10 +1015,6 @@ public class MainBoardFront implements Serializable {
                 watcher.addOpinionOn(player, ActionType.CARD.getImpactOnOpinion(), board.getDifficulty(),
                         MainBoardFront.this);
             }
-            if (player.equals(board.getTwicePlayingPlayer())) {
-                board.playerWillPlayTwice(player);
-            }
-
         }
 
     }
