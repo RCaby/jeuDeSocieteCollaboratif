@@ -229,6 +229,20 @@ public class PersonalityCooperative extends BasicPersonality {
 
     }
 
+    @Override
+    public Card chooseBestCardIn(Card[] cardArray) {
+        var minPriorityValue = 10;
+        Card selectedCard = null;
+        for (Card card : cardArray) {
+            var value = card.getCardType().getCooperativeValuePriorityOrder();
+            if (value < minPriorityValue) {
+                minPriorityValue = value;
+                selectedCard = card;
+            }
+        }
+        return selectedCard;
+    }
+
     /**
      * {@inheritDoc}
      * <p>

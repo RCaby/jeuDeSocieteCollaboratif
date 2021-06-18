@@ -128,7 +128,21 @@ public interface IPersonality {
      */
     public boolean isPersonalityPublic();
 
-    // TODO doc
+    /**
+     * Chooses in a given list of card belonging to a given player, the best card to
+     * rob.
+     * 
+     * @param player the player about to be robbed
+     * @return the card to rob
+     */
     public Card chooseRevealedCardToRob(Player player);
+
+    /**
+     * Chooses which card is the best to keep.
+     * 
+     * @param cardArray pickable cards
+     * @return the chosen card
+     */
+    public Card chooseBestCardIn(Card[] cardArray);
 
 }

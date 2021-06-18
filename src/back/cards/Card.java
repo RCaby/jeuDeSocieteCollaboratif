@@ -78,21 +78,21 @@ public abstract class Card implements ICard, Serializable {
     public static final int IMPACT_WINNING_LOTTERY_TICKET = 0;
     public static final int IMPACT_WOODEN_PLANK = 3;
 
-    public static final int IMPACT_CAT = 0; // TODO
-    public static final int IMPACT_FISH_BOWL = 0;
-    public static final int IMPACT_WHIP = 0;
-    public static final int IMPACT_CHINESE_NOODLES = 0;
-    public static final int IMPACT_CRATE = 0;
+    public static final int IMPACT_CAT = 2;
+    public static final int IMPACT_FISH_BOWL = 2;
+    public static final int IMPACT_WHIP = -1;
+    public static final int IMPACT_CHINESE_NOODLES = 3;
+    public static final int IMPACT_CRATE = 1;
     public static final int IMPACT_CONCAVE_METAL_SHEET = 0;
-    public static final int IMPACT_EXPANDING_BULLET = 0;
-    public static final int IMPACT_HONE = 0;
-    public static final int IMPACT_HONE_ON_TARGET = 0;
-    public static final int IMPACT_TASER = 0;
-    public static final int IMPACT_TASER_ON_TARGET = 0;
+    public static final int IMPACT_EXPANDING_BULLET = -3;
+    public static final int IMPACT_HONE = -3;
+    public static final int IMPACT_HONE_ON_TARGET = -1;
+    public static final int IMPACT_TASER = -1;
+    public static final int IMPACT_TASER_ON_TARGET = -3;
     public static final int IMPACT_BUOY = 0;
     public static final int IMPACT_RUM = 0;
     public static final int IMPACT_MAGAZINE = 0;
-    public static final int IMPACT_METAL_DETECTOR = 0;
+    public static final int IMPACT_METAL_DETECTOR = -1;
 
     protected boolean isRevealed;
     protected Player owner;

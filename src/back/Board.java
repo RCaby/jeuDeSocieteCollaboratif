@@ -77,6 +77,8 @@ public class Board implements Serializable {
     private List<Player> rumDistributionList;
     private HashMap<Player, Card> mapCardDonations;
     private boolean expansionUsed;
+    private Player whipperPlayer;
+    private Player whippedPlayer;
 
     /**
      * Builds the game without launching it and without incorporating any
@@ -96,6 +98,8 @@ public class Board implements Serializable {
         gameOver = false;
         Integer[] rations = data.getInitialRations(nbPlayers);
         foodRations = rations[0];
+        whipperPlayer = null;
+        whippedPlayer = null;
         waterRations = rations[1];
         indexOfCurrentPlayer = -2;
         nbWoodPlanks = 0;
@@ -365,6 +369,8 @@ public class Board implements Serializable {
             flashLightList.clear();
             barometerList.clear();
             designated = null;
+            whippedPlayer = null;
+            whipperPlayer = null;
             mainBoardFront.getNextButton().setEnabled(true);
             designatedForFoodThisRound.clear();
             designatedForWaterThisRound.clear();
@@ -476,7 +482,7 @@ public class Board implements Serializable {
             case WOOD:
                 mainBoardFront.displayMessage(player + stringsBundle.getString("woodAction"));
                 var nbTries = player.getPersonality().getNbWoodTries();
-                player.playerSeeksWood(this, nbTries);
+                player.playerSeeksWood(this, nbTries, whipperPlayer, whippedPlayer);
                 break;
             case CARD:
                 mainBoardFront.displayMessage(player + stringsBundle.getString("cardAction"));
@@ -1572,6 +1578,42 @@ public class Board implements Serializable {
      */
     public void setFlashLightList(List<Card> flashLightList) {
         this.flashLightList = flashLightList;
+    }
+
+    /**
+     * The setter for the attribute {@link Board#whippedPlayer}.
+     * 
+     * @param whippedPlayer the whippedPlayer to set
+     */
+    public void setWhippedPlayer(Player whippedPlayer) {
+        this.whippedPlayer = whippedPlayer;
+    }
+
+    /**
+     * The setter for the attribute {@link Board#whipperPlayer}.
+     * 
+     * @param whipperPlayer the whipperPlayer to set
+     */
+    public void setWhipperPlayer(Player whipperPlayer) {
+        this.whipperPlayer = whipperPlayer;
+    }
+
+    /**
+     * The getter for the attribute {@link Board#whippedPlayer}.
+     * 
+     * @return the whippedPlayer
+     */
+    public Player getWhippedPlayer() {
+        return whippedPlayer;
+    }
+
+    /**
+     * The getter for the attribute {@link Board#whipperPlayer}.
+     * 
+     * @return the whipperPlayer
+     */
+    public Player getWhipperPlayer() {
+        return whipperPlayer;
     }
 
     /**

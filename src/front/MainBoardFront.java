@@ -927,7 +927,7 @@ public class MainBoardFront implements Serializable {
         @Override
         public void actionPerformed(ActionEvent e) {
             var player = board.getThisPlayer();
-            player.playerSeeksWood(board, nbTries);
+            player.playerSeeksWood(board, nbTries, board.getWhipperPlayer(), board.getWhippedPlayer());
             nextButton.setEnabled(true);
             switchToPanel(CHOOSE_VOID_PANEL);
             for (Player watcher : board.getPlayerList()) {

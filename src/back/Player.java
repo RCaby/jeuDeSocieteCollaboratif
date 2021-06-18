@@ -32,6 +32,7 @@ import back.cards.Axe;
 import back.cards.Card;
 import back.cards.FishingRod;
 import back.cards.Gourd;
+import back.cards.expansion.BuoyExpansion;
 import back.personalities.BasicPersonality;
 import front.MainBoardFront;
 
@@ -223,7 +224,7 @@ public class Player implements Serializable {
      * 
      * @param board The main board, used to store the new rations.
      */
-    public void playerSeeksWood(Board board, int nbTries) {
+    public void playerSeeksWood(Board board, int nbTries, Player whipperPlayer, Player whippedPlayer) {
 
         var wood = 1;
 
@@ -242,23 +243,22 @@ public class Player implements Serializable {
         if (!randomSeries.contains(0)) {
             wood += nbTries;
         } else {
-            board.getMainBoardFront().displayMessage(this + stringsBundle.getString("playerGotSick"));
 
-            board.sickPlayer(this, PlayerState.SICK_FROM_SNAKE);
+            if (whipperPlayer != null && whippedPlayer != null && this.equals(whipperPlayer)) {
+                board.sickPlayer(whippedPlayer, PlayerState.SICK_FROM_SNAKE);
+                board.getMainBoardFront().displayMessage(whippedPlayer + stringsBundle.getString("playerGotSick"));
+            } else {
+                board.sickPlayer(this, PlayerState.SICK_FROM_SNAKE);
+                board.getMainBoardFront().displayMessage(this + stringsBundle.getString("playerGotSick"));
+            }
             sickRound = board.getRound();
         }
         board.getMainBoardFront().displayMessage(stringsBundle.getString("gotWood") + Math.abs(wood));
-
         board.addFragmentPlank(wood);
         board.updateDisplayResources();
     }
 
-    /**
-     * The card gathering action of the player.
-     * 
-     * @param board The main board, used to store the new rations.
-     */
-    public Card playerSeeksCard(Board board) {
+    private Card pickCard(Board board) {
         Card pickedCard;
         try {
             pickedCard = board.getDeck().remove(0);
@@ -271,6 +271,21 @@ public class Player implements Serializable {
                 return null;
             }
 
+        }
+        return pickedCard;
+    }
+
+    /**
+     * The card gathering action of the player.
+     * 
+     * @param board The main board, used to store the new rations.
+     */
+    public Card playerSeeksCard(Board board) {
+        var pickedCard = pickCard(board);
+        var buoy = getCardType(BuoyExpansion.class);
+        if (buoy != null && buoy.isCardRevealed()) {
+            var pickedOtherCard = pickCard(board);
+            pickedCard = personality.chooseBestCardIn(new Card[] { pickedCard, pickedOtherCard });
         }
         board.getMainBoardFront().displayMessage(this + stringsBundle.getString("gotCard"));
         addCardToInventory(pickedCard);

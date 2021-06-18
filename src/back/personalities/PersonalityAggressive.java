@@ -225,7 +225,20 @@ public class PersonalityAggressive extends BasicPersonality {
             }
         }
         return target;
+    }
 
+    @Override
+    public Card chooseBestCardIn(Card[] cardArray) {
+        var minPriorityValue = 10;
+        Card selectedCard = null;
+        for (Card card : cardArray) {
+            var value = card.getCardType().getAggressiveValuePriorityOrder();
+            if (value < minPriorityValue) {
+                minPriorityValue = value;
+                selectedCard = card;
+            }
+        }
+        return selectedCard;
     }
 
     /**
@@ -253,4 +266,5 @@ public class PersonalityAggressive extends BasicPersonality {
         }
 
     }
+
 }

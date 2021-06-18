@@ -153,6 +153,11 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
         return potentialTargets;
     }
 
+    @Override
+    public Card chooseBestCardIn(Card[] cardArray) {
+        return cardArray[random.nextInt(cardArray.length)];
+    }
+
     protected Player chooseTargetForTaser(List<Player> playerList) {
         List<Player> potentialTargets = getPotentialListTargetTaser(playerList);
         return potentialTargets.get(random.nextInt(potentialTargets.size()));
