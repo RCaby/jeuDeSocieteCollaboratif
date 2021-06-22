@@ -224,6 +224,9 @@ public class PersonalityAggressive extends BasicPersonality {
                 }
             }
         }
+        if (target == null) {
+            System.out.println("Alerte ! Joueur nul sélectionné");
+        }
         return target;
     }
 

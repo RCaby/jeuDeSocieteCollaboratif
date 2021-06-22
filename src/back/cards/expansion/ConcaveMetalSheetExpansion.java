@@ -11,7 +11,7 @@ import back.cards.Card;
 import back.cards.CardType;
 
 public class ConcaveMetalSheetExpansion extends Card {
-    public static final int NUMBER_THIS_IN_DECK = 10;
+    public static final int NUMBER_THIS_IN_DECK = 1;
 
     public ConcaveMetalSheetExpansion(Board board, ResourceBundle stringsBundle) {
         super(board, stringsBundle);

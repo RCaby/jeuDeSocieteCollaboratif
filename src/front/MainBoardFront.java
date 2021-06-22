@@ -34,6 +34,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 
 import back.ActionType;
 import back.Board;
@@ -1110,7 +1111,6 @@ public class MainBoardFront implements Serializable {
                 choosePlayerTargetLabel.setText(stringsBundle.getString("cardDescription") + " : " + card.toString());
                 choosePlayerTargetPanelPanelAction.setVisible(false);
                 choosePlayerTargetPanelPanelPlayers.setVisible(false);
-
                 choosePlayerTargetPanelPanelCard.setVisible(false);
                 cardDescription.setText(card.getCardDescription());
             }
@@ -1256,6 +1256,7 @@ public class MainBoardFront implements Serializable {
                 nbActionRequired = 0;
                 nbCardRequired = 1;
                 switchToPanel(CHOOSE_PLAYER_TARGET);
+                choosePlayerTargetPanelPanelCard.removeAll();
                 choosePlayerTargetPanelPanelAction.setVisible(false);
                 choosePlayerTargetPanelPanelCard.setVisible(true);
                 choosePlayerTargetPanelPanelPlayers.setVisible(true);
@@ -1339,18 +1340,26 @@ public class MainBoardFront implements Serializable {
          * @param nbCardSelected    the number of selected cards
          */
         private void buildCardChoiceTaser(int nbTargetsSelected, int nbCardSelected) {
+
             if (nbTargetsSelected == 1 && nbCardSelected == 0 && nbCardRequired == 1) {
+
                 Player selectedPlayer = null;
                 for (Entry<Player, JCheckBox> entry : targetMap.entrySet()) {
                     if (entry.getValue().isSelected()) {
+
                         selectedPlayer = entry.getKey();
-                        choosePlayerTargetPanelPanelCard.removeAll();
+
                         cardCheckBoxMap.clear();
                         for (Card card : selectedPlayer.getInventoryRevealed()) {
+
                             var box = new JCheckBox(card.getCardName());
+                            box.addItemListener(new ActionChoiceItemListener());
+
                             cardCheckBoxMap.put(card, box);
                             choosePlayerTargetPanelPanelCard.add(box);
+
                         }
+
                     }
                 }
             }

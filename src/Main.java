@@ -10,7 +10,6 @@ public class Main {
         // TODO discussion channel for players (not before V6 at least)
 
         // TODO rum
-        // TODO taser not displaying card choice
 
     }
 }

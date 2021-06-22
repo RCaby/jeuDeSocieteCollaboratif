@@ -146,7 +146,7 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
     protected List<Player> getPotentialListTargetTaser(List<Player> playerList) {
         List<Player> potentialTargets = new ArrayList<>();
         for (Player player : playerList) {
-            if (!player.getInventoryRevealed().isEmpty()) {
+            if (!player.getInventoryRevealed().isEmpty() && !player.equals(linkedPlayer)) {
                 potentialTargets.add(player);
             }
         }
