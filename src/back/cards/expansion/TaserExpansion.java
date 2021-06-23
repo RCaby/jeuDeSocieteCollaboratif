@@ -1,6 +1,8 @@
 package back.cards.expansion;
 
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
@@ -69,6 +71,15 @@ public class TaserExpansion extends Card {
     @Override
     public ActionListener getActionListener() {
         return board.getMainBoardFront().new CardPlayerActionListenerOneTargetOneCard(this);
+    }
+
+    @Override
+    public List<PlayerState> getRequiredState() {
+        List<PlayerState> allowedStates = new ArrayList<>();
+        allowedStates.add(PlayerState.HEALTHY);
+        allowedStates.add(PlayerState.SICK_FROM_SNAKE);
+        allowedStates.add(PlayerState.SICK_FROM_FOOD);
+        return allowedStates;
     }
 
 }

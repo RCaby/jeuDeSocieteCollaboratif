@@ -272,5 +272,6 @@ public class Strings extends ListResourceBundle {
                         { "typesPersonalities", "There %s %d %s player%s !" },
                         { "personalityUpdate", "%s has updated their personality !" },
                         { "useExpansionBox", "Use the expansion" },
-                        { "rumDistributionEvent", "%s is giving a %s to %s." } };
+                        { "rumDistributionEvent", "%s is giving a %s to %s." },
+                        { "choiceCardRum", "Choose a card to give to %s." } };
 }

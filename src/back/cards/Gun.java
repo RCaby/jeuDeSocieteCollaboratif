@@ -1,5 +1,7 @@
 package back.cards;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
@@ -7,6 +9,7 @@ import javax.swing.ImageIcon;
 import back.ActionType;
 import back.Board;
 import back.Player;
+import back.PlayerState;
 import back.cards.expansion.ConcaveMetalSheetExpansion;
 import back.cards.expansion.ExpandingBulletExpansion;
 
@@ -129,5 +132,14 @@ public class Gun extends Card {
     @Override
     public int getCardImpactOnOpinionOnTarget() {
         return IMPACT_GUN_ON_TARGET;
+    }
+
+    @Override
+    public List<PlayerState> getRequiredState() {
+        List<PlayerState> allowedStates = new ArrayList<>();
+        allowedStates.add(PlayerState.HEALTHY);
+        allowedStates.add(PlayerState.SICK_FROM_SNAKE);
+        allowedStates.add(PlayerState.SICK_FROM_FOOD);
+        return allowedStates;
     }
 }

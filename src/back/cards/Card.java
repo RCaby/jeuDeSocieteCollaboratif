@@ -1,6 +1,8 @@
 package back.cards;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.Icon;
@@ -8,6 +10,7 @@ import javax.swing.Icon;
 import back.ActionType;
 import back.Board;
 import back.Player;
+import back.PlayerState;
 
 import java.awt.event.ActionListener;
 
@@ -147,6 +150,16 @@ public abstract class Card implements ICard, Serializable {
             owner.discardCard(this);
 
         }
+    }
+
+    @Override
+    public List<PlayerState> getRequiredState() {
+        List<PlayerState> allowedStates = new ArrayList<>();
+        allowedStates.add(PlayerState.HEALTHY);
+        allowedStates.add(PlayerState.DEAD);
+        allowedStates.add(PlayerState.SICK_FROM_SNAKE);
+        allowedStates.add(PlayerState.SICK_FROM_FOOD);
+        return allowedStates;
     }
 
     public int getCardImpactOnOpinion() {

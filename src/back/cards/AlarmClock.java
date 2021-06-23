@@ -1,5 +1,7 @@
 package back.cards;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
@@ -82,6 +84,15 @@ public class AlarmClock extends Card {
 
     public int getCardImpactOnOpinionTarget() {
         return IMPACT_ALARM_CLOCK_ON_TARGET;
+    }
+
+    @Override
+    public List<PlayerState> getRequiredState() {
+        List<PlayerState> allowedStates = new ArrayList<>();
+        allowedStates.add(PlayerState.HEALTHY);
+        allowedStates.add(PlayerState.SICK_FROM_SNAKE);
+        allowedStates.add(PlayerState.SICK_FROM_FOOD);
+        return allowedStates;
     }
 
 }

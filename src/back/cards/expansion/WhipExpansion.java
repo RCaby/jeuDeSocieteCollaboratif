@@ -1,5 +1,7 @@
 package back.cards.expansion;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import java.awt.event.ActionListener;
@@ -8,6 +10,7 @@ import javax.swing.ImageIcon;
 import back.ActionType;
 import back.Board;
 import back.Player;
+import back.PlayerState;
 import back.cards.Card;
 import back.cards.CardType;
 
@@ -44,7 +47,7 @@ public class WhipExpansion extends Card {
 
     @Override
     public boolean canBeUsed() {
-        return board.getPlayerList().size() > 1;
+        return board.getHealthyPlayerList().size() > 1;
     }
 
     @Override
@@ -55,6 +58,13 @@ public class WhipExpansion extends Card {
     @Override
     public ActionListener getActionListener() {
         return board.getMainBoardFront().new CardPlayerActionListenerOneTarget(this);
+    }
+
+    @Override
+    public List<PlayerState> getRequiredState() {
+        List<PlayerState> allowedStates = new ArrayList<>();
+        allowedStates.add(PlayerState.HEALTHY);
+        return allowedStates;
     }
 
 }

@@ -122,6 +122,8 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
                 return chooseTargetForAlarmClock(playerList);
             case "Taser":
                 return chooseTargetForTaser(playerList);
+            case "Whip":
+                return chooseTargetForWhip(playerList);
             default:
                 return null;
         }
@@ -191,10 +193,20 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
     /**
      * Asks the player to choose a target for the voodoo doll.
      * 
-     * @param playerList the list of players who can be designated.
+     * @param playerList the list of players who can be designated
      * @return the designated player
      */
     protected Player chooseTargetForVoodooDoll(List<Player> playerList) {
+        return playerList.get(random.nextInt(playerList.size()));
+    }
+
+    /**
+     * Asks the player to choose a target for the whip.
+     * 
+     * @param playerList the list of players who can be designated
+     * @return the designated player
+     */
+    protected Player chooseTargetForWhip(List<Player> playerList) {
         return playerList.get(random.nextInt(playerList.size()));
     }
 

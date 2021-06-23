@@ -1,5 +1,7 @@
 package back.cards;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
@@ -7,6 +9,8 @@ import javax.swing.ImageIcon;
 import back.ActionType;
 import back.Board;
 import back.Player;
+import back.PlayerState;
+
 import java.awt.event.ActionListener;
 
 /**
@@ -71,7 +75,7 @@ public class Pendulum extends Card {
      */
     @Override
     public boolean canBeUsed() {
-        return board.getNbPlayersAlive() > 1;
+        return board.getHealthyPlayerList().size() > 1;
     }
 
     @Override
@@ -92,5 +96,12 @@ public class Pendulum extends Card {
     @Override
     public int getCardImpactOnOpinionOnTarget() {
         return IMPACT_PENDULUM_ON_TARGET;
+    }
+
+    @Override
+    public List<PlayerState> getRequiredState() {
+        List<PlayerState> allowedStates = new ArrayList<>();
+        allowedStates.add(PlayerState.HEALTHY);
+        return allowedStates;
     }
 }

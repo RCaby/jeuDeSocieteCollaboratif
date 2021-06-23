@@ -1,5 +1,7 @@
 package back.cards;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
@@ -101,5 +103,12 @@ public class Antivenom extends Card {
     @Override
     public int getCardImpactOnOpinionOnTarget() {
         return IMPACT_ANTIVENOM_ON_TARGET;
+    }
+
+    @Override
+    public List<PlayerState> getRequiredState() {
+        List<PlayerState> allowedStates = new ArrayList<>();
+        allowedStates.add(PlayerState.SICK_FROM_SNAKE);
+        return allowedStates;
     }
 }

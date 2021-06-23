@@ -1680,6 +1680,16 @@ public class Board implements Serializable {
         return rumDistributionList;
     }
 
+    public List<Player> getHealthyPlayerList() {
+        List<Player> healthyPlayer = new ArrayList<>();
+        for (Player player : playerList) {
+            if (player.getState() == PlayerState.HEALTHY) {
+                healthyPlayer.add(player);
+            }
+        }
+        return healthyPlayer;
+    }
+
     /**
      * The setter for the attribute {@link Board#barometerList}.
      * 

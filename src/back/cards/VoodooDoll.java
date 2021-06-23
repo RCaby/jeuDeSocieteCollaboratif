@@ -1,5 +1,7 @@
 package back.cards;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
@@ -93,5 +95,12 @@ public class VoodooDoll extends Card {
     @Override
     public int getCardImpactOnOpinionOnTarget() {
         return IMPACT_VOODOO_DOLL_ON_TARGET;
+    }
+
+    @Override
+    public List<PlayerState> getRequiredState() {
+        List<PlayerState> allowedStates = new ArrayList<>();
+        allowedStates.add(PlayerState.DEAD);
+        return allowedStates;
     }
 }

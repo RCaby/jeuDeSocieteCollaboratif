@@ -1,5 +1,7 @@
 package back.cards;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
@@ -7,6 +9,8 @@ import javax.swing.ImageIcon;
 import back.ActionType;
 import back.Board;
 import back.Player;
+import back.PlayerState;
+
 import java.awt.event.ActionListener;
 
 /**
@@ -114,5 +118,14 @@ public class SleepingPills extends Card {
         @Override
         public int getCardImpactOnOpinionOnTarget() {
                 return IMPACT_SLEEPING_PILLS_ON_TARGET;
+        }
+
+        @Override
+        public List<PlayerState> getRequiredState() {
+                List<PlayerState> allowedStates = new ArrayList<>();
+                allowedStates.add(PlayerState.HEALTHY);
+                allowedStates.add(PlayerState.SICK_FROM_FOOD);
+                allowedStates.add(PlayerState.SICK_FROM_SNAKE);
+                return allowedStates;
         }
 }

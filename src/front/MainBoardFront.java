@@ -52,6 +52,10 @@ public class MainBoardFront implements Serializable {
     private static final String CHOOSE_CARD_RUM_PANEL = "CHOOSE_CARD_RUM_PANEL";
     private static final int SOUTH_BUTTON_WIDTH = 65;
     private static final int SOUTH_BUTTON_HEIGHT = 65;
+    private static final int ACTION_BUTTON_WIDTH = 161;
+    private static final int ACTION_BUTTON_HEIGHT = 100;
+    private static final int VOTE_BUTTON_WIDTH = 121;
+    private static final int VOTE_BUTTON_HEIGHT = 75;
 
     JPanel mainPanel;
     Board board;
@@ -216,24 +220,40 @@ public class MainBoardFront implements Serializable {
         chooseWoodNbTriesPanel.add(chooseWoodNbTriesPanelPanel);
         choosePlayerTargetPanel.add(choosePlayerTargetPanelPanel);
 
-        chooseActionPanelPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        chooseActionPanelPanel.setLayout(new GridLayout(2, 2, 25, 25));
         notificationPanelPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         choosePlayerPanelPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         chooseWoodNbTriesPanelPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         choosePlayerTargetPanelPanel.setLayout(new BorderLayout());
 
         var foodButtonAction = new JButton(stringsBundle.getString("food"));
+        foodButtonAction.setPreferredSize(new Dimension(ACTION_BUTTON_WIDTH, ACTION_BUTTON_HEIGHT));
         foodButtonAction.addActionListener(new FoodActionListener());
+        var foodButtonPanel = new JPanel();
         var waterButtonAction = new JButton(stringsBundle.getString(waterString));
+        waterButtonAction.setPreferredSize(new Dimension(ACTION_BUTTON_WIDTH, ACTION_BUTTON_HEIGHT));
         waterButtonAction.addActionListener(new WaterActionListener());
+        var waterButtonPanel = new JPanel();
         var woodButtonAction = new JButton(stringsBundle.getString("wood"));
+        woodButtonAction.setPreferredSize(new Dimension(ACTION_BUTTON_WIDTH, ACTION_BUTTON_HEIGHT));
         woodButtonAction.addActionListener(new WoodActionListener());
+        var woodButtonPanel = new JPanel();
         var cardButtonAction = new JButton(stringsBundle.getString("card"));
+        cardButtonAction.setPreferredSize(new Dimension(ACTION_BUTTON_WIDTH, ACTION_BUTTON_HEIGHT));
         cardButtonAction.addActionListener(new CardActionListener());
-        chooseActionPanelPanel.add(foodButtonAction);
-        chooseActionPanelPanel.add(waterButtonAction);
-        chooseActionPanelPanel.add(woodButtonAction);
-        chooseActionPanelPanel.add(cardButtonAction);
+        var cardButtonPanel = new JPanel();
+        foodButtonPanel.add(foodButtonAction);
+        waterButtonPanel.add(waterButtonAction);
+        woodButtonPanel.add(woodButtonAction);
+        cardButtonPanel.add(cardButtonAction);
+        chooseActionPanelPanel.add(foodButtonPanel);
+        chooseActionPanelPanel.add(waterButtonPanel);
+        chooseActionPanelPanel.add(woodButtonPanel);
+        chooseActionPanelPanel.add(cardButtonPanel);
+        changeFont(foodButtonAction, 16);
+        changeFont(waterButtonAction, 16);
+        changeFont(woodButtonAction, 16);
+        changeFont(cardButtonAction, 16);
 
         notificationPanelTextPane = new JTextPane();
         changeFont(notificationPanelTextPane, 16);
@@ -347,11 +367,28 @@ public class MainBoardFront implements Serializable {
 
     public void buildCardChoiceRumPanel() {
         cardChoiceRumPanel.removeAll();
+        cardChoiceRumPanel.setLayout(new BorderLayout());
+        var titlePanel = new JPanel();
+        var target = board.getPlayerAliveAfterBefore(board.getPlayerList().indexOf(board.getThisPlayer()), true);
+        var titleLabel = new JLabel(String.format(stringsBundle.getString("choiceCardRum"), target));
+        titlePanel.add(titleLabel);
+        changeFont(titleLabel, 16);
+        cardChoiceRumPanel.add(titlePanel, BorderLayout.NORTH);
+        var numberRows = (int) Math.ceil(Math.sqrt(1.0 * board.getThisPlayer().getCardNumber()));
+        var cardsPanel = new JPanel(new GridLayout(numberRows, numberRows, 10, 10));
+        cardChoiceRumPanel.add(cardsPanel, BorderLayout.CENTER);
+
         switchToPanel(CHOOSE_CARD_RUM_PANEL);
         for (Card card : board.getThisPlayer().getInventory()) {
-            var buttonCard = new JButton(card.getCardName());
+            var img = ((ImageIcon) card.getRevealedCardIcon()).getImage();
+            var newImg = img.getScaledInstance(SOUTH_BUTTON_WIDTH, SOUTH_BUTTON_HEIGHT, java.awt.Image.SCALE_SMOOTH);
+            var icon = new ImageIcon(newImg);
+            var buttonCard = new JButton(icon);
+            buttonCard.setPreferredSize(new Dimension(SOUTH_BUTTON_WIDTH, SOUTH_BUTTON_HEIGHT));
             buttonCard.addActionListener(new ChoiceCardRumActionListener(card));
-            cardChoiceRumPanel.add(buttonCard);
+            var buttonCardPanel = new JPanel();
+            buttonCardPanel.add(buttonCard);
+            cardsPanel.add(buttonCardPanel);
         }
     }
 
@@ -656,12 +693,18 @@ public class MainBoardFront implements Serializable {
      */
     public void makePlayerVoteFor(List<Player> pickablePlayers) {
         choosePlayerPanelPanel.removeAll();
+        var numberRows = (int) Math.ceil(Math.sqrt(1.0 * pickablePlayers.size()));
+        choosePlayerPanelPanel.setLayout(new GridLayout(numberRows, numberRows, 5, 5));
         switchToPanel(CHOOSE_PLAYER_PANEL);
 
         for (Player player : pickablePlayers) {
             var voteButton = new JButton(player + "");
-            choosePlayerPanelPanel.add(voteButton);
+            var voteButtonPanel = new JPanel();
+            voteButtonPanel.add(voteButton);
+            changeFont(voteButton, 16);
+            choosePlayerPanelPanel.add(voteButtonPanel);
             voteButton.addActionListener(new VoteListener(player));
+            voteButton.setPreferredSize(new Dimension(VOTE_BUTTON_WIDTH, VOTE_BUTTON_HEIGHT));
         }
     }
 
@@ -1177,8 +1220,9 @@ public class MainBoardFront implements Serializable {
                 choosePlayerTargetPanelPanelAction.setVisible(false);
                 choosePlayerTargetPanelPanelPlayers.setVisible(true);
                 choosePlayerTargetPanelPanelCard.setVisible(false);
-                for (var box : targetMap.values()) {
-                    box.setEnabled(true);
+                for (Entry<Player, JCheckBox> entry : targetMap.entrySet()) {
+                    var box = entry.getValue();
+                    box.setEnabled(cardCurrentlyUsed.getRequiredState().contains(entry.getKey().getState()));
                     box.setSelected(false);
                 }
             }
@@ -1216,8 +1260,9 @@ public class MainBoardFront implements Serializable {
                 choosePlayerTargetPanelPanelAction.setVisible(true);
                 choosePlayerTargetPanelPanelPlayers.setVisible(true);
                 choosePlayerTargetPanelPanelCard.setVisible(false);
-                for (var box : targetMap.values()) {
-                    box.setEnabled(true);
+                for (Entry<Player, JCheckBox> entry : targetMap.entrySet()) {
+                    var box = entry.getValue();
+                    box.setEnabled(cardCurrentlyUsed.getRequiredState().contains(entry.getKey().getState()));
                     box.setSelected(false);
                 }
             }
@@ -1254,8 +1299,9 @@ public class MainBoardFront implements Serializable {
                 choosePlayerTargetPanelPanelAction.setVisible(false);
                 choosePlayerTargetPanelPanelPlayers.setVisible(true);
                 choosePlayerTargetPanelPanelCard.setVisible(false);
-                for (var box : targetMap.values()) {
-                    box.setEnabled(true);
+                for (Entry<Player, JCheckBox> entry : targetMap.entrySet()) {
+                    var box = entry.getValue();
+                    box.setEnabled(cardCurrentlyUsed.getRequiredState().contains(entry.getKey().getState()));
                     box.setSelected(false);
                 }
             }
@@ -1290,8 +1336,9 @@ public class MainBoardFront implements Serializable {
                 choosePlayerTargetPanelPanelAction.setVisible(false);
                 choosePlayerTargetPanelPanelCard.setVisible(true);
                 choosePlayerTargetPanelPanelPlayers.setVisible(true);
-                for (var box : targetMap.values()) {
-                    box.setEnabled(true);
+                for (Entry<Player, JCheckBox> entry : targetMap.entrySet()) {
+                    var box = entry.getValue();
+                    box.setEnabled(cardCurrentlyUsed.getRequiredState().contains(entry.getKey().getState()));
                     box.setSelected(false);
                 }
             }

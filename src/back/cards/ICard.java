@@ -2,8 +2,10 @@ package back.cards;
 
 import back.ActionType;
 import back.Player;
+import back.PlayerState;
 
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -26,6 +28,13 @@ public interface ICard {
      * @param action  a {@code ActionType}
      */
     public void useCard(Player player1, Player player2, Player player3, ActionType action, Card card);
+
+    /**
+     * Indicates which states are required for the target of this card.
+     * 
+     * @return the state allowed
+     */
+    public List<PlayerState> getRequiredState();
 
     /**
      * The getter for the attribute {@link Card#cardImpactOnOpinion}.
