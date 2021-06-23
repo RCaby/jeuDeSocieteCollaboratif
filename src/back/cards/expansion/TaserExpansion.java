@@ -13,7 +13,7 @@ import back.cards.Card;
 import back.cards.CardType;
 
 public class TaserExpansion extends Card {
-    public static final int NUMBER_THIS_IN_DECK = 10;
+    public static final int NUMBER_THIS_IN_DECK = 1;
 
     public TaserExpansion(Board board, ResourceBundle stringsBundle) {
         super(board, stringsBundle);

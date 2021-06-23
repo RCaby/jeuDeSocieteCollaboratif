@@ -24,17 +24,24 @@ public class RumExpansion extends Card {
 
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action, Card card) {
-        // TODO
         board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
         board.getMainBoardFront().displayMessage(stringsBundle.getString("Rum_smallDescription"));
+        if (owner.equals(board.getThisPlayer())) {
+            board.setIndexOfCurrentPlayer(board.getIndexCurrentPlayer() - 1);
+        }
         super.useCard(player1, player2, player3, action, card);
-        // board.rumDistributionInitialization();
 
+        board.getMainBoardFront().getReadyForRum();
     }
 
     @Override
     public int getCardImpactOnOpinion() {
         return IMPACT_RUM;
+    }
+
+    @Override
+    public boolean canBeUsed() {
+        return board.getNbPlayersAlive() > 1;
     }
 
 }

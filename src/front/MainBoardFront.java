@@ -34,7 +34,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import javax.swing.SwingConstants;
 
 import back.ActionType;
 import back.Board;
@@ -49,7 +48,8 @@ public class MainBoardFront implements Serializable {
     private static final String CHOOSE_VOID_PANEL = "CHOOSE_VOID_PANEL";
     private static final String CHOOSE_WOOD_TRIES_PANEL = "CHOOSE_WOOD_TRIES_PANEL";
     private static final String CHOOSE_PLAYER_TARGET = "CHOOSE_PLAYER_TARGET";
-    private static final String CHOOSE_CARD_PANEL = "CHOOSE_CARD_PANEL";
+    private static final String CHOOSE_CARD_BUOY_PANEL = "CHOOSE_CARD_BUOY_PANEL";
+    private static final String CHOOSE_CARD_RUM_PANEL = "CHOOSE_CARD_RUM_PANEL";
     private static final int SOUTH_BUTTON_WIDTH = 65;
     private static final int SOUTH_BUTTON_HEIGHT = 65;
 
@@ -99,7 +99,9 @@ public class MainBoardFront implements Serializable {
     private String waterString = "water";
     private JLabel choosePlayerTargetLabel;
     private JPanel choosePlayerTargetPanelPanelCard;
-    private JPanel cardChoicePanel;
+    private JPanel cardChoiceBuoyPanel;
+    private JPanel cardChoiceRumPanel;
+    private String previousPanelRum;
 
     /**
      * Builds an interface for the game.
@@ -159,20 +161,22 @@ public class MainBoardFront implements Serializable {
         var choosePlayerTargetPanel = new JPanel();
         centerPanelCenterNotificationPanel.add(notificationPanel);
         var voidChoicePanel = new JPanel();
-        cardChoicePanel = new JPanel();
+        cardChoiceBuoyPanel = new JPanel();
+        cardChoiceRumPanel = new JPanel();
         centerPanelCenterChoicePanel.add(voidChoicePanel, CHOOSE_VOID_PANEL);
         centerPanelCenterChoicePanel.add(chooseActionPanel, CHOOSE_ACTION_PANEL);
         centerPanelCenterChoicePanel.add(choosePlayerPanel, CHOOSE_PLAYER_PANEL);
         centerPanelCenterChoicePanel.add(chooseWoodNbTriesPanel, CHOOSE_WOOD_TRIES_PANEL);
         centerPanelCenterChoicePanel.add(choosePlayerTargetPanel, CHOOSE_PLAYER_TARGET);
-        centerPanelCenterChoicePanel.add(cardChoicePanel, CHOOSE_CARD_PANEL);
+        centerPanelCenterChoicePanel.add(cardChoiceBuoyPanel, CHOOSE_CARD_BUOY_PANEL);
+        centerPanelCenterChoicePanel.add(cardChoiceRumPanel, CHOOSE_CARD_RUM_PANEL);
 
         chooseActionPanel.setLayout(new BoxLayout(chooseActionPanel, BoxLayout.Y_AXIS));
         notificationPanel.setLayout(new BoxLayout(notificationPanel, BoxLayout.Y_AXIS));
         choosePlayerPanel.setLayout(new BoxLayout(choosePlayerPanel, BoxLayout.Y_AXIS));
         chooseWoodNbTriesPanel.setLayout(new BoxLayout(chooseWoodNbTriesPanel, BoxLayout.Y_AXIS));
         choosePlayerTargetPanel.setLayout(new BoxLayout(choosePlayerTargetPanel, BoxLayout.Y_AXIS));
-        cardChoicePanel.setLayout(new GridLayout(1, 2, 10, 10));
+        cardChoiceBuoyPanel.setLayout(new GridLayout(1, 2, 10, 10));
 
         var chooseActionLabelPanel = new JPanel();
         var chooseActionLabel = new JLabel(stringsBundle.getString("chooseAction"));
@@ -325,8 +329,34 @@ public class MainBoardFront implements Serializable {
 
     }
 
-    public void buildCardChoicePanel(Card card1, Card card2) {
-        cardChoicePanel.removeAll();
+    public void getReadyForRum() {
+        nextButton.setEnabled(false);
+        board.rumDistributionInitialization();
+        buildCardChoiceRumPanel();
+        updateSouth();
+        allowedToPlayCard = false;
+        previousPanelRum = previousPanel;
+    }
+
+    public void unbuildRum() {
+        updateSouth();
+        allowedToPlayCard = true;
+        switchToPanel(previousPanelRum);
+
+    }
+
+    public void buildCardChoiceRumPanel() {
+        cardChoiceRumPanel.removeAll();
+        switchToPanel(CHOOSE_CARD_RUM_PANEL);
+        for (Card card : board.getThisPlayer().getInventory()) {
+            var buttonCard = new JButton(card.getCardName());
+            buttonCard.addActionListener(new ChoiceCardRumActionListener(card));
+            cardChoiceRumPanel.add(buttonCard);
+        }
+    }
+
+    public void buildCardChoiceBuoyPanel(Card card1, Card card2) {
+        cardChoiceBuoyPanel.removeAll();
         var panelCard1 = new JPanel(new FlowLayout(FlowLayout.CENTER));
         var panelCard2 = new JPanel(new FlowLayout(FlowLayout.CENTER)); // TODO améliorer affichage parce que là beurk
         var buttonCard1 = new JButton(card1.toString());
@@ -337,9 +367,9 @@ public class MainBoardFront implements Serializable {
         buttonCard2.addActionListener(new ChooseCardListener(card2));
         panelCard1.add(buttonCard1);
         panelCard2.add(buttonCard2);
-        cardChoicePanel.add(panelCard1);
-        cardChoicePanel.add(panelCard2);
-        switchToPanel(CHOOSE_CARD_PANEL);
+        cardChoiceBuoyPanel.add(panelCard1);
+        cardChoiceBuoyPanel.add(panelCard2);
+        switchToPanel(CHOOSE_CARD_BUOY_PANEL);
 
     }
 
@@ -717,7 +747,8 @@ public class MainBoardFront implements Serializable {
      * @param panelName the name of the new panel
      */
     private void switchToPanel(String panelName) {
-        if (!previousPanel.equals(currentPanel) && !currentPanel.equals(CHOOSE_PLAYER_TARGET)) {
+        if (!previousPanel.equals(currentPanel) && !currentPanel.equals(CHOOSE_CARD_RUM_PANEL)
+                && !currentPanel.equals(CHOOSE_PLAYER_TARGET)) {
             previousPanel = currentPanel;
         }
 
@@ -833,7 +864,6 @@ public class MainBoardFront implements Serializable {
         @Override
         public void actionPerformed(ActionEvent e) {
             board.play(board.nextPlayer());
-
         }
     }
 
@@ -979,7 +1009,7 @@ public class MainBoardFront implements Serializable {
             if (buoy != null && buoy.isCardRevealed()) {
                 var card1 = board.getThisPlayer().pickCard(board);
                 var card2 = board.getThisPlayer().pickCard(board);
-                buildCardChoicePanel(card1, card2);
+                buildCardChoiceBuoyPanel(card1, card2);
             } else {
                 player.playerSeeksCard(board);
                 nextButton.setEnabled(true);
@@ -1100,7 +1130,7 @@ public class MainBoardFront implements Serializable {
         public void actionPerformed(ActionEvent e) {
             if (card.equals(cardCurrentlyUsed)) {
                 cardCurrentlyUsed = null;
-                switchToPanel(previousPanel);
+                switchToPanel(board.isRumDistributionActive() ? CHOOSE_CARD_RUM_PANEL : previousPanel);
             } else {
                 actionValidate.setEnabled(card.canBeUsed());
                 cardCurrentlyUsed = card;
@@ -1137,7 +1167,7 @@ public class MainBoardFront implements Serializable {
         public void actionPerformed(ActionEvent e) {
             if (card.equals(cardCurrentlyUsed)) {
                 cardCurrentlyUsed = null;
-                switchToPanel(previousPanel);
+                switchToPanel(board.isRumDistributionActive() ? CHOOSE_CARD_RUM_PANEL : previousPanel);
             } else {
                 super.actionPerformed(e);
                 switchToPanel(CHOOSE_PLAYER_TARGET);
@@ -1176,7 +1206,7 @@ public class MainBoardFront implements Serializable {
         public void actionPerformed(ActionEvent e) {
             if (card.equals(cardCurrentlyUsed)) {
                 cardCurrentlyUsed = null;
-                switchToPanel(previousPanel);
+                switchToPanel(board.isRumDistributionActive() ? CHOOSE_CARD_RUM_PANEL : previousPanel);
             } else {
                 super.actionPerformed(e);
                 switchToPanel(CHOOSE_PLAYER_TARGET);
@@ -1214,7 +1244,7 @@ public class MainBoardFront implements Serializable {
         public void actionPerformed(ActionEvent e) {
             if (card.equals(cardCurrentlyUsed)) {
                 cardCurrentlyUsed = null;
-                switchToPanel(previousPanel);
+                switchToPanel(board.isRumDistributionActive() ? CHOOSE_CARD_RUM_PANEL : previousPanel);
             } else {
                 super.actionPerformed(e);
                 nbTargetsRequired = 3;
@@ -1248,7 +1278,7 @@ public class MainBoardFront implements Serializable {
         public void actionPerformed(ActionEvent e) {
             if (card.equals(cardCurrentlyUsed)) {
                 cardCurrentlyUsed = null;
-                switchToPanel(previousPanel);
+                switchToPanel(board.isRumDistributionActive() ? CHOOSE_CARD_RUM_PANEL : previousPanel);
             } else {
                 super.actionPerformed(e);
 
@@ -1322,7 +1352,9 @@ public class MainBoardFront implements Serializable {
                 nbTargetsRequired = 0;
                 updateSouth();
                 board.updateDisplayResources();
-                switchToPanel(previousPanel);
+
+                switchToPanel(board.isRumDistributionActive() ? CHOOSE_CARD_RUM_PANEL : previousPanel);
+
             }
         }
     }
@@ -1371,6 +1403,7 @@ public class MainBoardFront implements Serializable {
             var nbTargetsSelected = 0;
             var nbActionSelected = 0;
             var nbCardSelected = 0;
+
             for (Entry<Player, JCheckBox> entry : targetMap.entrySet()) {
                 if (entry.getValue().isSelected()) {
                     nbTargetsSelected++;
@@ -1404,10 +1437,34 @@ public class MainBoardFront implements Serializable {
                     entry.getValue().setEnabled(nbCardSelected != 1);
                 }
             }
-            actionValidate.setEnabled(cardCurrentlyUsed.canBeUsed() && nbTargetsRequired > 0 && allowedToPlayCard
-                    && nbTargetsSelected >= 1 && nbTargetsSelected <= nbTargetsRequired
-                    && nbActionSelected == nbActionRequired && nbCardSelected == nbCardRequired);
+            actionValidate.setEnabled(
+                    cardCurrentlyUsed.canBeUsed() && !board.isRumDistributionActive() && nbTargetsRequired > 0
+                            && allowedToPlayCard && nbTargetsSelected >= 1 && nbTargetsSelected <= nbTargetsRequired
+                            && nbActionSelected == nbActionRequired && nbCardSelected == nbCardRequired);
 
+        }
+    }
+
+    private class ChoiceCardRumActionListener implements ActionListener {
+        private Card selectedCard;
+
+        public ChoiceCardRumActionListener(Card selectedCard) {
+            this.selectedCard = selectedCard;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int indexThisPlayer = board.getPlayerList().indexOf(board.getThisPlayer());
+            var target = board.getPlayerAliveAfterBefore(indexThisPlayer, true);
+            board.getThisPlayer().removeCard(selectedCard);
+            target.addCardToInventory(selectedCard);
+            board.getRumDistributionList().remove(board.getThisPlayer());
+            displayMessage(String.format(stringsBundle.getString("rumDistributionEvent"), board.getThisPlayer(),
+                    selectedCard, target));
+            nextButton.setEnabled(true);
+
+            cardChoiceRumPanel.removeAll();
+            board.rumDistributionEnd();
         }
     }
 }

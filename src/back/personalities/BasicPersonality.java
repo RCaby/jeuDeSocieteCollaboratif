@@ -158,6 +158,16 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
         return cardArray[random.nextInt(cardArray.length)];
     }
 
+    @Override
+    public Card chooseWorstCardIn(Card[] cardArray) {
+        return cardArray[random.nextInt(cardArray.length)];
+    }
+
+    @Override
+    public Card chooseCardToGiveRum() {
+        return linkedPlayer.getInventory().get(random.nextInt(linkedPlayer.getInventory().size()));
+    }
+
     protected Player chooseTargetForTaser(List<Player> playerList) {
         List<Player> potentialTargets = getPotentialListTargetTaser(playerList);
         return potentialTargets.get(random.nextInt(potentialTargets.size()));

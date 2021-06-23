@@ -79,6 +79,10 @@ public class Board implements Serializable {
     private boolean expansionUsed;
     private Player whipperPlayer;
     private Player whippedPlayer;
+    private int givingIndexRum;
+    private Player givingPlayerRum;
+    private boolean shouldRedirectOnRoundEnd;
+    private boolean isRumDistributionActive;
 
     /**
      * Builds the game without launching it and without incorporating any
@@ -159,9 +163,9 @@ public class Board implements Serializable {
         mainBoardFront.updateSouth();
         mainBoardFront.buildCardTargetPanel();
 
-        askPlayersForCards();
-
         setChief(playerList.get(0));
+
+        askPlayersForCards();
 
     }
 
@@ -248,12 +252,14 @@ public class Board implements Serializable {
      * cards at the same time, each computer player has to refuse to play a card for
      * the game to continue.
      * 
-     * @return a boolean that indicates if a card was played.
+     * @return a boolean array that indicates if a card was played and if the card
+     *         playing session was stopped.
      */
-    private boolean askPlayersForCards() {
+    private boolean[] askPlayersForCards() {
         var cardUsed = false;
         var allSaidNo = false;
         var index = 0;
+        var forceStop = false;
         while (!allSaidNo) {
             if (currentPhase == GamePhase.GOODS_DISTRIBUTION && isThereEnoughGoodsForAll(false)) {
                 for (Player player : playerList) {
@@ -262,20 +268,23 @@ public class Board implements Serializable {
             }
 
             var player = playerList.get(index);
+
             if (player.getState() != PlayerState.HEALTHY || player.equals(thisPlayer)) {
                 index++;
             } else {
-                boolean playerUsedCard = player.wouldLikePlayCardAsCpu(this);
+                boolean[] playerUsesCard = player.wouldLikePlayCardAsCpu(this);
+                boolean playerUsedCard = playerUsesCard[0];
+                forceStop = playerUsesCard[1];
                 cardUsed = cardUsed || playerUsedCard;
                 index = playerUsedCard ? 0 : index + 1;
             }
 
-            if (index == playerList.size() - 1) {
+            if (forceStop || index == playerList.size() - 1) {
                 allSaidNo = true;
             }
 
         }
-        return cardUsed;
+        return new boolean[] { cardUsed, forceStop };
 
     }
 
@@ -383,9 +392,9 @@ public class Board implements Serializable {
 
             nextChief = null;
             twicePlayingPlayer = null;
-            askPlayersForCards();
-
             indexOfCurrentPlayer = -1;
+
+            askPlayersForCards();
 
         }
 
@@ -402,6 +411,7 @@ public class Board implements Serializable {
         currentlyForDeparture = forDeparture;
         boolean end = isThereEnoughGoodsForAll(forDeparture);
         boolean cardUsedVoteSession;
+        boolean forceStop;
         if (end) {
             goodsDistributionForAlive();
             if (designated != null) {
@@ -413,8 +423,12 @@ public class Board implements Serializable {
             mainBoardFront.getNextButton().setEnabled(true);
 
         } else if (designated == null) {
-            cardUsedVoteSession = askPlayersForCards();
-            if (cardUsedVoteSession) {
+            var boolArray = askPlayersForCards();
+            cardUsedVoteSession = boolArray[0];
+            forceStop = boolArray[1];
+            if (forceStop) {
+                System.out.println("Yoho");
+            } else if (cardUsedVoteSession) {
                 roundEnd(forDeparture);
             } else {
                 mainBoardFront.allowPlayerToBeginVoteSession();
@@ -427,8 +441,13 @@ public class Board implements Serializable {
             } else if (lackingResource == ActionType.WATER) {
                 designatedForWaterThisRound.add(designated);
             }
-            cardUsedVoteSession = askPlayersForCards();
-            if (cardUsedVoteSession) {
+
+            var boolArray = askPlayersForCards();
+            cardUsedVoteSession = boolArray[0];
+            forceStop = boolArray[1];
+            if (forceStop) {
+                System.out.println("Yolo");
+            } else if (cardUsedVoteSession) {
                 roundEnd(forDeparture);
             } else {
                 mainBoardFront.allowPlayerToKillPlayerAfterVote(forDeparture);
@@ -494,10 +513,12 @@ public class Board implements Serializable {
         for (Player watcher : playerList) {
             watcher.addOpinionOn(player, imposedAction.getImpactOnOpinion(), difficulty, mainBoardFront);
         }
-        askPlayersForCards();
+
         if (twicePlayingPlayer != null && twicePlayingPlayer.equals(player)) {
             playerWillPlayTwice(player);
         }
+
+        askPlayersForCards();
     }
 
     /**
@@ -895,33 +916,58 @@ public class Board implements Serializable {
     }
 
     public void rumDistributionInitialization() {
-        List<Player> alivePlayers = new ArrayList<>();
-        for (Player player : alivePlayers) {
-            if (player.getState() != PlayerState.DEAD) {
-                alivePlayers.add(player);
+        rumDistributionList = new ArrayList<>();
+        isRumDistributionActive = true;
+        for (Player player : playerList) {
+            rumDistributionList.add(player);
+        }
+        givingIndexRum = rumDistributionList.indexOf(chief);
+        givingPlayerRum = rumDistributionList.get(givingIndexRum);
+        while (!rumDistributionList.isEmpty() && !givingPlayerRum.equals(thisPlayer)) {
+            if (givingPlayerRum.getState() != PlayerState.DEAD && givingPlayerRum.getCardNumber() > 0) {
+                var givenCard = givingPlayerRum.chooseCardToGiveRum();
+                var target = getPlayerAliveAfterBefore(playerList.indexOf(givingPlayerRum), true);
+                mainBoardFront.displayMessage(String.format(stringsBundle.getString("rumDistributionEvent"),
+                        givingPlayerRum, givenCard, target));
+                givingPlayerRum.removeCard(givenCard);
+                target.addCardToInventory(givenCard);
+
+            }
+
+            rumDistributionList.remove(givingPlayerRum);
+
+            if (!rumDistributionList.isEmpty()) {
+                givingIndexRum %= rumDistributionList.size();
+                givingPlayerRum = rumDistributionList.get(givingIndexRum);
             }
         }
-        var startingIndex = playerList.indexOf(chief);
-        var endList = alivePlayers.subList(0, startingIndex);
-        List<Player> middleList;
-        if (startingIndex == alivePlayers.size() - 1) {
-            middleList = new ArrayList<>();
-        } else {
-            middleList = alivePlayers.subList(startingIndex + 1, alivePlayers.size() - 1);
-        }
-        rumDistributionList = new ArrayList<>();
-        rumDistributionList.add(chief);
-        rumDistributionList.addAll(middleList);
-        rumDistributionList.addAll(endList);
-        mapCardDonations = new HashMap<>();
-        rumDistribution();
+
     }
 
-    public void rumDistribution() {
-        if (mapCardDonations.size() != rumDistributionList.size()) {
-            // var player = rumDistributionList.get(0);
-            // TODO
+    public void rumDistributionEnd() {
+        if (givingPlayerRum != null) {
+            while (!rumDistributionList.isEmpty()) {
+                if (!givingPlayerRum.equals(thisPlayer) && givingPlayerRum.getState() != PlayerState.DEAD
+                        && givingPlayerRum.getCardNumber() > 0) {
+                    var givenCard = givingPlayerRum.chooseCardToGiveRum();
+                    var target = getPlayerAliveAfterBefore(playerList.indexOf(givingPlayerRum), true);
+                    mainBoardFront.displayMessage(String.format(stringsBundle.getString("rumDistributionEvent"),
+                            givingPlayerRum, givenCard, target));
+                    givingPlayerRum.removeCard(givenCard);
+                    target.addCardToInventory(givenCard);
+                }
+                rumDistributionList.remove(givingPlayerRum);
+
+                if (!rumDistributionList.isEmpty()) {
+                    givingIndexRum %= rumDistributionList.size();
+                    givingPlayerRum = rumDistributionList.get(givingIndexRum);
+                }
+
+            }
+
         }
+        isRumDistributionActive = false;
+        mainBoardFront.unbuildRum();
 
     }
 
@@ -1293,6 +1339,15 @@ public class Board implements Serializable {
     }
 
     /**
+     * The getter for the attribute {@link Board#isRumDistributionActive}.
+     * 
+     * @return the isRumDistributionActive
+     */
+    public boolean isRumDistributionActive() {
+        return isRumDistributionActive;
+    }
+
+    /**
      * The getter for the attribute {@link Board#matchesUsedThisRound}.
      * 
      * @return a boolean indicating whether matches were used during this round
@@ -1614,6 +1669,15 @@ public class Board implements Serializable {
      */
     public Player getWhipperPlayer() {
         return whipperPlayer;
+    }
+
+    /**
+     * The getter for the attribute {@link Board#rumDistributionList}.
+     * 
+     * @return the rumDistributionList
+     */
+    public List<Player> getRumDistributionList() {
+        return rumDistributionList;
     }
 
     /**

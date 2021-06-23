@@ -33,6 +33,7 @@ import back.cards.Card;
 import back.cards.FishingRod;
 import back.cards.Gourd;
 import back.cards.expansion.BuoyExpansion;
+import back.cards.expansion.RumExpansion;
 import back.personalities.BasicPersonality;
 import front.MainBoardFront;
 
@@ -400,11 +401,14 @@ public class Player implements Serializable {
      * used, the player may decide to use it.
      * 
      * @param board the main board
-     * @return a boolean indicating if one card has been used.
+     * @return a boolean array indicating if one card has been used and if other
+     *         players are allowed to play a card after this one.
      */
-    public boolean wouldLikePlayCardAsCpu(Board board) {
+    public boolean[] wouldLikePlayCardAsCpu(Board board) {
         var cardUsed = personality.wouldLikePlayACard();
         var cardWasPlayed = false;
+        var forceStop = false;
+
         if (cardUsed != null) {
             cardWasPlayed = true;
             boolean[] neededParameters = cardUsed.getNeededParameters();
@@ -423,12 +427,15 @@ public class Player implements Serializable {
                 var pickedPlayer = personality.chooseTarget(cardUsed, board.getPlayerList());
                 cardUsed.useCard(pickedPlayer, null, null, ActionType.NONE, null);
             } else {
+                if (cardUsed instanceof RumExpansion) {
+                    forceStop = true;
+                }
                 cardUsed.useCard(null, null, null, ActionType.NONE, null);
             }
             board.getMainBoardFront().displayMessage("\n");
         }
 
-        return cardWasPlayed;
+        return new boolean[] { cardWasPlayed, forceStop };
     }
 
     /**
@@ -600,6 +607,16 @@ public class Player implements Serializable {
      */
     public boolean isPlayerChief() {
         return isChief;
+    }
+
+    /**
+     * Asks the personality to choose which card should be given during the rum card
+     * action.
+     * 
+     * @return the chosen card
+     */
+    public Card chooseCardToGiveRum() {
+        return personality.chooseCardToGiveRum();
     }
 
     /**

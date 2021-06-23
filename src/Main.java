@@ -9,7 +9,8 @@ public class Main {
 
         // TODO discussion channel for players (not before V6 at least)
 
-        // TODO rum
+        // TODO empecher de cliquer sur player dead pour utilisation de gun par exemple
+        // en disabled les joueurs non ciblables
 
     }
 }

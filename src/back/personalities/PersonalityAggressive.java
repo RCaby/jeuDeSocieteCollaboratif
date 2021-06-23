@@ -236,12 +236,48 @@ public class PersonalityAggressive extends BasicPersonality {
         Card selectedCard = null;
         for (Card card : cardArray) {
             var value = card.getCardType().getAggressiveValuePriorityOrder();
-            if (value < minPriorityValue) {
+            if (value <= minPriorityValue) {
                 minPriorityValue = value;
                 selectedCard = card;
             }
         }
         return selectedCard;
+    }
+
+    @Override
+    public Card chooseWorstCardIn(Card[] cardArray) {
+        var maxPriorityValue = 0;
+        Card selectedCard = null;
+        for (Card card : cardArray) {
+            var value = card.getCardType().getAggressiveValuePriorityOrder();
+            if (value >= maxPriorityValue) {
+                maxPriorityValue = value;
+                selectedCard = card;
+            }
+        }
+        return selectedCard;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Takes the least liked card.
+     */
+    @Override
+    public Card chooseCardToGiveRum() {
+        List<Card> nonRevealedCard = new ArrayList<>();
+        for (Card card : linkedPlayer.getInventory()) {
+            if (!card.isCardRevealed()) {
+                nonRevealedCard.add(card);
+            }
+        }
+        Card[] usedCards;
+        if (nonRevealedCard.isEmpty()) {
+            usedCards = linkedPlayer.getInventory().toArray(new Card[0]);
+        } else {
+            usedCards = nonRevealedCard.toArray(new Card[0]);
+        }
+        return chooseWorstCardIn(usedCards);
     }
 
     /**

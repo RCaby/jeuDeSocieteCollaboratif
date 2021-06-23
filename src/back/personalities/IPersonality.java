@@ -145,4 +145,19 @@ public interface IPersonality {
      */
     public Card chooseBestCardIn(Card[] cardArray);
 
+    /**
+     * Chooses which card is the worst to keep.
+     * 
+     * @param cardArray pickable cards
+     * @return the chosen card
+     */
+    public Card chooseWorstCardIn(Card[] cardArray);
+
+    /**
+     * Chooses which card should be given during a rum card action.
+     * 
+     * @return the chosen card
+     */
+    public Card chooseCardToGiveRum();
+
 }
