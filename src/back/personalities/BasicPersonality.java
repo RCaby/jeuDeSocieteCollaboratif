@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
 import back.ActionType;
 import back.Player;
 import back.PlayerState;
-import back.cards.Card;
+import back.cards.items.Card;
 
 /**
  * The basic personality which makes every choice randomly.

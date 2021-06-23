@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
 
 import back.ActionType;
 import back.Player;
-import back.cards.Card;
+import back.cards.items.Card;
 
 /**
  * The aggressive personality is supposed to be more independent than the other.

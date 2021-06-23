@@ -39,8 +39,8 @@ import back.ActionType;
 import back.Board;
 import back.Player;
 import back.PlayerState;
-import back.cards.Card;
-import back.cards.expansion.BuoyExpansion;
+import back.cards.items.Card;
+import back.cards.items.expansion.BuoyExpansion;
 
 public class MainBoardFront implements Serializable {
     private static final String CHOOSE_ACTION_PANEL = "CHOOSE_ACTION_PANEL";

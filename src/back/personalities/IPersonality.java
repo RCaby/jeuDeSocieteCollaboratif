@@ -4,7 +4,7 @@ import java.util.List;
 
 import back.ActionType;
 import back.Player;
-import back.cards.Card;
+import back.cards.items.Card;
 
 /**
  * The interface describing the personality of a player.

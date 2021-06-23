@@ -11,9 +11,9 @@ import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Map.Entry;
 
-import back.cards.Card;
-import back.cards.Club;
-import back.cards.CrystalBall;
+import back.cards.items.Card;
+import back.cards.items.Club;
+import back.cards.items.CrystalBall;
 import back.personalities.BasicPersonality;
 import back.personalities.PersonalitiesEnum;
 import front.MainBoardFront;

@@ -10,7 +10,7 @@ import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Map.Entry;
 
-import static back.cards.ICard.hiddenCardIcon;
+import static back.cards.items.ICard.hiddenCardIcon;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER;
 
@@ -28,12 +28,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import back.cards.Axe;
-import back.cards.Card;
-import back.cards.FishingRod;
-import back.cards.Gourd;
-import back.cards.expansion.BuoyExpansion;
-import back.cards.expansion.RumExpansion;
+import back.cards.items.Axe;
+import back.cards.items.Card;
+import back.cards.items.FishingRod;
+import back.cards.items.Gourd;
+import back.cards.items.expansion.BuoyExpansion;
+import back.cards.items.expansion.RumExpansion;
 import back.personalities.BasicPersonality;
 import front.MainBoardFront;
 

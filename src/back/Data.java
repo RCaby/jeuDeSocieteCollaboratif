@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-import back.cards.Card;
-import back.cards.CardEnum;
+import back.cards.items.Card;
+import back.cards.items.CardEnum;
 
 public class Data implements Serializable {
     private static final long serialVersionUID = 2040640105155032989L;
