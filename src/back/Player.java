@@ -28,6 +28,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import back.cards.characters.CharacterEnum;
+import back.cards.characters.ICharacter;
 import back.cards.items.Axe;
 import back.cards.items.Card;
 import back.cards.items.FishingRod;
@@ -53,7 +55,7 @@ public class Player implements Serializable {
     public static final int IMPACT_VOTE_ON_OPINION = -3;
     public static final int IMPACT_CHIEF_DESIGNATION_ON_OPINION = -5;
     private static final int CARD_WIDTH = 65;
-    private static final int CARD_HEIGHT = 65; // ratio of 1needed.
+    private static final int CARD_HEIGHT = 65; // ratio of 1 needed.
     private List<Card> inventory;
     private List<Card> inventoryRevealed;
     private List<Card> inventoryHidden;
@@ -75,6 +77,7 @@ public class Player implements Serializable {
     private Map<Player, Integer> opinionMap;
     private final String originalName;
     private ThreatLevel threatLevel;
+    private ICharacter playerCharacter;
 
     /**
      * Generates a Player.
@@ -911,6 +914,24 @@ public class Player implements Serializable {
      */
     public void setThreatLevel(ThreatLevel threatLevel) {
         this.threatLevel = threatLevel;
+    }
+
+    /**
+     * The setter for the attribute {@link Player#playerCharacter}.
+     * 
+     * @param playerCharacter the playerCharacter to set
+     */
+    public void setPlayerCharacter(ICharacter playerCharacter) {
+        this.playerCharacter = playerCharacter;
+    }
+
+    /**
+     * The setter for the attribute {@link Player#playerCharacter}.
+     * 
+     * @return the playerCharacter set
+     */
+    public ICharacter getPlayerCharacter() {
+        return this.playerCharacter;
     }
 
 }

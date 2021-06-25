@@ -61,7 +61,6 @@ public enum PersonalitiesEnum {
             e.printStackTrace();
         }
         return newInstanceBasicPersonality;
-
     }
 
     @Override
@@ -83,7 +82,7 @@ public enum PersonalitiesEnum {
      * 
      * @return the array of personalities
      */
-    public static PersonalitiesEnum[] getPersonalitiesarray() {
+    public static PersonalitiesEnum[] getPersonalitiesArray() {
         return personalitiesArray;
     }
 

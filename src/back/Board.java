@@ -11,6 +11,10 @@ import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Map.Entry;
 
+import back.cards.characters.CharacterEnum;
+import back.cards.characters.ICharacter;
+import back.cards.events.EventEnum;
+import back.cards.events.IEvent;
 import back.cards.items.Card;
 import back.cards.items.Club;
 import back.cards.items.CrystalBall;
@@ -75,14 +79,14 @@ public class Board implements Serializable {
     private ActionType lackingResource;
     private int difficulty;
     private List<Player> rumDistributionList;
-    private HashMap<Player, Card> mapCardDonations;
     private boolean expansionUsed;
     private Player whipperPlayer;
     private Player whippedPlayer;
     private int givingIndexRum;
     private Player givingPlayerRum;
-    private boolean shouldRedirectOnRoundEnd;
     private boolean isRumDistributionActive;
+    private IEvent[] eventArray;
+    private Map<ICharacter, Player> mapCharacters;
 
     /**
      * Builds the game without launching it and without incorporating any
@@ -119,6 +123,7 @@ public class Board implements Serializable {
         random = new Random();
         rumDistributionList = new ArrayList<>();
         weatherList = data.getWeatherList();
+        eventArray = EventEnum.getEventEnumArray(stringsBundle);
 
         voluntaryDepartureStarted = false;
         playerList = new ArrayList<>();
@@ -153,6 +158,7 @@ public class Board implements Serializable {
         playerList.add(indexOfThisPlayer, thisPlayer);
 
         associatePersonalities();
+        associateCharacters();
         cardsDistribution();
 
         currentPhase = GamePhase.ROUND_BEGINNING;
@@ -182,6 +188,31 @@ public class Board implements Serializable {
                 giveCardToPlayer(player, card);
             }
         }
+    }
+
+    /**
+     * Associate each player with a random character.
+     */
+    private void associateCharacters() {
+        mapCharacters = new HashMap<>();
+        List<Player> playerListCopy = new ArrayList<>();
+        for (Player player : playerList) {
+            playerListCopy.add(player);
+        }
+
+        List<ICharacter> characterList = CharacterEnum.getCharacterEnumList(playerList.size(), stringsBundle);
+
+        for (var index = 0; index < playerList.size(); index++) {
+            var pickedIndexCharacter = random.nextInt(characterList.size());
+            ICharacter character = characterList.get(pickedIndexCharacter);
+            var pickedIndexPlayer = random.nextInt(playerListCopy.size());
+            var player = playerListCopy.get(pickedIndexPlayer);
+            characterList.remove(character);
+            playerListCopy.remove(player);
+            mapCharacters.put(character, player);
+            player.setPlayerCharacter(character);
+        }
+
     }
 
     /**
@@ -217,7 +248,7 @@ public class Board implements Serializable {
      */
     private void displayPersonalities() {
         Map<PersonalitiesEnum, Integer> personalitiesMap = new EnumMap<>(PersonalitiesEnum.class);
-        for (PersonalitiesEnum personality : PersonalitiesEnum.getPersonalitiesarray()) {
+        for (PersonalitiesEnum personality : PersonalitiesEnum.getPersonalitiesArray()) {
             personalitiesMap.put(personality, 0);
         }
         for (Player player : playerList) {
