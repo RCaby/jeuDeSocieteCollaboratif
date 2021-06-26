@@ -194,7 +194,8 @@ public class PersonalityCooperative extends BasicPersonality {
         var minPriorityOrder = 10;
         Card selectedCard = null;
         for (Card potentialCard : player.getInventoryRevealed()) {
-            if (potentialCard.getCardType().getCooperativeValuePriorityOrder() < minPriorityOrder) {
+            if (potentialCard.getCardType().getCooperativeValuePriorityOrder() < minPriorityOrder
+                    && potentialCard.isSingleUse()) {
                 selectedCard = potentialCard;
                 minPriorityOrder = potentialCard.getCardType().getCooperativeValuePriorityOrder();
             }
@@ -216,10 +217,10 @@ public class PersonalityCooperative extends BasicPersonality {
         for (Player player : potentialTargets) {
             for (Card card : player.getInventoryRevealed()) {
                 var priorityValue = card.getCardType().getCooperativeValuePriorityOrder();
-                if (priorityValue < minPriorityValue) {
+                if (priorityValue < minPriorityValue && card.isSingleUse()) {
                     target = player;
                     minPriorityValue = priorityValue;
-                } else if (priorityValue == minPriorityValue) {
+                } else if (priorityValue == minPriorityValue && card.isSingleUse()) {
                     List<Player> targets = new ArrayList<>();
                     target = linkedPlayer.getLeastLikedPlayerIn(targets);
                 }

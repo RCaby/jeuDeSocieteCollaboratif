@@ -6,5 +6,6 @@ public class RumblingVolcano extends AEvent {
     public RumblingVolcano(ResourceBundle stringBundle) {
         super(stringBundle);
         eventName = stringBundle.getString("rumblingVolcanoName");
+        linkedEventEnum = EventEnum.RUMBLING_VOLCANO;
     }
 }

@@ -6,5 +6,6 @@ public class InsularTax extends AEvent {
     public InsularTax(ResourceBundle stringBundle) {
         super(stringBundle);
         eventName = stringBundle.getString("insularTaxName");
+        linkedEventEnum = EventEnum.INSULAR_TAX;
     }
 }

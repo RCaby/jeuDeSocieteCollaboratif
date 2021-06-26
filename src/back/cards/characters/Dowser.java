@@ -7,5 +7,6 @@ public class Dowser extends ACharacter {
     public Dowser(ResourceBundle stringBundle) {
         super(stringBundle);
         characterName = stringBundle.getString("dowserName");
+        linkedCharacterEnum = CharacterEnum.DOWSER;
     }
 }

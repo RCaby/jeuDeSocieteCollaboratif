@@ -6,5 +6,6 @@ public class HeavySwell extends AEvent {
     public HeavySwell(ResourceBundle stringBundle) {
         super(stringBundle);
         eventName = stringBundle.getString("heavySwellName");
+        linkedEventEnum = EventEnum.HEAVY_SWELL;
     }
 }

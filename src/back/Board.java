@@ -123,7 +123,7 @@ public class Board implements Serializable {
         random = new Random();
         rumDistributionList = new ArrayList<>();
         weatherList = data.getWeatherList();
-        eventArray = EventEnum.getEventEnumArray(stringsBundle);
+        // *eventArray = EventEnum.getEventEnumArray(stringsBundle);
 
         voluntaryDepartureStarted = false;
         playerList = new ArrayList<>();
@@ -158,7 +158,7 @@ public class Board implements Serializable {
         playerList.add(indexOfThisPlayer, thisPlayer);
 
         associatePersonalities();
-        associateCharacters();
+        // *associateCharacters();
         cardsDistribution();
 
         currentPhase = GamePhase.ROUND_BEGINNING;

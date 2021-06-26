@@ -6,5 +6,6 @@ public class FarSighted extends ACharacter {
     public FarSighted(ResourceBundle stringBundle) {
         super(stringBundle);
         characterName = stringBundle.getString("farSightedName");
+        linkedCharacterEnum = CharacterEnum.FARSIGHTED;
     }
 }

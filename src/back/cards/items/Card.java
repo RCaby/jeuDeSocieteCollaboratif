@@ -231,6 +231,10 @@ public abstract class Card implements ICard, Serializable {
         return discardOnDeath;
     }
 
+    public boolean isSingleUse() {
+        return isSingleUse;
+    }
+
     public String toString() {
         return cardName;
     }

@@ -61,9 +61,4 @@ public class MetalDetectorExpansion extends Card {
         return IMPACT_METAL_DETECTOR;
     }
 
-    @Override
-    public boolean canBeUsed() {
-        return board.getWeather() == 0;
-    }
-
 }

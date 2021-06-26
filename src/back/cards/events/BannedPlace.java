@@ -6,5 +6,6 @@ public class BannedPlace extends AEvent {
     public BannedPlace(ResourceBundle stringBundle) {
         super(stringBundle);
         eventName = stringBundle.getString("bannedPlaceName");
+        linkedEventEnum = EventEnum.BANNED_PLACE;
     }
 }

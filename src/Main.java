@@ -9,5 +9,7 @@ public class Main {
 
         // TODO discussion channel for players (not before V6 at least)
 
+        // TODO Modif spyglass pcq l'affichage bof
+
     }
 }

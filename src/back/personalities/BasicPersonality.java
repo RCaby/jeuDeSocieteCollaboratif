@@ -149,7 +149,11 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
         List<Player> potentialTargets = new ArrayList<>();
         for (Player player : playerList) {
             if (!player.getInventoryRevealed().isEmpty() && !player.equals(linkedPlayer)) {
-                potentialTargets.add(player);
+                for (Card card : player.getInventoryRevealed()) {
+                    if (card.isSingleUse() && !potentialTargets.contains(player)) {
+                        potentialTargets.add(player);
+                    }
+                }
             }
         }
         return potentialTargets;

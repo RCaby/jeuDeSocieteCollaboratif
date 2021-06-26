@@ -6,5 +6,6 @@ public class CrazyPsychic extends AEvent {
     public CrazyPsychic(ResourceBundle stringBundle) {
         super(stringBundle);
         eventName = stringBundle.getString("crazyPsychicName");
+        linkedEventEnum = EventEnum.CRAZY_PSYCHIC;
     }
 }

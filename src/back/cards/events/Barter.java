@@ -6,5 +6,6 @@ public class Barter extends AEvent {
     public Barter(ResourceBundle stringBundle) {
         super(stringBundle);
         eventName = stringBundle.getString("barterName");
+        linkedEventEnum = EventEnum.BARTER;
     }
 }

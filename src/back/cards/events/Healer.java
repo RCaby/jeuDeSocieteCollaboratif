@@ -6,5 +6,6 @@ public class Healer extends AEvent {
     public Healer(ResourceBundle stringBundle) {
         super(stringBundle);
         eventName = stringBundle.getString("healerName");
+        linkedEventEnum = EventEnum.HEALER;
     }
 }

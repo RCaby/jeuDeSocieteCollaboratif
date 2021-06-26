@@ -6,5 +6,6 @@ public class Looting extends AEvent {
     public Looting(ResourceBundle stringBundle) {
         super(stringBundle);
         eventName = stringBundle.getString("lootingName");
+        linkedEventEnum = EventEnum.LOOTING;
     }
 }

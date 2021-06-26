@@ -6,5 +6,6 @@ public class Model extends ACharacter {
     public Model(ResourceBundle stringBundle) {
         super(stringBundle);
         characterName = stringBundle.getString("modelName");
+        linkedCharacterEnum = CharacterEnum.MODEL;
     }
 }

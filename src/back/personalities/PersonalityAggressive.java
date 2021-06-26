@@ -193,7 +193,8 @@ public class PersonalityAggressive extends BasicPersonality {
         var minPriorityOrder = 10;
         Card selectedCard = null;
         for (Card potentialCard : player.getInventoryRevealed()) {
-            if (potentialCard.getCardType().getAggressiveValuePriorityOrder() < minPriorityOrder) {
+            if (potentialCard.getCardType().getAggressiveValuePriorityOrder() < minPriorityOrder
+                    && potentialCard.isSingleUse()) {
                 selectedCard = potentialCard;
                 minPriorityOrder = potentialCard.getCardType().getAggressiveValuePriorityOrder();
             }
@@ -215,10 +216,10 @@ public class PersonalityAggressive extends BasicPersonality {
         for (Player player : potentialTargets) {
             for (Card card : player.getInventoryRevealed()) {
                 var priorityValue = card.getCardType().getAggressiveValuePriorityOrder();
-                if (priorityValue < minPriorityValue) {
+                if (priorityValue < minPriorityValue && card.isSingleUse()) {
                     target = player;
                     minPriorityValue = priorityValue;
-                } else if (priorityValue == minPriorityValue) {
+                } else if (priorityValue == minPriorityValue && card.isSingleUse()) {
                     List<Player> targets = new ArrayList<>();
                     target = linkedPlayer.getLeastLikedPlayerIn(targets);
                 }

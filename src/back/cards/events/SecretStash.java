@@ -6,5 +6,6 @@ public class SecretStash extends AEvent {
     public SecretStash(ResourceBundle stringBundle) {
         super(stringBundle);
         eventName = stringBundle.getString("secretStashName");
+        linkedEventEnum = EventEnum.SECRET_STASH;
     }
 }

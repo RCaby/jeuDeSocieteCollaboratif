@@ -6,5 +6,6 @@ public class TimeTraveller extends ACharacter {
     public TimeTraveller(ResourceBundle stringBundle) {
         super(stringBundle);
         characterName = stringBundle.getString("timeTravellerName");
+        linkedCharacterEnum = CharacterEnum.TIME_TRAVELLER;
     }
 }

@@ -6,5 +6,6 @@ public class Prisoner extends AEvent {
     public Prisoner(ResourceBundle stringBundle) {
         super(stringBundle);
         eventName = stringBundle.getString("prisonerName");
+        linkedEventEnum = EventEnum.PRISONER;
     }
 }

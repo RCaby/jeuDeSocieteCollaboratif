@@ -6,5 +6,6 @@ public class RainMaking extends AEvent {
     public RainMaking(ResourceBundle stringBundle) {
         super(stringBundle);
         eventName = stringBundle.getString("rainMakingName");
+        linkedEventEnum = EventEnum.RAINMAKING;
     }
 }

@@ -7,6 +7,7 @@ public class Bodyguard extends ACharacter {
     public Bodyguard(ResourceBundle stringBundle) {
         super(stringBundle);
         characterName = stringBundle.getString("bodyguardName");
+        linkedCharacterEnum = CharacterEnum.BODYGUARD;
     }
 
 }

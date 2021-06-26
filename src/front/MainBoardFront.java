@@ -1431,12 +1431,13 @@ public class MainBoardFront implements Serializable {
                         cardCheckBoxMap.clear();
                         for (Card card : selectedPlayer.getInventoryRevealed()) {
 
-                            var box = new JCheckBox(card.getCardName());
-                            box.addItemListener(new ActionChoiceItemListener());
+                            if (!card.isSingleUse()) {
+                                var box = new JCheckBox(card.getCardName());
+                                box.addItemListener(new ActionChoiceItemListener());
 
-                            cardCheckBoxMap.put(card, box);
-                            choosePlayerTargetPanelPanelCard.add(box);
-
+                                cardCheckBoxMap.put(card, box);
+                                choosePlayerTargetPanelPanelCard.add(box);
+                            }
                         }
 
                     }

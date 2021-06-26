@@ -6,5 +6,6 @@ public class WholesaleFisherman extends ACharacter {
     public WholesaleFisherman(ResourceBundle stringBundle) {
         super(stringBundle);
         characterName = stringBundle.getString("wholesaleFishermanName");
+        linkedCharacterEnum = CharacterEnum.WHOLESALE_FISHERMAN;
     }
 }

@@ -6,5 +6,6 @@ public class Logger extends AEvent {
     public Logger(ResourceBundle stringBundle) {
         super(stringBundle);
         eventName = stringBundle.getString("loggerName");
+        linkedEventEnum = EventEnum.LOGGER;
     }
 }

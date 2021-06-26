@@ -62,7 +62,11 @@ public class TaserExpansion extends Card {
         for (Player player : board.getPlayerList()) {
             if (!player.equals(owner) && player.getState() != PlayerState.DEAD
                     && !player.getInventoryRevealed().isEmpty()) {
-                return true;
+                for (Card card : player.getInventoryRevealed()) {
+                    if (!card.isSingleUse()) {
+                        return true;
+                    }
+                }
             }
         }
         return false;

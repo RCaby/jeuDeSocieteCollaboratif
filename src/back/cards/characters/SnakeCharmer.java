@@ -6,5 +6,6 @@ public class SnakeCharmer extends ACharacter {
     public SnakeCharmer(ResourceBundle stringBundle) {
         super(stringBundle);
         characterName = stringBundle.getString("snakeCharmerName");
+        linkedCharacterEnum = CharacterEnum.SNAKE_CHARMER;
     }
 }

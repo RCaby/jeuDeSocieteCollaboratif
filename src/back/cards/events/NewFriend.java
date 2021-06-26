@@ -6,5 +6,6 @@ public class NewFriend extends AEvent {
     public NewFriend(ResourceBundle stringBundle) {
         super(stringBundle);
         eventName = stringBundle.getString("newFriendName");
+        linkedEventEnum = EventEnum.NEW_FRIEND;
     }
 }

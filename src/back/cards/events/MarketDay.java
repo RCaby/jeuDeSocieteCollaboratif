@@ -6,5 +6,6 @@ public class MarketDay extends AEvent {
     public MarketDay(ResourceBundle stringBundle) {
         super(stringBundle);
         eventName = stringBundle.getString("marketDayName");
+        linkedEventEnum = EventEnum.MARKET_DAY;
     }
 }

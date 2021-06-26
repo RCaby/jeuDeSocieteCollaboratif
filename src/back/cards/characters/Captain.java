@@ -6,5 +6,6 @@ public class Captain extends ACharacter {
     public Captain(ResourceBundle stringBundle) {
         super(stringBundle);
         characterName = stringBundle.getString("captainName");
+        linkedCharacterEnum = CharacterEnum.CAPTAIN;
     }
 }

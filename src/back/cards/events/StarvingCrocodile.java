@@ -6,5 +6,6 @@ public class StarvingCrocodile extends AEvent {
     public StarvingCrocodile(ResourceBundle stringBundle) {
         super(stringBundle);
         eventName = stringBundle.getString("starvingCrocodileName");
+        linkedEventEnum = EventEnum.STARVING_CROCODILE;
     }
 }
