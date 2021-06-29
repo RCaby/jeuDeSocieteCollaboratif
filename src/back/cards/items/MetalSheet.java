@@ -60,4 +60,9 @@ public class MetalSheet extends Card {
         return IMPACT_METAL_SHEET;
     }
 
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_METAL_SHEET_SEE;
+    }
+
 }

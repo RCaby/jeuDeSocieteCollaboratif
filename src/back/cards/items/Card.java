@@ -42,60 +42,107 @@ public abstract class Card implements ICard, Serializable {
     public static final int NUMBER_THIS_IN_DECK = 0;
     public static final int IMPACT_ALARM_CLOCK = 0;
     public static final int IMPACT_ALARM_CLOCK_ON_TARGET = 1;
+    public static final int IMPACT_ALARM_CLOCK_SEE = 0;
     public static final int IMPACT_ANTIVENOM = 1;
     public static final int IMPACT_ANTIVENOM_ON_TARGET = 2;
+    public static final int IMPACT_ANTIVENOM_SEE = 0;
     public static final int IMPACT_AXE = 5;
+    public static final int IMPACT_AXE_SEE = 1;
     public static final int IMPACT_BAROMETER = 0;
+    public static final int IMPACT_BAROMETER_SEE = 0;
     public static final int IMPACT_BOARD_GAME_QUORIDOR = 0;
+    public static final int IMPACT_BOARD_GAME_QUORIDOR_SEE = 0;
     public static final int IMPACT_CARTRIDGE = -1;
+    public static final int IMPACT_CARTRIDGE_SEE = -1;
     public static final int IMPACT_CLUB = -5;
+    public static final int IMPACT_CLUB_SEE = -1;
     public static final int IMPACT_COCONUT = 3;
+    public static final int IMPACT_COCONUT_SEE = 1;
     public static final int IMPACT_COFFEE = 0;
+    public static final int IMPACT_COFFEE_SEE = 0;
     public static final int IMPACT_CONCH = -1;
+    public static final int IMPACT_CONCH_SEE = 0;
     public static final int IMPACT_CRYSTAL_BALL = -3;
+    public static final int IMPACT_CRYSTAL_BALL_SEE = -1;
     public static final int IMPACT_FISHINGROD = 5;
+    public static final int IMPACT_FISHINGROD_SEE = 1;
     public static final int IMPACT_FLASHLIGHT = 0;
+    public static final int IMPACT_FLASHLIGHT_SEE = 0;
     public static final int IMPACT_GIFTBASKET = 3;
+    public static final int IMPACT_GIFTBASKET_SEE = 1;
     public static final int IMPACT_GOURD = 5;
+    public static final int IMPACT_GOURD_SEE = 1;
     public static final int IMPACT_GUN = -5;
+    public static final int IMPACT_GUN_SEE = -1;
     public static final int IMPACT_GUN_ON_TARGET = -3;
     public static final int IMPACT_KIT_BBQ_CANNIBAL = 3;
+    public static final int IMPACT_KIT_BBQ_CANNIBAL_SEE = 1;
     public static final int IMPACT_LUXURY_CAR_KEY = 0;
+    public static final int IMPACT_LUXURY_CAR_KEY_SEE = 0;
     public static final int IMPACT_MATCHES = 1;
+    public static final int IMPACT_MATCHES_SEE = 0;
     public static final int IMPACT_METAL_SHEET = 1;
+    public static final int IMPACT_METAL_SHEET_SEE = 0;
     public static final int IMPACT_OLD_BRIEF = 0;
+    public static final int IMPACT_OLD_BRIEF_SEE = 0;
     public static final int IMPACT_PENDULUM = -1;
     public static final int IMPACT_PENDULUM_ON_TARGET = -3;
+    public static final int IMPACT_PENDULUM_SEE = -1;
     public static final int IMPACT_ROTTEN_FISH = 3;
+    public static final int IMPACT_ROTTEN_FISH_SEE = 1;
     public static final int IMPACT_SANDWICH = 1;
+    public static final int IMPACT_SANDWICH_SEE = 0;
     public static final int IMPACT_SARDINES = 3;
+    public static final int IMPACT_SARDINES_SEE = 1;
     public static final int IMPACT_SLEEPING_PILLS = -3;
     public static final int IMPACT_SLEEPING_PILLS_ON_TARGET = -3;
+    public static final int IMPACT_SLEEPING_PILLS_SEE = -1;
     public static final int IMPACT_SPYGLASS = 0;
+    public static final int IMPACT_SPYGLASS_SEE = 0;
     public static final int IMPACT_STAGNANT_WATER = 3;
+    public static final int IMPACT_STAGNANT_WATER_SEE = 1;
     public static final int IMPACT_TOILET_BRUSH = 0;
+    public static final int IMPACT_TOILET_BRUSH_SEE = 0;
     public static final int IMPACT_VEGETABLE_MILL = 3;
+    public static final int IMPACT_VEGETABLE_MILL_SEE = 1;
     public static final int IMPACT_VOODOO_DOLL = 3;
     public static final int IMPACT_VOODOO_DOLL_ON_TARGET = 5;
+    public static final int IMPACT_VOODOO_DOLL_SEE = 1;
     public static final int IMPACT_WATER_BOTTLE = 1;
+    public static final int IMPACT_WATER_BOTTLE_SEE = 0;
     public static final int IMPACT_WINNING_LOTTERY_TICKET = 0;
+    public static final int IMPACT_WINNING_LOTTERY_SEE = 0;
     public static final int IMPACT_WOODEN_PLANK = 3;
+    public static final int IMPACT_WOODEN_PLANK_SEE = 1;
 
     public static final int IMPACT_CAT = 2;
+    public static final int IMPACT_CAT_SEE = 1;
     public static final int IMPACT_FISH_BOWL = 2;
+    public static final int IMPACT_FISH_BOWL_SEE = 1;
     public static final int IMPACT_WHIP = -1;
+    public static final int IMPACT_WHIP_SEE = -1;
     public static final int IMPACT_CHINESE_NOODLES = 3;
+    public static final int IMPACT_CHINESE_NOODLES_SEE = 1;
     public static final int IMPACT_CRATE = 1;
+    public static final int IMPACT_CRATE_SEE = 0;
     public static final int IMPACT_CONCAVE_METAL_SHEET = 0;
+    public static final int IMPACT_CONCAVE_METAL_SHEET_SEE = 0;
     public static final int IMPACT_EXPANDING_BULLET = -3;
+    public static final int IMPACT_EXPANDING_BULLET_SEE = -1;
     public static final int IMPACT_HONE = -3;
     public static final int IMPACT_HONE_ON_TARGET = -1;
+    public static final int IMPACT_HONE_SEE = -1;
     public static final int IMPACT_TASER = -1;
     public static final int IMPACT_TASER_ON_TARGET = -3;
+    public static final int IMPACT_TASER_SEE = -1;
     public static final int IMPACT_BUOY = 0;
+    public static final int IMPACT_BUOY_SEE = 0;
     public static final int IMPACT_RUM = 0;
+    public static final int IMPACT_RUM_SEE = 0;
     public static final int IMPACT_MAGAZINE = 0;
+    public static final int IMPACT_MAGAZINE_SEE = 0;
     public static final int IMPACT_METAL_DETECTOR = -1;
+    public static final int IMPACT_METAL_DETECTOR_SEE = 0;
 
     protected boolean isRevealed;
     protected Player owner;
@@ -168,6 +215,10 @@ public abstract class Card implements ICard, Serializable {
 
     public int getCardImpactOnOpinionOnTarget() {
         return IMPACT_LUXURY_CAR_KEY;
+    }
+
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_ALARM_CLOCK_SEE;
     }
 
     public void setCardRevealed(boolean cardRevealed) {

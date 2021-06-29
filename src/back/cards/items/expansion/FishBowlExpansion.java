@@ -39,6 +39,11 @@ public class FishBowlExpansion extends Card {
     }
 
     @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_FISH_BOWL_SEE;
+    }
+
+    @Override
     public boolean canBeUsed() {
         return !board.isThereEnoughGoodsForAll(false);
     }

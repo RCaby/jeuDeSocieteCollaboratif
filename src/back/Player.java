@@ -28,12 +28,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import back.cards.characters.CharacterEnum;
-import back.cards.characters.ICharacter;
+import back.cards.characters.ACharacter;
 import back.cards.items.Axe;
 import back.cards.items.Card;
 import back.cards.items.FishingRod;
 import back.cards.items.Gourd;
+import back.cards.items.OldBrief;
 import back.cards.items.expansion.BuoyExpansion;
 import back.cards.items.expansion.RumExpansion;
 import back.personalities.BasicPersonality;
@@ -77,7 +77,8 @@ public class Player implements Serializable {
     private Map<Player, Integer> opinionMap;
     private final String originalName;
     private ThreatLevel threatLevel;
-    private ICharacter playerCharacter;
+    private ACharacter playerCharacter;
+    private int nbActionPlayedThisRound;
 
     /**
      * Generates a Player.
@@ -165,6 +166,10 @@ public class Player implements Serializable {
         scrollPaneHidden.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneHidden.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_NEVER);
         scrollPaneHidden.setPreferredSize(new Dimension(170, 100));
+    }
+
+    public void updateDisplay() {
+        display.update(display.getGraphics());
     }
 
     /**
@@ -303,6 +308,9 @@ public class Player implements Serializable {
      */
     public void addCardToInventory(Card card) {
         inventory.add(card);
+        if (playerCharacter.isCardsPermanentlyRevealed() && !hasCardType(OldBrief.class)) {
+            card.setCardRevealed(true);
+        }
         if (card.isCardRevealed()) {
             addCardToRevealedPanel(card);
             inventoryRevealed.add(card);
@@ -557,10 +565,11 @@ public class Player implements Serializable {
     public void deathPurgeCards() {
         for (int index = inventory.size() - 1; index >= 0; index--) {
             var card = inventory.get(index);
-            if (card.discardOnDeath()) {
+            if (playerCharacter.isCardsLostOnDeath() || card.discardOnDeath()) {
                 discardCard(card);
             }
         }
+        updateDisplay();
     }
 
     /**
@@ -921,7 +930,7 @@ public class Player implements Serializable {
      * 
      * @param playerCharacter the playerCharacter to set
      */
-    public void setPlayerCharacter(ICharacter playerCharacter) {
+    public void setPlayerCharacter(ACharacter playerCharacter) {
         this.playerCharacter = playerCharacter;
     }
 
@@ -930,8 +939,22 @@ public class Player implements Serializable {
      * 
      * @return the playerCharacter set
      */
-    public ICharacter getPlayerCharacter() {
+    public ACharacter getPlayerCharacter() {
         return this.playerCharacter;
+    }
+
+    /**
+     * @return the nbActionPlayedThisRound
+     */
+    public int getNbActionPlayedThisRound() {
+        return nbActionPlayedThisRound;
+    }
+
+    /**
+     * @param nbActionPlayedThisRound the nbActionPlayedThisRound to set
+     */
+    public void setNbActionPlayedThisRound(int nbActionPlayedThisRound) {
+        this.nbActionPlayedThisRound = nbActionPlayedThisRound;
     }
 
 }

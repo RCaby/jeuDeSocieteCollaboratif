@@ -5,6 +5,7 @@ import java.util.List;
 import back.ActionType;
 import back.Player;
 import back.cards.items.Card;
+import front.MainBoardFront;
 
 /**
  * The interface describing the personality of a player.
@@ -45,14 +46,15 @@ public interface IPersonality {
      * Asks the player to choose which action should be played based on the
      * resources of the group.
      * 
-     * @param food    the number of food rations available
-     * @param water   the number of water rations available
-     * @param wood    the number of planks on the raft
-     * @param weather the weather on the island
-     * @param nbAlive the number of players alive
+     * @param food            the number of food rations available
+     * @param water           the number of water rations available
+     * @param wood            the number of planks on the raft
+     * @param weather         the weather on the island
+     * @param nbAlive         the number of players alive
+     * @param forbiddenAction an action which cannot be played
      * @return the action chosen
      */
-    public ActionType chooseAction(int food, int water, int wood, int weather, int nbAlive);
+    public ActionType chooseAction(int food, int water, int wood, int weather, int nbAlive, ActionType forbiddenAction);
 
     /**
      * Determines which is the most lacking resource between water, food and wooden
@@ -65,7 +67,8 @@ public interface IPersonality {
      * @param nbAlive the number of players alive
      * @return the lacking resource
      */
-    public ActionType getLackingResource(int food, int water, int wood, int weather, int nbAlive);
+    public ActionType getLackingResource(int food, int water, int wood, int weather, int nbAlive,
+            ActionType forbiddenAction);
 
     /**
      * Asks the player to choose a target for a card in a given list.
@@ -105,6 +108,16 @@ public interface IPersonality {
      * @return the chosen action
      */
     public ActionType chooseActionForPendulum();
+
+    /**
+     * Change the opinion of a player, because of a card in their inventory.
+     * 
+     * @param player         the target player
+     * @param card           the card seen
+     * @param difficulty     the difficulty of the game
+     * @param mainBoardFront the front page of the game
+     */
+    public void seeCard(Player player, Card card, int difficulty, MainBoardFront mainBoardFront);
 
     /**
      * The getter for the attribute {@code linkedPersonality}.

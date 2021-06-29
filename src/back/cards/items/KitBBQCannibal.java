@@ -49,12 +49,14 @@ public class KitBBQCannibal extends Card {
      */
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action, Card card) {
-
-        int foodGot = 2 * board.getDeadThisRound().size();
-        board.addFood(foodGot);
+        var foodGenerated = 0;
+        for (var player : board.getDeadThisRound()) {
+            foodGenerated += player.getPlayerCharacter().getRationsProducedOnDeath();
+        }
+        board.addFood(foodGenerated);
         board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
         board.getMainBoardFront().displayMessage(
-                String.format(stringsBundle.getString("KitBBQCannibal_smallDescription"), owner, foodGot));
+                String.format(stringsBundle.getString("KitBBQCannibal_smallDescription"), owner, foodGenerated));
         super.useCard(player1, player2, player3, action, card);
     }
 
@@ -70,5 +72,10 @@ public class KitBBQCannibal extends Card {
     @Override
     public int getCardImpactOnOpinion() {
         return IMPACT_KIT_BBQ_CANNIBAL;
+    }
+
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_KIT_BBQ_CANNIBAL_SEE;
     }
 }

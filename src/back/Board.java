@@ -12,7 +12,10 @@ import java.util.ResourceBundle;
 import java.util.Map.Entry;
 
 import back.cards.characters.CharacterEnum;
-import back.cards.characters.ICharacter;
+import back.cards.characters.FarSighted;
+import back.cards.characters.ACharacter;
+import back.cards.characters.Bodyguard;
+import back.cards.characters.Captain;
 import back.cards.events.EventEnum;
 import back.cards.events.IEvent;
 import back.cards.items.Card;
@@ -86,7 +89,8 @@ public class Board implements Serializable {
     private Player givingPlayerRum;
     private boolean isRumDistributionActive;
     private IEvent[] eventArray;
-    private Map<ICharacter, Player> mapCharacters;
+    private Map<Class<? extends ACharacter>, Player> mapCharacters;
+    private ActionType lastActionUsed;
 
     /**
      * Builds the game without launching it and without incorporating any
@@ -123,7 +127,7 @@ public class Board implements Serializable {
         random = new Random();
         rumDistributionList = new ArrayList<>();
         weatherList = data.getWeatherList();
-        // *eventArray = EventEnum.getEventEnumArray(stringsBundle);
+        eventArray = EventEnum.getEventEnumArray(stringsBundle);
 
         voluntaryDepartureStarted = false;
         playerList = new ArrayList<>();
@@ -158,7 +162,7 @@ public class Board implements Serializable {
         playerList.add(indexOfThisPlayer, thisPlayer);
 
         associatePersonalities();
-        // *associateCharacters();
+        associateCharacters();
         cardsDistribution();
 
         currentPhase = GamePhase.ROUND_BEGINNING;
@@ -183,7 +187,8 @@ public class Board implements Serializable {
     private void cardsDistribution() {
         int nbCardToGive = playerList.size() >= 9 ? 3 : 4;
         for (Player player : playerList) {
-            for (var nbCard = 0; nbCard < nbCardToGive; nbCard++) {
+            int nbCardToGiveThisPlayer = nbCardToGive + player.getPlayerCharacter().getInitialCardBonus();
+            for (var nbCard = 0; nbCard < nbCardToGiveThisPlayer; nbCard++) {
                 var card = deck.remove(0);
                 giveCardToPlayer(player, card);
             }
@@ -200,17 +205,19 @@ public class Board implements Serializable {
             playerListCopy.add(player);
         }
 
-        List<ICharacter> characterList = CharacterEnum.getCharacterEnumList(playerList.size(), stringsBundle);
+        List<ACharacter> characterList = CharacterEnum.getCharacterEnumList(expansionUsed, playerList.size(),
+                stringsBundle);
 
         for (var index = 0; index < playerList.size(); index++) {
             var pickedIndexCharacter = random.nextInt(characterList.size());
-            ICharacter character = characterList.get(pickedIndexCharacter);
+            ACharacter character = characterList.get(pickedIndexCharacter);
             var pickedIndexPlayer = random.nextInt(playerListCopy.size());
             var player = playerListCopy.get(pickedIndexPlayer);
             characterList.remove(character);
             playerListCopy.remove(player);
-            mapCharacters.put(character, player);
+            mapCharacters.put(character.getClass(), player);
             player.setPlayerCharacter(character);
+            character.setLinkedPlayer(player);
         }
 
     }
@@ -408,6 +415,7 @@ public class Board implements Serializable {
             cardsPlayedThisRound.clear();
             flashLightList.clear();
             barometerList.clear();
+            lastActionUsed = ActionType.NONE;
             designated = null;
             whippedPlayer = null;
             whipperPlayer = null;
@@ -416,6 +424,7 @@ public class Board implements Serializable {
             designatedForWaterThisRound.clear();
             currentPhase = GamePhase.ROUND_BEGINNING;
             clearImposedDecisions();
+            clearNbActionPlayedThisRound();
             conchOwner = null;
             matchesUsedThisRound = false;
             nextRoundPlayerList();
@@ -457,11 +466,9 @@ public class Board implements Serializable {
             var boolArray = askPlayersForCards();
             cardUsedVoteSession = boolArray[0];
             forceStop = boolArray[1];
-            if (forceStop) {
-                System.out.println("Yoho");
-            } else if (cardUsedVoteSession) {
+            if (!forceStop && cardUsedVoteSession) {
                 roundEnd(forDeparture);
-            } else {
+            } else if (!forceStop) {
                 mainBoardFront.allowPlayerToBeginVoteSession();
             }
 
@@ -476,11 +483,9 @@ public class Board implements Serializable {
             var boolArray = askPlayersForCards();
             cardUsedVoteSession = boolArray[0];
             forceStop = boolArray[1];
-            if (forceStop) {
-                System.out.println("Yolo");
-            } else if (cardUsedVoteSession) {
+            if (!forceStop && cardUsedVoteSession) {
                 roundEnd(forDeparture);
-            } else {
+            } else if (!forceStop) {
                 mainBoardFront.allowPlayerToKillPlayerAfterVote(forDeparture);
             }
 
@@ -516,27 +521,40 @@ public class Board implements Serializable {
     private void playAsCPU(Player player) {
         ActionType imposedAction = player.getImposedActionThisRound();
         if (imposedAction == ActionType.NONE) {
+            var forbiddenAction = ActionType.NONE;
+            if (player.getPlayerCharacter().isCannotUseSameAction()) {
+                forbiddenAction = lastActionUsed;
+            }
             imposedAction = player.getPersonality().chooseAction(foodRations, waterRations, nbWoodPlanks, getWeather(),
-                    getNbPlayersAlive());
+                    getNbPlayersAlive(), forbiddenAction);
         }
+        player.setNbActionPlayedThisRound(player.getNbActionPlayedThisRound() + 1);
 
         switch (imposedAction) {
             case FOOD:
                 mainBoardFront.displayMessage(player + stringsBundle.getString("foodAction"));
                 player.playerSeeksFood(this);
+                lastActionUsed = ActionType.FOOD;
                 break;
             case WATER:
                 mainBoardFront.displayMessage(player + stringsBundle.getString("waterAction"));
                 player.playerSeeksWater(this);
+                lastActionUsed = ActionType.WATER;
                 break;
             case WOOD:
                 mainBoardFront.displayMessage(player + stringsBundle.getString("woodAction"));
                 var nbTries = player.getPersonality().getNbWoodTries();
                 player.playerSeeksWood(this, nbTries, whipperPlayer, whippedPlayer);
+                lastActionUsed = ActionType.WOOD;
                 break;
             case CARD:
                 mainBoardFront.displayMessage(player + stringsBundle.getString("cardAction"));
-                player.playerSeeksCard(this);
+                var card = player.playerSeeksCard(this);
+                lastActionUsed = ActionType.CARD;
+                var farSighted = mapCharacters.get(FarSighted.class);
+                if (farSighted != null) {
+                    farSighted.getPersonality().seeCard(player, card, difficulty, mainBoardFront);
+                }
                 break;
             default:
                 break;
@@ -545,7 +563,8 @@ public class Board implements Serializable {
             watcher.addOpinionOn(player, imposedAction.getImpactOnOpinion(), difficulty, mainBoardFront);
         }
 
-        if (twicePlayingPlayer != null && twicePlayingPlayer.equals(player)) {
+        if ((twicePlayingPlayer != null && twicePlayingPlayer.equals(player))
+                || (player.getNbActionPlayedThisRound() < player.getPlayerCharacter().getNbActionPerRound())) {
             playerWillPlayTwice(player);
         }
 
@@ -612,7 +631,9 @@ public class Board implements Serializable {
                     && designatedForFoodThisRound.contains(player);
             boolean alreadyDesignatedForWater = lackingResource == ActionType.WATER
                     && designatedForWaterThisRound.contains(player);
-            if (playerState != PlayerState.DEAD && (!isConchOwner || getNbPlayersAlive() == 1)
+            boolean isPriority = voluntaryDepartureStarted && player.getState() != PlayerState.DEAD
+                    && player.getPlayerCharacter().isFirstOnRaft() && getNbPlayersAlive() > 1;
+            if (!isPriority && playerState != PlayerState.DEAD && (!isConchOwner || getNbPlayersAlive() == 1)
                     && !alreadyDesignatedForFood && !alreadyDesignatedForWater) {
                 pickablePlayers.add(player);
                 if (player.getState() == PlayerState.SICK_FROM_FOOD
@@ -872,8 +893,12 @@ public class Board implements Serializable {
      * Distributes the rations to the players still alive.
      */
     private void goodsDistributionForAlive() {
-        foodRations -= getNbPlayersAlive();
-        waterRations -= getNbPlayersAlive();
+        for (var player : playerList) {
+            if (player.getState() != PlayerState.DEAD) {
+                foodRations -= player.getPlayerCharacter().getFoodConsumptionPerRound();
+                waterRations -= player.getPlayerCharacter().getWaterConsumptionPerRound();
+            }
+        }
     }
 
     // Tools functions #####################################################
@@ -1099,9 +1124,36 @@ public class Board implements Serializable {
      * @return a boolean which indicates if there are enough rations for everyone
      */
     public boolean isThereEnoughGoodsForAll(boolean departure) {
-        int n = getNbPlayersAlive();
-        boolean enoughResources = departure ? nbWoodPlanks >= n && foodRations >= n && waterRations >= n
-                : waterRations >= n && foodRations >= n;
+
+        var nbFoodRationsNeeded = 0;
+        var nbWaterRationsNeeded = 0;
+        boolean enoughResources;
+
+        for (var player : playerList) {
+            if (player.getState() != PlayerState.DEAD) {
+                nbFoodRationsNeeded += player.getPlayerCharacter().getFoodConsumptionPerRound();
+                nbWaterRationsNeeded += player.getPlayerCharacter().getWaterConsumptionPerRound();
+            }
+        }
+        if (departure) {
+            var nbWoodPlanksNeeded = 0;
+            var nbFoodRationsNeededOnRaft = 0;
+            var nbWaterRationsNeededOnRaft = 0;
+            for (var player : playerList) {
+                if (player.getState() != PlayerState.DEAD) {
+                    nbWoodPlanksNeeded += player.getPlayerCharacter().getNbPlacesTakenOnRaft();
+                    nbFoodRationsNeededOnRaft += player.getPlayerCharacter().getFoodConsumptionOnRaft();
+                    nbWaterRationsNeededOnRaft += player.getPlayerCharacter().getWaterConsumptionOnRaft();
+                }
+            }
+            enoughResources = nbWoodPlanks >= nbWoodPlanksNeeded
+                    && foodRations >= nbFoodRationsNeededOnRaft + nbFoodRationsNeeded
+                    && waterRations >= nbWaterRationsNeededOnRaft + nbWaterRationsNeeded
+                    && (playerList.size() != 1 || playerList.get(0).getPlayerCharacter().isCanFleeAlone());
+        } else {
+            enoughResources = foodRations >= nbFoodRationsNeeded && waterRations >= nbWaterRationsNeeded;
+        }
+
         if (!enoughResources && waterRations <= foodRations) {
             lackingResource = ActionType.WATER;
         } else if (!enoughResources) {
@@ -1132,6 +1184,7 @@ public class Board implements Serializable {
             mainBoardFront.displayMessage(newChief + stringsBundle.getString("newChief"));
         }
         updateDisplayResources();
+        updateBodyguard();
         mainBoardFront.updateSouth();
     }
 
@@ -1151,17 +1204,39 @@ public class Board implements Serializable {
     }
 
     /**
-     * Cures a player from sickness and updates the game interface for the case it
-     * was a non computer player.
+     * Cures a player from sickness or death and updates the game interface for the
+     * case it was a non computer player.
      * 
      * @param player the player to cure
      */
     public void curePlayer(Player player) {
         player.setState(PlayerState.HEALTHY);
         player.setThreatLevel(ThreatLevel.NONE);
+        updateBodyguard();
         if (thisPlayer.equals(player)) {
             mainBoardFront.setAllowedToPlayCard(true);
             mainBoardFront.updateSouth();
+        }
+    }
+
+    /**
+     * Updates the bullet protection offered by the bodyguard.
+     */
+    public void updateBodyguard() {
+        for (var player : playerList) {
+            player.getPlayerCharacter().setBulletProtected(false);
+        }
+        Player bodyguard = mapCharacters.get(Bodyguard.class);
+        if (bodyguard != null) {
+            var indexBodyguard = playerList.indexOf(bodyguard);
+            var after = getPlayerAliveAfterBefore(indexBodyguard, true);
+            var before = getPlayerAliveAfterBefore(indexBodyguard, false);
+            if (!after.equals(thisPlayer)) {
+                after.getPlayerCharacter().setBulletProtected(true);
+            }
+            if (!before.equals(thisPlayer)) {
+                before.getPlayerCharacter().setBulletProtected(true);
+            }
         }
     }
 
@@ -1180,14 +1255,20 @@ public class Board implements Serializable {
             var playerAfter = getPlayerAliveAfterBefore(indexOfPlayer, true);
 
             int indexMax = player.getCardNumber();
+            var firstPlayer = playerAfter;
+            var secondPlayer = playerBefore;
+            if (playerBefore.getPlayerCharacter().isPriorityToLootNeighbor()) {
+                firstPlayer = playerBefore;
+                secondPlayer = playerAfter;
+            }
             for (var index = 0; index < indexMax; index++) {
                 var card = player.getCard(0);
                 player.removeCard(0);
 
                 if (index % 2 == 0) {
-                    giveCardToPlayer(playerAfter, card);
+                    giveCardToPlayer(firstPlayer, card);
                 } else {
-                    giveCardToPlayer(playerBefore, card);
+                    giveCardToPlayer(secondPlayer, card);
                 }
 
             }
@@ -1204,6 +1285,15 @@ public class Board implements Serializable {
     public void clearImposedDecisions() {
         for (Player player : playerList) {
             player.setImposedActionThisRound(ActionType.NONE);
+        }
+    }
+
+    /**
+     * Clear the number of action played this round for each player.
+     */
+    public void clearNbActionPlayedThisRound() {
+        for (Player player : playerList) {
+            player.setNbActionPlayedThisRound(0);
         }
     }
 

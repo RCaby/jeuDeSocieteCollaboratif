@@ -40,6 +40,11 @@ public class RumExpansion extends Card {
     }
 
     @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_RUM_SEE;
+    }
+
+    @Override
     public boolean canBeUsed() {
         return board.getNbPlayersAlive() > 1;
     }

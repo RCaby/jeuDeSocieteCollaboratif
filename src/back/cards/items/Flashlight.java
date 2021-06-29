@@ -74,4 +74,9 @@ public class Flashlight extends Card {
     public int getCardImpactOnOpinion() {
         return IMPACT_FLASHLIGHT;
     }
+
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_FLASHLIGHT_SEE;
+    }
 }

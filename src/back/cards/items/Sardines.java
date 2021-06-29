@@ -60,4 +60,9 @@ public class Sardines extends Card {
     public int getCardImpactOnOpinion() {
         return IMPACT_SARDINES;
     }
+
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_SARDINES_SEE;
+    }
 }

@@ -64,4 +64,9 @@ public class Coffee extends Card {
         return IMPACT_COCONUT;
     }
 
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_COFFEE_SEE;
+    }
+
 }

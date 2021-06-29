@@ -37,6 +37,11 @@ public class ExpandingBulletExpansion extends Card {
     }
 
     @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_EXPANDING_BULLET_SEE;
+    }
+
+    @Override
     public boolean canBeUsed() {
         return false;
     }

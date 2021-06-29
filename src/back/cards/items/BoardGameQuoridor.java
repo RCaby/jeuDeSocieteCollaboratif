@@ -50,4 +50,9 @@ public class BoardGameQuoridor extends Card {
         return IMPACT_BOARD_GAME_QUORIDOR;
     }
 
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_BOARD_GAME_QUORIDOR_SEE;
+    }
+
 }

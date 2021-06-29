@@ -65,4 +65,9 @@ public class Conch extends Card {
         return IMPACT_CONCH;
     }
 
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_CONCH_SEE;
+    }
+
 }

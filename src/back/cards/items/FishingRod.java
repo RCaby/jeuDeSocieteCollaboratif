@@ -62,4 +62,9 @@ public class FishingRod extends Card {
         return IMPACT_FISHINGROD;
     }
 
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_FISHINGROD_SEE;
+    }
+
 }

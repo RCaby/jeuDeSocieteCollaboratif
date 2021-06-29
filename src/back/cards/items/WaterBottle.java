@@ -60,4 +60,9 @@ public class WaterBottle extends Card {
     public int getCardImpactOnOpinion() {
         return IMPACT_WATER_BOTTLE;
     }
+
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_WATER_BOTTLE_SEE;
+    }
 }

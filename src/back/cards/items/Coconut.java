@@ -62,4 +62,9 @@ public class Coconut extends Card {
         return IMPACT_COCONUT;
     }
 
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_COCONUT_SEE;
+    }
+
 }

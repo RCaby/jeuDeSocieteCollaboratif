@@ -61,4 +61,9 @@ public class MetalDetectorExpansion extends Card {
         return IMPACT_METAL_DETECTOR;
     }
 
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_METAL_DETECTOR_SEE;
+    }
+
 }

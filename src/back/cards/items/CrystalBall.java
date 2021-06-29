@@ -61,4 +61,9 @@ public class CrystalBall extends Card {
     public int getCardImpactOnOpinion() {
         return IMPACT_CRYSTAL_BALL;
     }
+
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_CRYSTAL_BALL_SEE;
+    }
 }

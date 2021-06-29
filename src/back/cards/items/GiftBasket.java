@@ -81,4 +81,9 @@ public class GiftBasket extends Card {
         return IMPACT_GIFTBASKET;
     }
 
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_GIFTBASKET_SEE;
+    }
+
 }

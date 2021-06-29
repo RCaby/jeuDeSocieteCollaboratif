@@ -61,4 +61,9 @@ public class WoodenPlank extends Card {
         return IMPACT_WOODEN_PLANK;
     }
 
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_WOODEN_PLANK_SEE;
+    }
+
 }

@@ -37,4 +37,9 @@ public class BuoyExpansion extends Card {
         return IMPACT_BUOY;
     }
 
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_BUOY_SEE;
+    }
+
 }

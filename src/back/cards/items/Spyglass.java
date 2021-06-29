@@ -59,15 +59,16 @@ public class Spyglass extends Card {
             if (!player.equals(owner)) {
                 List<Card> cardsOfPlayer = new ArrayList<>();
                 for (var index = 0; index < player.getCardNumber(); index++) {
-
-                    cardsOfPlayer.add(player.getCard(index));
+                    owner.getPersonality().seeCard(player, card, board.getDifficulty(), board.getMainBoardFront());
+                    // cardsOfPlayer.add(player.getCard(index));
                 }
-                cardsMap.put(player, cardsOfPlayer);
+                // cardsMap.put(player, cardsOfPlayer);
             }
 
         }
-        board.setSpyglassMap(cardsMap);
-        board.showSpyglassMap(owner);
+        // board.setSpyglassMap(cardsMap);
+        // board.showSpyglassMap(owner);
+
         board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
         board.getMainBoardFront()
                 .displayMessage(String.format(stringsBundle.getString("Spyglass_smallDescription"), owner));
@@ -77,6 +78,11 @@ public class Spyglass extends Card {
     @Override
     public int getCardImpactOnOpinion() {
         return IMPACT_SPYGLASS;
+    }
+
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_SPYGLASS_SEE;
     }
 
 }

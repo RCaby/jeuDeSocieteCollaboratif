@@ -37,11 +37,13 @@ public class PersonalityAggressive extends BasicPersonality {
      * personality.
      */
     @Override
-    public ActionType chooseAction(int food, int water, int wood, int weather, int nbAlive) {
-        if (random.nextInt(2) % 2 == 0) {
+    public ActionType chooseAction(int food, int water, int wood, int weather, int nbAlive,
+            ActionType forbiddenAction) {
+        if (random.nextInt(2) % 2 == 0
+                && (!linkedPlayer.getPlayerCharacter().isCannotUseSameAction() || forbiddenAction != ActionType.CARD)) {
             return ActionType.CARD;
         }
-        return getLackingResource(food, water, wood, weather, nbAlive);
+        return getLackingResource(food, water, wood, weather, nbAlive, forbiddenAction);
 
     }
 
@@ -136,10 +138,19 @@ public class PersonalityAggressive extends BasicPersonality {
         List<Player> alivePlayers = getAlivePlayersIn(playerList);
         if (alivePlayers.size() == 1) {
             return linkedPlayer;
-        } else {
-            alivePlayers.remove(linkedPlayer);
-            return linkedPlayer.getLeastLikedPlayerIn(alivePlayers);
         }
+        List<Player> protectedPlayers = new ArrayList<>();
+        for (var player : alivePlayers) {
+            if (player.getPlayerCharacter().isBulletProtected()) {
+                protectedPlayers.add(player);
+            }
+        }
+        alivePlayers.removeAll(protectedPlayers);
+        if (alivePlayers.size() == 1) {
+            return alivePlayers.get(0);
+        }
+        alivePlayers.remove(linkedPlayer);
+        return linkedPlayer.getLeastLikedPlayerIn(alivePlayers);
 
     }
 

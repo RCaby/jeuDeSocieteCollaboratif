@@ -48,4 +48,9 @@ public class OldBrief extends Card {
     public int getCardImpactOnOpinion() {
         return IMPACT_OLD_BRIEF;
     }
+
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_OLD_BRIEF_SEE;
+    }
 }

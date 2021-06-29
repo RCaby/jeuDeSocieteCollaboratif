@@ -48,4 +48,9 @@ public class ToiletBrush extends Card {
     public int getCardImpactOnOpinion() {
         return IMPACT_TOILET_BRUSH;
     }
+
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_TOILET_BRUSH_SEE;
+    }
 }

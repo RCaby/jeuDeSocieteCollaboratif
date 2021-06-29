@@ -34,4 +34,9 @@ public class MagazineExpansion extends Card {
         return IMPACT_MAGAZINE;
     }
 
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_MAGAZINE_SEE;
+    }
+
 }

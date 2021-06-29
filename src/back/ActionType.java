@@ -17,6 +17,14 @@ public enum ActionType {
     private static final Random RANDOM = new Random();
     private static final ActionType[] L_ACTION_TYPES = new ActionType[] { FOOD, WATER, WOOD, CARD };
 
+    public static final ActionType getRandomActionType(ActionType forbiddenActionType) {
+        var pickedAction = getRandomActionType();
+        while (pickedAction == forbiddenActionType) {
+            pickedAction = getRandomActionType();
+        }
+        return pickedAction;
+    }
+
     public static final ActionType getRandomActionType() {
         var pickedAction = RANDOM.nextInt(4);
         return L_ACTION_TYPES[pickedAction];

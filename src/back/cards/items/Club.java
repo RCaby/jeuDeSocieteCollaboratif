@@ -62,4 +62,8 @@ public class Club extends Card {
         return IMPACT_CLUB;
     }
 
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_CLUB_SEE;
+    }
 }

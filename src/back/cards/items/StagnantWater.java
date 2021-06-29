@@ -71,4 +71,9 @@ public class StagnantWater extends Card {
         return IMPACT_STAGNANT_WATER;
     }
 
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_STAGNANT_WATER_SEE;
+    }
+
 }

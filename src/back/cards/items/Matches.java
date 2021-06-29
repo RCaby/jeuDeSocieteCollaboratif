@@ -62,4 +62,9 @@ public class Matches extends Card {
         return IMPACT_MATCHES;
     }
 
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_MATCHES_SEE;
+    }
+
 }

@@ -39,6 +39,11 @@ public class ChineseNoodlesExpansion extends Card {
     }
 
     @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_CHINESE_NOODLES_SEE;
+    }
+
+    @Override
     public boolean canBeUsed() {
         return board.getWaterRations() >= 2;
     }

@@ -73,4 +73,9 @@ public class Barometer extends Card {
     public int getCardImpactOnOpinion() {
         return IMPACT_BAROMETER;
     }
+
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_BAROMETER_SEE;
+    }
 }

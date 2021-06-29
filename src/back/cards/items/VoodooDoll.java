@@ -103,4 +103,9 @@ public class VoodooDoll extends Card {
         allowedStates.add(PlayerState.DEAD);
         return allowedStates;
     }
+
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_VOODOO_DOLL_SEE;
+    }
 }

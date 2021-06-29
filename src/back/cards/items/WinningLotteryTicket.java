@@ -51,4 +51,9 @@ public class WinningLotteryTicket extends Card {
         return IMPACT_WINNING_LOTTERY_TICKET;
     }
 
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_WINNING_LOTTERY_SEE;
+    }
+
 }

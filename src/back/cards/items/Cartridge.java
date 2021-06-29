@@ -59,4 +59,9 @@ public class Cartridge extends Card {
     public int getCardImpactOnOpinion() {
         return IMPACT_CARTRIDGE;
     }
+
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_CARTRIDGE_SEE;
+    }
 }

@@ -61,4 +61,9 @@ public class Axe extends Card {
     public int getCardImpactOnOpinion() {
         return IMPACT_AXE;
     }
+
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_AXE_SEE;
+    }
 }

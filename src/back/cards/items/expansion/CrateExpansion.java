@@ -37,4 +37,9 @@ public class CrateExpansion extends Card {
         return IMPACT_CRATE;
     }
 
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_CRATE_SEE;
+    }
+
 }

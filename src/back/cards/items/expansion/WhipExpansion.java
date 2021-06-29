@@ -46,6 +46,11 @@ public class WhipExpansion extends Card {
     }
 
     @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_WHIP_SEE;
+    }
+
+    @Override
     public boolean canBeUsed() {
         return board.getHealthyPlayerList().size() > 1;
     }

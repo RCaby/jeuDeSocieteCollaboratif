@@ -70,4 +70,9 @@ public class VegetableMill extends Card {
     public int getCardImpactOnOpinion() {
         return IMPACT_VEGETABLE_MILL;
     }
+
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_VEGETABLE_MILL_SEE;
+    }
 }

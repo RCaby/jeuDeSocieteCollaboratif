@@ -37,6 +37,11 @@ public class ConcaveMetalSheetExpansion extends Card {
     }
 
     @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_CONCAVE_METAL_SHEET_SEE;
+    }
+
+    @Override
     public boolean canBeUsed() {
         return false;
     }

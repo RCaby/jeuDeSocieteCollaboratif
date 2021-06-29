@@ -52,6 +52,11 @@ public class TaserExpansion extends Card {
     }
 
     @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_TASER_SEE;
+    }
+
+    @Override
     public boolean[] getNeededParameters() {
         return new boolean[] { true, false, false, false, true };
     }

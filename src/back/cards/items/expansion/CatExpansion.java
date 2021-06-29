@@ -41,4 +41,9 @@ public class CatExpansion extends Card {
         return !board.isThereEnoughGoodsForAll(false);
     }
 
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_CAT_SEE;
+    }
+
 }

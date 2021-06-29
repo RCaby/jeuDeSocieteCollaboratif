@@ -49,4 +49,9 @@ public class LuxuryCarKey extends Card {
         return IMPACT_LUXURY_CAR_KEY;
     }
 
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_LUXURY_CAR_KEY_SEE;
+    }
+
 }

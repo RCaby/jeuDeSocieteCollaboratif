@@ -8,4 +8,5 @@ public class FarSighted extends ACharacter {
         characterName = stringBundle.getString("farSightedName");
         linkedCharacterEnum = CharacterEnum.FARSIGHTED;
     }
+
 }

@@ -39,7 +39,15 @@ public enum CharacterEnum {
             FARSIGHTED, SUMO, BODYGUARD, SALESMAN, MODEL, CAPTAIN, KID };
     static Random random = new Random();
 
-    public static List<ICharacter> getCharacterEnumList(int nbPlayers, ResourceBundle stringBundle) {
+    public static List<ACharacter> getCharacterEnumList(boolean isExpansionUsed, int nbPlayers,
+            ResourceBundle stringBundle) {
+        if (!isExpansionUsed) {
+            List<ACharacter> charactersListNoExpansion = new ArrayList<>();
+            for (var index = 0; index < nbPlayers; index++) {
+                charactersListNoExpansion.add(new NeutralCharacter(stringBundle));
+            }
+            return charactersListNoExpansion;
+        }
         CharacterEnum[] availableCharacters;
         if (nbPlayers < 5) {
             availableCharacters = lessThanFivePlayers;
@@ -57,7 +65,7 @@ public enum CharacterEnum {
             }
         }
 
-        List<ICharacter> pickedCharacters = new ArrayList<>();
+        List<ACharacter> pickedCharacters = new ArrayList<>();
         for (var index = 0; index < nbPlayers; index++) {
             pickedCharacters.add(availableCharacters[pickedIndex.get(index)].getInstance(stringBundle));
         }
@@ -65,16 +73,16 @@ public enum CharacterEnum {
         return pickedCharacters;
     }
 
-    public ICharacter getInstance(ResourceBundle stringBundle) {
-        ICharacter newInstanceICharacter = null;
+    public ACharacter getInstance(ResourceBundle stringBundle) {
+        ACharacter newInstanceACharacter = null;
         try {
             Constructor<?> constructor = linkedClass.getConstructor(ResourceBundle.class);
             Object instance = constructor.newInstance(stringBundle);
-            newInstanceICharacter = (ICharacter) instance;
+            newInstanceACharacter = (ACharacter) instance;
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
                 | IllegalArgumentException | InvocationTargetException e) {
             e.printStackTrace();
         }
-        return newInstanceICharacter;
+        return newInstanceACharacter;
     }
 }

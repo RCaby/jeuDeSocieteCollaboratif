@@ -71,4 +71,9 @@ public class RottenFish extends Card {
         return IMPACT_ROTTEN_FISH;
     }
 
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_ROTTEN_FISH_SEE;
+    }
+
 }

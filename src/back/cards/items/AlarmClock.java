@@ -87,6 +87,11 @@ public class AlarmClock extends Card {
     }
 
     @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_ALARM_CLOCK_SEE;
+    }
+
+    @Override
     public List<PlayerState> getRequiredState() {
         List<PlayerState> allowedStates = new ArrayList<>();
         allowedStates.add(PlayerState.HEALTHY);

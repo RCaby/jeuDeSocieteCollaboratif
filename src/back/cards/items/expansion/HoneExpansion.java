@@ -59,6 +59,11 @@ public class HoneExpansion extends Card {
     }
 
     @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_HONE_SEE;
+    }
+
+    @Override
     public boolean canBeUsed() {
         return owner.getCardType(Axe.class) != null && board.getNbPlayersAlive() > 1;
     }

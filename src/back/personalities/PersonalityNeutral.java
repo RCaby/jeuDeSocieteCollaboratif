@@ -3,6 +3,8 @@ package back.personalities;
 import java.util.ResourceBundle;
 
 import back.Player;
+import back.cards.items.Card;
+import front.MainBoardFront;
 
 /**
  * A neutral personality does not need any interaction with any player, the user
@@ -41,6 +43,11 @@ public class PersonalityNeutral extends BasicPersonality {
     @Override
     public boolean updatePersonality() {
         return false;
+    }
+
+    @Override
+    public void seeCard(Player picker, Card card, int difficulty, MainBoardFront mainBoardFront) {
+        mainBoardFront.displayMessage(String.format(stringsBundle.getString("seePickedCard"), picker, card));
     }
 
 }

@@ -10,6 +10,7 @@ import back.ActionType;
 import back.Player;
 import back.PlayerState;
 import back.cards.items.Card;
+import front.MainBoardFront;
 
 /**
  * The basic personality which makes every choice randomly.
@@ -63,14 +64,23 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
      * cannot be found when the weather is 0.
      */
     @Override
-    public ActionType getLackingResource(int food, int water, int wood, int weather, int nbAlive) {
-        if (weather != 0 && water <= food && (water < nbAlive || wood >= nbAlive)) {
+    public ActionType getLackingResource(int food, int water, int wood, int weather, int nbAlive,
+            ActionType forbiddenAction) {
+        if (weather != 0 && water <= food && (water < nbAlive || wood >= nbAlive)
+                && forbiddenAction != ActionType.WATER) {
             return ActionType.WATER;
-        } else if (food < nbAlive || wood >= nbAlive) {
+        } else if (food < nbAlive || wood >= nbAlive && forbiddenAction != ActionType.FOOD) {
             return ActionType.FOOD;
-        } else {
+        } else if (forbiddenAction != ActionType.WOOD) {
             return ActionType.WOOD;
+        } else {
+            return ActionType.FOOD;
         }
+    }
+
+    @Override
+    public void seeCard(Player player, Card card, int difficulty, MainBoardFront mainBoardFront) {
+        linkedPlayer.addOpinionOn(player, card.getCardImpactOnOpinionOnSee(), difficulty, mainBoardFront);
     }
 
     @Override
@@ -88,8 +98,9 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
     }
 
     @Override
-    public ActionType chooseAction(int food, int water, int wood, int weather, int nbAlive) {
-        return ActionType.getRandomActionType();
+    public ActionType chooseAction(int food, int water, int wood, int weather, int nbAlive,
+            ActionType forbiddenAction) {
+        return ActionType.getRandomActionType(forbiddenAction);
     }
 
     @Override

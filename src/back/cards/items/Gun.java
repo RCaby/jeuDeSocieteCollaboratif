@@ -63,7 +63,11 @@ public class Gun extends Card {
         if (player1 != null && owner != null) {
             var cardCartridge = owner.getCardType(Cartridge.class);
             var cardExpandingCartridge = owner.getCardType(ExpandingBulletExpansion.class);
-            if (cardExpandingCartridge != null) {
+
+            if (player1.getPlayerCharacter().isBulletProtected()) {
+                board.getMainBoardFront()
+                        .displayMessage(String.format(stringsBundle.getString("isProtected"), player1));
+            } else if (cardExpandingCartridge != null) {
                 player1.addOpinionOn(owner, getCardImpactOnOpinionOnTarget(), board.getDifficulty(),
                         board.getMainBoardFront());
                 board.getMainBoardFront()
@@ -132,6 +136,11 @@ public class Gun extends Card {
     @Override
     public int getCardImpactOnOpinionOnTarget() {
         return IMPACT_GUN_ON_TARGET;
+    }
+
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_GUN_SEE;
     }
 
     @Override

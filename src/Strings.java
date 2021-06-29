@@ -273,5 +273,31 @@ public class Strings extends ListResourceBundle {
                         { "personalityUpdate", "%s has updated their personality !" },
                         { "useExpansionBox", "Use the expansion" },
                         { "rumDistributionEvent", "%s is giving a %s to %s." },
-                        { "choiceCardRum", "Choose a card to give to %s." } };
+                        { "choiceCardRum", "Choose a card to give to %s." }, { "bodyguardName", "Bodyguard" },
+                        { "captainName", "Captain" }, { "dowserName", "Dowser" }, { "farSightedName", "Far Sighted" },
+                        { "foodAllName", "Food All" }, { "hypnotistName", "Hypnotist" }, { "kidName", "Kid" },
+                        { "magicianName", "Magician" }, { "modelName", "Model" }, { "naturistName", "Naturist" },
+                        { "salesManName", "Salesman" }, { "scavengerName", "Scavenger" },
+                        { "sharpEyeName", "Sharp Eye" }, { "snakeCharmerName", "Snake Charmer" },
+                        { "strappingName", "Strapping" }, { "sumoName", "Sumo" }, { "survivalistName", "Survivalist" },
+                        { "timeTravellerName", "Time Traveller" }, { "uptightName", "Uptight" },
+                        { "wholesaleFishermanName", "Wholesale Fisherman" }, { "armedThreatName", "Armed Threat" },
+                        { "attackName", "Attack" }, { "attackByTheOthersName", "Attack by the Others" },
+                        { "bannedPlaceName", "Banned Place" }, { "barterName", "Barter" },
+                        { "bodyArmourName", "Body Armour" }, { "careerChangeName", "Career Change" },
+                        { "charityName", "Charity" }, { "crazyPsychicName", "Crazy Psychic" },
+                        { "desertedCampName", "Deserted Camp" }, { "giftName", "Gift" },
+                        { "happyBirthdayName", "Happy Birthday" }, { "healerName", "Healer" },
+                        { "heavySwellName", "Heavy Swell" }, { "insularTaxName", "Insular Tax" },
+                        { "jerrycanName", "Jerrycan" }, { "loggerName", "Logger" }, { "lootingName", "Looting" },
+                        { "marketDayName", "Market Day" }, { "mouldName", "Mould" }, { "newFriendName", "New Friend" },
+                        { "planeOfTheOthersName", "Plane of the Others" }, { "potatoCropName", "Potato Crop" },
+                        { "prestigeHostageName", "Prestige Hostage" }, { "prisonerName", "Prisoner" },
+                        { "rainMakingName", "Rain Making" }, { "rumblingVolcanoName", "Rumbling Volcano" },
+                        { "secretStashName", "Secret Stash" }, { "starvingCrocodileName", "Starving Crocodile" },
+                        { "tribalCemeteryName", "Tribal Cemetery" },
+                        { "isProtected", "%s is protected by a bodyguard and can't be shot." },
+                        { "seePickedCard", "%s picked the card %s." }
+
+        };
 }

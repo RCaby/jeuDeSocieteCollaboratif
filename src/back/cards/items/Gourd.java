@@ -62,4 +62,9 @@ public class Gourd extends Card {
         return IMPACT_GOURD;
     }
 
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_GOURD_SEE;
+    }
+
 }

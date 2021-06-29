@@ -121,6 +121,11 @@ public class SleepingPills extends Card {
         }
 
         @Override
+        public int getCardImpactOnOpinionOnSee() {
+                return IMPACT_SLEEPING_PILLS_SEE;
+        }
+
+        @Override
         public List<PlayerState> getRequiredState() {
                 List<PlayerState> allowedStates = new ArrayList<>();
                 allowedStates.add(PlayerState.HEALTHY);

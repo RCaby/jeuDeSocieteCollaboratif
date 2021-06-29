@@ -60,4 +60,9 @@ public class Sandwich extends Card {
     public int getCardImpactOnOpinion() {
         return IMPACT_SANDWICH;
     }
+
+    @Override
+    public int getCardImpactOnOpinionOnSee() {
+        return IMPACT_SANDWICH_SEE;
+    }
 }
