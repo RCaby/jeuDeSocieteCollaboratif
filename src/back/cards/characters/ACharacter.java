@@ -20,7 +20,7 @@ public abstract class ACharacter implements ICharacter, Serializable {
     protected int foodConsumptionOnRaft = 1;
     protected int rationsProducedOnDeath = 2;
     protected boolean spyOnPickCardAction = false;
-    protected boolean bulletProtected = false;
+    protected boolean bulletProtected = false; // TODO useless at the moment
     protected boolean cardsLostOnDeath = false;
     protected boolean cardsPermanentlyRevealed = false;
     protected boolean priorityToLootNeighbor = false;
@@ -28,6 +28,8 @@ public abstract class ACharacter implements ICharacter, Serializable {
     protected boolean canFleeAlone = true;
     protected boolean firstOnRaft = false;
     protected Player linkedPlayer;
+
+    // TODO method to get food etc in each character involved
 
     protected ACharacter(ResourceBundle stringBundle) {
         this.stringBundle = stringBundle;

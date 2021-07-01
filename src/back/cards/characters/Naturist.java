@@ -7,5 +7,6 @@ public class Naturist extends ACharacter {
         super(stringBundle);
         characterName = stringBundle.getString("naturistName");
         linkedCharacterEnum = CharacterEnum.NATURIST;
+        cardsPermanentlyRevealed = true;
     }
 }

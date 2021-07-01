@@ -334,7 +334,7 @@ public class Strings extends ListResourceBundle {
                         { "secretStashName", "Secret Stash" }, { "starvingCrocodileName", "Starving Crocodile" },
                         { "tribalCemeteryName", "Tribal Cemetery" },
                         { "isProtected", "%s is protected by a bodyguard and can't be shot." },
-                        { "seePickedCard", "%s picked the card %s." }
+                        { "seePickedCard", "%s has the card %s." }, { "characterReveal", "%s has the character %s." },
 
         };
 }

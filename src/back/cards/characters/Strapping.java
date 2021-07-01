@@ -7,5 +7,8 @@ public class Strapping extends ACharacter {
         super(stringBundle);
         characterName = stringBundle.getString("strappingName");
         linkedCharacterEnum = CharacterEnum.STRAPPING;
+        nbActionPerRound = 2;
+        waterConsumptionPerRound = 2;
+        foodConsumptionPerRound = 2;
     }
 }

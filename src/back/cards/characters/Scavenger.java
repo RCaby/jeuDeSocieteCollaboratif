@@ -7,5 +7,6 @@ public class Scavenger extends ACharacter {
         super(stringBundle);
         characterName = stringBundle.getString("scavengerName");
         linkedCharacterEnum = CharacterEnum.SCAVENGER;
+        firstOnRaft = true;
     }
 }

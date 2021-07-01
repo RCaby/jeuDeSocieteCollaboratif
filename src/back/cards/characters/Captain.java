@@ -7,5 +7,6 @@ public class Captain extends ACharacter {
         super(stringBundle);
         characterName = stringBundle.getString("captainName");
         linkedCharacterEnum = CharacterEnum.CAPTAIN;
+        firstOnRaft = true;
     }
 }

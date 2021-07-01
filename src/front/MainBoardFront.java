@@ -1499,7 +1499,8 @@ public class MainBoardFront implements Serializable {
 
             for (Entry<Player, JCheckBox> entry : targetMap.entrySet()) {
                 if (!entry.getValue().isSelected()) {
-                    entry.getValue().setEnabled(nbTargetsSelected < nbTargetsRequired);
+                    entry.getValue().setEnabled(nbTargetsSelected < nbTargetsRequired
+                            && cardCurrentlyUsed.getRequiredState().contains(entry.getKey().getState()));
                 }
             }
             for (Entry<ActionType, JCheckBox> entry : actionCheckBoxMap.entrySet()) {

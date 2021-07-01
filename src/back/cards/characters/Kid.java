@@ -7,5 +7,7 @@ public class Kid extends ACharacter {
         super(stringBundle);
         characterName = stringBundle.getString("kidName");
         linkedCharacterEnum = CharacterEnum.KID;
+        nbPlacesTakenOnRaft = 0;
+        canFleeAlone = false;
     }
 }

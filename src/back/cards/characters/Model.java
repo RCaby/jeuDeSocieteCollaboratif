@@ -7,5 +7,7 @@ public class Model extends ACharacter {
         super(stringBundle);
         characterName = stringBundle.getString("modelName");
         linkedCharacterEnum = CharacterEnum.MODEL;
+        foodConsumptionPerRound = 0;
+        foodConsumptionOnRaft = 0;
     }
 }

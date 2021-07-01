@@ -7,5 +7,8 @@ public class Survivalist extends ACharacter {
         super(stringBundle);
         characterName = stringBundle.getString("survivalistName");
         linkedCharacterEnum = CharacterEnum.SURVIVALIST;
+        waterConsumptionOnRaft = 0;
+        waterConsumptionPerRound = 0;
+        nbPlacesTakenOnRaft = 2;
     }
 }
