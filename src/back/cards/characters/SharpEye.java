@@ -7,5 +7,6 @@ public class SharpEye extends ACharacter {
         super(stringBundle);
         characterName = stringBundle.getString("sharpEyeName");
         linkedCharacterEnum = CharacterEnum.SHARP_EYE;
+        spyOnPickCardAction = true;
     }
 }

@@ -7,7 +7,18 @@ public class FarSighted extends ACharacter {
         super(stringBundle);
         characterName = stringBundle.getString("farSightedName");
         linkedCharacterEnum = CharacterEnum.FARSIGHTED;
-        spyOnPickCardAction = true;
+
+    }
+
+    @Override
+    public int updateWaterCollect(int waterRation, int weather) {
+        if (weather == 0) {
+            return 1;
+        }
+        if (weather == 3) {
+            return 2;
+        }
+        return weather;
     }
 
 }

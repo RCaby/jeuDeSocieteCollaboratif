@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import back.ActionType;
 import back.Player;
 import back.PlayerState;
+import back.cards.characters.FarSighted;
 import back.cards.items.Card;
 import front.MainBoardFront;
 
@@ -66,8 +67,8 @@ public abstract class BasicPersonality implements IPersonality, Serializable {
     @Override
     public ActionType getLackingResource(int food, int water, int wood, int weather, int nbAlive,
             ActionType forbiddenAction) {
-        if (weather != 0 && water <= food && (water < nbAlive || wood >= nbAlive)
-                && forbiddenAction != ActionType.WATER) {
+        if ((weather != 0 || linkedPlayer.getPlayerCharacter() instanceof FarSighted) && water <= food
+                && (water < nbAlive || wood >= nbAlive) && forbiddenAction != ActionType.WATER) {
             return ActionType.WATER;
         } else if (food < nbAlive || wood >= nbAlive && forbiddenAction != ActionType.FOOD) {
             return ActionType.FOOD;

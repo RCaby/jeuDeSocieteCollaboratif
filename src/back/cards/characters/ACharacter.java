@@ -35,7 +35,7 @@ public abstract class ACharacter implements ICharacter, Serializable {
         this.stringBundle = stringBundle;
     }
 
-    public int updateWaterCollect(int waterRation) {
+    public int updateWaterCollect(int waterRation, int weather) {
         return waterRation;
     }
 

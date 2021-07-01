@@ -10,4 +10,19 @@ public class Kid extends ACharacter {
         nbPlacesTakenOnRaft = 0;
         canFleeAlone = false;
     }
+
+    @Override
+    public int updateFoodCollect(int foodRation) {
+        return Math.min(foodRation, 2);
+    }
+
+    @Override
+    public int updateWaterCollect(int waterRation, int weather) {
+        return Math.min(waterRation, 2);
+    }
+
+    @Override
+    public int updateWoodCollect(int woodRation) {
+        return Math.min(woodRation, 2);
+    }
 }
