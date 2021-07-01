@@ -7,6 +7,7 @@ public class FarSighted extends ACharacter {
         super(stringBundle);
         characterName = stringBundle.getString("farSightedName");
         linkedCharacterEnum = CharacterEnum.FARSIGHTED;
+        spyOnPickCardAction = true;
     }
 
 }

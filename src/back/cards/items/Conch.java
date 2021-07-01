@@ -52,6 +52,9 @@ public class Conch extends Card {
         if (owner != null) {
             board.setConchOwner(owner);
             board.setChief(owner);
+            if (owner.equals(board.getDesignated())) {
+                board.setDesignated(null);
+            }
             board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
             board.getMainBoardFront()
                     .displayMessage(String.format(stringsBundle.getString("Conch_smallDescription"), owner));

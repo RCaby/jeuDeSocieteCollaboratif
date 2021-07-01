@@ -7,5 +7,7 @@ public class Sumo extends ACharacter {
         super(stringBundle);
         characterName = stringBundle.getString("sumoName");
         linkedCharacterEnum = CharacterEnum.SUMO;
+        rationsProducedOnDeath = 4;
+        initialCardBonus = 1;
     }
 }

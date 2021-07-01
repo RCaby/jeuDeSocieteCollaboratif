@@ -7,5 +7,6 @@ public class Uptight extends ACharacter {
         super(stringBundle);
         characterName = stringBundle.getString("uptightName");
         linkedCharacterEnum = CharacterEnum.UPTIGHT;
+        cannotUseSameAction = true;
     }
 }

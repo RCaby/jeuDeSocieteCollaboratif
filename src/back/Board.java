@@ -218,6 +218,10 @@ public class Board implements Serializable {
             mapCharacters.put(character.getClass(), player);
             player.setPlayerCharacter(character);
             character.setLinkedPlayer(player);
+            if (expansionUsed) {
+                mainBoardFront
+                        .displayMessage(String.format(stringsBundle.getString("characterReveal"), player, character));
+            }
         }
 
     }
@@ -1681,6 +1685,13 @@ public class Board implements Serializable {
      */
     public void setThisPlayer(Player thisPlayer) {
         this.thisPlayer = thisPlayer;
+    }
+
+    /**
+     * @return the designated
+     */
+    public Player getDesignated() {
+        return designated;
     }
 
     /**
