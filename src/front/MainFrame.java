@@ -1,10 +1,14 @@
 package front;
 
+import static java.awt.Frame.MAXIMIZED_BOTH;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+
+import java.awt.GraphicsEnvironment;
+import java.awt.DisplayMode;
 
 import back.Board;
 
@@ -13,6 +17,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.UIManager.*;
+import javax.swing.plaf.ColorUIResource;
 
 public class MainFrame {
     JFrame frame;
@@ -20,6 +25,8 @@ public class MainFrame {
     CardLayout mainPanelLayout;
     Board board;
     private ResourceBundle stringsBundle;
+    private static final DisplayMode DIM = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
+            .getDisplayMode();
 
     public static final String WELCOME_SCREEN = "Welcome_Screen";
     public static final String MAIN_SCREEN = "Main_Screen";
@@ -37,7 +44,7 @@ public class MainFrame {
         }
 
         frame = new JFrame("Game");
-        frame.setSize(1280, 720);
+        frame.setSize(DIM.getWidth(), DIM.getHeight());
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         var locale = new Locale("en", "US");

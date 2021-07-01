@@ -20,6 +20,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.GraphicsEnvironment;
+import java.awt.DisplayMode;
 import java.io.Serializable;
 
 import javax.swing.BorderFactory;
@@ -54,8 +56,15 @@ public class Player implements Serializable {
     private static final long serialVersionUID = 2874539910717357461L;
     public static final int IMPACT_VOTE_ON_OPINION = -3;
     public static final int IMPACT_CHIEF_DESIGNATION_ON_OPINION = -5;
-    private static final int CARD_WIDTH = 65;
-    private static final int CARD_HEIGHT = 65; // ratio of 1 needed.
+    private static final transient DisplayMode DIM = GraphicsEnvironment.getLocalGraphicsEnvironment()
+            .getDefaultScreenDevice().getDisplayMode();
+    private static final int CARD_WIDTH = (int) (0.0339 * DIM.getWidth());
+    private static final int CARD_HEIGHT = (int) (0.06 * DIM.getHeight());
+    private static final int DISPLAY_WIDTH = (int) (0.23 * DIM.getWidth());
+    private static final int DISPLAY_HEIGHT = (int) (0.11 * DIM.getHeight());
+    private static final int SCROLL_PANE_WIDTH = (int) (0.09 * DIM.getWidth());
+    private static final int SCROLL_PANE_HEIGHT = (int) (0.0092 * DIM.getHeight());
+
     private List<Card> inventory;
     private List<Card> inventoryRevealed;
     private List<Card> inventoryHidden;
@@ -65,6 +74,7 @@ public class Player implements Serializable {
     private boolean isChief;
     private boolean currentPlayer;
     private JLabel chiefLabel;
+    private JLabel characterLabel;
     private JLabel stateLabel;
     private JPanel cardRevealedPanel;
     private JPanel cardHiddenPanel;
@@ -120,7 +130,7 @@ public class Player implements Serializable {
         display.add(voidPanelSouth, BorderLayout.SOUTH);
 
         display.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        display.setPreferredSize(new Dimension(525, 132));
+        display.setPreferredSize(new Dimension(DISPLAY_WIDTH, DISPLAY_HEIGHT));
         displayCenter.setLayout(new GridLayout(1, 0, 10, 0));
 
         nameLabel = new JLabel(name);
@@ -129,23 +139,27 @@ public class Player implements Serializable {
 
         var statePanelContainer = new JPanel(new GridLayout(1, 1));
 
-        var statePanel = new JPanel(new BorderLayout());
+        var statePanel = new JPanel(new GridLayout(3, 1));
         statePanelContainer.add(statePanel);
         stateLabel = new JLabel(state.toString());
 
         displayCenter.add(statePanelContainer);
-        var statePanelNorth = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        var statePanelCenter = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        statePanel.add(statePanelNorth, BorderLayout.NORTH);
-        statePanel.add(statePanelCenter, BorderLayout.CENTER);
-        statePanelNorth.add(stateLabel);
-        statePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        var statePanelName = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        var statePanelChief = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        var statePanelCharacter = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        statePanel.add(statePanelChief);
+        statePanel.add(statePanelName);
+        statePanel.add(statePanelCharacter);
+        statePanelName.add(stateLabel);
+        statePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         chiefLabel = new JLabel(stringsBundle.getString("not_chief_label"));
+        characterLabel = new JLabel();
 
-        statePanelCenter.add(chiefLabel);
+        statePanelChief.add(chiefLabel);
+        statePanelCharacter.add(characterLabel);
 
-        cardRevealedPanel = new JPanel(new GridLayout(1, 0, 4, 4));
+        cardRevealedPanel = new JPanel(new GridLayout(1, 0, 4, 2));
 
         var cardRevealedScrollableContainer = new JPanel(new GridLayout(1, 1));
 
@@ -155,9 +169,9 @@ public class Player implements Serializable {
         cardRevealedScrollableContainer.add(scrollPaneRevealed);
         scrollPaneRevealed.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneRevealed.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_NEVER);
-        scrollPaneRevealed.setPreferredSize(new Dimension(170, 100));
+        scrollPaneRevealed.setPreferredSize(new Dimension(SCROLL_PANE_WIDTH, SCROLL_PANE_HEIGHT));
 
-        cardHiddenPanel = new JPanel(new GridLayout(1, 0, 4, 4));
+        cardHiddenPanel = new JPanel(new GridLayout(1, 0, 4, 2));
         var cardHiddenScrollableContainer = new JPanel(new GridLayout(1, 1));
 
         displayCenter.add(cardHiddenScrollableContainer);
@@ -165,7 +179,7 @@ public class Player implements Serializable {
         cardHiddenScrollableContainer.add(scrollPaneHidden);
         scrollPaneHidden.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneHidden.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_NEVER);
-        scrollPaneHidden.setPreferredSize(new Dimension(170, 100));
+        scrollPaneHidden.setPreferredSize(new Dimension(SCROLL_PANE_WIDTH, SCROLL_PANE_HEIGHT));
     }
 
     public void updateDisplay() {
@@ -932,6 +946,8 @@ public class Player implements Serializable {
      */
     public void setPlayerCharacter(ACharacter playerCharacter) {
         this.playerCharacter = playerCharacter;
+        characterLabel.setText(playerCharacter.getCharacterName());
+        characterLabel.setToolTipText(playerCharacter.getCharacterDescription());
     }
 
     /**

@@ -15,6 +15,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.GraphicsEnvironment;
+import java.awt.DisplayMode;
 import java.util.ResourceBundle;
 
 public class WelcomeScreen {
@@ -26,6 +28,10 @@ public class WelcomeScreen {
     private JTextField nameField;
     private JComboBox<String> difficultyChoice;
     private JCheckBox useExpansionBox;
+    private static final transient DisplayMode DIM = GraphicsEnvironment.getLocalGraphicsEnvironment()
+            .getDefaultScreenDevice().getDisplayMode();
+    private static final int NAME_FIELD_WIDTH = (int) (0.0521 * DIM.getWidth());
+    private static final int NAME_FIELD_HEIGHT = (int) (0.0278 * DIM.getHeight());
 
     public WelcomeScreen(MainFrame mainFrame, ResourceBundle stringsBundle) {
         this.stringsBundle = stringsBundle;
@@ -44,7 +50,7 @@ public class WelcomeScreen {
         validateButton.addActionListener(new ValidateListener());
         var namePanel = new JPanel();
         nameField = new JTextField(stringsBundle.getString("defaultName"));
-        nameField.setPreferredSize(new Dimension(100, 30));
+        nameField.setPreferredSize(new Dimension(NAME_FIELD_WIDTH, NAME_FIELD_HEIGHT));
         changeFont(nameField, 18);
         var nameLabel = new JLabel(stringsBundle.getString("yourNameLabel"));
         changeFont(nameLabel, 18);

@@ -15,6 +15,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.GraphicsEnvironment;
+import java.awt.DisplayMode;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -50,12 +52,29 @@ public class MainBoardFront implements Serializable {
     private static final String CHOOSE_PLAYER_TARGET = "CHOOSE_PLAYER_TARGET";
     private static final String CHOOSE_CARD_BUOY_PANEL = "CHOOSE_CARD_BUOY_PANEL";
     private static final String CHOOSE_CARD_RUM_PANEL = "CHOOSE_CARD_RUM_PANEL";
-    private static final int SOUTH_BUTTON_WIDTH = 65;
-    private static final int SOUTH_BUTTON_HEIGHT = 65;
-    private static final int ACTION_BUTTON_WIDTH = 161;
-    private static final int ACTION_BUTTON_HEIGHT = 100;
-    private static final int VOTE_BUTTON_WIDTH = 121;
-    private static final int VOTE_BUTTON_HEIGHT = 75;
+
+    private static final transient DisplayMode DIM = GraphicsEnvironment.getLocalGraphicsEnvironment()
+            .getDefaultScreenDevice().getDisplayMode();
+    private static final int SOUTH_BUTTON_WIDTH = (int) (0.0339 * DIM.getWidth());
+    private static final int SOUTH_BUTTON_HEIGHT = (int) (0.0602 * DIM.getHeight());
+    private static final int ACTION_BUTTON_WIDTH = (int) (0.084 * DIM.getWidth());
+    private static final int ACTION_BUTTON_HEIGHT = (int) (0.0926 * DIM.getHeight());
+    private static final int VOTE_BUTTON_WIDTH = (int) (0.063 * DIM.getWidth());
+    private static final int VOTE_BUTTON_HEIGHT = (int) (0.069 * DIM.getHeight());
+    private static final int TEXT_PANE_WIDTH = (int) (0.32 * DIM.getWidth());
+    private static final int TEXT_PANE_HEIGHT = (int) (0.23 * DIM.getHeight());
+    private static final int NEXT_BUTTON_WIDTH = (int) (0.0521 * DIM.getWidth());
+    private static final int NEXT_BUTTON_HEIGHT = (int) (0.0602 * DIM.getHeight());
+    private static final int BEGIN_BUTTON_WIDTH = (int) (0.1042 * DIM.getWidth());
+    private static final int BEGIN_BUTTON_HEIGHT = (int) (0.0602 * DIM.getHeight());
+    private static final int ALLOW_KILL_BUTTON_WIDTH = (int) (0.1302 * DIM.getWidth());
+    private static final int ALLOW_KILL_BUTTON_HEIGHT = (int) (0.0602 * DIM.getHeight());
+    private static final int CARD_DESCRIPTION_PANEL_WIDTH = (int) (0.32 * DIM.getWidth());
+    private static final int CARD_DESCRIPTION_PANEL_HEIGHT = (int) (0.0926 * DIM.getHeight());
+    private static final int PLAYER_STATE_PANEL_WIDTH = (int) (0.0104 * DIM.getWidth());
+    private static final int PLAYER_STATE_PANEL_HEIGHT = (int) (0.0185 * DIM.getHeight());
+    private static final int CARD_PANEL_WIDTH = (int) (0.35 * DIM.getWidth());
+    private static final int CARD_PANEL_HEIGHT = (int) (0.092 * DIM.getHeight());
 
     JPanel mainPanel;
     Board board;
@@ -74,7 +93,6 @@ public class MainBoardFront implements Serializable {
     private JPanel hiddenCardPanelPanel;
     private JPanel revealedCardPanelPanel;
     private CardLayout cardLayoutCentralPanel;
-
     private JPanel choosePlayerPanelPanel;
     private JTextPane notificationPanelTextPane;
     private JLabel notificationLabel;
@@ -106,6 +124,7 @@ public class MainBoardFront implements Serializable {
     private JPanel cardChoiceBuoyPanel;
     private JPanel cardChoiceRumPanel;
     private String previousPanelRum;
+    private JLabel characterLabel;
 
     /**
      * Builds an interface for the game.
@@ -263,28 +282,28 @@ public class MainBoardFront implements Serializable {
         notificationPanelTextPaneScrollable.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_ALWAYS);
 
         notificationPanelTextPane.setEditable(false);
-        notificationPanelTextPaneScrollable.setPreferredSize(new Dimension(800, 300));
+        notificationPanelTextPaneScrollable.setPreferredSize(new Dimension(TEXT_PANE_WIDTH, TEXT_PANE_HEIGHT));
         notificationPanelPanel.add(notificationPanelTextPaneScrollable);
 
         nextButton = new JButton(stringsBundle.getString("next"));
         changeFont(nextButton, 14);
-        nextButton.setPreferredSize(new Dimension(100, 65));
+        nextButton.setPreferredSize(new Dimension(NEXT_BUTTON_WIDTH, NEXT_BUTTON_HEIGHT));
         nextButton.addActionListener(new NextActionListener());
         centerPanelSouth.add(nextButton);
         beginVoteButton = new JButton(stringsBundle.getString("beginVote"));
         beginVoteButton.addActionListener(new BeginVoteListener());
         changeFont(beginVoteButton, 14);
-        beginVoteButton.setPreferredSize(new Dimension(200, 65));
+        beginVoteButton.setPreferredSize(new Dimension(BEGIN_BUTTON_WIDTH, BEGIN_BUTTON_HEIGHT));
         centerPanelSouth.add(beginVoteButton);
         allowKillNotForDeparture = new JButton(stringsBundle.getString("confirmPlayer"));
         allowKillNotForDeparture.addActionListener(new AllowKillListener(false));
         changeFont(allowKillNotForDeparture, 14);
-        allowKillNotForDeparture.setPreferredSize(new Dimension(250, 65));
+        allowKillNotForDeparture.setPreferredSize(new Dimension(ALLOW_KILL_BUTTON_WIDTH, ALLOW_KILL_BUTTON_HEIGHT));
         centerPanelSouth.add(allowKillNotForDeparture);
         allowKillForDeparture = new JButton(stringsBundle.getString("confirmPlayer"));
         allowKillForDeparture.addActionListener(new AllowKillListener(true));
         changeFont(allowKillForDeparture, 14);
-        allowKillForDeparture.setPreferredSize(new Dimension(250, 65));
+        allowKillForDeparture.setPreferredSize(new Dimension(ALLOW_KILL_BUTTON_WIDTH, ALLOW_KILL_BUTTON_HEIGHT));
         centerPanelSouth.add(allowKillForDeparture);
         beginVoteButton.setVisible(false);
         allowKillNotForDeparture.setVisible(false);
@@ -306,7 +325,8 @@ public class MainBoardFront implements Serializable {
         var choosePlayerTargetPanelPanelCenterCardDescription = new JPanel();
         cardDescription = new JTextPane();
         var cardDescriptionScrollPane = new JScrollPane(cardDescription);
-        cardDescriptionScrollPane.setPreferredSize(new Dimension(800, 100));
+        cardDescriptionScrollPane
+                .setPreferredSize(new Dimension(CARD_DESCRIPTION_PANEL_WIDTH, CARD_DESCRIPTION_PANEL_HEIGHT));
         changeFont(cardDescription, 16);
         cardDescriptionScrollPane.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
         cardDescriptionScrollPane.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_ALWAYS);
@@ -440,16 +460,20 @@ public class MainBoardFront implements Serializable {
         var hiddenCardPanelContainer = new JPanel();
         var revealedCardPanelContainer = new JPanel();
 
-        var playerStatePanel = new JPanel(new GridLayout(2, 1, 10, 0));
+        var playerStatePanel = new JPanel(new GridLayout(3, 1, 10, 0));
         var chiefPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         var statePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        var characterPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         chiefLabel = new JLabel("");
         stateLabel = new JLabel(PlayerState.HEALTHY.toString());
+        characterLabel = new JLabel("");
 
         chiefPanel.add(chiefLabel);
         statePanel.add(stateLabel);
-        playerStatePanel.add(statePanel);
+        characterPanel.add(characterLabel);
         playerStatePanel.add(chiefPanel);
+        playerStatePanel.add(statePanel);
+        playerStatePanel.add(characterPanel);
 
         var hiddenCardPanel = new JPanel();
         var revealedCardPanel = new JPanel();
@@ -457,9 +481,9 @@ public class MainBoardFront implements Serializable {
                 HORIZONTAL_SCROLLBAR_AS_NEEDED);
         var revealedCardPanelScrollable = new JScrollPane(revealedCardPanel, VERTICAL_SCROLLBAR_NEVER,
                 HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        playerStatePanel.setPreferredSize(new Dimension(20, 20));
-        hiddenCardPanelScrollable.setPreferredSize(new Dimension(900, 110));
-        revealedCardPanelScrollable.setPreferredSize(new Dimension(900, 110));
+        playerStatePanel.setPreferredSize(new Dimension(PLAYER_STATE_PANEL_WIDTH, PLAYER_STATE_PANEL_HEIGHT));
+        hiddenCardPanelScrollable.setPreferredSize(new Dimension(CARD_PANEL_WIDTH, CARD_PANEL_HEIGHT));
+        revealedCardPanelScrollable.setPreferredSize(new Dimension(CARD_PANEL_WIDTH, CARD_PANEL_HEIGHT));
         hiddenCardPanelContainer.add(hiddenCardPanelScrollable);
         revealedCardPanelContainer.add(revealedCardPanelScrollable);
         southPanel.add(hiddenCardPanelContainer, BorderLayout.WEST);
@@ -638,6 +662,9 @@ public class MainBoardFront implements Serializable {
                 ? board.getStringsBundle().getString("chief_label")
                 : board.getStringsBundle().getString("not_chief_label");
         chiefLabel.setText(chiefString);
+        characterLabel.setText(board.getThisPlayer().getPlayerCharacter().getCharacterName());
+        characterLabel.setToolTipText(board.getThisPlayer().getPlayerCharacter().getCharacterDescription());
+
         southPanel.update(southPanel.getGraphics());
 
     }

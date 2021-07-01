@@ -6,7 +6,8 @@ public class NeutralCharacter extends ACharacter {
 
     protected NeutralCharacter(ResourceBundle stringBundle) {
         super(stringBundle);
-        characterName = "neutral";
+        characterName = stringBundle.getString("neutralName");
+        characterDescription = stringBundle.getString("neutralDescription");
     }
 
 }

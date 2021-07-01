@@ -9,6 +9,7 @@ public abstract class ACharacter implements ICharacter, Serializable {
 
     protected transient ResourceBundle stringBundle;
     protected String characterName = "";
+    protected String characterDescription = "";
     protected CharacterEnum linkedCharacterEnum = null;
     protected int initialCardBonus = 0;
     protected int nbActionPerRound = 1;
@@ -168,6 +169,20 @@ public abstract class ACharacter implements ICharacter, Serializable {
      */
     public int getInitialCardBonus() {
         return initialCardBonus;
+    }
+
+    /**
+     * @return the characterName
+     */
+    public String getCharacterName() {
+        return characterName;
+    }
+
+    /**
+     * @return the characterDescription
+     */
+    public String getCharacterDescription() {
+        return characterDescription;
     }
 
     @Override

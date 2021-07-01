@@ -273,21 +273,58 @@ public class Strings extends ListResourceBundle {
                         { "personalityUpdate", "%s has updated their personality !" },
                         { "useExpansionBox", "Use the expansion" },
                         { "rumDistributionEvent", "%s is giving a %s to %s." },
-                        { "choiceCardRum", "Choose a card to give to %s." }, { "bodyguardName", "Bodyguard" },
-                        { "captainName", "Captain" }, { "dowserName", "Dowser" }, { "farSightedName", "Far Sighted" },
-                        { "foodAllName", "Food All" }, { "hypnotistName", "Hypnotist" }, { "kidName", "Kid" },
-                        { "magicianName", "Magician" }, { "modelName", "Model" }, { "naturistName", "Naturist" },
-                        { "salesManName", "Salesman" }, { "scavengerName", "Scavenger" },
-                        { "sharpEyeName", "Sharp Eye" }, { "snakeCharmerName", "Snake Charmer" },
-                        { "strappingName", "Strapping" }, { "sumoName", "Sumo" }, { "survivalistName", "Survivalist" },
-                        { "timeTravellerName", "Time Traveller" }, { "uptightName", "Uptight" },
-                        { "wholesaleFishermanName", "Wholesale Fisherman" }, { "armedThreatName", "Armed Threat" },
-                        { "attackName", "Attack" }, { "attackByTheOthersName", "Attack by the Others" },
-                        { "bannedPlaceName", "Banned Place" }, { "barterName", "Barter" },
-                        { "bodyArmourName", "Body Armour" }, { "careerChangeName", "Career Change" },
-                        { "charityName", "Charity" }, { "crazyPsychicName", "Crazy Psychic" },
-                        { "desertedCampName", "Deserted Camp" }, { "giftName", "Gift" },
-                        { "happyBirthdayName", "Happy Birthday" }, { "healerName", "Healer" },
+                        { "choiceCardRum", "Choose a card to give to %s." },
+
+                        { "bodyguardName", "Bodyguard" }, { "bodyguardDescription", "Bodyguard Description" },
+
+                        { "captainName", "Captain" }, { "captainDescription", "Captain Description" },
+
+                        { "dowserName", "Dowser" }, { "dowserDescription", "Dowser Description" },
+
+                        { "farSightedName", "Far Sighted" }, { "farSightedDescription", "Far Sighted Description" },
+
+                        { "foodAllName", "Food All" }, { "foodAllDescription", "Food All Description" },
+
+                        { "hypnotistName", "Hypnotist" }, { "hypnotistDescription", "Hypnotist Description" },
+
+                        { "kidName", "Kid" }, { "kidDescription", "Kid Description" },
+
+                        { "magicianName", "Magician" }, { "magicianDescription", "Magician Description" },
+
+                        { "modelName", "Model" }, { "modelDescription", "Model Description" },
+
+                        { "naturistName", "Naturist" }, { "naturistDescription", "Naturist Description" },
+
+                        { "salesmanName", "Salesman" }, { "salesmanDescription", "Salesman Description" },
+
+                        { "scavengerName", "Scavenger" }, { "scavengerDescription", "Scavenger Description" },
+
+                        { "sharpEyeName", "Sharp Eye" }, { "sharpEyeDescription", "Sharp Eye Description" },
+
+                        { "snakeCharmerName", "Snake Charmer" }, { "snakeCharmerDescription", "Snake Description" },
+
+                        { "strappingName", "Strapping" }, { "strappingDescription", "StrappingDescription" },
+
+                        { "sumoName", "Sumo" }, { "sumoDescription", "Sumo Description" },
+
+                        { "survivalistName", "Survivalist" }, { "survivalistDescription", "Survivalist Description" },
+
+                        { "timeTravellerName", "Time Traveller" },
+                        { "timeTravellerDescription", "Time Traveller Description" },
+
+                        { "uptightName", "Uptight" }, { "uptightDescription", "Uptight Description" },
+
+                        { "wholesaleFishermanName", "Wholesale Fisherman" },
+                        { "wholesaleFishermanDescription", "Wholesale Fisherman Description" },
+
+                        { "neutralName", "Neutral" }, { "neutralDescription", "Neutral Description" },
+
+                        { "armedThreatName", "Armed Threat" }, { "attackName", "Attack" },
+                        { "attackByTheOthersName", "Attack by the Others" }, { "bannedPlaceName", "Banned Place" },
+                        { "barterName", "Barter" }, { "bodyArmourName", "Body Armour" },
+                        { "careerChangeName", "Career Change" }, { "charityName", "Charity" },
+                        { "crazyPsychicName", "Crazy Psychic" }, { "desertedCampName", "Deserted Camp" },
+                        { "giftName", "Gift" }, { "happyBirthdayName", "Happy Birthday" }, { "healerName", "Healer" },
                         { "heavySwellName", "Heavy Swell" }, { "insularTaxName", "Insular Tax" },
                         { "jerrycanName", "Jerrycan" }, { "loggerName", "Logger" }, { "lootingName", "Looting" },
                         { "marketDayName", "Market Day" }, { "mouldName", "Mould" }, { "newFriendName", "New Friend" },

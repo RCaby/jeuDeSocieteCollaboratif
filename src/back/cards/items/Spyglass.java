@@ -54,20 +54,13 @@ public class Spyglass extends Card {
     @Override
     public void useCard(Player player1, Player player2, Player player3, ActionType action, Card card) {
 
-        Map<Player, List<Card>> cardsMap = new HashMap<>();
         for (Player player : board.getPlayerList()) {
             if (!player.equals(owner)) {
-                List<Card> cardsOfPlayer = new ArrayList<>();
-                for (var index = 0; index < player.getCardNumber(); index++) {
-                    owner.getPersonality().seeCard(player, card, board.getDifficulty(), board.getMainBoardFront());
-                    // cardsOfPlayer.add(player.getCard(index));
+                for (Card cardSeen : player.getInventory()) {
+                    owner.getPersonality().seeCard(player, cardSeen, board.getDifficulty(), board.getMainBoardFront());
                 }
-                // cardsMap.put(player, cardsOfPlayer);
             }
-
         }
-        // board.setSpyglassMap(cardsMap);
-        // board.showSpyglassMap(owner);
 
         board.getMainBoardFront().displayMessage(String.format(stringsBundle.getString("NoTarget"), owner, this));
         board.getMainBoardFront()

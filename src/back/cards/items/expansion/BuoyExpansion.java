@@ -42,4 +42,13 @@ public class BuoyExpansion extends Card {
         return IMPACT_BUOY_SEE;
     }
 
+    /**
+     * Indicates whether the card can be played. This card can be played only to
+     * reveal it to the other player.
+     */
+    @Override
+    public boolean canBeUsed() {
+        return !isRevealed;
+    }
+
 }

@@ -15,7 +15,6 @@ import back.cards.characters.CharacterEnum;
 import back.cards.characters.FarSighted;
 import back.cards.characters.ACharacter;
 import back.cards.characters.Bodyguard;
-import back.cards.characters.Captain;
 import back.cards.events.EventEnum;
 import back.cards.events.IEvent;
 import back.cards.items.Card;
@@ -299,6 +298,7 @@ public class Board implements Serializable {
         var index = 0;
         var forceStop = false;
         while (!allSaidNo) {
+            System.out.println("No");
             if (currentPhase == GamePhase.GOODS_DISTRIBUTION && isThereEnoughGoodsForAll(false)) {
                 for (Player player : playerList) {
                     player.setThreatLevel(ThreatLevel.NONE);
